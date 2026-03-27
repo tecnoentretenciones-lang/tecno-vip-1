@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -26,7 +25,7 @@
     <div id="p-l">
         <div class="c-l">
             <h2 style="margin:0">TECNOENTRETE</h2>
-            <p style="color: var(--c5); margin-bottom: 20px;">RULETA VIP v16.8</p>
+            <p style="color: var(--c5); margin-bottom: 20px;">IA MULTIPATRÓN v17.5</p>
             <div id="e-m" style="color: red; font-size: 12px; margin-bottom: 10px;"></div>
             <input type="text" id="l-i" class="i-s" placeholder="LICENCIA">
             <button class="b-a" id="btn-entrar">ENTRAR</button>
@@ -61,7 +60,7 @@
 
     <script>
     (function(){
-        let _ba=10.0, _g=0, _p=0, _h=[], _ia={t:5,s:5}, _m=0.2, _s="", _uL="", _uT="", _uS=0;
+        let _ba=10.0, _g=0, _p=0, _h=[], _m=0.2, _s="", _uL="", _uT="", _uS=0;
         const _uA = "https://script.google.com/macros/s/AKfycbyL48_uVFXFE3wENSlH6DDlLMM3d0VkCb2WDjJaKgijARdmpWw2SFdzRrwVu-I2vsSYGQ/exec";
 
         async function _fV(){
@@ -78,14 +77,11 @@
                     document.getElementById('p-l').style.display='none';
                     document.getElementById('app-principal').style.display='flex';
                     const sv = localStorage.getItem('tecno_save_'+_uL);
-                    if(sv){ const x=JSON.parse(sv); _ba=x.ba; _g=x.g; _p=x.p; _h=x.h; _ia=x.ia; _m=x.m; _s=x.s; _fUpd(); }
+                    if(sv){ const x=JSON.parse(sv); _ba=x.ba; _g=x.g; _p=x.p; _h=x.h; _m=x.m; _s=x.s; _fUpd(); }
                     setInterval(_fClock, 1000); setInterval(_fCheck, 8000);
                 } else { document.getElementById('e-m').innerText=d.mensaje; btn.innerText = "ENTRAR"; }
             } catch(e) { document.getElementById('e-m').innerText="ERROR DE RED"; btn.innerText = "ENTRAR"; }
         }
-
-        function _fClock(){ if(_uS > 0){ _uS--; let m=Math.floor(_uS/60), s=_uS%60; document.getElementById('tmr').innerText = m + ":" + (s<10?'0'+s:s); } else { location.reload(); } }
-        async function _fCheck(){ try { const r = await fetch(_uA + "?action=chequear_sesion&serial=" + _uL + "&token=" + _uT); const d = await r.json(); if(d.status === "kick") location.reload(); } catch(e) {} }
 
         function _fR(c){
             if(_s !== ""){
@@ -93,15 +89,37 @@
                 else if(c !== 'Cero') { _ba -= _m; _m *= 2; _p++; }
             }
             _h.unshift(c);
+            
             if(c !== "Cero"){
-                let u = _h[0], p = _h[1] || "", a = _h[2] || "";
-                // LOGICA MEJORADA v16.8
-                if(u === p && u !== a) { _s = u.toUpperCase(); } // Detecta Dobles
-                else if(u !== p && p === a) { _s = u.toUpperCase(); } // Detecta Pares
-                else if(u !== p && u === a) { _s = (u === "Rojo") ? "NEGRO" : "ROJO"; } // Salto simple
-                else { _s = (u === "Rojo") ? "NEGRO" : "ROJO"; } // Alternancia
+                let u = _h[0], p = _h[1] || "", a = _h[2] || "", t = _h[3] || "";
+                
+                // 1. Capa de Tendencia (Si van 3 iguales, seguimos al color)
+                let racha = 1;
+                for(let i=0; i<_h.length-1; i++) { if(_h[i] === _h[i+1]) racha++; else break; }
+
+                if(racha >= 3) {
+                    _s = u.toUpperCase();
+                } 
+                // 2. Capa de Pares (R-R-N -> Pide N / N-N-R -> Pide R)
+                // Si el último es diferente al penúltimo, pero el penúltimo era igual al antepenúltimo,
+                // significa que se rompió un par y probablemente viene el segundo del nuevo par.
+                else if(u !== p && p === a) {
+                    _s = u.toUpperCase(); 
+                }
+                // 3. Capa de Serrucho (R-N-R-N -> Pide el cambio)
+                else if(u !== p && p !== a && a !== t && t !== "") {
+                    _s = (u === "Rojo") ? "NEGRO" : "ROJO";
+                }
+                // 4. Lógica de seguridad: Si solo hay un tiro de un color, buscamos el segundo (Pares)
+                else if(u !== p) {
+                    _s = u.toUpperCase();
+                }
+                // 5. Por defecto: Alternancia
+                else {
+                    _s = (u === "Rojo") ? "NEGRO" : "ROJO";
+                }
             }
-            localStorage.setItem('tecno_save_'+_uL, JSON.stringify({ba:_ba,g:_g,p:_p,h:_h,ia:_ia,m:_m,s:_s}));
+            localStorage.setItem('tecno_save_'+_uL, JSON.stringify({ba:_ba,g:_g,p:_p,h:_h,m:_m,s:_s}));
             _fUpd();
         }
 
@@ -121,6 +139,8 @@
             new Image().src = _uA + "?action=guardar&licencia="+_uL+"&ganadas="+_g+"&perdidas="+_p+"&neto="+(_ba-10).toFixed(2);
         }
 
+        function _fClock(){ if(_uS > 0){ _uS--; let m=Math.floor(_uS/60), s=_uS%60; document.getElementById('tmr').innerText = m + ":" + (s<10?'0'+s:s); } else { location.reload(); } }
+        async function _fCheck(){ try { const r = await fetch(_uA + "?action=chequear_sesion&serial=" + _uL + "&token=" + _uT); const d = await r.json(); if(d.status === "kick") location.reload(); } catch(e) {} }
         document.getElementById('btn-entrar').onclick = _fV;
         document.getElementById('btn-R').onclick = function(){ _fR('Rojo'); };
         document.getElementById('btn-N').onclick = function(){ _fR('Negro'); };
