@@ -1,106 +1,19 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>TECNOENTRETE VIP</title>
-    
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="apple-touch-icon" href="ico.png"> 
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        :root { --c1: #e74c3c; --c2: #2c3e50; --c3: #27ae60; --c4: #f1c40f; --c5: #00e5ff; --c6: #050505; --c8: #111; }
-        
-        /* Sistema de Autoajuste */
-        * { box-sizing: border-box; }
-        body { 
-            -webkit-user-select: none; user-select: none; 
-            font-family: 'Segoe UI', sans-serif; background: var(--c6); color: white; 
-            padding: env(safe-area-inset-top) 10px env(safe-area-inset-bottom) 10px; 
-            display: flex; flex-direction: column; align-items: center; margin: 0; 
-            min-height: 100vh; width: 100%; overflow-x: hidden;
-        }
-
-        .header-brand { text-align: center; border-bottom: 2px solid var(--c5); width: 100%; max-width: 500px; padding: 10px 0; }
-        .header-brand h1 { margin: 0; letter-spacing: 4px; font-size: clamp(18px, 5vw, 26px); }
-
-        .ganancia-box { background: #000; border: 1px solid var(--c3); border-radius: 10px; padding: 10px; width: 100%; max-width: 480px; text-align: center; margin: 10px 0; }
-        .ganancia-monto { font-size: clamp(24px, 6vw, 32px); font-weight: bold; color: var(--c3); font-family: monospace; }
-
-        #p-l { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; }
-        .c-l { background: var(--c8); border: 1px solid var(--c5); border-radius: 15px; padding: clamp(20px, 5vw, 40px); width: 90%; max-width: 350px; text-align: center; }
-
-        #app-principal { display: none; width: 100%; flex-direction: column; align-items: center; flex: 1; }
-
-        .panel { background: var(--c8); border: 1px solid #444; border-radius: 15px; padding: clamp(10px, 3vw, 20px); width: 100%; max-width: 500px; display: flex; flex-direction: column; justify-content: space-between; }
-        
-        .p-b { display: flex; justify-content: space-around; background: #151515; padding: 10px; border-radius: 12px; margin-bottom: 10px; font-size: clamp(12px, 3vw, 15px); }
-        .d-p { background: #1a1a1a; border: 2px solid #333; border-radius: 15px; padding: clamp(15px, 5vw, 30px); text-align: center; margin-bottom: 15px; }
-        
-        #s-t { font-size: clamp(50px, 15vw, 80px); font-weight: 900; line-height: 1; }
-        
-        .b-g { display: flex; gap: 8px; margin-bottom: 15px; width: 100%; }
-        .b-i { flex: 1; height: clamp(55px, 12vw, 75px); border: none; border-radius: 12px; font-size: 22px; font-weight: bold; color: white; cursor: pointer; }
-        
-        .c-c { background: #000; border: 1px solid #222; border-radius: 12px; padding: 8px; overflow-x: auto; white-space: nowrap; min-height: 40px; width: 100%; }
-        .bola { width: 30px; height: 30px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; margin-right: 6px; font-weight: bold; }
-        
-        .b-w { background: #25d366; color: white; text-decoration: none; padding: 12px; border-radius: 50px; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 10px; margin: 15px 0; width: 100%; max-width: 480px; font-size: 14px; }
-    </style>
-</head>
-<body oncontextmenu="return false;">
-
-    <div id="p-l">
-        <div class="c-l">
-            <h1>TECNOENTRETE</h1>
-            <p style="color: var(--c5); font-size: 12px;">RULETA VIP v16.2</p>
-            <div id="e-m" style="color: red; font-size: 11px; margin-bottom: 10px;"></div>
-            <input type="text" id="l-i" class="i-s" style="width:100%; padding:12px; background:#000; color:var(--c4); border:1px solid #555; text-align:center; margin-bottom:15px;" placeholder="LICENCIA">
-            <button class="b-a" id="btn-entrar" style="width:100%; padding:15px; background:var(--c5); font-weight:bold; border:none; border-radius:8px;">ENTRAR</button>
-        </div>
-    </div>
-
-    <div id="app-principal">
-        <div class="header-brand"><h1>TECNOENTRETE VIP</h1></div>
-        
-        <div style="background:#111; border:1px solid var(--c5); border-radius:8px; padding:5px; margin:10px 0; width:100%; max-width:480px; text-align:center;">
-            TIEMPO: <span id="tmr" style="color:var(--c5); font-weight:bold;">--:--</span>
-        </div>
-
-        <div class="ganancia-box">
-            <div style="font-size: 10px; color: #888;">NETO ACUMULADO</div>
-            <div class="ganancia-monto" id="n-v">$0.00</div>
-        </div>
-
-        <div class="panel">
-            <div class="p-b">
-                <div>CAPITAL<br><b id="cap-val">$0.00</b></div>
-                <div>G/P<br><b id="gp-val">0/0</b></div>
-            </div>
-            <div class="d-p">
-                <div id="s-t">---</div>
-                <div id="m-t" style="color:var(--c3); font-weight:bold; font-size:20px;">$0.20</div>
-            </div>
-            <div class="b-g">
-                <button class="b-i btn-reg" data-col="Rojo" style="background:var(--c1); border-bottom:4px solid #922b21;">R</button>
-                <button class="b-i btn-reg" data-col="Negro" style="background:var(--c2); border-bottom:4px solid #1a252f;">N</button>
-                <button class="b-i btn-reg" data-col="Cero" style="background:var(--c3); border-bottom:4px solid #1e8449;">0</button>
-            </div>
-            <div id="c-h" class="c-c"></div>
-        </div>
-
-        <a href="https://wa.me/56995931641" class="b-w"><i class="fab fa-whatsapp"></i> SOPORTE TÉCNICO</a>
-    </div>
-
-    <script>
+<script>
     (function(){
-        // Bloqueo de Teclado (Blindaje)
         document.onkeydown = function(e) { if(e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74)) || (e.ctrlKey && e.keyCode == 85)) return false; };
 
         let _ba=10.0, _g=0, _p=0, _h=[], _ia={t:5,s:5}, _m=0.2, _s="", _uL="", _uT="", _uS=0;
         const _uA = "https://script.google.com/macros/s/AKfycbyL48_uVFXFE3wENSlH6DDlLMM3d0VkCb2WDjJaKgijARdmpWw2SFdzRrwVu-I2vsSYGQ/exec";
+
+        // --- FUNCIÓN DE RECUPERACIÓN ---
+        function _0xLoad() {
+            const saved = localStorage.getItem('tecno_save_' + _uL);
+            if(saved) {
+                const d = JSON.parse(saved);
+                _ba = d.ba; _g = d.g; _p = d.p; _h = d.h; _ia = d.ia; _m = d.m; _s = d.s;
+                _fUpd();
+            }
+        }
 
         async function _fV(){
             const s=document.getElementById('l-i').value.trim().toUpperCase();
@@ -112,6 +25,7 @@
                     _uL=s; _uS=d.segundos;
                     document.getElementById('p-l').style.display='none';
                     document.getElementById('app-principal').style.display='flex';
+                    _0xLoad(); // Cargar datos guardados al entrar
                     setInterval(_fClock, 1000); setInterval(_fCheck, 10000);
                 }else{document.getElementById('e-m').innerText=d.mensaje;}
             }catch(e){document.getElementById('e-m').innerText="ERR_CON";}
@@ -120,22 +34,23 @@
         function _fR(c){
             if(_s!==""){
                 if(c.toUpperCase()===_s){
-                    _ba += _m; _m = 0.20; _g++; // Acierto: Reset Martingala
+                    _ba += _m; _m = 0.20; _g++;
                 } else if(c !== 'Cero') {
-                    _ba -= _m; _m *= 2; _p++; // Fallo: Martingala x2
+                    _ba -= _m; _m *= 2; _p++;
                 }
             }
             _h.unshift(c);
             if(c!=="Cero"){
                 let l=c.toUpperCase();
                 if(_h.length>1){
-                    // Lógica v14.0 Ofuscada
                     (_h[0]===_h[1])?_ia.t+=1.5:_ia.t-=1;
                     (_h[0]!==_h[1])?_ia.s+=1.5:_ia.s-=1;
                 }
                 _ia.t=Math.max(0,Math.min(10,_ia.t)); _ia.s=Math.max(0,Math.min(10,_ia.s));
                 _s=(_ia.t>=_ia.s)?l:(l==="ROJO"?"NEGRO":"ROJO");
             }
+            // --- GUARDADO AUTOMÁTICO ---
+            localStorage.setItem('tecno_save_' + _uL, JSON.stringify({ba:_ba, g:_g, p:_p, h:_h, ia:_ia, m:_m, s:_s}));
             _fUpd();
         }
 
@@ -152,15 +67,6 @@
             });
             new Image().src=`${_uA}?action=guardar&licencia=${_uL}&ganadas=${_g}&perdidas=${_p}&neto=${(_ba-10).toFixed(2)}`;
         }
-
-        function _fClock(){if(_uS>0){_uS--;let m=Math.floor(_uS/60),s=_uS%60;document.getElementById('tmr').innerText=`${m}:${s<10?'0'+s:s}`;}else{location.reload();}}
-        async function _fCheck(){try{const r=await fetch(`${_uA}?action=chequear_sesion&serial=${_uL}&token=${_uT}`);const d=await r.json();if(d.status==="kick")location.reload();}catch(e){}}
-
-        document.getElementById('btn-entrar').onclick=_fV;
-        document.querySelectorAll('.btn-reg').forEach(b=>{
-            b.onclick=function(){_fR(this.getAttribute('data-col'));};
-        });
+        // ... (resto de funciones de reloj y chequeo igual)
     })();
-    </script>
-</body>
-</html>
+</script>
