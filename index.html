@@ -4,13 +4,18 @@
     document.onkeydown = function(e) { if(e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74)) || (e.ctrlKey && e.keyCode == 85)) return false; };
 
     let _ba=10.0, _g=0, _p=0, _h=[], _ia={t:5,s:5}, _m=0.2, _s="", _uL="", _uT="", _uS=0;
+    
+    // REEMPLAZA ESTA URL CON LA TUYA DEL EXCEL ACTUALIZADA
     const _uA = "https://script.google.com/macros/s/AKfycbyL48_uVFXFE3wENSlH6DDlLMM3d0VkCb2WDjJaKgijARdmpWw2SFdzRrwVu-I2vsSYGQ/exec";
 
     async function _fV(){
         const s=document.getElementById('l-i').value.trim().toUpperCase();
         if(!s) return;
-        document.getElementById('btn-entrar').innerText = "CONECTANDO...";
+        const btn = document.getElementById('btn-entrar');
+        btn.innerText = "CONECTANDO...";
+        btn.disabled = true;
         _uT="W-"+Date.now();
+        
         try{
             const r=await fetch(`${_uA}?action=validar&serial=${s}&token=${_uT}&version=16.2`);
             const d=await r.json();
@@ -18,17 +23,19 @@
                 _uL=s; _uS=d.segundos;
                 document.getElementById('p-l').style.display='none';
                 document.getElementById('app-principal').style.display='flex';
-                // Recuperar memoria si existe
+                // Recuperar memoria
                 const sv = localStorage.getItem('tecno_save_'+_uL);
                 if(sv){ const x=JSON.parse(sv); _ba=x.ba; _g=x.g; _p=x.p; _h=x.h; _ia=x.ia; _m=x.m; _s=x.s; _fUpd(); }
                 setInterval(_fClock, 1000); setInterval(_fCheck, 10000);
             }else{
-                document.getElementById('e-m').innerText=d.mensaje;
-                document.getElementById('btn-entrar').innerText = "ENTRAR";
+                alert(d.mensaje);
+                btn.innerText = "ENTRAR";
+                btn.disabled = false;
             }
         }catch(e){
-            document.getElementById('e-m').innerText="ERROR DE RED/HTTPS";
-            document.getElementById('btn-entrar').innerText = "ENTRAR";
+            alert("ERROR DE CONEXIÓN: Verifica que el Script de Google sea público.");
+            btn.innerText = "ENTRAR";
+            btn.disabled = false;
         }
     }
 
