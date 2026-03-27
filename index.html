@@ -7,17 +7,20 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --c1: #e74c3c; --c2: #2c3e50; --c3: #27ae60; --c4: #f1c40f; --c5: #00e5ff; --c6: #050505; --c8: #111; }
-        body { -webkit-user-select: none; user-select: none; font-family: 'Segoe UI', sans-serif; background: var(--c6); color: white; margin: 0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 20px; box-sizing: border-box; }
+        body { -webkit-user-select: none; user-select: none; font-family: 'Segoe UI', sans-serif; background: var(--c6); color: white; margin: 0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 10px; box-sizing: border-box; }
         
-        /* Pantalla de Inicio Minimalista */
-        #p-l { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; display: flex; justify-content: center; align-items: center; z-index: 9999; }
-        .c-l { background: var(--c8); border: 1px solid var(--c5); border-radius: 20px; padding: 45px 30px; width: 85%; max-width: 320px; text-align: center; box-shadow: 0 0 30px rgba(0,229,255,0.15); }
-        .i-s { width: 100%; background: #000; border: 1px solid #444; color: var(--c4); padding: 15px; border-radius: 12px; font-size: 22px; text-align: center; margin-bottom: 25px; box-sizing: border-box; outline: none; }
-        .b-a { background: var(--c5); color: #000; border: none; padding: 18px; border-radius: 12px; font-weight: 900; width: 100%; cursor: pointer; text-transform: uppercase; letter-spacing: 2px; font-size: 16px; margin-bottom: 20px; }
+        /* Pantalla de Inicio con Manual */
+        #p-l { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; display: flex; justify-content: center; align-items: center; z-index: 9999; overflow-y: auto; padding: 20px; }
+        .c-l { background: var(--c8); border: 1px solid var(--c5); border-radius: 20px; padding: 30px 20px; width: 100%; max-width: 350px; text-align: center; box-shadow: 0 0 30px rgba(0,229,255,0.15); }
         
-        /* Botón de Compra */
-        .btn-buy { background: transparent; color: var(--c3); border: 1px solid var(--c3); padding: 10px; border-radius: 10px; font-size: 11px; font-weight: bold; cursor: pointer; text-decoration: none; display: block; width: 100%; text-transform: uppercase; letter-spacing: 1px; }
-        .btn-buy:hover { background: rgba(39, 174, 96, 0.1); }
+        /* Manual de Usuario */
+        .manual-box { text-align: left; font-size: 11px; background: #000; padding: 15px; border-radius: 10px; border: 1px solid #333; margin-bottom: 20px; max-height: 250px; overflow-y: auto; color: #bbb; }
+        .manual-box b { color: var(--c5); }
+        .manual-box h3 { font-size: 14px; margin: 0 0 10px 0; color: white; text-align: center; }
+
+        .i-s { width: 100%; background: #000; border: 1px solid #444; color: var(--c4); padding: 15px; border-radius: 12px; font-size: 22px; text-align: center; margin-bottom: 20px; outline: none; display: none; }
+        .b-a { background: var(--c5); color: #000; border: none; padding: 18px; border-radius: 12px; font-weight: 900; width: 100%; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; font-size: 14px; margin-bottom: 10px; }
+        .btn-buy { background: transparent; color: var(--c3); border: 1px solid var(--c3); padding: 10px; border-radius: 10px; font-size: 10px; font-weight: bold; cursor: pointer; text-decoration: none; display: block; width: 100%; text-transform: uppercase; }
 
         /* App Principal */
         #app-principal { display: none; width: 100%; max-width: 480px; flex-direction: column; }
@@ -25,32 +28,37 @@
         .panel { background: var(--c8); border: 1px solid #333; border-radius: 15px; padding: 20px; position: relative; }
         .b-g { display: flex; gap: 10px; margin-top: 20px; }
         .b-i { flex: 1; height: 75px; border: none; border-radius: 15px; font-size: 30px; font-weight: bold; color: white; cursor: pointer; }
-        
-        /* Historial y Bolas */
         .c-c { background: #000; border: 1px solid #222; border-radius: 12px; padding: 10px; overflow-x: auto; white-space: nowrap; margin-top: 20px; min-height: 45px; display: flex; align-items: center; }
         .bola { width: 34px; height: 34px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; margin-right: 8px; font-weight: bold; flex-shrink: 0; }
         .btn-undo { background: transparent; color: #555; border: 1px solid #222; padding: 10px; border-radius: 10px; font-size: 12px; font-weight: bold; cursor: pointer; margin-top: 20px; width: 100%; text-transform: uppercase; }
-        
-        /* Botón WhatsApp Soporte */
         .wsp-f { position: fixed; bottom: 25px; right: 25px; background: #25d366; width: 60px; height: 60px; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: white; font-size: 32px; box-shadow: 0 5px 15px rgba(0,0,0,0.6); z-index: 10000; text-decoration: none; }
     </style>
 </head>
 <body>
 
-    <a href="https://wa.me/56995931641" class="wsp-f" target="_blank">
-        <i class="fab fa-whatsapp"></i>
-    </a>
+    <a href="https://wa.me/56995931641" class="wsp-f" target="_blank"><i class="fab fa-whatsapp"></i></a>
 
     <div id="p-l">
         <div class="c-l">
-            <h1 style="margin: 0 0 35px 0; letter-spacing: 3px; font-size: 32px; color: white;">TECNOENTRETE</h1>
-            <div id="e-m" style="color: #ff4757; font-size: 13px; margin-bottom: 15px; font-weight: bold;"></div>
-            <input type="text" id="l-i" class="i-s" placeholder="LICENCIA">
-            <button class="b-a" id="btn-entrar">ENTRAR</button>
+            <h1 style="margin: 0 0 20px 0; font-size: 24px;">TECNOENTRETE</h1>
             
-            <a href="https://wa.me/56995931641?text=Hola%20Felipe,%20quiero%20comprar%20tiempo%20para%20el%20sistema%20TECNOENTRETE%20VIP" class="btn-buy">
-                ¿No tienes licencia? Compra aquí
-            </a>
+            <div id="m-box" class="manual-box">
+                <h3>📜 REGLAS DE USO</h3>
+                1. <b>Apuesta Base:</b> Iniciar SIEMPRE con <b>$0.20</b>.<br>
+                2. <b>Disciplina:</b> Respetar la Martingala calculada. No subir apuestas por impulso.<br>
+                3. <b>Uso Legal:</b> Herramienta de análisis estadístico. No garantizamos resultados infalibles.<br>
+                4. <b>Responsabilidad:</b> No nos hacemos responsables por pérdidas derivadas del mal uso o ignorar la apuesta base ($0.20).<br>
+                5. <b>Meta:</b> Sugerimos retirar ganancias al cumplir el 20% de su capital diario.
+            </div>
+
+            <div id="e-m" style="color: #ff4757; font-size: 12px; margin-bottom: 10px; font-weight: bold;"></div>
+            
+            <button id="btn-acepto" class="b-a">ACEPTO LAS REGLAS</button>
+
+            <input type="text" id="l-i" class="i-s" placeholder="PON TU LICENCIA">
+            <button class="b-a" id="btn-entrar" style="display:none;">ENTRAR AL SISTEMA</button>
+            
+            <a href="https://wa.me/56995931641?text=Hola%20Felipe,%20vengo%20del%20manual%20y%20quiero%20comprar%20tiempo%20VIP" class="btn-buy">COMPRAR LICENCIA</a>
         </div>
     </div>
 
@@ -58,31 +66,26 @@
         <div style="background:#111; border:1px solid #333; border-radius:10px; padding:10px; margin-bottom:15px; text-align:center; font-size: 12px; color: #666;">
             SESIÓN ACTIVA: <span id="tmr" style="color:var(--c5); font-weight: bold;">--:--</span>
         </div>
-        
         <div class="ganancia-box">
             <div style="font-size: 11px; color: #888; margin-bottom: 5px;">NETO ACUMULADO</div>
             <div style="font-size: 38px; font-weight: 900; color: var(--c3);" id="n-v">$0.00</div>
         </div>
-
         <div class="panel">
             <div style="display: flex; justify-content: space-around; background: #151515; padding: 15px; border-radius: 12px; border: 1px solid #222;">
                 <div style="text-align:center; font-size: 11px; color: #666;">CAPITAL<br><b id="cap-val" style="color:white; font-size: 18px;">$10.00</b></div>
                 <div style="text-align:center; font-size: 11px; color: #666;">G / P<br><b id="gp-val" style="color:white; font-size: 18px;">0 / 0</b></div>
             </div>
-
             <div style="background: #1a1a1a; border: 1px solid #333; border-radius: 20px; padding: 40px; text-align: center; margin-top: 20px;">
                 <div id="s-t" style="font-size:80px; font-weight:900;">---</div>
                 <div id="m-t" style="color:var(--c3); font-weight:900; font-size:28px; margin-top:10px;">$0.20</div>
             </div>
-
             <div class="b-g">
                 <button class="b-i" id="btn-R" style="background:var(--c1);">R</button>
                 <button class="b-i" id="btn-N" style="background:var(--c2);">N</button>
                 <button class="b-i" id="btn-0" style="background:var(--c3);">0</button>
             </div>
-
             <div id="c-h" class="c-c"></div>
-            <button class="btn-undo" id="btn-undo"><i class="fas fa-undo"></i> Corregir última jugada</button>
+            <button class="btn-undo" id="btn-undo"><i class="fas fa-undo"></i> Corregir jugada</button>
         </div>
     </div>
 
@@ -91,11 +94,18 @@
         let _ba=10.0, _g=0, _p=0, _h=[], _m=0.2, _s="", _uL="", _uT="", _uS=0, _lS=null;
         const _uA = "https://script.google.com/macros/s/AKfycbyL48_uVFXFE3wENSlH6DDlLMM3d0VkCb2WDjJaKgijARdmpWw2SFdzRrwVu-I2vsSYGQ/exec";
 
+        // Función para mostrar licencia tras aceptar manual
+        document.getElementById('btn-acepto').onclick = function(){
+            this.style.display = 'none';
+            document.getElementById('m-box').style.display = 'none';
+            document.getElementById('l-i').style.display = 'block';
+            document.getElementById('btn-entrar').style.display = 'block';
+        };
+
         async function _fV(){
             const s=document.getElementById('l-i').value.trim().toUpperCase();
             if(!s) return;
-            const btn = document.getElementById('btn-entrar');
-            btn.innerText = "VERIFICANDO...";
+            document.getElementById('btn-entrar').innerText = "ENTRANDO...";
             _uT = "W-" + Date.now();
             try{
                 const r=await fetch(_uA + "?action=validar&serial=" + s + "&token=" + _uT);
@@ -107,8 +117,8 @@
                     const sv = localStorage.getItem('tecno_save_'+_uL);
                     if(sv){ const x=JSON.parse(sv); _ba=x.ba; _g=x.g; _p=x.p; _h=x.h; _m=x.m; _s=x.s; _fUpd(); }
                     setInterval(_fClock, 1000); setInterval(_fCheck, 8000);
-                } else { document.getElementById('e-m').innerText=d.mensaje; btn.innerText = "ENTRAR"; }
-            } catch(e) { document.getElementById('e-m').innerText="SIN CONEXIÓN"; btn.innerText = "ENTRAR"; }
+                } else { document.getElementById('e-m').innerText=d.mensaje; document.getElementById('btn-entrar').innerText = "ENTRAR"; }
+            } catch(e) { document.getElementById('e-m').innerText="SIN CONEXIÓN"; document.getElementById('btn-entrar').innerText = "ENTRAR"; }
         }
 
         function _fR(c){
@@ -117,35 +127,27 @@
                 if(c.toUpperCase() === _s){ _ba += _m; _m = 0.20; _g++; }
                 else if(c !== 'Cero') { _ba -= _m; _m *= 2; _p++; }
             }
-            _h.unshift(c);
-            _calc(); _save(); _fUpd();
+            _h.unshift(c); _calc(); _save(); _fUpd();
         }
 
         function _calc() {
             if(_h.length === 0) return;
-            let u = _h[0], p = _h[1] || "", a = _h[2] || "", t = _h[3] || "";
-            let racha = 1; for(let i=0; i<_h.length-1; i++) { if(_h[i] === _h[i+1]) racha++; else break; }
-            if(racha >= 3) { _s = u.toUpperCase(); }
-            else if(u !== p && p === a) { _s = u.toUpperCase(); }
-            else if(u !== p && p !== a && a !== t && t !== "") { _s = (u === "Rojo") ? "NEGRO" : "ROJO"; }
-            else if(u !== p) { _s = u.toUpperCase(); }
-            else { _s = (u === "Rojo") ? "NEGRO" : "ROJO"; }
+            let u=_h[0], p=_h[1]||"", a=_h[2]||"", t=_h[3]||"";
+            let racha=1; for(let i=0; i<_h.length-1; i++){ if(_h[i]===_h[i+1]) racha++; else break; }
+            if(racha>=3){ _s=u.toUpperCase(); }
+            else if(u!==p && p===a){ _s=u.toUpperCase(); }
+            else if(u!==p && p!==a && a!==t && t!==""){ _s=(u==="Rojo")?"NEGRO":"ROJO"; }
+            else if(u!==p){ _s=u.toUpperCase(); }
+            else { _s=(u==="Rojo")?"NEGRO":"ROJO"; }
         }
 
-        function _undo() {
-            if(!_lS) return;
-            _ba = _lS.ba; _g = _lS.g; _p = _lS.p; _h = _lS.h; _m = _lS.m; _s = _lS.s;
-            _lS = null; _save(); _fUpd();
-        }
-
+        function _undo() { if(!_lS) return; _ba=_lS.ba; _g=_lS.g; _p=_lS.p; _h=_lS.h; _m=_lS.m; _s=_lS.s; _lS=null; _save(); _fUpd(); }
         function _save() { localStorage.setItem('tecno_save_'+_uL, JSON.stringify({ba:_ba,g:_g,p:_p,h:_h,m:_m,s:_s})); }
-
         function _fUpd(){
             document.getElementById('cap-val').innerText = "$" + _ba.toFixed(2);
             document.getElementById('gp-val').innerText = _g + " / " + _p;
             const st = document.getElementById('s-t');
-            st.innerText = _s || "---";
-            st.style.color = (_s === "ROJO") ? "#e74c3c" : "#fff";
+            st.innerText = _s || "---"; st.style.color = (_s === "ROJO") ? "#e74c3c" : "#fff";
             document.getElementById('m-t').innerText = "$" + _m.toFixed(2);
             document.getElementById('n-v').innerText = "$" + (_ba - 10).toFixed(2);
             const ch = document.getElementById('c-h'); ch.innerHTML = "";
