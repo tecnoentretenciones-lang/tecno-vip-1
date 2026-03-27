@@ -1,110 +1,165 @@
-<script>
-(function(){
-    // Bloqueo de Teclado
-    document.onkeydown = function(e) { if(e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74)) || (e.ctrlKey && e.keyCode == 85)) return false; };
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>TECNOENTRETE VIP</title>
+    <style>
+        :root { --c1: #e74c3c; --c2: #2c3e50; --c3: #27ae60; --c4: #f1c40f; --c5: #00e5ff; --c6: #050505; --c8: #111; }
+        body { -webkit-user-select: none; user-select: none; font-family: sans-serif; background: var(--c6); color: white; margin: 0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 20px; box-sizing: border-box; }
+        #p-l { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; display: flex; justify-content: center; align-items: center; z-index: 9999; }
+        .c-l { background: var(--c8); border: 1px solid var(--c5); border-radius: 15px; padding: 30px; width: 85%; max-width: 320px; text-align: center; }
+        .i-s { width: 100%; background: #000; border: 1px solid #555; color: var(--c4); padding: 12px; border-radius: 8px; font-size: 18px; text-align: center; margin-bottom: 15px; box-sizing: border-box; }
+        .b-a { background: var(--c5); color: #000; border: none; padding: 15px; border-radius: 8px; font-weight: bold; width: 100%; cursor: pointer; }
+        #app-principal { display: none; width: 100%; max-width: 480px; flex-direction: column; }
+        .ganancia-box { background: #000; border: 1px solid var(--c3); border-radius: 10px; padding: 15px; text-align: center; margin-bottom: 15px; }
+        .panel { background: var(--c8); border: 1px solid #444; border-radius: 15px; padding: 20px; }
+        .b-g { display: flex; gap: 10px; margin-top: 20px; }
+        .b-i { flex: 1; height: 70px; border: none; border-radius: 12px; font-size: 24px; font-weight: bold; color: white; cursor: pointer; }
+        .c-c { background: #000; border: 1px solid #222; border-radius: 12px; padding: 10px; overflow-x: auto; white-space: nowrap; margin-top: 15px; min-height: 40px; }
+        .bola { width: 30px; height: 30px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; margin-right: 8px; font-weight: bold; }
+    </style>
+</head>
+<body>
 
-    let _ba=10.0, _g=0, _p=0, _h=[], _ia={t:5,s:5}, _m=0.2, _s="", _uL="", _uT="", _uS=0;
-    const _uA = "https://script.google.com/macros/s/AKfycbyL48_uVFXFE3wENSlH6DDlLMM3d0VkCb2WDjJaKgijARdmpWw2SFdzRrwVu-I2vsSYGQ/exec";
+    <div id="p-l">
+        <div class="c-l">
+            <h2 style="margin:0">TECNOENTRETE</h2>
+            <p style="color: var(--c5); margin-bottom: 20px;">RULETA VIP v16.5</p>
+            <div id="e-m" style="color: red; font-size: 12px; margin-bottom: 10px;"></div>
+            <input type="text" id="l-i" class="i-s" placeholder="LICENCIA">
+            <button class="b-a" id="btn-entrar">ENTRAR</button>
+        </div>
+    </div>
 
-    async function _fV(){
-        const s=document.getElementById('l-i').value.trim().toUpperCase();
-        if(!s) return;
-        const btn = document.getElementById('btn-entrar');
-        btn.innerText = "VERIFICANDO...";
-        _uT = "W-" + Date.now(); // Genera Token único para evitar doble sesión
-        
-        try{
-            const r=await fetch(`${_uA}?action=validar&serial=${s}&token=${_uT}&version=16.3`);
-            const d=await r.json();
+    <div id="app-principal">
+        <div style="background:#111; border:1px solid var(--c5); border-radius:8px; padding:10px; margin-bottom:10px; text-align:center; font-weight:bold;">
+            TIEMPO RESTANTE: <span id="tmr" style="color:var(--c5)">--:--</span>
+        </div>
+
+        <div class="ganancia-box">
+            <div style="font-size: 12px; color: #888;">NETO ACUMULADO</div>
+            <div style="font-size: 32px; font-weight: bold; color: var(--c3);" id="n-v">$0.00</div>
+        </div>
+
+        <div class="panel">
+            <div style="display: flex; justify-content: space-around; background: #151515; padding: 12px; border-radius: 10px;">
+                <div style="text-align:center">CAPITAL<br><b id="cap-val">$10.00</b></div>
+                <div style="text-align:center">G / P<br><b id="gp-val">0 / 0</b></div>
+            </div>
+
+            <div style="background: #1a1a1a; border: 2px solid #333; border-radius: 15px; padding: 30px; text-align: center; margin-top: 20px;">
+                <div id="s-t" style="font-size:70px; font-weight:900;">---</div>
+                <div id="m-t" style="color:var(--c3); font-weight:bold; font-size:24px; margin-top:10px;">$0.20</div>
+            </div>
+
+            <div class="b-g">
+                <button class="b-i" id="btn-R" style="background:var(--c1);">R</button>
+                <button class="b-i" id="btn-N" style="background:var(--c2);">N</button>
+                <button class="b-i" id="btn-0" style="background:var(--c3);">0</button>
+            </div>
+            <div id="c-h" class="c-c"></div>
+        </div>
+    </div>
+
+    <script>
+    (function(){
+        let _ba=10.0, _g=0, _p=0, _h=[], _ia={t:5,s:5}, _m=0.2, _s="", _uL="", _uT="", _uS=0;
+        const _uA = "https://script.google.com/macros/s/AKfycbyL48_uVFXFE3wENSlH6DDlLMM3d0VkCb2WDjJaKgijARdmpWw2SFdzRrwVu-I2vsSYGQ/exec";
+
+        async function _fV(){
+            const s=document.getElementById('l-i').value.trim().toUpperCase();
+            if(!s) return;
+            const btn = document.getElementById('btn-entrar');
+            btn.innerText = "VERIFICANDO...";
+            _uT = "W-" + Date.now();
             
-            if(d.status==="success"){
-                _uL=s; 
-                _uS=parseInt(d.segundos); // Trae el tiempo real del Excel
-                
-                document.getElementById('p-l').style.display='none';
-                document.getElementById('app-principal').style.display='flex';
-                
-                // Recuperar memoria local
-                const sv = localStorage.getItem('tecno_save_'+_uL);
-                if(sv){ const x=JSON.parse(sv); _ba=x.ba; _g=x.g; _p=x.p; _h=x.h; _ia=x.ia; _m=x.m; _s=x.s; _fUpd(); }
-                
-                // Iniciar Reloj y Chequeo de Sesión
-                setInterval(_fClock, 1000); 
-                setInterval(_fCheck, 8000); // Revisa cada 8 seg si hay alguien más conectado
-            } else { 
-                document.getElementById('e-m').innerText = d.mensaje;
-                btn.innerText = "ENTRAR";
+            try{
+                const r=await fetch(_uA + "?action=validar&serial=" + s + "&token=" + _uT);
+                const d=await r.json();
+                if(d.status==="success"){
+                    _uL=s;
+                    _uS=parseInt(d.segundos) || 0;
+                    document.getElementById('p-l').style.display='none';
+                    document.getElementById('app-principal').style.display='flex';
+                    
+                    const sv = localStorage.getItem('tecno_save_'+_uL);
+                    if(sv){ 
+                        const x=JSON.parse(sv); 
+                        _ba=x.ba; _g=x.g; _p=x.p; _h=x.h; _ia=x.ia; _m=x.m; _s=x.s; 
+                        _fUpd(); 
+                    }
+                    setInterval(_fClock, 1000);
+                    setInterval(_fCheck, 8000);
+                } else { 
+                    document.getElementById('e-m').innerText=d.mensaje; 
+                    btn.innerText = "ENTRAR"; 
+                }
+            } catch(e) { 
+                document.getElementById('e-m').innerText="ERROR DE CONEXIÓN"; 
+                btn.innerText = "ENTRAR"; 
             }
-        } catch(e) { 
-            document.getElementById('e-m').innerText = "ERROR DE CONEXIÓN"; 
-            btn.innerText = "ENTRAR"; 
         }
-    }
 
-    // --- FUNCIÓN RELOJ ---
-    function _fClock(){
-        if(_uS > 0){
-            _uS--;
-            let m=Math.floor(_uS/60), s=_uS%60;
-            document.getElementById('tmr').innerText = m + ":" + (s<10?'0'+s:s);
-        } else {
-            alert("TIEMPO AGOTADO");
-            location.reload();
-        }
-    }
-
-    // --- BLOQUEO DOBLE SESIÓN ---
-    async function _fCheck(){
-        try {
-            const r = await fetch(`${_uA}?action=chequear_sesion&serial=${_uL}&token=${_uT}`);
-            const d = await r.json();
-            if(d.status === "kick") {
-                alert("SESIÓN ABIERTA EN OTRO DISPOSITIVO");
+        function _fClock(){
+            if(_uS > 0){
+                _uS--;
+                let m=Math.floor(_uS/60), s=_uS%60;
+                document.getElementById('tmr').innerText = m + ":" + (s<10?'0'+s:s);
+            } else {
                 location.reload();
             }
-        } catch(e) {}
-    }
-
-    function _fR(c){
-        if(_s !== ""){
-            if(c.toUpperCase() === _s){ _ba += _m; _m = 0.20; _g++; }
-            else if(c !== 'Cero') { _ba -= _m; _m *= 2; _p++; }
         }
-        _h.unshift(c);
-        if(c !== "Cero"){
-            let l = c.toUpperCase();
-            if(_h.length > 1){
-                (_h[0] === _h[1]) ? _ia.t += 1.5 : _ia.t -= 1;
-                (_h[0] !== _h[1]) ? _ia.s += 1.5 : _ia.s -= 1;
+
+        async function _fCheck(){
+            try {
+                const r = await fetch(_uA + "?action=chequear_sesion&serial=" + _uL + "&token=" + _uT);
+                const d = await r.json();
+                if(d.status === "kick") location.reload();
+            } catch(e) {}
+        }
+
+        function _fR(c){
+            if(_s !== ""){
+                if(c.toUpperCase() === _s){ _ba += _m; _m = 0.20; _g++; }
+                else if(c !== 'Cero') { _ba -= _m; _m *= 2; _p++; }
             }
-            _ia.t = Math.max(0, Math.min(10, _ia.t));
-            _ia.s = Math.max(0, Math.min(10, _ia.s));
-            _s = (_ia.t >= _ia.s) ? l : (l === "ROJO" ? "NEGRO" : "ROJO");
+            _h.unshift(c);
+            if(c !== "Cero"){
+                let l = c.toUpperCase();
+                if(_h.length > 1){
+                    (_h[0] === _h[1]) ? _ia.t += 1.5 : _ia.t -= 1;
+                    (_h[0] !== _h[1]) ? _ia.s += 1.5 : _ia.s -= 1;
+                }
+                _ia.t = Math.max(0, Math.min(10, _ia.t));
+                _ia.s = Math.max(0, Math.min(10, _ia.s));
+                _s = (_ia.t >= _ia.s) ? l : (l === "ROJO" ? "NEGRO" : "ROJO");
+            }
+            localStorage.setItem('tecno_save_'+_uL, JSON.stringify({ba:_ba,g:_g,p:_p,h:_h,ia:_ia,m:_m,s:_s}));
+            _fUpd();
         }
-        localStorage.setItem('tecno_save_'+_uL, JSON.stringify({ba:_ba,g:_g,p:_p,h:_h,ia:_ia,m:_m,s:_s}));
-        _fUpd();
-    }
 
-    function _fUpd(){
-        document.getElementById('cap-val').innerText = "$" + _ba.toFixed(2);
-        document.getElementById('gp-val').innerText = _g + " / " + _p;
-        document.getElementById('s-t').innerText = _s || "---";
-        document.getElementById('s-t').style.color = (_s === "ROJO") ? "#e74c3c" : "#fff";
-        document.getElementById('m-t').innerText = "$" + _m.toFixed(2);
-        document.getElementById('n-v').innerText = "$" + (_ba - 10).toFixed(2);
-        const ch = document.getElementById('c-h'); ch.innerHTML = "";
-        _h.slice(0,10).forEach(v => {
-            const color = (v === 'Rojo') ? 'red' : (v === 'Negro' ? '#fff' : 'green');
-            const tColor = (v === 'Negro') ? '#000' : '#fff';
-            ch.innerHTML += '<div class="bola" style="background:'+color+'; color:'+tColor+';">' + (v === 'Cero' ? '0' : '') + '</div>';
-        });
-        // Enviar datos al Excel en segundo plano
-        new Image().src = _uA + "?action=guardar&licencia="+_uL+"&ganadas="+_g+"&perdidas="+_p+"&neto="+(_ba-10).toFixed(2);
-    }
+        function _fUpd(){
+            document.getElementById('cap-val').innerText = "$" + _ba.toFixed(2);
+            document.getElementById('gp-val').innerText = _g + " / " + _p;
+            document.getElementById('s-t').innerText = _s || "---";
+            document.getElementById('s-t').style.color = (_s === "ROJO") ? "#e74c3c" : "#fff";
+            document.getElementById('m-t').innerText = "$" + _m.toFixed(2);
+            document.getElementById('n-v').innerText = "$" + (_ba - 10).toFixed(2);
+            const ch = document.getElementById('c-h'); ch.innerHTML = "";
+            _h.slice(0,10).forEach(v => {
+                const color = (v === 'Rojo') ? 'red' : (v === 'Negro' ? '#fff' : 'green');
+                const tColor = (v === 'Negro') ? '#000' : '#fff';
+                ch.innerHTML += '<div class="bola" style="background:'+color+'; color:'+tColor+';">' + (v === 'Cero' ? '0' : '') + '</div>';
+            });
+            new Image().src = _uA + "?action=guardar&licencia="+_uL+"&ganadas="+_g+"&perdidas="+_p+"&neto="+(_ba-10).toFixed(2);
+        }
 
-    document.getElementById('btn-entrar').onclick = _fV;
-    document.getElementById('btn-R').onclick = function(){ _fR('Rojo'); };
-    document.getElementById('btn-N').onclick = function(){ _fR('Negro'); };
-    document.getElementById('btn-0').onclick = function(){ _fR('Cero'); };
-})();
-</script>
+        document.getElementById('btn-entrar').onclick = _fV;
+        document.getElementById('btn-R').onclick = function(){ _fR('Rojo'); };
+        document.getElementById('btn-N').onclick = function(){ _fR('Negro'); };
+        document.getElementById('btn-0').onclick = function(){ _fR('Cero'); };
+    })();
+    </script>
+</body>
+</html>
