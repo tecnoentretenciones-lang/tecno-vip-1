@@ -3,31 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>TECNOENTRETE VIP - 4M SECURITY</title>
+    <title>TECNOENTRETE VIP</title>
+    
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="ico.png"> 
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --c1: #e74c3c; --c2: #2c3e50; --c3: #27ae60; --c4: #f1c40f; --c5: #00e5ff; --c6: #050505; --c8: #111; }
-        body { -webkit-user-select: none; user-select: none; font-family: 'Segoe UI', sans-serif; background: var(--c6); color: white; padding: env(safe-area-inset-top) 5px 5px 5px; display: flex; flex-direction: column; align-items: center; margin: 0; height: 100vh; overflow: hidden; }
-        .header-brand { text-align: center; border-bottom: 1px solid var(--c5); width: 100%; padding: 5px 0; }
-        .header-brand h1 { margin: 0; font-size: 20px; letter-spacing: 2px; }
+        
+        /* Sistema de Autoajuste */
+        * { box-sizing: border-box; }
+        body { 
+            -webkit-user-select: none; user-select: none; 
+            font-family: 'Segoe UI', sans-serif; background: var(--c6); color: white; 
+            padding: env(safe-area-inset-top) 10px env(safe-area-inset-bottom) 10px; 
+            display: flex; flex-direction: column; align-items: center; margin: 0; 
+            min-height: 100vh; width: 100%; overflow-x: hidden;
+        }
+
+        .header-brand { text-align: center; border-bottom: 2px solid var(--c5); width: 100%; max-width: 500px; padding: 10px 0; }
+        .header-brand h1 { margin: 0; letter-spacing: 4px; font-size: clamp(18px, 5vw, 26px); }
+
+        .ganancia-box { background: #000; border: 1px solid var(--c3); border-radius: 10px; padding: 10px; width: 100%; max-width: 480px; text-align: center; margin: 10px 0; }
+        .ganancia-monto { font-size: clamp(24px, 6vw, 32px); font-weight: bold; color: var(--c3); font-family: monospace; }
+
         #p-l { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; }
-        .c-l { background: var(--c8); border: 1px solid var(--c5); border-radius: 15px; padding: 25px; width: 85%; max-width: 320px; text-align: center; }
-        .i-s { width: 100%; background: #000; border: 1px solid #555; color: var(--c4); padding: 12px; border-radius: 8px; font-size: 18px; text-align: center; margin: 15px 0; text-transform: uppercase; box-sizing: border-box; }
-        .b-a { background: var(--c5); color: #000; border: none; padding: 10px; border-radius: 8px; font-weight: 900; width: 100%; cursor: pointer; }
-        #a-p { display: none; width: 100%; height: 100%; flex-direction: column; }
-        #selector-inicio { background: var(--c8); padding: 20px; border-radius: 15px; border: 1px solid var(--c5); text-align: center; margin: auto; width: 90%; max-width: 350px; }
-        .sel-input { width: 100%; background: #000; color: white; padding: 10px; border: 1px solid #444; border-radius: 8px; margin: 10px 0; text-align: center; }
-        .info-bar { display: flex; justify-content: space-between; align-items: center; background: #000; padding: 10px 15px; border-bottom: 1px solid #333; font-size: 13px; }
-        #mesas-grid { display: grid; grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(2, 1fr); gap: 8px; flex-grow: 1; width: 100%; padding: 8px; box-sizing: border-box; }
-        .panel { background: var(--c8); border: 1px solid #333; border-radius: 10px; padding: 10px; display: flex; flex-direction: column; justify-content: space-between; }
-        .p-b { display: flex; justify-content: space-between; background: #151515; padding: 6px 10px; border-radius: 6px; font-size: 11px; }
-        .d-p { background: #1a1a1a; border: 1px solid #333; border-radius: 10px; padding: 8px; text-align: center; flex-grow: 1; display: flex; flex-direction: column; justify-content: center; margin: 5px 0; }
-        .s-val { font-size: 45px; font-weight: 900; line-height: 1; }
-        .b-g { display: flex; gap: 6px; }
-        .b-i { flex: 1; height: 55px; border: none; border-radius: 8px; font-size: 18px; font-weight: bold; color: white; }
-        .c-c { background: #000; border: 1px solid #222; border-radius: 6px; padding: 6px; overflow-x: auto; white-space: nowrap; margin-top: 8px; min-height: 28px; }
-        .bola { width: 25px; height: 25px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; margin-right: 4px; font-weight: bold; }
-        .b-w { background: #25d366; color: white; text-decoration: none; padding: 10px; border-radius: 50px; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; font-size: 13px; }
+        .c-l { background: var(--c8); border: 1px solid var(--c5); border-radius: 15px; padding: clamp(20px, 5vw, 40px); width: 90%; max-width: 350px; text-align: center; }
+
+        #app-principal { display: none; width: 100%; flex-direction: column; align-items: center; flex: 1; }
+
+        .panel { background: var(--c8); border: 1px solid #444; border-radius: 15px; padding: clamp(10px, 3vw, 20px); width: 100%; max-width: 500px; display: flex; flex-direction: column; justify-content: space-between; }
+        
+        .p-b { display: flex; justify-content: space-around; background: #151515; padding: 10px; border-radius: 12px; margin-bottom: 10px; font-size: clamp(12px, 3vw, 15px); }
+        .d-p { background: #1a1a1a; border: 2px solid #333; border-radius: 15px; padding: clamp(15px, 5vw, 30px); text-align: center; margin-bottom: 15px; }
+        
+        #s-t { font-size: clamp(50px, 15vw, 80px); font-weight: 900; line-height: 1; }
+        
+        .b-g { display: flex; gap: 8px; margin-bottom: 15px; width: 100%; }
+        .b-i { flex: 1; height: clamp(55px, 12vw, 75px); border: none; border-radius: 12px; font-size: 22px; font-weight: bold; color: white; cursor: pointer; }
+        
+        .c-c { background: #000; border: 1px solid #222; border-radius: 12px; padding: 8px; overflow-x: auto; white-space: nowrap; min-height: 40px; width: 100%; }
+        .bola { width: 30px; height: 30px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; margin-right: 6px; font-weight: bold; }
+        
+        .b-w { background: #25d366; color: white; text-decoration: none; padding: 12px; border-radius: 50px; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 10px; margin: 15px 0; width: 100%; max-width: 480px; font-size: 14px; }
     </style>
 </head>
 <body oncontextmenu="return false;">
@@ -35,126 +55,111 @@
     <div id="p-l">
         <div class="c-l">
             <h1>TECNOENTRETE</h1>
-            <p style="color:var(--c5); font-size:10px;">RULETA VIP v16.2</p>
-            <div id="e-m" style="color:red; font-size:11px;"></div>
-            <input type="text" id="l-i" class="i-s" placeholder="LICENCIA">
-            <button class="b-a" id="btn-login">ENTRAR</button>
-            <a href="https://wa.me/56995931641" class="b-w" style="margin-top:15px;"><i class="fab fa-whatsapp"></i> COMPRAR TIEMPO</a>
+            <p style="color: var(--c5); font-size: 12px;">RULETA VIP v16.2</p>
+            <div id="e-m" style="color: red; font-size: 11px; margin-bottom: 10px;"></div>
+            <input type="text" id="l-i" class="i-s" style="width:100%; padding:12px; background:#000; color:var(--c4); border:1px solid #555; text-align:center; margin-bottom:15px;" placeholder="LICENCIA">
+            <button class="b-a" id="btn-entrar" style="width:100%; padding:15px; background:var(--c5); font-weight:bold; border:none; border-radius:8px;">ENTRAR</button>
         </div>
     </div>
 
-    <div id="a-p">
+    <div id="app-principal">
         <div class="header-brand"><h1>TECNOENTRETE VIP</h1></div>
-        <div id="selector-inicio">
-            <h3 style="color:var(--c5); margin:0;">MESAS ACTIVAS</h3>
-            <select id="cant-mesas" class="sel-input">
-                <option value="1">1 Mesa (Vista Completa)</option>
-                <option value="2">2 Mesas</option>
-                <option value="4" selected>4 Mesas (Cuadrícula)</option>
-            </select>
-            <button class="b-a" id="btn-start">COMENZAR</button>
+        
+        <div style="background:#111; border:1px solid var(--c5); border-radius:8px; padding:5px; margin:10px 0; width:100%; max-width:480px; text-align:center;">
+            TIEMPO: <span id="tmr" style="color:var(--c5); font-weight:bold;">--:--</span>
         </div>
-        <div id="contenedor-juego" style="display:none; height:100%; flex-direction:column;">
-            <div class="info-bar">
-                <div>TIEMPO: <span id="tmr" style="color:var(--c5); font-weight:bold;">00:00</span></div>
-                <div>NETO: <span id="n-v" style="color:var(--c3); font-weight:bold;">$0.00</span></div>
+
+        <div class="ganancia-box">
+            <div style="font-size: 10px; color: #888;">NETO ACUMULADO</div>
+            <div class="ganancia-monto" id="n-v">$0.00</div>
+        </div>
+
+        <div class="panel">
+            <div class="p-b">
+                <div>CAPITAL<br><b id="cap-val">$0.00</b></div>
+                <div>G/P<br><b id="gp-val">0/0</b></div>
             </div>
-            <div id="mesas-grid"></div>
-            <div style="padding: 5px;"><a href="https://wa.me/56995931641" class="b-w"><i class="fab fa-whatsapp"></i> SOPORTE TECNOENTRETE</a></div>
+            <div class="d-p">
+                <div id="s-t">---</div>
+                <div id="m-t" style="color:var(--c3); font-weight:bold; font-size:20px;">$0.20</div>
+            </div>
+            <div class="b-g">
+                <button class="b-i btn-reg" data-col="Rojo" style="background:var(--c1); border-bottom:4px solid #922b21;">R</button>
+                <button class="b-i btn-reg" data-col="Negro" style="background:var(--c2); border-bottom:4px solid #1a252f;">N</button>
+                <button class="b-i btn-reg" data-col="Cero" style="background:var(--c3); border-bottom:4px solid #1e8449;">0</button>
+            </div>
+            <div id="c-h" class="c-c"></div>
         </div>
+
+        <a href="https://wa.me/56995931641" class="b-w"><i class="fab fa-whatsapp"></i> SOPORTE TÃ‰CNICO</a>
     </div>
 
     <script>
     (function(){
-        // Blindaje de Teclado y Mouse
-        document.onkeydown = function(e) {
-            if(e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74)) || (e.ctrlKey && e.keyCode == 85)) return false;
-        };
+        // Bloqueo de Teclado (Blindaje)
+        document.onkeydown = function(e) { if(e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74)) || (e.ctrlKey && e.keyCode == 85)) return false; };
 
-        let _vL = "", _vT = "", _vS = 0, _vM = [];
-        const _vV = "16.2", _vA = "https://script.google.com/macros/s/AKfycbyL48_uVFXFE3wENSlH6DDlLMM3d0VkCb2WDjJaKgijARdmpWw2SFdzRrwVu-I2vsSYGQ/exec";
+        let _ba=10.0, _g=0, _p=0, _h=[], _ia={t:5,s:5}, _m=0.2, _s="", _uL="", _uT="", _uS=0;
+        const _uA = "https://script.google.com/macros/s/AKfycbyL48_uVFXFE3wENSlH6DDlLMM3d0VkCb2WDjJaKgijARdmpWw2SFdzRrwVu-I2vsSYGQ/exec";
 
-        async function _fV() {
-            const s = document.getElementById('l-i').value.trim().toUpperCase();
-            if(!s) return; _vT = "W-" + Date.now();
-            try {
-                const r = await fetch(`${_vA}?action=validar&serial=${s}&token=${_vT}&version=${_vV}`);
-                const d = await r.json();
-                if(d.status === "success") {
-                    _vL = s; _vS = d.segundos;
-                    document.getElementById('p-l').style.display = 'none';
-                    document.getElementById('a-p').style.display = 'flex';
-                    setInterval(_fC, 1000); setInterval(_fK, 10000);
-                } else { document.getElementById('e-m').innerText = d.mensaje; }
-            } catch (e) { document.getElementById('e-m').innerText = "ERR_CON"; }
+        async function _fV(){
+            const s=document.getElementById('l-i').value.trim().toUpperCase();
+            if(!s)return; _uT="W-"+Date.now();
+            try{
+                const r=await fetch(`${_uA}?action=validar&serial=${s}&token=${_uT}&version=16.2`);
+                const d=await r.json();
+                if(d.status==="success"){
+                    _uL=s; _uS=d.segundos;
+                    document.getElementById('p-l').style.display='none';
+                    document.getElementById('app-principal').style.display='flex';
+                    setInterval(_fClock, 1000); setInterval(_fCheck, 10000);
+                }else{document.getElementById('e-m').innerText=d.mensaje;}
+            }catch(e){document.getElementById('e-m').innerText="ERR_CON";}
         }
 
-        function _fI() {
-            const num = parseInt(document.getElementById('cant-mesas').value);
-            document.getElementById('selector-inicio').style.display = 'none';
-            document.getElementById('contenedor-juego').style.display = 'flex';
-            const grid = document.getElementById('mesas-grid');
-            grid.innerHTML = ""; _vM = [];
-            grid.style.gridTemplateColumns = num === 1 ? "1fr" : "1fr 1fr";
-            grid.style.gridTemplateRows = num <= 2 ? "1fr" : "1fr 1fr";
-            for(let i=1; i<=num; i++) {
-                let m = new _M(i); _vM.push(m); grid.innerHTML += m._h();
+        function _fR(c){
+            if(_s!==""){
+                if(c.toUpperCase()===_s){
+                    _ba += _m; _m = 0.20; _g++; // Acierto: Reset Martingala
+                } else if(c !== 'Cero') {
+                    _ba -= _m; _m *= 2; _p++; // Fallo: Martingala x2
+                }
             }
-            _vM.forEach(m => m._u());
-            // Vinculación dinámica de botones
-            document.querySelectorAll('.b-i').forEach((btn, idx) => {
-                const mIdx = Math.floor(idx / 3);
-                const col = btn.innerText === 'R' ? 'Rojo' : (btn.innerText === 'N' ? 'Negro' : 'Cero');
-                btn.onclick = () => _vM[mIdx]._r(col);
+            _h.unshift(c);
+            if(c!=="Cero"){
+                let l=c.toUpperCase();
+                if(_h.length>1){
+                    // LÃ³gica v14.0 Ofuscada
+                    (_h[0]===_h[1])?_ia.t+=1.5:_ia.t-=1;
+                    (_h[0]!==_h[1])?_ia.s+=1.5:_ia.s-=1;
+                }
+                _ia.t=Math.max(0,Math.min(10,_ia.t)); _ia.s=Math.max(0,Math.min(10,_ia.s));
+                _s=(_ia.t>=_ia.s)?l:(l==="ROJO"?"NEGRO":"ROJO");
+            }
+            _fUpd();
+        }
+
+        function _fUpd(){
+            document.getElementById('cap-val').innerText=`$${_ba.toFixed(2)}`;
+            document.getElementById('gp-val').innerText=`${_g}/${_p}`;
+            document.getElementById('s-t').innerText=_s||"---";
+            document.getElementById('s-t').style.color=_s==="ROJO"?"#e74c3c":"#fff";
+            document.getElementById('m-t').innerText=`$${_m.toFixed(2)}`;
+            document.getElementById('n-v').innerText=`$${(_ba-10).toFixed(2)}`;
+            const ch=document.getElementById('c-h'); ch.innerHTML="";
+            _h.slice(0,10).forEach(v=>{
+                ch.innerHTML+=`<div class="bola" style="background:${v==='Rojo'?'red':v==='Negro'?'#fff':'green'}; color:${v==='Negro'?'#000':'#fff'};">${v==='Cero'?'0':''}</div>`;
             });
+            new Image().src=`${_uA}?action=guardar&licencia=${_uL}&ganadas=${_g}&perdidas=${_p}&neto=${(_ba-10).toFixed(2)}`;
         }
 
-        function _fC() { if(_vS > 0) { _vS--; let m=Math.floor(_vS/60), s=_vS%60; document.getElementById('tmr').innerText = `${m}:${s<10?'0'+s:s}`; } else { location.reload(); } }
-        async function _fK() { try { const r=await fetch(`${_vA}?action=chequear_sesion&serial=${_vL}&token=${_vT}`); const d=await r.json(); if(d.status === "kick") location.reload(); } catch (e) {} }
+        function _fClock(){if(_uS>0){_uS--;let m=Math.floor(_uS/60),s=_uS%60;document.getElementById('tmr').innerText=`${m}:${s<10?'0'+s:s}`;}else{location.reload();}}
+        async function _fCheck(){try{const r=await fetch(`${_uA}?action=chequear_sesion&serial=${_uL}&token=${_uT}`);const d=await r.json();if(d.status==="kick")location.reload();}catch(e){}}
 
-        class _M {
-            constructor(i) {
-                this.i = i; this.b = 10.0; this.g = 0; this.p = 0;
-                this.h = []; this.ia = {t: 5, s: 5}; this.m = 0.2; this.s = "";
-            }
-            _h() {
-                return `<div class="panel"><div class="p-b"><div>CAP: <b>$${this.b.toFixed(2)}</b></div><div>G/P: <b>${this.g}/${this.p}</b></div></div><div class="d-p"><div id="s-${this.i}" class="s-val">---</div><div style="color:var(--c3); font-weight:bold; font-size:18px;">$${this.m.toFixed(2)}</div></div><div class="b-g"><button class="b-i" style="background:var(--c1); border-bottom:3px solid #922b21;">R</button><button class="b-i" style="background:var(--c2); border-bottom:3px solid #1a252f;">N</button><button class="b-i" style="background:var(--c3); border-bottom:3px solid #1e8449;">0</button></div><div class="c-c" id="c-${this.i}"></div></div>`;
-            }
-            _r(c) {
-                if(this.s !== "") {
-                    (c.toUpperCase() === this.s) ? (this.b += this.m, this.m = 0.2, this.g++) : (c !== 'Cero' ? (this.b -= this.m, this.m *= 2, this.p++) : null);
-                }
-                this.h.unshift(c); this._ca(c); this._u();
-            }
-            _ca(c) {
-                if(c === "Cero") return;
-                const l = c.toUpperCase();
-                if(this.h.length > 1) {
-                    // Lógica v14.0 Ofuscada
-                    (this.h[0] === this.h[1]) ? this.ia.t += 1.5 : this.ia.t -= 1;
-                    (this.h[0] !== this.h[1]) ? this.ia.s += 1.5 : this.ia.s -= 1;
-                }
-                this.ia.t = Math.max(0, Math.min(10, this.ia.t)); this.ia.s = Math.max(0, Math.min(10, this.ia.s));
-                this.s = (this.ia.t >= this.ia.s) ? l : (l === "ROJO" ? "NEGRO" : "ROJO");
-            }
-            _u() {
-                const st = document.getElementById(`s-${this.i}`);
-                if(st) { st.innerText = this.s || "---"; st.style.color = this.s === "ROJO" ? "#e74c3c" : "#fff"; }
-                const ch = document.getElementById(`c-${this.i}`); 
-                if(ch) {
-                    ch.innerHTML = "";
-                    this.h.slice(0,10).forEach(v => {
-                        ch.innerHTML += `<div class="bola" style="background:${v==='Rojo'?'red':v==='Negro'?'#fff':'green'}; color:${v==='Negro'?'#000':'#fff'};">${v==='Cero'?'0':''}</div>`;
-                    });
-                }
-                let n = _vM.reduce((a, m) => a + (m.b - 10), 0);
-                document.getElementById('n-v').innerText = `$${n.toFixed(2)}`;
-                new Image().src = `${_vA}?action=guardar&licencia=${_vL}&ganadas=${this.g}&perdidas=${this.p}&neto=${n.toFixed(2)}`;
-            }
-        }
-
-        document.getElementById('btn-login').onclick = _fV;
-        document.getElementById('btn-start').onclick = _fI;
+        document.getElementById('btn-entrar').onclick=_fV;
+        document.querySelectorAll('.btn-reg').forEach(b=>{
+            b.onclick=function(){_fR(this.getAttribute('data-col'));};
+        });
     })();
     </script>
 </body>
