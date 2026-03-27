@@ -1,22 +1,71 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>TECNOENTRETE VIP</title>
-    <style>
-        body { background: #050505; color: white; font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; text-align: center; }
-        .box { border: 1px solid #00e5ff; padding: 30px; border-radius: 15px; background: #111; width: 85%; max-width: 320px; }
-        input { width: 100%; padding: 12px; margin: 15px 0; background: #000; color: #f1c40f; border: 1px solid #555; text-align: center; border-radius: 8px; }
-        button { width: 100%; padding: 12px; background: #00e5ff; font-weight: bold; border: none; border-radius: 8px; cursor: pointer; }
-    </style>
-</head>
-<body>
-    <div id="login-screen" class="box">
-        <h1>TECNOENTRETE</h1>
-        <p style="color:#00e5ff; font-size:12px;">RULETA VIP v16.2</p>
-        <input type="text" id="lic" placeholder="LICENCIA">
-        <button onclick="alert('Conectando...')">ENTRAR</button>
-    </div>
-</body>
-</html>
+<script>
+(function(){
+    // Bloqueo de Teclado
+    document.onkeydown = function(e) { if(e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74)) || (e.ctrlKey && e.keyCode == 85)) return false; };
+
+    let _ba=10.0, _g=0, _p=0, _h=[], _ia={t:5,s:5}, _m=0.2, _s="", _uL="", _uT="", _uS=0;
+    const _uA = "https://script.google.com/macros/s/AKfycbyL48_uVFXFE3wENSlH6DDlLMM3d0VkCb2WDjJaKgijARdmpWw2SFdzRrwVu-I2vsSYGQ/exec";
+
+    async function _fV(){
+        const s=document.getElementById('l-i').value.trim().toUpperCase();
+        if(!s) return;
+        document.getElementById('btn-entrar').innerText = "CONECTANDO...";
+        _uT="W-"+Date.now();
+        try{
+            const r=await fetch(`${_uA}?action=validar&serial=${s}&token=${_uT}&version=16.2`);
+            const d=await r.json();
+            if(d.status==="success"){
+                _uL=s; _uS=d.segundos;
+                document.getElementById('p-l').style.display='none';
+                document.getElementById('app-principal').style.display='flex';
+                // Recuperar memoria si existe
+                const sv = localStorage.getItem('tecno_save_'+_uL);
+                if(sv){ const x=JSON.parse(sv); _ba=x.ba; _g=x.g; _p=x.p; _h=x.h; _ia=x.ia; _m=x.m; _s=x.s; _fUpd(); }
+                setInterval(_fClock, 1000); setInterval(_fCheck, 10000);
+            }else{
+                document.getElementById('e-m').innerText=d.mensaje;
+                document.getElementById('btn-entrar').innerText = "ENTRAR";
+            }
+        }catch(e){
+            document.getElementById('e-m').innerText="ERROR DE RED/HTTPS";
+            document.getElementById('btn-entrar').innerText = "ENTRAR";
+        }
+    }
+
+    function _fR(c){
+        if(_s!==""){
+            if(c.toUpperCase()===_s){ _ba+=_m; _m=0.20; _g++; }
+            else if(c!=='Cero'){ _ba-=_m; _m*=2; _p++; }
+        }
+        _h.unshift(c);
+        if(c!=="Cero"){
+            let l=c.toUpperCase();
+            if(_h.length>1){ (_h[0]===_h[1])?_ia.t+=1.5:_ia.t-=1; (_h[0]!==_h[1])?_ia.s+=1.5:_ia.s-=1; }
+            _ia.t=Math.max(0,Math.min(10,_ia.t)); _ia.s=Math.max(0,Math.min(10,_ia.s));
+            _s=(_ia.t>=_ia.s)?l:(l==="ROJO"?"NEGRO":"ROJO");
+        }
+        localStorage.setItem('tecno_save_'+_uL, JSON.stringify({ba:_ba,g:_g,p:_p,h:_h,ia:_ia,m:_m,s:_s}));
+        _fUpd();
+    }
+
+    function _fUpd(){
+        document.getElementById('cap-val').innerText=`$${_ba.toFixed(2)}`;
+        document.getElementById('gp-val').innerText=`${_g}/${_p}`;
+        document.getElementById('s-t').innerText=_s||"---";
+        document.getElementById('s-t').style.color=_s==="ROJO"?"#e74c3c":"#fff";
+        document.getElementById('m-t').innerText=`$${_m.toFixed(2)}`;
+        document.getElementById('n-v').innerText=`$${(_ba-10).toFixed(2)}`;
+        const ch=document.getElementById('c-h'); ch.innerHTML="";
+        _h.slice(0,10).forEach(v=>{
+            ch.innerHTML+=`<div class="bola" style="background:${v==='Rojo'?'red':v==='Negro'?'#fff':'green'};color:${v==='Negro'?'#000':'#fff'};">${v==='Cero'?'0':''}</div>`;
+        });
+        new Image().src=`${_uA}?action=guardar&licencia=${_uL}&ganadas=${_g}&perdidas=${_p}&neto=${(_ba-10).toFixed(2)}`;
+    }
+
+    function _fClock(){if(_uS>0){_uS--;let m=Math.floor(_uS/60),s=_uS%60;document.getElementById('tmr').innerText=`${m}:${s<10?'0'+s:s}`;}else{location.reload();}}
+    async function _fCheck(){try{const r=await fetch(`${_uA}?action=chequear_sesion&serial=${_uL}&token=${_uT}`);const d=await r.json();if(d.status==="kick")location.reload();}catch(e){}}
+
+    document.getElementById('btn-entrar').onclick=_fV;
+    document.querySelectorAll('.btn-reg').forEach(b=>{ b.onclick=function(){_fR(this.getAttribute('data-col'));}; });
+})();
+</script>
