@@ -5,12 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>TECNOENTRETE VIP v54.1 - FINAL BLINDADO</title>
+    <title>TECNOENTRETE VIP v55.0 - FINAL PROTEGIDO</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --c1: #e74c3c; --c2: #2c3e50; --c3: #27ae60; --c4: #f1c40f; --c5: #00e5ff; --c8: #111; }
-        
-        /* BLOQUEO DE ZOOM Y SELECCIÓN */
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; touch-action: none; user-select: none !important; -webkit-user-select: none !important; }
         
         html, body { height: 100dvh; width: 100vw; overflow: hidden; margin: 0; color: white; font-family: 'Segoe UI', sans-serif; background: url('https://raw.githubusercontent.com/tecnoentretenciones-lang/tecno-vip-1/main/image_1209a3.jpg') no-repeat center center fixed; background-size: cover; }
@@ -19,7 +17,6 @@
 
         #p-l, #app-principal { width: 100%; height: 100dvh; max-width: 500px; display: flex; flex-direction: column; padding: 12px; }
 
-        /* PANTALLA INICIO ORIGINAL */
         #p-l { position: fixed; top: 0; background: rgba(0,0,0,0.9); z-index: 9999; align-items: center; justify-content: center; }
         .c-l { background: rgba(20, 20, 20, 0.95); border: 2px solid var(--c5); border-radius: 25px; padding: 25px; width: 100%; text-align: center; box-shadow: 0 0 30px rgba(0,229,255,0.2); }
         
@@ -30,7 +27,6 @@
         .i-s { width: 100%; background: #000; border: 2px solid #555; color: var(--c4); padding: 15px; border-radius: 12px; font-size: 22px; text-align: center; margin-bottom: 15px; outline: none; font-weight: bold; }
         .b-a { background: var(--c5); color: #000; border: none; padding: 18px; border-radius: 12px; font-weight: 900; width: 100%; cursor: pointer; text-transform: uppercase; font-size: 16px; margin-bottom: 10px; }
 
-        /* APP Y JUEGO */
         #app-principal { display: none; justify-content: flex-start; }
         .tmr-big { background:#000; border:2px solid var(--c5); border-radius:15px; padding:15px; text-align:center; font-size: 32px; color: var(--c5); font-weight: 900; margin-bottom:8px; text-shadow: 0 0 10px var(--c5); }
         .ganancia-box { background: #000; border: 1px solid #333; border-radius: 15px; padding: 12px; display: flex; flex-direction: column; gap: 5px; margin-bottom: 10px; }
@@ -48,7 +44,7 @@
         .btn-nube { background: #000; color: #f1c40f; border: none; padding: 15px; border-radius: 15px; margin-top: 15px; font-weight: 900; width: 100%; cursor: pointer; text-transform: uppercase; }
     </style>
 </head>
-<body oncontextmenu="return false;" onkeydown="if(event.keyCode==123)return false;">
+<body oncontextmenu="return false;">
 
     <div id="alerta-meta">
         <div class="nube-voladora">
@@ -75,7 +71,6 @@
             </div>
             
             <div id="e-m" style="color: #ff4757; font-size: 13px; margin-bottom: 10px; font-weight: bold;"></div>
-            
             <button id="btn-acepto" class="b-a">ACEPTO Y COMIENZO</button>
 
             <div id="step-1" style="display:none">
@@ -84,7 +79,6 @@
             </div>
 
             <div id="step-2" style="display:none">
-                <div style="margin-bottom:15px; color:var(--c5); font-weight:bold; font-size:12px;">✅ DISPOSITIVO VINCULADO CON ÉXITO</div>
                 <input type="number" id="c-init" class="i-s" placeholder="SALDO DISPONIBLE EN MESA" step="0.01">
                 <button class="b-a" id="btn-entrar-nuevo">ENTRAR A JUGAR</button>
                 <div id="btn-continuar-box" style="display:none; margin-top:10px;">
@@ -136,61 +130,52 @@
 
     <script>
     (function(){
-        // TU ENLACE ORIGINAL DE GOOGLE (Intacto)
-        const _uA = "https://script.google.com/macros/s/AKfycbzZnxMcWUM7wUQqEBsuaUHfQJeF4g-auZG7s5jrGFONOx3yyAOYgRRvDW0d1QewuC2pfg/exec";
-
-        /* BLOQUEO DE DOMINIO - PROTECCIÓN GITHUB */
+        // CANDADO DE DOMINIO (Solo funciona en tu enlace)
         const d_ok = "tecnoentretenciones-lang.github.io";
         if(window.location.hostname !== d_ok && window.location.hostname !== "localhost" && window.location.protocol !== "file:") {
-            document.body.innerHTML = "<div style='color:red; text-align:center; padding:50px; font-weight:bold;'>⚠️ ACCESO DENEGADO</div>"; return;
+            document.body.innerHTML = "<div style='color:red; text-align:center; padding:50px; font-weight:bold; background:black; height:100vh;'>⚠️ ACCESO DENEGADO</div>"; 
+            return;
         }
 
-        /* BLOQUEO DE ZOOM SAFARI IPHONE */
+        // BLOQUEO ANTI-ROBO (Ocultar código)
+        document.addEventListener('keydown', function(e) {
+            if(e.keyCode == 123 || (e.ctrlKey && e.shiftKey && e.keyCode == 73) || (e.ctrlKey && e.keyCode == 85)) { e.preventDefault(); return false; }
+        });
+
+        // BLOQUEO DE ZOOM SAFARI IPHONE
         document.addEventListener('touchstart', (e) => { if (e.touches.length > 1) e.preventDefault(); }, { passive: false });
         let lastTouchEnd = 0;
-        document.addEventListener('touchend', (e) => {
-            let now = Date.now();
-            if (now - lastTouchEnd <= 300) e.preventDefault();
-            lastTouchEnd = now;
-        }, false);
+        document.addEventListener('touchend', (e) => { let now = Date.now(); if (now - lastTouchEnd <= 300) e.preventDefault(); lastTouchEnd = now; }, false);
         document.addEventListener('gesturestart', (e) => e.preventDefault());
 
-        /* HUELLA DIGITAL (HID) OCULTA */
-        const getHID = () => {
-            try {
-                const gl = document.createElement('canvas').getContext('webgl');
-                const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
-                return btoa(navigator.userAgent + screen.width + gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL)).substring(0, 16);
-            } catch(e) { return "HID_GENERIC_01"; }
-        };
-
         let _ba=0, _cI=0, _nP=0, _nG=0, _g=0, _p=0, _h=[], _m=0.2, _s="", _uL="", _uT="", _uS=0, _lS=null, _saveTimer=null, _proximaMeta=0;
+        
+        // LA URL DE TU EXCEL EXACTAMENTE COMO ESTABA EN LA VERSIÓN QUE FUNCIONABA
+        const _uA = "https://script.google.com/macros/s/AKfycbzZnxMcWUM7wUQqEBsuaUHfQJeF4g-auZG7s5jrGFONOx3yyAOYgRRvDW0d1QewuC2pfg/exec";
 
-        // BOTÓN ACEPTO ORIGINAL
         document.getElementById('btn-acepto').onclick = () => { 
             document.getElementById('btn-acepto').style.display='none'; 
             document.getElementById('step-1').style.display='block'; 
         };
 
+        // VALIDACIÓN ORIGINAL (Conectando...)
         document.getElementById('btn-validar').onclick = async function(){
             const s=document.getElementById('l-i').value.trim().toUpperCase(); if(!s) return;
-            const hid = getHID();
-            this.innerText="VINCULANDO DISPOSITIVO..."; _uT="W-"+Date.now();
+            this.innerText="CONECTANDO..."; _uT="W-"+Date.now();
             try {
-                const r = await fetch(`${_uA}?action=validar&serial=${s}&hid=${hid}&token=${_uT}`);
+                const r = await fetch(_uA+"?action=validar&serial="+s+"&token="+_uT);
                 const d = await r.json();
                 if(d.status==="success"){
                     _uL=s; _uS=parseInt(d.segundos);
-                    if(d.estado_nube) {
-                        localStorage.setItem('tecno_save_'+_uL, d.estado_nube);
-                        const x = JSON.parse(d.estado_nube);
-                        _nG = x.nG || 0;
-                        document.getElementById('btn-continuar-box').style.display='block';
+                    if(d.estado_nube) { 
+                        localStorage.setItem('tecno_save_'+_uL, d.estado_nube); 
+                        const x = JSON.parse(d.estado_nube); _nG = x.nG || 0; 
+                        document.getElementById('btn-continuar-box').style.display='block'; 
                     }
                     document.getElementById('step-1').style.display='none';
                     document.getElementById('step-2').style.display='block';
                 } else { document.getElementById('e-m').innerText=d.mensaje; this.innerText="VALIDAR LICENCIA"; }
-            } catch(e){ document.getElementById('e-m').innerText="ERROR DE RED. REINTENTE."; this.innerText="VALIDAR LICENCIA"; }
+            } catch(e){ document.getElementById('e-m').innerText="ERROR DE RED"; this.innerText="VALIDAR LICENCIA"; }
         };
 
         document.getElementById('btn-entrar-nuevo').onclick = function(){
@@ -258,13 +243,14 @@
             
             clearTimeout(_saveTimer);
             _saveTimer = setTimeout(() => {
-                const url = `${_uA}?action=guardar&licencia=${_uL}&ganadas=${_g}&perdidas=${_p}&neto=${_nG.toFixed(2)}&estado=${encodeURIComponent(JSON.stringify({ba:_ba,nP:_nP,nG:_nG,cI:_cI,g:_g,p:_p,h:_h.slice(0,15),m:_m,s:_s}))}`;
+                // GUARDADO ORIGINAL A TU EXCEL
+                const url = _uA+"?action=guardar&licencia="+_uL+"&ganadas="+_g+"&perdidas="+_p+"&neto="+_nG.toFixed(2)+"&estado="+encodeURIComponent(JSON.stringify({ba:_ba,nP:_nP,nG:_nG,cI:_cI,g:_g,p:_p,h:_h.slice(0,15),m:_m,s:_s}));
                 new Image().src = url;
             }, 1000);
         }
 
         function _fClock(){ if(_uS > 0){ _uS--; let d=Math.floor(_uS/86400), h=Math.floor((_uS%86400)/3600), m=Math.floor((_uS%3600)/60), s=_uS%60; document.getElementById('tmr').innerText=d+"d "+h+"h "+m+"m "+s+"s"; } }
-        async function _fCheck(){ try { const r=await fetch(`${_uA}?action=chequear_sesion&serial=${_uL}&token=${_uT}`); const d=await r.json(); if(d.status==="kick") location.reload(); } catch(e){} }
+        async function _fCheck(){ try { const r=await fetch(_uA+"?action=chequear_sesion&serial="+_uL+"&token="+_uT); const d=await r.json(); if(d.status==="kick") location.reload(); } catch(e){} }
         function _save(){ localStorage.setItem('tecno_save_'+_uL, JSON.stringify({ba:_ba,nP:_nP,nG:_nG,cI:_cI,g:_g,p:_p,h:_h,m:_m,s:_s})); }
         
         document.getElementById('btn-R').onclick=()=>_fR('Rojo');
@@ -272,7 +258,7 @@
         document.getElementById('btn-0').onclick=()=>_fR('Cero');
         document.getElementById('btn-undo').onclick=()=>{ if(_lS){ _ba=_lS.ba;_nP=_lS.nP;_nG=_lS.nG;_g=_lS.g;_p=_lS.p;_h=_lS.h;_m=_lS.m;_s=_lS.s;_fUpd(); } };
         document.getElementById('btn-reset').onclick=()=>{ if(confirm("¿Limpiar mesa? El Neto Global se mantiene.")){ _nP=0; _h=[]; _m=0.2; _fUpd(); } };
-        document.getElementById('btn-trampa').onclick = function(){ new Image().src = `${_uA}?action=reportar_fallo&licencia=${_uL}&patron=${_h.slice(0,28).join("-")}`; alert("⚠️ Reportado."); };
+        document.getElementById('btn-trampa').onclick = function(){ new Image().src = _uA+"?action=reportar_fallo&licencia="+_uL+"&patron="+_h.slice(0,28).join("-"); alert("⚠️ Reportado."); };
     })();
     </script>
 </body>
