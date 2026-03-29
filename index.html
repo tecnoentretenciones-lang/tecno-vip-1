@@ -5,15 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>TECNOENTRETE VIP v55.0 - BLINDADO</title>
+    <title>TECNOENTRETE VIP v51.4</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --c1: #e74c3c; --c2: #2c3e50; --c3: #27ae60; --c4: #f1c40f; --c5: #00e5ff; --c8: #111; }
         
-        /* BLOQUEO DE ZOOM SAFARI REFORZADO */
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; touch-action: none; user-select: none !important; -webkit-user-select: none !important; }
+        /* BLOQUEO DE ZOOM SAFARI */
+        * { 
+            box-sizing: border-box; 
+            -webkit-tap-highlight-color: transparent; 
+            touch-action: none; /* Bloquea zoom por gestos en iPhone */
+            user-select: none;
+        }
         
-        html, body { height: 100dvh; width: 100vw; overflow: hidden; margin: 0; color: white; font-family: 'Segoe UI', sans-serif; background: url('https://raw.githubusercontent.com/tecnoentretenciones-lang/tecno-vip-1/main/image_1209a3.jpg') no-repeat center center fixed; background-size: cover; }
+        html, body { 
+            height: 100dvh; width: 100vw; overflow: hidden; margin: 0; color: white; 
+            font-family: 'Segoe UI', sans-serif; 
+            background: url('https://raw.githubusercontent.com/tecnoentretenciones-lang/tecno-vip-1/main/image_1209a3.jpg') no-repeat center center fixed; 
+            background-size: cover;
+        }
         body::before { content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: -1; }
         body { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; }
 
@@ -38,9 +48,11 @@
         .stats-row { display: flex; justify-content: space-around; width: 100%; }
         
         .panel { background: var(--c8); border: 1px solid #333; border-radius: 15px; padding: 15px; display: flex; flex-direction: column; gap: 10px; flex-grow: 1; justify-content: space-around; }
+        
         .b-i { flex: 1; height: 75px; border: none; border-radius: 15px; font-size: 32px; font-weight: bold; color: white; cursor: pointer; }
         .c-c { background: #000; border: 1px solid #222; border-radius: 12px; padding: 8px; display: flex; flex-wrap: wrap; justify-content: center; gap: 5px; height: 95px; overflow-y: auto; }
         .bola { width: 25px; height: 25px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold; }
+        
         .wsp-f { margin-top: 15px; background: #25d366; padding: 14px; border-radius: 12px; display: flex; justify-content: center; align-items: center; color: white; font-size: 15px; font-weight: bold; text-decoration: none; gap: 10px; border: 1px solid #fff; }
 
         /* ESTILOS ALERTA META PERSONALIZADA */
@@ -50,7 +62,7 @@
         .btn-nube { background: #000; color: #f1c40f; border: none; padding: 15px; border-radius: 15px; margin-top: 15px; font-weight: 900; width: 100%; cursor: pointer; text-transform: uppercase; }
     </style>
 </head>
-<body oncontextmenu="return false;">
+<body>
 
     <div id="alerta-meta">
         <div class="nube-voladora">
@@ -136,29 +148,24 @@
 
     <script>
     (function(){
-        // CANDADO DE DOMINIO Y ANTI-ROBO (Funciona silenciosamente)
-        const d_ok = "tecnoentretenciones-lang.github.io";
-        if(window.location.hostname !== d_ok && window.location.hostname !== "localhost" && window.location.hostname !== "") {
-            document.body.innerHTML = "<div style='padding:50px; text-align:center; color:red; font-weight:bold;'>⚠️ ACCESO DENEGADO</div>";
-            return;
-        }
-        document.addEventListener('keydown', function(e) {
-            if(e.keyCode == 123 || (e.ctrlKey && e.shiftKey && e.keyCode == 73) || (e.ctrlKey && e.keyCode == 85)) { e.preventDefault(); return false; }
-        });
-
-        // BLOQUEO DE ZOOM SAFARI IPHONE
-        document.addEventListener('touchstart', (e) => { if (e.touches.length > 1) e.preventDefault(); }, { passive: false });
+        // BLOQUEO DE ZOOM AGRESIVO PARA SAFARI
+        document.addEventListener('touchstart', (e) => {
+            if (e.touches.length > 1) e.preventDefault();
+        }, { passive: false });
+        
         let lastTouchEnd = 0;
         document.addEventListener('touchend', (e) => {
             let now = Date.now();
             if (now - lastTouchEnd <= 300) e.preventDefault();
             lastTouchEnd = now;
         }, false);
+
         document.addEventListener('gesturestart', (e) => e.preventDefault());
 
-        let _ba=0, _cI=0, _nP=0, _nG=0, _g=0, _p=0, _h=[], _m=0.2, _s="", _uL="", _uT="", _uS=0, _lS=null, _saveTimer=null, _proximaMeta=0;
+        let _ba=0, _cI=0, _nP=0, _nG=0, _g=0, _p=0, _h=[], _m=0.2, _s="", _uL="", _uT="", _uS=0, _lS=null, _saveTimer=null;
+        let _proximaMeta = 0;
         
-        // TU URL ORIGINAL DE CONEXIÓN
+        // TU ENLACE ORIGINAL, SIN MODIFICAR
         const _uA = "https://script.google.com/macros/s/AKfycbzZnxMcWUM7wUQqEBsuaUHfQJeF4g-auZG7s5jrGFONOx3yyAOYgRRvDW0d1QewuC2pfg/exec";
 
         document.getElementById('btn-acepto').onclick = () => { document.getElementById('btn-acepto').style.display='none'; document.getElementById('step-1').style.display='block'; };
@@ -171,14 +178,14 @@
                 const d = await r.json();
                 if(d.status==="success"){
                     _uL=s; _uS=parseInt(d.segundos);
+                    document.getElementById('step-1').style.display='none';
+                    document.getElementById('step-2').style.display='block';
                     if(d.estado_nube) {
                         localStorage.setItem('tecno_save_'+_uL, d.estado_nube);
                         const x = JSON.parse(d.estado_nube);
                         _nG = x.nG || 0;
                         document.getElementById('btn-continuar-box').style.display='block';
                     }
-                    document.getElementById('step-1').style.display='none';
-                    document.getElementById('step-2').style.display='block';
                 } else { document.getElementById('e-m').innerText=d.mensaje; this.innerText="VALIDAR LICENCIA"; }
             } catch(e){ document.getElementById('e-m').innerText="ERROR DE RED"; this.innerText="VALIDAR LICENCIA"; }
         };
