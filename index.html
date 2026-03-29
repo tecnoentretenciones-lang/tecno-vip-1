@@ -44,32 +44,17 @@
             <img src="https://cdn-icons-png.flaticon.com/512/1055/1055673.png" class="ruleta-logo">
             <h1 style="margin: 0 0 5px 0; font-size: 24px; color:white;">TECNOENTRETE VIP</h1>
             <p style="font-size: 14px; color: var(--c4); font-weight: bold; margin-bottom: 15px;">SOFTWARE PARA GANARLE A LA RULETA</p>
-            
             <div class="legal-box">⚠️ AVISO: No nos hacemos responsables por pérdidas de capital. El uso es bajo su propio riesgo.</div>
-
             <div style="text-align:left; font-size:12px; background:rgba(0,0,0,0.5); padding:12px; border-radius:15px; margin-bottom:15px; color:#eee; line-height: 1.5;">
                 - Iniciar siempre con monto base <b>$0.20</b>.<br>
                 - Capital recomendado: <b>$40 USD</b>.<br>
-                - Si hay 7 pérdidas seguidas, presione <b>⚠️ TRAMPA</b>. Esto reporta el patrón del casino y ayuda al programa a mejorar su precisión.
+                - Si hay 7 pérdidas seguidas, presione <b>⚠️ TRAMPA</b>. Esto reporta el patrón del casino.
             </div>
-            
             <div id="e-m" style="color: #ff4757; font-size: 13px; margin-bottom: 10px; font-weight: bold;"></div>
             <button id="btn-acepto" class="b-a">ACEPTO Y COMIENZO</button>
-
-            <div id="step-1" style="display:none">
-                <input type="text" id="l-i" class="i-s" placeholder="INGRESE LICENCIA" autocomplete="off">
-                <button class="b-a" id="btn-validar">VALIDAR LICENCIA</button>
-            </div>
-
-            <div id="step-2" style="display:none">
-                <input type="number" id="c-init" class="i-s" placeholder="SALDO DISPONIBLE EN MESA" step="0.01">
-                <button class="b-a" id="btn-entrar-nuevo">ENTRAR A JUGAR</button>
-                <div id="btn-continuar-box" style="display:none; margin-top:10px;">
-                    <button class="b-a" id="btn-continuar-sesion" style="background:#27ae60; color:white;">SINCRONIZAR ÚLTIMA PARTIDA</button>
-                </div>
-            </div>
-
-            <a href="https://wa.me/56995931641?text=Hola%20TECNOENTRETE,%20te%20escribo%20directamente%20desde%20la%20Ruleta%20VIP." class="wsp-f"><i class="fab fa-whatsapp"></i> CONTACTAR SOPORTE</a>
+            <div id="step-1" style="display:none"><input type="text" id="l-i" class="i-s" placeholder="INGRESE LICENCIA" autocomplete="off"><button class="b-a" id="btn-validar">VALIDAR LICENCIA</button></div>
+            <div id="step-2" style="display:none"><input type="number" id="c-init" class="i-s" placeholder="SALDO DISPONIBLE EN MESA" step="0.01"><button class="b-a" id="btn-entrar-nuevo">ENTRAR A JUGAR</button><div id="btn-continuar-box" style="display:none; margin-top:10px;"><button class="b-a" id="btn-continuar-sesion" style="background:#27ae60; color:white;">SINCRONIZAR ÚLTIMA PARTIDA</button></div></div>
+            <a href="https://wa.me/56995931641" class="wsp-f"><i class="fab fa-whatsapp"></i> CONTACTAR SOPORTE</a>
         </div>
     </div>
 
@@ -97,14 +82,15 @@
             document.body.innerHTML = "<div style='color:red; text-align:center; padding:50px; font-weight:bold;'>⚠️ ACCESO DENEGADO</div>"; return;
         }
 
-        // --- SÚPER HUELLA DIGITAL NIVEL NAVEGADOR ---
+        // --- GENERADOR DE LLAVE DE NAVEGADOR INDEPENDIENTE ---
         const getHID = () => {
-            const canvas = document.createElement('canvas');
-            const gl = canvas.getContext('webgl');
-            const debugInfo = gl ? gl.getExtension('WEBGL_debug_renderer_info') : null;
-            const renderer = debugInfo ? gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL) : "NoGL";
-            // Sumamos el UserAgent (Navegador) a la huella
-            return btoa(navigator.userAgent + screen.width + renderer).substring(0, 18);
+            let key = localStorage.getItem('_tecno_hid_key');
+            if(!key){
+                // Si no hay llave, crea una única para ESTE navegador
+                key = 'NAV-' + Math.random().toString(36).substring(2, 15) + Date.now().toString(36);
+                localStorage.setItem('_tecno_hid_key', key);
+            }
+            return key;
         };
 
         let _ba=0, _cI=0, _nP=0, _nG=0, _g=0, _p=0, _h=[], _m=0.2, _s="", _uL="", _uT="", _uS=0, _lS=null, _saveTimer=null, _proximaMeta = 0; 
