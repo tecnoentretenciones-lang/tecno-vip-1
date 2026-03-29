@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -6,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>TECNOENTRETE VIP v55.2 - HUELLA</title>
+    <title>TECNOENTRETE VIP v55.2 - HUELLA ACTIVA</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --c1: #e74c3c; --c2: #2c3e50; --c3: #27ae60; --c4: #f1c40f; --c5: #00e5ff; --c8: #111; }
@@ -136,7 +135,7 @@
         document.addEventListener('touchend', (e) => { let now = Date.now(); if (now - lastTouchEnd <= 300) e.preventDefault(); lastTouchEnd = now; }, false);
         document.addEventListener('gesturestart', (e) => e.preventDefault());
 
-        // LECTOR DE HUELLA DIGITAL (NUEVO)
+        // LECTOR DE HUELLA DIGITAL
         const getHID = () => {
             try {
                 const gl = document.createElement('canvas').getContext('webgl');
