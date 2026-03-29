@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -78,19 +79,16 @@
 
     <script>
     (function(){
-        // CANDADO DE DOMINIO
         const d_ok = "tecnoentretenciones-lang.github.io";
         if(window.location.hostname !== d_ok && window.location.hostname !== "localhost" && window.location.protocol !== "file:") {
             document.body.innerHTML = "<div style='color:red; text-align:center; padding:50px; font-weight:bold; background:black; height:100vh;'>⚠️ ACCESO DENEGADO</div>"; return;
         }
 
-        // BLOQUEO DE ZOOM
         document.addEventListener('touchstart', (e) => { if (e.touches.length > 1) e.preventDefault(); }, { passive: false });
         let lastTouchEnd = 0;
         document.addEventListener('touchend', (e) => { let now = Date.now(); if (now - lastTouchEnd <= 300) e.preventDefault(); lastTouchEnd = now; }, false);
         document.addEventListener('gesturestart', (e) => e.preventDefault());
 
-        // HUELLA DIGITAL SIMPLIFICADA (PC Y MÓVIL)
         const getHID = () => { return btoa(navigator.userAgent.length + navigator.platform + screen.width).substring(0, 12); };
 
         let _ba=0, _cI=0, _nP=0, _nG=0, _g=0, _p=0, _h=[], _m=0.2, _s="", _uL="", _uT="", _uS=0, _lS=null, _saveTimer=null, _proximaMeta = 0; 
