@@ -69,7 +69,7 @@
                 </div>
             </div>
 
-            <a href="https://wa.me/56995931641?text=Hola%20TECNOENTRETE,%20te%20escribo%20directamente%20desde%20la%20Ruleta%20VIP.%20Necesito%20soporte." class="wsp-f"><i class="fab fa-whatsapp"></i> CONTACTAR SOPORTE</a>
+            <a href="https://wa.me/56995931641?text=Hola%20TECNOENTRETE,%20te%20escribo%20directamente%20desde%20la%20Ruleta%20VIP." class="wsp-f"><i class="fab fa-whatsapp"></i> CONTACTAR SOPORTE</a>
         </div>
     </div>
 
@@ -93,16 +93,18 @@
     <script>
     (function(){
         const d_ok = "tecnoentretenciones-lang.github.io";
-        if(window.location.hostname !== d_ok && window.location.hostname !== "localhost" && window.location.protocol !== "file:") {
-            document.body.innerHTML = "<div style='color:red; text-align:center; padding:50px; font-weight:bold; background:black; height:100vh;'>⚠️ ACCESO DENEGADO</div>"; return;
+        if(window.location.hostname !== d_ok && window.location.hostname !== "localhost") {
+            document.body.innerHTML = "<div style='color:red; text-align:center; padding:50px; font-weight:bold;'>⚠️ ACCESO DENEGADO</div>"; return;
         }
 
+        // --- SÚPER HUELLA DIGITAL NIVEL NAVEGADOR ---
         const getHID = () => {
             const canvas = document.createElement('canvas');
             const gl = canvas.getContext('webgl');
             const debugInfo = gl ? gl.getExtension('WEBGL_debug_renderer_info') : null;
             const renderer = debugInfo ? gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL) : "NoGL";
-            return btoa(navigator.userAgent + screen.width + renderer).substring(0, 16);
+            // Sumamos el UserAgent (Navegador) a la huella
+            return btoa(navigator.userAgent + screen.width + renderer).substring(0, 18);
         };
 
         let _ba=0, _cI=0, _nP=0, _nG=0, _g=0, _p=0, _h=[], _m=0.2, _s="", _uL="", _uT="", _uS=0, _lS=null, _saveTimer=null, _proximaMeta = 0; 
