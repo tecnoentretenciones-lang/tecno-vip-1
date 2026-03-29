@@ -5,16 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>TECNOENTRETE VIP v51.0</title>
+    <title>TECNOENTRETE VIP v51.4</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --c1: #e74c3c; --c2: #2c3e50; --c3: #27ae60; --c4: #f1c40f; --c5: #00e5ff; --c8: #111; }
         
-        /* BLOQUEO DE ZOOM SAFARI */
+        /* BLOQUEO DE ZOOM SAFARI REFORZADO */
         * { 
             box-sizing: border-box; 
             -webkit-tap-highlight-color: transparent; 
-            touch-action: none; /* Bloquea zoom por gestos en iPhone */
+            touch-action: none; 
             user-select: none;
         }
         
@@ -54,9 +54,25 @@
         .bola { width: 25px; height: 25px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold; }
         
         .wsp-f { margin-top: 15px; background: #25d366; padding: 14px; border-radius: 12px; display: flex; justify-content: center; align-items: center; color: white; font-size: 15px; font-weight: bold; text-decoration: none; gap: 10px; border: 1px solid #fff; }
+
+        /* ESTILOS ALERTA META PERSONALIZADA */
+        #alerta-meta { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.92); z-index: 10005; display: none; justify-content: center; align-items: center; flex-direction: column; }
+        .nube-voladora { background: linear-gradient(135deg, #f1c40f, #f39c12); color: #000; padding: 25px; border-radius: 30px; text-align: center; max-width: 90%; border: 4px solid #fff; box-shadow: 0px 15px 35px rgba(241,196,15,0.5); animation: entrarVuelo 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        @keyframes entrarVuelo { 0% { transform: scale(0.5); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+        .btn-nube { background: #000; color: #f1c40f; border: none; padding: 15px; border-radius: 15px; margin-top: 15px; font-weight: 900; width: 100%; cursor: pointer; text-transform: uppercase; }
     </style>
 </head>
 <body>
+
+    <div id="alerta-meta">
+        <div class="nube-voladora">
+            <div style="font-size: 50px;">🛑💰✨</div>
+            <h2 style="margin: 10px 0; font-weight: 900; line-height: 1.1;">¡OBJETIVO LOGRADO!</h2>
+            <p style="margin: 10px 0; font-weight: bold; font-size: 16px;">Has ganado el 20% de tu capital.</p>
+            <p style="margin: 0; font-weight: 600; font-size: 14px; line-height: 1.4;">Para proteger tus ganancias y no perder la racha, <b>¡ARRANCA AHORA!</b><br><br>Tómate un descanso, disfruta tu dinero y vuelve más tarde.</p>
+            <button class="btn-nube" onclick="aceptarMeta()">OK, ENTIENDO (CONTINUAR)</button>
+        </div>
+    </div>
 
     <div id="p-l">
         <div class="c-l">
@@ -132,7 +148,7 @@
 
     <script>
     (function(){
-        // BLOQUEO DE ZOOM AGRESIVO PARA SAFARI
+        // BLOQUEO DE ZOOM SAFARI IPHONE REFORZADO
         document.addEventListener('touchstart', (e) => {
             if (e.touches.length > 1) e.preventDefault();
         }, { passive: false });
@@ -147,6 +163,7 @@
         document.addEventListener('gesturestart', (e) => e.preventDefault());
 
         let _ba=0, _cI=0, _nP=0, _nG=0, _g=0, _p=0, _h=[], _m=0.2, _s="", _uL="", _uT="", _uS=0, _lS=null, _saveTimer=null;
+        let _proximaMeta = 0; 
         const _uA = "https://script.google.com/macros/s/AKfycbzZnxMcWUM7wUQqEBsuaUHfQJeF4g-auZG7s5jrGFONOx3yyAOYgRRvDW0d1QewuC2pfg/exec";
 
         document.getElementById('btn-acepto').onclick = () => { document.getElementById('btn-acepto').style.display='none'; document.getElementById('step-1').style.display='block'; };
@@ -159,14 +176,14 @@
                 const d = await r.json();
                 if(d.status==="success"){
                     _uL=s; _uS=parseInt(d.segundos);
-                    document.getElementById('step-1').style.display='none';
-                    document.getElementById('step-2').style.display='block';
                     if(d.estado_nube) {
                         localStorage.setItem('tecno_save_'+_uL, d.estado_nube);
                         const x = JSON.parse(d.estado_nube);
                         _nG = x.nG || 0;
                         document.getElementById('btn-continuar-box').style.display='block';
                     }
+                    document.getElementById('step-1').style.display='none';
+                    document.getElementById('step-2').style.display='block';
                 } else { document.getElementById('e-m').innerText=d.mensaje; this.innerText="VALIDAR LICENCIA"; }
             } catch(e){ document.getElementById('e-m').innerText="ERROR DE RED"; this.innerText="VALIDAR LICENCIA"; }
         };
@@ -174,6 +191,7 @@
         document.getElementById('btn-entrar-nuevo').onclick = function(){
             const v=parseFloat(document.getElementById('c-init').value); if(isNaN(v)||v<=0) return;
             _ba=v; _cI=v; _nP=0; _h=[]; _m=0.2; _s=""; 
+            _proximaMeta = _ba * 1.20; // 20%
             document.getElementById('val-inicial').innerText = "$" + v.toFixed(2);
             _arrancar();
         };
@@ -183,9 +201,15 @@
             if(sv){
                 const x=JSON.parse(sv);
                 _ba=x.ba; _nP=x.nP; _nG=x.nG; _cI=x.cI||x.ba; _g=x.g; _p=x.p; _h=x.h; _m=x.m; _s=x.s;
+                _proximaMeta = _ba * 1.20;
                 document.getElementById('val-inicial').innerText = "$" + _cI.toFixed(2);
             }
             _arrancar();
+        };
+
+        window.aceptarMeta = function() {
+            document.getElementById('alerta-meta').style.display = 'none';
+            _proximaMeta = _ba * 1.20; // Nueva meta sobre el saldo ganado
         };
 
         function _arrancar(){ document.getElementById('p-l').style.display='none'; document.getElementById('app-principal').style.display='flex'; setInterval(_fClock, 1000); setInterval(_fCheck, 20000); _fUpd(); }
@@ -197,6 +221,7 @@
                 else if(c!=='Cero'){ _ba-=_m; _nP-=_m; _nG-=_m; _m*=2; _p++; }
             }
             _h.unshift(c); _calc(); _save(); _fUpd();
+            if(_ba >= _proximaMeta) { document.getElementById('alerta-meta').style.display = 'flex'; }
         }
 
         function _calc() {
@@ -247,4 +272,3 @@
     </script>
 </body>
 </html>
-
