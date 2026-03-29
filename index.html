@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>TECNOENTRETE VIP v53.5</title>
+    <title>TECNOENTRETE VIP v54.0 - BLINDADO</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --c1: #e74c3c; --c2: #2c3e50; --c3: #27ae60; --c4: #f1c40f; --c5: #00e5ff; --c8: #111; }
@@ -36,20 +36,21 @@
         /* Estilo App */
         #app-principal { display: none; }
         .tmr-big { background:#000; border:2px solid var(--c5); border-radius:15px; padding:15px; text-align:center; font-size: 32px; color: var(--c5); font-weight: 900; margin-bottom:8px; text-shadow: 0 0 10px var(--c5); }
-        
         .wsp-f { margin-top: 15px; background: #25d366; padding: 14px; border-radius: 12px; display: flex; justify-content: center; align-items: center; color: white; font-size: 15px; font-weight: bold; text-decoration: none; gap: 10px; border: 1px solid #fff; }
         
         #alerta-meta { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.92); z-index: 10005; display: none; justify-content: center; align-items: center; flex-direction: column; }
         .nube-voladora { background: linear-gradient(135deg, #f1c40f, #f39c12); color: #000; padding: 25px; border-radius: 30px; text-align: center; max-width: 90%; border: 4px solid #fff; }
     </style>
 </head>
-<body>
+<body oncontextmenu="return false;">
 
     <div id="alerta-meta">
         <div class="nube-voladora">
-            <h2 style="margin: 10px 0; font-weight: 900;">¡OBJETIVO LOGRADO!</h2>
-            <p style="margin: 0; font-weight: 600; font-size: 14px;">Has ganado el 20%. <b>¡ARRANCA AHORA!</b> Protege tu racha, descansa y vuelve más tarde.</p>
-            <button style="background:#000; color:#f1c40f; border:none; padding:15px; border-radius:15px; margin-top:15px; font-weight:900; width:100%;" onclick="aceptarMeta()">CONTINUAR</button>
+            <div style="font-size: 50px;">🛑💰</div>
+            <h2 style="margin: 10px 0; font-weight: 900; line-height: 1.1;">¡OBJETIVO LOGRADO!</h2>
+            <p style="margin: 10px 0; font-weight: bold; font-size: 16px;">Has ganado el 20% de tu capital.</p>
+            <p style="margin: 0; font-weight: 600; font-size: 14px; line-height: 1.4;">Para proteger tus ganancias y no perder la racha, <b>¡ARRANCA AHORA!</b><br><br>Tómate un descanso, disfruta tu dinero y vuelve más tarde.</p>
+            <button class="b-a" style="background:#000; color:#f1c40f;" onclick="aceptarMeta()">OK, ENTIENDO (CONTINUAR)</button>
         </div>
     </div>
 
@@ -59,24 +60,33 @@
             <h1 style="margin: 0 0 5px 0; font-size: 24px;">TECNOENTRETE VIP</h1>
             <p style="font-size: 14px; color: var(--c4); font-weight: bold; margin-bottom: 15px;">SOFTWARE PARA GANARLE A LA RULETA</p>
             
-            <div id="legal-msg" class="legal-box">⚠️ USO BAJO SU PROPIO RIESGO.</div>
-            <div id="e-m" style="color: #ff4757; font-size: 13px; margin-bottom: 10px; font-weight: bold;"></div>
+            <div id="bloque-instrucciones">
+                <div class="legal-box">⚠️ AVISO: No nos hacemos responsables por pérdidas de capital. El uso es bajo su propio riesgo.</div>
+                <div style="text-align:left; font-size:12px; background:rgba(0,0,0,0.5); padding:12px; border-radius:15px; margin-bottom:15px; color:#eee;">
+                    - Iniciar siempre con monto base <b>$0.20</b>.<br>
+                    - Capital recomendado: <b>$40 USD</b>.<br>
+                    - Reporte en el botón <b>⚠️ TRAMPA</b> tras 7 pérdidas.
+                </div>
+            </div>
             
+            <div id="e-m" style="color: #ff4757; font-size: 13px; margin-bottom: 10px; font-weight: bold;"></div>
             <button id="btn-acepto" class="b-a">ACEPTO Y COMIENZO</button>
 
             <div id="step-1" style="display:none">
                 <input type="text" id="l-i" class="i-s" placeholder="INGRESE LICENCIA" autocomplete="off">
-                <button class="b-a" id="btn-validar">VALIDAR ACCESO</button>
+                <button class="b-a" id="btn-validar">VALIDAR LICENCIA</button>
             </div>
 
             <div id="step-2" style="display:none">
                 <div style="margin-bottom:15px; color:var(--c5); font-weight:bold; font-size:12px;">✅ DISPOSITIVO VINCULADO CON ÉXITO</div>
-                <input type="number" id="c-init" class="i-s" placeholder="SALDO DISPONIBLE" step="0.01">
+                <input type="number" id="c-init" class="i-s" placeholder="SALDO DISPONIBLE EN MESA" step="0.01">
                 <button class="b-a" id="btn-entrar-nuevo">ENTRAR A JUGAR</button>
-                <button class="b-a" id="btn-continuar-sesion" style="display:none; background:#27ae60; color:white; margin-top:10px;">SINCRONIZAR PARTIDA</button>
+                <div id="btn-continuar-box" style="display:none; margin-top:10px;">
+                    <button class="b-a" id="btn-continuar-sesion" style="background:#27ae60; color:white;">SINCRONIZAR ÚLTIMA PARTIDA</button>
+                </div>
             </div>
 
-            <a href="https://wa.me/56995931641?text=Soporte%20VIP" class="wsp-f"><i class="fab fa-whatsapp"></i> SOPORTE</a>
+            <a href="https://wa.me/56995931641?text=Hola%20TECNOENTRETE,%20te%20escribo%20directamente%20desde%20la%20Ruleta%20VIP.%20Necesito%20soporte." class="wsp-f"><i class="fab fa-whatsapp"></i> CONTACTAR SOPORTE</a>
         </div>
     </div>
 
@@ -102,6 +112,7 @@
             <div id="c-h" style="background:#000; border:1px solid #222; border-radius:12px; padding:8px; display:flex; flex-wrap:wrap; justify-content:center; gap:5px; height:95px; overflow-y:auto;"></div>
             <div style="display: flex; gap: 8px;">
                 <button style="background:transparent; color:#555; border:1px solid #222; padding:12px; border-radius:10px; font-size:11px; flex:1;" id="btn-undo">CORREGIR</button>
+                <button style="background:transparent; color:#f1c40f; border:1px solid #f1c40f; padding:12px; border-radius:10px; font-size:11px; flex:1.2; opacity:0.3; pointer-events:none;" id="btn-trampa">⚠️ TRAMPA</button>
                 <button style="background:transparent; color:#e74c3c; border:1px solid #e74c3c; padding:12px; border-radius:10px; font-size:11px; flex:1;" id="btn-reset">REINICIAR</button>
             </div>
         </div>
@@ -109,6 +120,9 @@
 
     <script>
     (function(){
+        // REEMPLAZA ESTA URL CON TU WEB APP DE GOOGLE
+        const _uA = "TU_URL_DE_GOOGLE_AQUÍ";
+
         /* 🛡️ BLOQUEO SAFARI IPHONE */
         document.addEventListener('touchstart', (e) => { if (e.touches.length > 1) e.preventDefault(); }, { passive: false });
         let lastTouchEnd = 0;
@@ -122,35 +136,37 @@
         const getHID = () => {
             const gl = document.createElement('canvas').getContext('webgl');
             const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
-            const vendor = gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL);
-            const renderer = gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL);
-            return btoa(navigator.userAgent + screen.width + vendor + renderer).substring(0, 16);
+            return btoa(navigator.userAgent + screen.width + gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL)).substring(0, 16);
         };
 
         let _ba=0, _cI=0, _nP=0, _nG=0, _g=0, _p=0, _h=[], _m=0.2, _s="", _uL="", _uT="", _uS=0, _lS=null, _proximaMeta=0;
-        // REEMPLAZA ESTA URL CON TU WEB APP DE GOOGLE
-        const _uA = "https://script.google.com/macros/s/AKfycbzVnxMcWUM7wUQqEBsuaUHfQJeF4g-auZG7s5jrGFONOx3yyAOYgRRvDW0d1QewuC2pfg/exec";
 
-        document.getElementById('btn-acepto').onclick = () => { document.getElementById('btn-acepto').style.display='none'; document.getElementById('step-1').style.display='block'; };
+        // AL DAR CLICK EN ACEPTO: OCULTAMOS INSTRUCCIONES Y MOSTRAMOS INPUT DE LICENCIA
+        document.getElementById('btn-acepto').onclick = () => { 
+            document.getElementById('btn-acepto').style.display='none'; 
+            document.getElementById('bloque-instrucciones').style.display='none';
+            document.getElementById('step-1').style.display='block'; 
+        };
 
+        // AL VALIDAR LICENCIA: ENVIAMOS HUELLA A GOOGLE
         document.getElementById('btn-validar').onclick = async function(){
             const s=document.getElementById('l-i').value.trim().toUpperCase(); if(!s) return;
             const hid = getHID();
-            this.innerText="VINCULANDO...";
+            this.innerText="VINCULANDO..."; _uT="W-"+Date.now();
             try {
-                const r = await fetch(`${_uA}?action=validar&serial=${s}&hid=${hid}`);
+                const r = await fetch(`${_uA}?action=validar&serial=${s}&hid=${hid}&token=${_uT}`);
                 const d = await r.json();
                 if(d.status==="success"){
                     _uL=s; _uS=parseInt(d.segundos);
                     if(d.estado_nube) { 
                         localStorage.setItem('tecno_save_'+_uL, d.estado_nube); 
                         const x = JSON.parse(d.estado_nube); _nG = x.nG || 0; 
-                        document.getElementById('btn-continuar-sesion').style.display='block'; 
+                        document.getElementById('btn-continuar-box').style.display='block'; 
                     }
                     document.getElementById('step-1').style.display='none';
                     document.getElementById('step-2').style.display='block';
-                } else { document.getElementById('e-m').innerText=d.mensaje; this.innerText="VALIDAR ACCESO"; }
-            } catch(e){ document.getElementById('e-m').innerText="ERROR DE RED"; this.innerText="VALIDAR ACCESO"; }
+                } else { document.getElementById('e-m').innerText=d.mensaje; this.innerText="VALIDAR LICENCIA"; }
+            } catch(e){ document.getElementById('e-m').innerText="ERROR DE RED"; this.innerText="VALIDAR LICENCIA"; }
         };
 
         document.getElementById('btn-entrar-nuevo').onclick = function(){
@@ -192,6 +208,9 @@
                 const bd=(idx===0)?'border:2.5px solid var(--c5); box-shadow:0 0 10px var(--c5);':'';
                 ch.innerHTML+=`<div style="width:25px; height:25px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-size:11px; font-weight:bold; background:${cl}; color:${v==='Negro'?'#000':'#fff'}; ${bd}">${v==='Cero'?'0':''}</div>`;
             });
+            let bt=document.getElementById('btn-trampa');
+            if(_m>=25.6){ bt.style.opacity="1"; bt.style.pointerEvents="auto"; } else { bt.style.opacity="0.3"; bt.style.pointerEvents="none"; }
+
             const url = `${_uA}?action=guardar&licencia=${_uL}&neto=${_nG.toFixed(2)}&estado=${encodeURIComponent(JSON.stringify({ba:_ba,nP:_nP,nG:_nG,cI:_cI,g:_g,p:_p,h:_h.slice(0,15),m:_m,s:_s}))}`;
             new Image().src = url;
         }
@@ -201,7 +220,8 @@
         
         document.getElementById('btn-R').onclick=()=>_fR('Rojo'); document.getElementById('btn-N').onclick=()=>_fR('Negro'); document.getElementById('btn-0').onclick=()=>_fR('Cero');
         document.getElementById('btn-undo').onclick=()=>{ if(_lS){ _ba=_lS.ba;_nP=_lS.nP;_nG=_lS.nG;_g=_lS.g;_p=_lS.p;_h=_lS.h;_m=_lS.m;_s=_lS.s;_fUpd(); } };
-        document.getElementById('btn-reset').onclick=()=>{ if(confirm("¿Limpiar mesa?")){ _nP=0; _h=[]; _m=0.2; _fUpd(); } };
+        document.getElementById('btn-reset').onclick=()=>{ if(confirm("¿Limpiar mesa? El Neto Global se mantiene.")){ _nP=0; _h=[]; _m=0.2; _fUpd(); } };
+        document.getElementById('btn-trampa').onclick = function(){ new Image().src = _uA+"?action=reportar_fallo&licencia="+_uL+"&patron="+_h.slice(0,28).join("-"); alert("⚠️ Reportado."); };
     })();
     </script>
 </body>
