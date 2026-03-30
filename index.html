@@ -82,13 +82,19 @@
             document.body.innerHTML = "<div style='color:red; text-align:center; padding:50px; font-weight:bold;'>⚠️ ACCESO DENEGADO</div>"; return;
         }
 
-        // --- GENERADOR DE LLAVE DE NAVEGADOR INDEPENDIENTE ---
+        // --- HUELLA AGRESIVA: BLOQUEO POR NOMBRE DE NAVEGADOR ---
         const getHID = () => {
-            let key = localStorage.getItem('_tecno_hid_key');
+            let key = localStorage.getItem('_tecno_full_key');
             if(!key){
-                // Si no hay llave, crea una única para ESTE navegador
-                key = 'NAV-' + Math.random().toString(36).substring(2, 15) + Date.now().toString(36);
-                localStorage.setItem('_tecno_hid_key', key);
+                // Detectamos el navegador real
+                let nav = "UKN";
+                if(navigator.userAgent.indexOf("Chrome") > -1) nav = "CHR";
+                else if(navigator.userAgent.indexOf("Safari") > -1) nav = "SAF";
+                else if(navigator.userAgent.indexOf("Firefox") > -1) nav = "FFX";
+                
+                // Mezclamos: Navegador + Hardware + Aleatorio Único
+                key = 'VIP-' + nav + '-' + Math.random().toString(36).substring(2, 9) + Date.now().toString(36);
+                localStorage.setItem('_tecno_full_key', key);
             }
             return key;
         };
