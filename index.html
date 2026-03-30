@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -81,10 +82,10 @@
     (function(){
         const _uA = "https://script.google.com/macros/s/AKfycbx5WjIbvjm2EXQgGJhO3oJxYj0oMf_7A0DrwMrIli4N_d6oShqZv7ff_H8FN-pvWrHebg/exec";
         
-        // HID ORIGINAL QUE TU SCRIPT RECONOCE
+        // HID ORIGINAL
         const getHID = () => {
-            let key = localStorage.getItem('_ts_hid_v2');
-            if(!key){ key = 'VIP-' + Math.random().toString(36).substring(2,12).toUpperCase(); localStorage.setItem('_ts_hid_v2', key); }
+            let key = localStorage.getItem('_tecno_super_key_v2');
+            if(!key){ key = 'VIP-' + Math.random().toString(36).substring(2,12).toUpperCase(); localStorage.setItem('_tecno_super_key_v2', key); }
             return key;
         };
 
@@ -100,15 +101,18 @@
             const s=document.getElementById('l-i').value.trim().toUpperCase(); if(!s) return;
             this.innerText="..."; _uT="W-"+Date.now();
             try {
-                // USAMOS "serial" TAL CUAL TU SCRIPT RESPALDADO
+                // PARAMETRO "serial" SEGUN TU SCRIPT RESPALDADO
                 const r = await fetch(_uA+"?action=validar&serial="+s+"&hid="+getHID()+"&token="+_uT);
                 const d = await r.json();
                 if(d.status==="success"){
                     _uL=s; _uS=parseInt(d.segundos);
                     if(d.estado_nube) { localStorage.setItem('ts_'+_uL, d.estado_nube); document.getElementById('btn-continuar-box').style.display='block'; }
                     document.getElementById('step-1').style.display='none'; document.getElementById('step-2').style.display='block';
-                } else { document.getElementById('e-m').innerText=d.mensaje; this.innerText="VALIDAR"; }
-            } catch(e){ document.getElementById('e-m').innerText="ERROR RED"; this.innerText="VALIDAR"; }
+                } else { 
+                    document.getElementById('e-m').innerText=d.mensaje || "NO ENCONTRADA"; 
+                    this.innerText="VALIDAR LICENCIA"; 
+                }
+            } catch(e){ document.getElementById('e-m').innerText="ERROR DE CONEXIÓN"; this.innerText="VALIDAR LICENCIA"; }
         };
 
         document.getElementById('btn-entrar-nuevo').onclick = function(){
@@ -163,7 +167,7 @@
         function _fUpd(){
             const est = JSON.stringify({ba:_ba, nP:_nP, nG:_nG, cI:_cI, h:_h.slice(0,12), m:_m, s:_s});
             localStorage.setItem('ts_'+_uL, est);
-            // USAMOS "licencia" y "neto" TAL CUAL TU SCRIPT
+            // PARAMETROS EXACTOS: licencia, neto, ganadas/perdidas, segundos_actuales
             new Image().src = _uA+"?action=guardar&licencia="+_uL+"&neto="+_nG.toFixed(2)+"&ganadas="+_g+"&perdidas="+_p+"&segundos_actuales="+_uS;
         }
 
@@ -174,7 +178,6 @@
                 if(_uS===0) location.reload();
             }
         }
-        function _p2(n){return n<10?'0'+n:n;}
         document.getElementById('btn-R').onclick=()=>_fR('Rojo');
         document.getElementById('btn-N').onclick=()=>_fR('Negro');
         document.getElementById('btn-0').onclick=()=>_fR('Cero');
