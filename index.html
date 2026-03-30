@@ -3,26 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
     <title>TECNOENTRETE VIP v55.2</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --c1: #e74c3c; --c2: #2c3e50; --c3: #27ae60; --c4: #f1c40f; --c5: #00e5ff; --c8: #111; }
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; touch-action: none; user-select: none !important; }
         html, body { height: 100dvh; width: 100vw; overflow: hidden; margin: 0; color: white; font-family: 'Segoe UI', sans-serif; background: url('https://raw.githubusercontent.com/tecnoentretenciones-lang/tecno-vip-1/main/image_1209a3.jpg') no-repeat center center fixed; background-size: cover; }
         body::before { content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: -1; }
         body { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; }
         #p-l, #app-principal { width: 100%; height: 100dvh; max-width: 500px; display: flex; flex-direction: column; padding: 12px; }
-        #p-l { position: fixed; top: 0; background: rgba(0,0,0,0.9); z-index: 9999; align-items: center; justify-content: center; }
-        .c-l { background: rgba(20, 20, 20, 0.95); border: 2px solid var(--c5); border-radius: 25px; padding: 25px; width: 100%; text-align: center; }
+        #p-l { position: fixed; top: 0; background: rgba(0,0,0,0.95); z-index: 9999; align-items: center; justify-content: center; }
+        .c-l { background: rgba(20, 20, 20, 0.95); border: 2px solid var(--c5); border-radius: 25px; padding: 25px; width: 100%; text-align: center; box-shadow: 0 0 30px rgba(0,229,255,0.2); }
         .ruleta-logo { width: 70px; height: 70px; margin-bottom: 10px; animation: rotar 5s linear infinite; filter: drop-shadow(0 0 10px var(--c5)); }
         @keyframes rotar { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-        .i-s { width: 100%; background: #000; border: 2px solid #555; color: var(--c4); padding: 15px; border-radius: 12px; font-size: 22px; text-align: center; margin-bottom: 15px; outline: none; }
+        .legal-box { background: rgba(231, 76, 60, 0.2); border: 1px solid var(--c1); padding: 10px; border-radius: 12px; margin-bottom: 15px; font-size: 11px; color: #ff8888; font-weight: bold; }
+        .i-s { width: 100%; background: #000; border: 2px solid #555; color: var(--c4); padding: 15px; border-radius: 12px; font-size: 22px; text-align: center; margin-bottom: 15px; outline: none; font-weight: bold; }
         .b-a { background: var(--c5); color: #000; border: none; padding: 18px; border-radius: 12px; font-weight: 900; width: 100%; cursor: pointer; text-transform: uppercase; font-size: 16px; margin-bottom: 10px; }
         #app-principal { display: none; }
-        .tmr-big { background:#000; border:2px solid var(--c5); border-radius:15px; padding:15px; text-align:center; font-size: 32px; color: var(--c5); font-weight: 900; margin-bottom:8px; }
-        .stats-row { display: flex; justify-content: space-around; background: #000; padding: 15px; border-radius: 15px; border: 1px solid #333; margin-bottom: 10px; }
+        .tmr-big { background:#000; border:2px solid var(--c5); border-radius:15px; padding:12px; text-align:center; font-size: 30px; color: var(--c5); font-weight: 900; margin-bottom:8px; }
+        .stats-row { display: flex; justify-content: space-around; background: #000; padding: 12px; border-radius: 15px; border: 1px solid #333; margin-bottom: 8px; }
         .panel { background: #111; border: 1px solid #333; border-radius: 15px; padding: 15px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-around; }
-        .b-i { flex: 1; height: 75px; border: none; border-radius: 15px; font-size: 32px; font-weight: bold; color: white; cursor: pointer; }
+        .b-i { flex: 1; height: 70px; border: none; border-radius: 15px; font-size: 32px; font-weight: bold; color: white; cursor: pointer; }
         .bola { width: 25px; height: 25px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold; margin: 2px; }
     </style>
 </head>
@@ -33,15 +35,16 @@
             <img src="https://cdn-icons-png.flaticon.com/512/1055/1055673.png" class="ruleta-logo">
             <h1 style="margin: 0; font-size: 24px;">TECNOENTRETE VIP</h1>
             <p style="color: var(--c4); font-weight: bold; margin-bottom: 15px;">SOFTWARE PROFESIONAL</p>
+            <div class="legal-box">⚠️ AVISO: No nos hacemos responsables por pérdidas. El uso es bajo su propio riesgo.</div>
             <div id="e-m" style="color: #ff4757; font-size: 13px; margin-bottom: 10px;"></div>
             <div id="step-1">
                 <input type="text" id="l-i" class="i-s" placeholder="LICENCIA">
-                <button class="b-a" id="btn-validar">VALIDAR</button>
+                <button class="b-a" id="btn-validar">ACEPTO Y VALIDAR</button>
             </div>
             <div id="step-2" style="display:none">
-                <input type="number" id="c-init" class="i-s" placeholder="SALDO">
-                <button class="b-a" id="btn-entrar">JUGAR</button>
-                <div id="cont-box" style="display:none; margin-top:10px;"><button class="b-a" id="btn-cont" style="background:#27ae60; color:white;">SINCRONIZAR</button></div>
+                <input type="number" id="c-init" class="i-s" placeholder="SALDO MESA">
+                <button class="b-a" id="btn-entrar">ENTRAR A JUGAR</button>
+                <div id="cont-box" style="display:none; margin-top:10px;"><button class="b-a" id="btn-cont" style="background:#27ae60; color:white;">SINCRONIZAR PARTIDA</button></div>
             </div>
         </div>
     </div>
@@ -49,40 +52,39 @@
     <div id="app-principal">
         <div id="tmr" class="tmr-big">00:00:00</div>
         <div class="stats-row">
-            <div style="text-align:center;"><div style="font-size: 10px; color: #888;">SALDO</div><div id="cap-val" style="font-size: 22px; font-weight: 900;">$0.00</div></div>
+            <div style="text-align:center;"><div style="font-size: 10px; color: #888;">SALDO ACTUAL</div><div id="cap-val" style="font-size: 22px; font-weight: 900;">$0.00</div></div>
             <div style="text-align:center;"><div style="font-size: 10px; color: #888;">NETO GLOBAL</div><div id="n-g" style="font-size: 22px; font-weight: 900; color: var(--c5);">$0.00</div></div>
         </div>
         <div class="panel">
             <div id="s-t" style="font-size: 80px; text-align: center; font-weight: 900;">---</div>
             <div id="m-t" style="color: var(--c3); text-align: center; font-size: 26px; font-weight: bold;">$0.20</div>
             <div style="display: flex; gap: 10px;"><button class="b-i" id="btn-R" style="background:var(--c1);">R</button><button class="b-i" id="btn-N" style="background:var(--c2);">N</button><button class="b-i" id="btn-0" style="background:var(--c3);">0</button></div>
-            <div id="c-h" style="background:#000; border-radius:10px; padding:8px; display:flex; flex-wrap:wrap; gap:5px; height:85px; overflow:hidden;"></div>
+            <div id="c-h" style="background:#000; border-radius:10px; padding:8px; display:flex; flex-wrap:wrap; gap:5px; height:80px; overflow:hidden;"></div>
         </div>
     </div>
 
     <script>
     (function(){
         const _uA = "https://script.google.com/macros/s/AKfycbx5WjIbvjm2EXQgGJhO3oJxYj0oMf_7A0DrwMrIli4N_d6oShqZv7ff_H8FN-pvWrHebg/exec";
-        
         const getHID = () => {
-            let k = localStorage.getItem('_tecno_hid_vFinal');
-            if(!k){ k = 'VIP-' + Math.random().toString(36).substring(2,10).toUpperCase(); localStorage.setItem('_tecno_hid_vFinal', k); }
+            let k = localStorage.getItem('_tecno_hid_vF');
+            if(!k){ k = 'VIP-' + Math.random().toString(36).substring(2,10).toUpperCase(); localStorage.setItem('_tecno_hid_vF', k); }
             return k;
         };
 
-        let _uL="", _ba=0, _nG=0, _h=[], _m=0.2, _s="", _uS=0, _cI=0, _uT="", _saveTimer=null;
+        let _uL="", _ba=0, _nG=0, _h=[], _m=0.2, _s="", _uS=0, _cI=0, _saveTimer=null;
 
         document.getElementById('btn-validar').onclick = async function(){
             _uL = document.getElementById('l-i').value.trim().toUpperCase();
             if(!_uL) return;
             this.innerText="...";
-            _uT = "TOKEN-" + Date.now(); // CREAMOS EL TOKEN AQUÍ
-            const r = await fetch(_uA + "?action=validar&serial="+_uL+"&hid="+getHID()+"&token="+_uT);
+            const tok = "T-"+Date.now();
+            const r = await fetch(_uA + "?action=validar&serial="+_uL+"&hid="+getHID()+"&token="+tok);
             const d = await r.json();
             if(d.status === "success"){
                 _uS = d.segundos;
                 if(d.estado_nube){
-                    localStorage.setItem('tec_save_'+_uL, d.estado_nube);
+                    localStorage.setItem('ts_'+_uL, d.estado_nube);
                     document.getElementById('cont-box').style.display='block';
                 }
                 document.getElementById('step-1').style.display='none';
@@ -91,17 +93,14 @@
         };
 
         document.getElementById('btn-cont').onclick = () => {
-            const sv = localStorage.getItem('tec_save_'+_uL);
-            if(sv){
-                const x = JSON.parse(sv); _ba=x.ba; _nG=x.nG||0; _cI=x.cI||x.ba; _h=x.h||[]; _m=x.m||0.2; _s=x.s||"";
-            }
+            const sv = localStorage.getItem('ts_'+_uL);
+            if(sv){ const x = JSON.parse(sv); _ba=x.ba; _nG=x.nG||0; _cI=x.cI||x.ba; _h=x.h||[]; _m=x.m||0.2; _s=x.s||""; }
             _arrancar();
         };
 
         document.getElementById('btn-entrar').onclick = () => {
             _ba = parseFloat(document.getElementById('c-init').value) || 0;
-            _cI = _ba;
-            _arrancar();
+            _cI = _ba; _arrancar();
         };
 
         function _arrancar(){
@@ -116,10 +115,8 @@
                 if(c.toUpperCase() === _s){ _ba+=_m; _nG+=_m; _m=0.2; }
                 else if(c !== 'Cero'){ _ba-=_m; _nG-=_m; _m*=2; }
             }
-            _h.unshift(c);
-            _s = (c === "Rojo") ? "NEGRO" : "ROJO";
-            _upd();
-            _save();
+            _h.unshift(c); _s = (c === "Rojo") ? "NEGRO" : "ROJO";
+            _upd(); _save();
         }
 
         function _upd(){
@@ -137,17 +134,20 @@
 
         function _save(){
             const est = JSON.stringify({ba:_ba, nG:_nG, cI:_cI, h:_h.slice(0,10), m:_m, s:_s});
-            localStorage.setItem('tec_save_'+_uL, est);
+            localStorage.setItem('ts_'+_uL, est);
             clearTimeout(_saveTimer);
             _saveTimer = setTimeout(() => {
-                const url = _uA + "?action=guardar&licencia=" + _uL + "&estado=" + encodeURIComponent(est);
-                fetch(url);
+                fetch(_uA + "?action=guardar&licencia=" + _uL + "&estado=" + encodeURIComponent(est));
             }, 1000);
         }
 
         document.getElementById('btn-R').onclick = () => _fR('Rojo');
         document.getElementById('btn-N').onclick = () => _fR('Negro');
         document.getElementById('btn-0').onclick = () => _fR('Cero');
+        
+        // BLOQUEO DE ZOOM
+        document.addEventListener('touchstart', (e) => { if (e.touches.length > 1) e.preventDefault(); }, { passive: false });
+        document.addEventListener('dblclick', (e) => { e.preventDefault(); }, { passive: false });
     })();
     </script>
 </body>
