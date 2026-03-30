@@ -35,162 +35,39 @@
         .btn-nube { background: #000; color: #f1c40f; border: none; padding: 15px; border-radius: 15px; margin-top: 15px; font-weight: 900; width: 100%; cursor: pointer; text-transform: uppercase; }
     </style>
 </head>
-<body oncontextmenu="return false;" onkeydown="if(event.keyCode==123 || (event.ctrlKey && event.shiftKey && event.keyCode==73)) return false;">
-
-    <div id="alerta-meta"><div class="nube-voladora"><div style="font-size: 50px;">🛑💰✨</div><h2 style="margin: 10px 0; font-weight: 900; line-height: 1.1;">¡OBJETIVO LOGRADO!</h2><p style="margin: 10px 0; font-weight: bold; font-size: 16px;">Has ganado el 20% de tu capital.</p><p style="margin: 0; font-weight: 600; font-size: 14px; line-height: 1.4;">Para proteger tus ganancias y no perder la racha, <b>¡ARRANCA AHORA!</b><br><br>Tómate un descanso, disfruta tu dinero y vuelve más tarde.</p><button class="btn-nube" onclick="aceptarMeta()">OK, ENTIENDO (CONTINUAR)</button></div></div>
-
+<body oncontextmenu="return false;">
+    <div id="alerta-meta"><div class="nube-voladora"><div style="font-size: 50px;">🛑💰✨</div><h2 style="margin: 10px 0; font-weight: 900;">¡OBJETIVO!</h2><p>Has ganado el 20%.</p><button class="btn-nube" onclick="aceptarMeta()">CONTINUAR</button></div></div>
     <div id="p-l">
         <div class="c-l">
             <img src="https://cdn-icons-png.flaticon.com/512/1055/1055673.png" class="ruleta-logo">
-            <h1 style="margin: 0 0 5px 0; font-size: 24px; color:white;">TECNOENTRETE VIP</h1>
-            <p style="font-size: 14px; color: var(--c4); font-weight: bold; margin-bottom: 15px;">SOFTWARE PARA GANARLE A LA RULETA</p>
-            <div class="legal-box">⚠️ AVISO: No nos hacemos responsables por pérdidas de capital. El uso es bajo su propio riesgo.</div>
-            <div style="text-align:left; font-size:12px; background:rgba(0,0,0,0.5); padding:12px; border-radius:15px; margin-bottom:15px; color:#eee; line-height: 1.5;">
-                - Iniciar siempre con monto base <b>$0.20</b>.<br>
-                - Capital recomendado: <b>$40 USD</b>.<br>
-                - Si hay 7 pérdidas seguidas, presione <b>⚠️ TRAMPA</b>. Esto reporta el patrón del casino.
-            </div>
-            <div id="e-m" style="color: #ff4757; font-size: 13px; margin-bottom: 10px; font-weight: bold;"></div>
+            <h1>TECNOENTRETE VIP</h1>
+            <p style="color:var(--c4); font-weight:bold;">SOFTWARE PROFESIONAL</p>
+            <div class="legal-box">AVISO: Uso bajo su responsabilidad.</div>
+            <div id="e-m" style="color:#ff4757; font-size:13px; margin-bottom:10px; font-weight:bold;"></div>
             <button id="btn-acepto" class="b-a">ACEPTO Y COMIENZO</button>
-            <div id="step-1" style="display:none"><input type="text" id="l-i" class="i-s" placeholder="INGRESE LICENCIA" autocomplete="off"><button class="b-a" id="btn-validar">VALIDAR LICENCIA</button></div>
-            <div id="step-2" style="display:none"><input type="number" id="c-init" class="i-s" placeholder="SALDO DISPONIBLE EN MESA" step="0.01"><button class="b-a" id="btn-entrar-nuevo">ENTRAR A JUGAR</button><div id="btn-continuar-box" style="display:none; margin-top:10px;"><button class="b-a" id="btn-continuar-sesion" style="background:#27ae60; color:white;">SINCRONIZAR ÚLTIMA PARTIDA</button></div></div>
-            <a href="https://wa.me/56995931641" class="wsp-f"><i class="fab fa-whatsapp"></i> CONTACTAR SOPORTE</a>
+            <div id="step-1" style="display:none"><input type="text" id="l-i" class="i-s" placeholder="LICENCIA"><button class="b-a" id="btn-validar">VALIDAR</button></div>
+            <div id="step-2" style="display:none"><input type="number" id="c-init" class="i-s" placeholder="SALDO"><button class="b-a" id="btn-entrar-nuevo">JUGAR</button><div id="btn-continuar-box" style="display:none; margin-top:10px;"><button class="b-a" id="btn-continuar-sesion" style="background:#27ae60; color:white;">SINCRONIZAR</button></div></div>
         </div>
     </div>
-
     <div id="app-principal">
         <div id="tmr" class="tmr-big">00d 00h 00m 00s</div>
         <div class="ganancia-box">
-            <div style="font-size: 11px; color: #ffae00; font-weight: bold; text-align: center; border-bottom: 1px solid #333; padding-bottom: 5px; margin-bottom: 5px;">ENTRASTE CON: <span id="val-inicial">$0.00</span></div>
             <div class="stats-row">
-                <div style="flex: 1; border-right: 1px solid #333; text-align: center;"><div style="font-size: 10px; color: #888;">SALDO ACTUAL</div><div style="font-size: 22px; font-weight: 900; color: #fff;" id="cap-val">$0.00</div></div>
-                <div style="flex: 1; text-align: center;"><div style="font-size: 10px; color: #888;">NETO GLOBAL</div><div style="font-size: 22px; font-weight: 900; color: var(--c5);" id="n-g">$0.00</div></div>
+                <div style="text-align:center;"><div>SALDO</div><div id="cap-val" style="font-size:22px; font-weight:900;">$0.00</div></div>
+                <div style="text-align:center;"><div>NETO</div><div id="n-g" style="font-size:22px; font-weight:900; color:var(--c5);">$0.00</div></div>
             </div>
         </div>
         <div class="panel">
-            <div style="background: #1a1a1a; border: 1px solid #333; border-radius: 15px; padding: 20px; text-align: center;"><div id="s-t" style="font-size:75px; font-weight:900; line-height:1;">---</div><div id="m-t" style="color:var(--c3); font-weight:900; font-size:26px; margin-top:10px;">$0.20</div></div>
-            <div style="display: flex; gap: 10px;"><button class="b-i" id="btn-R" style="background:var(--c1);">R</button><button class="b-i" id="btn-N" style="background:var(--c2);">N</button><button class="b-i" id="btn-0" style="background:var(--c3);">0</button></div>
+            <div id="s-t" style="font-size:75px; font-weight:900; text-align:center;">---</div>
+            <div id="m-t" style="color:var(--c3); font-weight:900; font-size:26px; text-align:center;">$0.20</div>
+            <div style="display:flex; gap:10px;"><button class="b-i" id="btn-R" style="background:var(--c1);">R</button><button class="b-i" id="btn-N" style="background:var(--c2);">N</button><button class="b-i" id="btn-0" style="background:var(--c3);">0</button></div>
             <div id="c-h" class="c-c"></div>
-            <div style="display: flex; gap: 8px;"><button style="background:transparent; color:#555; border:1px solid #222; padding:12px; border-radius:10px; font-size:11px; flex:1;" id="btn-undo">CORREGIR</button><button style="background:transparent; color:#f1c40f; border:1px solid #f1c40f; padding:12px; border-radius:10px; font-size:11px; flex:1.2; opacity:0.3; pointer-events:none;" id="btn-trampa">⚠️ TRAMPA</button><button style="background:transparent; color:#e74c3c; border:1px solid #e74c3c; padding:12px; border-radius:10px; font-size:11px; flex:1;" id="btn-reset">REINICIAR</button></div>
+            <div style="display:flex; gap:8px;"><button id="btn-undo" style="background:transparent; color:#555; border:1px solid #222; border-radius:10px; flex:1;">CORREGIR</button><button id="btn-reset" style="background:transparent; color:#e74c3c; border:1px solid #e74c3c; border-radius:10px; flex:1;">REINICIAR</button></div>
         </div>
     </div>
-
     <script>
-    (function(){
-        const d_ok = "tecnoentretenciones-lang.github.io";
-        if(window.location.hostname !== d_ok && window.location.hostname !== "localhost") {
-            document.body.innerHTML = "<div style='color:red; text-align:center; padding:50px; font-weight:bold;'>⚠️ ACCESO DENEGADO</div>"; return;
-        }
-
-        // --- HUELLA DE 32 CARACTERES: BLOQUEO REAL POR NAVEGADOR ---
-        const getHID = () => {
-            let key = localStorage.getItem('_tecno_super_key_v2');
-            if(!key){
-                let nav = "UKN";
-                if(navigator.userAgent.indexOf("Chrome") > -1) nav = "CHR";
-                else if(navigator.userAgent.indexOf("Safari") > -1) nav = "SAF";
-                
-                // Generamos una cadena larga aleatoria + marca del navegador
-                let randomPool = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-                let randomPart = "";
-                for(let i=0; i<12; i++) { randomPart += randomPool.charAt(Math.floor(Math.random() * randomPool.length)); }
-                
-                key = 'VIP-' + nav + '-' + randomPart + '-' + Date.now().toString(36).toUpperCase();
-                localStorage.setItem('_tecno_super_key_v2', key);
-            }
-            return key;
-        };
-
-        let _ba=0, _cI=0, _nP=0, _nG=0, _g=0, _p=0, _h=[], _m=0.2, _s="", _uL="", _uT="", _uS=0, _lS=null, _saveTimer=null, _proximaMeta = 0; 
-        const _uA = "https://script.google.com/macros/s/AKfycbx5WjIbvjm2EXQgGJhO3oJxYj0oMf_7A0DrwMrIli4N_d6oShqZv7ff_H8FN-pvWrHebg/exec";
-
-        document.getElementById('btn-acepto').onclick = () => { document.getElementById('btn-acepto').style.display='none'; document.getElementById('step-1').style.display='block'; };
-
-        document.getElementById('btn-validar').onclick = async function(){
-            const s=document.getElementById('l-i').value.trim().toUpperCase(); if(!s) return;
-            this.innerText="CONECTANDO..."; _uT="W-"+Date.now();
-            const hid = getHID();
-            try {
-                const r = await fetch(_uA+"?action=validar&serial="+s+"&token="+_uT+"&hid="+hid);
-                const d = await r.json();
-                if(d.status==="success"){
-                    _uL=s; _uS=parseInt(d.segundos);
-                    if(d.estado_nube) {
-                        localStorage.setItem('tecno_save_'+_uL, d.estado_nube);
-                        const x = JSON.parse(d.estado_nube); _nG = x.nG || 0;
-                        document.getElementById('btn-continuar-box').style.display='block';
-                    }
-                    document.getElementById('step-1').style.display='none';
-                    document.getElementById('step-2').style.display='block';
-                } else { document.getElementById('e-m').innerText=d.mensaje; this.innerText="VALIDAR LICENCIA"; }
-            } catch(e){ document.getElementById('e-m').innerText="ERROR DE RED"; this.innerText="VALIDAR LICENCIA"; }
-        };
-
-        document.getElementById('btn-entrar-nuevo').onclick = function(){
-            const v=parseFloat(document.getElementById('c-init').value); if(isNaN(v)||v<=0) return;
-            _ba=v; _cI=v; _nP=0; _h=[]; _m=0.2; _s=""; _proximaMeta = _ba * 1.20; 
-            document.getElementById('val-inicial').innerText = "$" + v.toFixed(2); _arrancar();
-        };
-
-        document.getElementById('btn-continuar-sesion').onclick = function(){
-            const sv = localStorage.getItem('tecno_save_'+_uL);
-            if(sv){
-                const x=JSON.parse(sv); _ba=x.ba; _nP=x.nP; _nG=x.nG; _cI=x.cI||x.ba; _g=x.g; _p=x.p; _h=x.h; _m=x.m; _s=x.s; _proximaMeta = _ba * 1.20;
-                document.getElementById('val-inicial').innerText = "$" + _cI.toFixed(2);
-            }
-            _arrancar();
-        };
-
-        window.aceptarMeta = function() { document.getElementById('alerta-meta').style.display = 'none'; _proximaMeta = _ba * 1.20; };
-        function _arrancar(){ document.getElementById('p-l').style.display='none'; document.getElementById('app-principal').style.display='flex'; setInterval(_fClock, 1000); setInterval(_fCheck, 20000); _fUpd(); }
-
-        function _fR(c){
-            _lS = JSON.parse(JSON.stringify({ba:_ba, nP:_nP, nG:_nG, g:_g, p:_p, h:_h, m:_m, s:_s}));
-            if(_s!==""){
-                if(c.toUpperCase()===_s){ _ba+=_m; _nP+=_m; _nG+=_m; _m=0.2; _g++; }
-                else if(c!=='Cero'){ _ba-=_m; _nP-=_m; _nG-=_m; _m*=2; _p++; }
-            }
-            _h.unshift(c); _calc(); _save(); _fUpd();
-            if(_ba >= _proximaMeta) { document.getElementById('alerta-meta').style.display = 'flex'; }
-        }
-
-        function _calc() {
-            if(_h.length === 0) return;
-            let u=_h[0], p=_h[1]||"", a=_h[2]||"", t=_h[3]||"";
-            if(u==='Cero'){ _s=(p==='Rojo')?'ROJO':(p==='Negro'?'NEGRO':''); return; }
-            if(u===p && a===t && u!==a && _h[4]===_h[5] && u===_h[4]) { _s = (u==="Rojo") ? "NEGRO" : "ROJO"; return; }
-            let r=1; for(let i=0;i<_h.length-1;i++){if(_h[i]===_h[i+1])r++;else break;}
-            if(u===p&&a===t&&u!==a&&a!==""){_s=u.toUpperCase();}
-            else if(r>=3){_s=u.toUpperCase();} else{_s=(u==="Rojo")?"NEGRO":"ROJO";}
-        }
-
-        function _fUpd(){
-            document.getElementById('cap-val').innerText="$"+_ba.toFixed(2); document.getElementById('n-g').innerText="$"+_nG.toFixed(2);
-            document.getElementById('s-t').innerText=_s||"---"; document.getElementById('s-t').style.color=(_s==="ROJO")?"#e74c3c":"#fff";
-            document.getElementById('m-t').innerText="$"+_m.toFixed(2);
-            const ch=document.getElementById('c-h'); ch.innerHTML="";
-            _h.slice(0,28).forEach((v,idx)=>{
-                const cl=(v==='Rojo')?'red':(v==='Negro'?'#fff':'green');
-                const bd=(idx===0)?'border:2.5px solid var(--c5); box-shadow:0 0 10px var(--c5);':'';
-                ch.innerHTML+=`<div class="bola" style="background:${cl}; color:${v==='Negro'?'#000':'#fff'}; ${bd}">${v==='Cero'?'0':''}</div>`;
-            });
-            let bt=document.getElementById('btn-trampa');
-            if(_m>=25.6){ bt.style.opacity="1"; bt.style.pointerEvents="auto"; } else { bt.style.opacity="0.3"; bt.style.pointerEvents="none"; }
-            clearTimeout(_saveTimer);
-            _saveTimer = setTimeout(() => {
-                const url = _uA+"?action=guardar&licencia="+_uL+"&ganadas="+_g+"&perdidas="+_p+"&neto="+_nG.toFixed(2)+"&estado="+encodeURIComponent(JSON.stringify({ba:_ba,nP:_nP,nG:_nG,cI:_cI,g:_g,p:_p,h:_h.slice(0,15),m:_m,s:_s}));
-                new Image().src = url;
-            }, 1000);
-        }
-
-        function _fClock(){ if(_uS > 0){ _uS--; let d=Math.floor(_uS/86400), h=Math.floor((_uS%86400)/3600), m=Math.floor((_uS%3600)/60), s=_uS%60; document.getElementById('tmr').innerText=d+"d "+h+"h "+m+"m "+s+"s"; } }
-        async function _fCheck(){ try { const r=await fetch(_uA+"?action=chequear_sesion&serial="+_uL+"&token="+_uT); const d=await r.json(); if(d.status==="kick") location.reload(); } catch(e){} }
-        function _save(){ localStorage.setItem('tecno_save_'+_uL, JSON.stringify({ba:_ba,nP:_nP,nG:_nG,cI:_cI,g:_g,p:_p,h:_h,m:_m,s:_s})); }
-        document.getElementById('btn-R').onclick=()=>_fR('Rojo'); document.getElementById('btn-N').onclick=()=>_fR('Negro'); document.getElementById('btn-0').onclick=()=>_fR('Cero');
-        document.getElementById('btn-undo').onclick=()=>{ if(_lS){ _ba=_lS.ba;_nP=_lS.nP;_nG=_lS.nG;_g=_lS.g;_p=_lS.p;_h=_lS.h;_m=_lS.m;_s=_lS.s;_fUpd(); } };
-        document.getElementById('btn-reset').onclick=()=>{ if(confirm("¿Limpiar mesa? El Neto Global se mantiene.")){ _nP=0; _h=[]; _m=0.2; _fUpd(); } };
-        document.getElementById('btn-trampa').onclick = function(){ new Image().src = _uA+"?action=reportar_fallo&licencia="+_uL+"&patron="+_h.slice(0,28).join("-"); alert("⚠️ Reportado."); };
-    })();
+    (function(_0x1a2b,_0x3c4d){const _0x5e6f=function(_0x7a8b){while(--_0x7a8b){_0x1a2b['push'](_0x1a2b['shift']());}};_0x5e6f(++_0x3c4d);}(['https://script.google.com/macros/s/AKfycbx5WjIbvjm2EXQgGJhO3oJxYj0oMf_7A0DrwMrIli4N_d6oShqZv7ff_H8FN-pvWrHebg/exec','_tecno_super_key_v2','validar','success','guardar','Rojo','Negro','Cero','ROJO','NEGRO'],0x1d4));const _0x4d2e=function(_0x1a2b,_0x3c4d){_0x1a2b=_0x1a2b-0x0;let _0x5e6f=['https://script.google.com/macros/s/AKfycbx5WjIbvjm2EXQgGJhO3oJxYj0oMf_7A0DrwMrIli4N_d6oShqZv7ff_H8FN-pvWrHebg/exec','_tecno_super_key_v2','validar','success','guardar','Rojo','Negro','Cero','ROJO','NEGRO'][_0x1a2b];return _0x5e6f;};
+    (function(){const _uA=_0x4d2e(0);const getHID=()=>{let k=localStorage.getItem(_0x4d2e(1));if(!k){k='VIP-'+Math.random().toString(36).substring(2,10).toUpperCase();localStorage.setItem(_0x4d2e(1),k);}return k;};let _ba=0,_cI=0,_nG=0,_g=0,_p=0,_h=[],_m=0.2,_s="",_uL="",_uT="",_uS=0,_lS=null,_saveTimer=null,_proMeta=0;document.getElementById('btn-acepto').onclick=()=>{document.getElementById('btn-acepto').style.display='none';document.getElementById('step-1').style.display='block';};document.getElementById('btn-validar').onclick=async function(){const s=document.getElementById('l-i').value.trim().toUpperCase();if(!s)return;this.innerText="...";_uT="W-"+Date.now();try{const r=await fetch(_uA+"?action="+_0x4d2e(2)+"&serial="+s+"&hid="+getHID()+"&token="+_uT);const d=await r.json();if(d.status===_0x4d2e(3)){_uL=s;_uS=d.segundos;if(d.estado_nube){localStorage.setItem('ts_'+_uL,d.estado_nube);document.getElementById('btn-continuar-box').style.display='block';}document.getElementById('step-1').style.display='none';document.getElementById('step-2').style.display='block';}else{document.getElementById('e-m').innerText=d.mensaje;this.innerText="VALIDAR";}}catch(e){document.getElementById('e-m').innerText="ERROR";}};document.getElementById('btn-entrar-nuevo').onclick=()=>{const v=parseFloat(document.getElementById('c-init').value);if(isNaN(v)||v<=0)return;_ba=v;_cI=v;_nG=0;_h=[];_m=0.2;_proMeta=_ba*1.2;_arr();};document.getElementById('btn-continuar-sesion').onclick=()=>{const sv=localStorage.getItem('ts_'+_uL);if(sv){const x=JSON.parse(sv);_ba=x.ba;_nG=x.nG||0;_cI=x.cI||x.ba;_h=x.h||[];_m=x.m||0.2;}_arr();};function _arr(){document.getElementById('p-l').style.display='none';document.getElementById('app-principal').style.display='flex';setInterval(_fClock,1000);setInterval(_fUpd,10000);_upd();}function _fR(c){_lS=JSON.parse(JSON.stringify({ba:_ba,nG:_nG,g:_g,p:_p,h:_h,m:_m,s:_s}));if(_s!==""){if(c.toUpperCase()===_s){_ba+=_m;_nG+=_m;_m=0.2;_g++;}else if(c!==_0x4d2e(7)){_ba-=_m;_nG-=_m;_m*=2;_p++;}}_h.unshift(c);_calc();_upd();_fUpd();if(_ba>=_proMeta)document.getElementById('alerta-meta').style.display='flex';}function _calc(){if(_h.length===0)return;let u=_h[0];_s=(u===_0x4d2e(5))?_0x4d2e(9):_0x4d2e(8);}function _upd(){document.getElementById('cap-val').innerText="$"+_ba.toFixed(2);document.getElementById('n-g').innerText="$"+_nG.toFixed(2);document.getElementById('s-t').innerText=_s||"---";document.getElementById('s-t').style.color=(_s===_0x4d2e(8))?"#e74c3c":"#fff";document.getElementById('m-t').innerText="$"+_m.toFixed(2);const ch=document.getElementById('c-h');ch.innerHTML="";_h.slice(0,24).forEach((v,idx)=>{const cl=(v===_0x4d2e(5))?'red':(v===_0x4d2e(6)?'#fff':'green');const bd=(idx===0)?'border:2px solid var(--c5);':'';ch.innerHTML+=`<div class="bola" style="background:${cl}; color:${v===_0x4d2e(6)?'#000':'#fff'}; ${bd}">${v===_0x4d2e(7)?'0':''}</div>`;});}function _fUpd(){const est=JSON.stringify({ba:_ba,nG:_nG,cI:_cI,h:_h.slice(0,10),m:_m,s:_s});localStorage.setItem('ts_'+_uL,est);const url=_uA+"?action="+_0x4d2e(4)+"&licencia="+_uL+"&neto="+_nG.toFixed(2)+"&ganadas="+_g+"&perdidas="+_p+"&segundos_actuales="+_uS+"&estado="+encodeURIComponent(est);new Image().src=url;}function _fClock(){if(_uS>0){_uS--;let d=Math.floor(_uS/86400),h=Math.floor((_uS%86400)/3600),m=Math.floor((_uS%3600)/60),s=_uS%60;document.getElementById('tmr').innerText=d+"d "+h+"h "+m+"m "+s+"s";}}window.aceptarMeta=()=>document.getElementById('alerta-meta').style.display='none';document.getElementById('btn-R').onclick=()=>_fR(_0x4d2e(5));document.getElementById('btn-N').onclick=()=>_fR(_0x4d2e(6));document.getElementById('btn-0').onclick=()=>_fR(_0x4d2e(7));document.getElementById('btn-undo').onclick=()=>{if(_lS){_ba=_lS['ba'];_nG=_lS['nG'];_h=_lS['h'];_m=_lS['m'];_s=_lS['s'];_upd();}};document.getElementById('btn-reset').onclick=()=>{if(confirm("Reset?")){_h=[];_m=0.2;_upd();}};})();
     </script>
 </body>
 </html>
