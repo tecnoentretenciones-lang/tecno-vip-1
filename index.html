@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
     <title>TECNOENTRETE VIP v55.2</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --c1: #e74c3c; --c2: #2c3e50; --c3: #27ae60; --c4: #f1c40f; --c5: #00e5ff; --c8: #111; }
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; touch-action: none; user-select: none !important; -webkit-user-select: none !important; }
         html, body { height: 100dvh; width: 100vw; overflow: hidden; margin: 0; color: white; font-family: 'Segoe UI', sans-serif; background: url('https://raw.githubusercontent.com/tecnoentretenciones-lang/tecno-vip-1/main/image_1209a3.jpg') no-repeat center center fixed; background-size: cover; }
         body::before { content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: -1; }
         body { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; }
@@ -27,8 +28,7 @@
         .bola { width: 25px; height: 25px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold; }
     </style>
 </head>
-<body oncontextmenu="return false;">
-
+<body>
     <div id="p-l">
         <div class="c-l">
             <img src="https://cdn-icons-png.flaticon.com/512/1055/1055673.png" class="ruleta-logo">
@@ -71,13 +71,13 @@
             return k;
         };
 
-        let _uL="", _ba=0, _nG=0, _h=[], _m=0.2, _s="", _uS=0, _saveTimer=null;
+        let _uL="", _ba=0, _nG=0, _h=[], _m=0.2, _s="", _uS=0, _cI=0, _saveTimer=null;
 
         document.getElementById('btn-validar').onclick = async function(){
             _uL = document.getElementById('l-i').value.trim().toUpperCase();
             if(!_uL) return;
             this.innerText="...";
-            const r = await fetch(_uA + "?action=validar&serial="+_uL+"&hid="+getHID()+"&token=T-"+Date.now());
+            const r = await fetch(_uA + "?action=validar&serial="+_uL+"&hid="+getHID());
             const d = await r.json();
             if(d.status === "success"){
                 _uS = d.segundos;
@@ -90,16 +90,17 @@
             } else { alert(d.mensaje); this.innerText="VALIDAR"; }
         };
 
-        document.getElementById('btn-entrar').onclick = () => {
-            _ba = parseFloat(document.getElementById('c-init').value) || 0;
-            _arrancar();
-        };
-
         document.getElementById('btn-cont').onclick = () => {
             const sv = localStorage.getItem('tec_save_'+_uL);
             if(sv){
-                const x = JSON.parse(sv); _ba=x.ba; _nG=x.nG||0; _h=x.h||[]; _m=x.m||0.2; _s=x.s||"";
+                const x = JSON.parse(sv); _ba=x.ba; _nG=x.nG||0; _cI=x.cI||x.ba; _h=x.h||[]; _m=x.m||0.2; _s=x.s||"";
             }
+            _arrancar();
+        };
+
+        document.getElementById('btn-entrar').onclick = () => {
+            _ba = parseFloat(document.getElementById('c-init').value) || 0;
+            _cI = _ba;
             _arrancar();
         };
 
@@ -133,19 +134,20 @@
             document.getElementById('s-t').style.color = (_s === "ROJO") ? "#e74c3c" : "#fff";
             document.getElementById('m-t').innerText = "$" + _m.toFixed(2);
             const ch = document.getElementById('c-h'); ch.innerHTML = "";
-            _h.slice(0,20).forEach(v => {
+            _h.slice(0,15).forEach(v => {
                 const cl = (v==='Rojo')?'red':(v==='Negro'?'white':'green');
                 ch.innerHTML += `<div class="bola" style="background:${cl}; color:black;">${v[0]}</div>`;
             });
         }
 
         function _save(){
-            const est = JSON.stringify({ba:_ba, nG:_nG, h:_h.slice(0,10), m:_m, s:_s});
+            const est = JSON.stringify({ba:_ba, nG:_nG, cI:_cI, h:_h.slice(0,10), m:_m, s:_s});
             localStorage.setItem('tec_save_'+_uL, est);
             clearTimeout(_saveTimer);
             _saveTimer = setTimeout(() => {
-                new Image().src = _uA + "?action=guardar&licencia="+_uL+"&estado="+encodeURIComponent(est);
-            }, 2000);
+                const url = _uA + "?action=guardar&licencia=" + _uL + "&estado=" + encodeURIComponent(est);
+                fetch(url).then(() => console.log("Guardado")).catch(e => console.log(e));
+            }, 1000);
         }
 
         document.getElementById('btn-R').onclick = () => _fR('Rojo');
