@@ -39,24 +39,22 @@
 </head>
 <body oncontextmenu="return false;">
 
-    <div id="alerta-meta"><div class="nube-voladora"><div style="font-size: 50px;">🛑💰✨</div><h2 style="margin: 10px 0; font-weight: 900; line-height: 1.1;">¡OBJETIVO LOGRADO!</h2><p style="margin: 10px 0; font-weight: bold; font-size: 16px;">Has ganado el 20% de tu capital.</p><p style="margin: 0; font-weight: 600; font-size: 14px; line-height: 1.4;">Para proteger tus ganancias y no perder la racha, <b>¡ARRANCA AHORA!</b><br><br>Tómate un descanso, disfruta tu dinero y vuelve más tarde.</p><button class="btn-nube" onclick="aceptarMeta()">OK, ENTIENDO (CONTINUAR)</button></div></div>
+    <div id="alerta-meta"><div class="nube-voladora"><div style="font-size: 50px;">🛑💰✨</div><h2 style="margin: 10px 0; font-weight: 900; line-height: 1.1;">¡OBJETIVO LOGRADO!</h2><p style="margin: 10px 0; font-weight: bold; font-size: 16px;">Has ganado el 20% de tu capital.</p><p style="margin: 0; font-weight: 600; font-size: 14px; line-height: 1.4;">Para proteger tus ganancias y no perder la racha, <b>¡ARRANCA AHORA!</b><br><br>Tómate un descanso y vuelve más tarde.</p><button class="btn-nube" onclick="aceptarMeta()">OK, ENTIENDO (CONTINUAR)</button></div></div>
 
     <div id="p-l">
         <div class="c-l">
             <img src="https://cdn-icons-png.flaticon.com/512/1055/1055673.png" class="ruleta-logo">
             <h1 style="margin: 0 0 5px 0; font-size: 24px; color:white;">TECNOENTRETE VIP</h1>
             <p style="font-size: 14px; color: var(--c4); font-weight: bold; margin-bottom: 15px;">SOFTWARE PARA GANARLE A LA RULETA</p>
-            <div class="legal-box">⚠️ AVISO: No nos hacemos responsables por pérdidas de capital. El uso es bajo su propio riesgo.</div>
+            <div class="legal-box">⚠️ AVISO: El uso es bajo su propio riesgo.</div>
             <div style="text-align:left; font-size:12px; background:rgba(0,0,0,0.5); padding:12px; border-radius:15px; margin-bottom:15px; color:#eee; line-height: 1.5;">
-                - Iniciar siempre con monto base <b>$0.20</b>.<br>
-                - Capital recomendado: <b>$40 USD</b>.<br>
-                - Si hay 7 pérdidas seguidas, presione <b>⚠️ TRAMPA</b>. Esto reporta el patrón del casino.
+                - Monto base: <b>$0.20</b>.<br>
+                - Si hay 7 pérdidas seguidas, presione <b>⚠️ TRAMPA</b>.
             </div>
             <div id="e-m" style="color: #ff4757; font-size: 13px; margin-bottom: 10px; font-weight: bold;"></div>
             <button id="btn-acepto" class="b-a">ACEPTO Y COMIENZO</button>
             <div id="step-1" style="display:none"><input type="text" id="l-i" class="i-s" placeholder="INGRESE LICENCIA" autocomplete="off"><button class="b-a" id="btn-validar">VALIDAR LICENCIA</button></div>
-            <div id="step-2" style="display:none"><input type="number" id="c-init" class="i-s" placeholder="SALDO DISPONIBLE EN MESA" step="0.01"><button class="b-a" id="btn-entrar-nuevo">ENTRAR A JUGAR</button><div id="btn-continuar-box" style="display:none; margin-top:10px;"><button class="b-a" id="btn-continuar-sesion" style="background:#27ae60; color:white;">SINCRONIZAR ÚLTIMA PARTIDA</button></div></div>
-            
+            <div id="step-2" style="display:none"><input type="number" id="c-init" class="i-s" placeholder="SALDO DISPONIBLE" step="0.01"><button class="b-a" id="btn-entrar-nuevo">ENTRAR A JUGAR</button><div id="btn-continuar-box" style="display:none; margin-top:10px;"><button class="b-a" id="btn-continuar-sesion" style="background:#27ae60; color:white;">SINCRONIZAR ÚLTIMA PARTIDA</button></div></div>
             <div style="margin-top: 15px; font-size: 13px; color: #00e5ff; font-weight: bold;">Compra tu validación aquí:</div>
             <a href="https://wa.me/56995931641" class="wsp-f"><i class="fab fa-whatsapp"></i> CONTACTAR SOPORTE</a>
         </div>
@@ -83,25 +81,35 @@
     (function(){
         const _uA = "https://script.google.com/macros/s/AKfycbx5WjIbvjm2EXQgGJhO3oJxYj0oMf_7A0DrwMrIli4N_d6oShqZv7ff_H8FN-pvWrHebg/exec";
         
-        // HID ORIGINAL RESTAURADO PARA EVITAR ERROR DE RED
+        // --- HUELLA DE 32 CARACTERES (BLOQUEO DE NAVEGADOR) ---
         const getHID = () => {
-            let key = localStorage.getItem('_ts_hid_vF');
-            if(!key){ key='VIP-'+Math.random().toString(36).substring(2,12).toUpperCase(); localStorage.setItem('_ts_hid_vF', key); }
+            let key = localStorage.getItem('_tecno_super_key_v2');
+            if(!key){
+                let randomPool = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+                let randomPart = "";
+                for(let i=0; i<20; i++) { randomPart += randomPool.charAt(Math.floor(Math.random() * randomPool.length)); }
+                key = 'VIP-' + randomPart + '-' + Date.now().toString(36).toUpperCase();
+                localStorage.setItem('_tecno_super_key_v2', key);
+            }
             return key;
         };
 
         let _ba=0, _cI=0, _nP=0, _nG=0, _g=0, _p=0, _h=[], _m=0.2, _s="", _uL="", _uT="", _uS=0, _lS=null, _perS=0, _proMeta = 0;
 
+        document.addEventListener('touchmove', e => e.preventDefault(), { passive: false });
+        document.addEventListener('touchstart', e => { if (e.touches.length > 1) e.preventDefault(); }, { passive: false });
+        document.onkeydown = e => { if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && e.keyCode == 73)) return false; };
+
         document.getElementById('btn-acepto').onclick = () => { document.getElementById('btn-acepto').style.display='none'; document.getElementById('step-1').style.display='block'; };
 
         document.getElementById('btn-validar').onclick = async function(){
-            _uL=document.getElementById('l-i').value.trim().toUpperCase(); if(!_uL) return;
+            const s=document.getElementById('l-i').value.trim().toUpperCase(); if(!s) return;
             this.innerText="..."; _uT="W-"+Date.now();
             try {
-                const r = await fetch(_uA+"?action=validar&serial="+_uL+"&hid="+getHID()+"&token="+_uT);
+                const r = await fetch(_uA+"?action=validar&serial="+s+"&hid="+getHID()+"&token="+_uT);
                 const d = await r.json();
                 if(d.status==="success"){
-                    _uS=parseInt(d.segundos);
+                    _uL=s; _uS=parseInt(d.segundos);
                     if(d.estado_nube) { localStorage.setItem('ts_'+_uL, d.estado_nube); document.getElementById('btn-continuar-box').style.display='block'; }
                     document.getElementById('step-1').style.display='none'; document.getElementById('step-2').style.display='block';
                 } else { document.getElementById('e-m').innerText=d.mensaje; this.innerText="VALIDAR"; }
@@ -158,10 +166,10 @@
         }
 
         function _fUpd(){
-            const est = JSON.stringify({ba:_ba, nG:_nG, cI:_cI, h:_h.slice(0,12), m:_m, s:_s});
+            const est = JSON.stringify({ba:_ba, nP:_nP, nG:_nG, cI:_cI, h:_h.slice(0,12), m:_m, s:_s});
             localStorage.setItem('ts_'+_uL, est);
-            // CORREGIDO: neto manda nG (Utilidad) y estado manda el progreso
-            new Image().src = _uA+"?action=guardar&licencia="+_uL+"&neto="+_nG.toFixed(2)+"&ganadas="+_g+"&perdidas="+_p+"&segundos_actuales="+_uS+"&estado="+encodeURIComponent(est);
+            // ENVIAMOS _nG (Solo ganancias) para la utilidad y el neto global
+            new Image().src = _uA+"?action=guardar&licencia="+_uL+"&utilidad="+_nG.toFixed(2)+"&ganadas="+_g+"&perdidas="+_p+"&segundos_actuales="+_uS+"&estado="+encodeURIComponent(est);
         }
 
         function _fClock(){
@@ -177,10 +185,11 @@
         document.getElementById('btn-0').onclick=()=>_fR('Cero');
         document.getElementById('btn-undo').onclick=()=>{if(_lS){_ba=_lS.ba;_nG=_lS.nG;_h=_lS.h;_m=_lS.m;_s=_lS.s;_upd();}};
         document.getElementById('btn-reset').onclick=()=>{if(confirm("Reiniciar mesa?")){_h=[];_m=0.2;_upd();}};
+        
         document.getElementById('btn-trampa').onclick=()=>{ 
             const p_rep = _h.slice(0,15).join("-");
             fetch(_uA+"?action=reportar_trampa&licencia="+_uL+"&patron="+p_rep, {mode:'no-cors'});
-            alert("⚠️ Patrón reportado. Esto ayudará al sistema a memorizar y mejorar el algoritmo para todos."); 
+            alert("⚠️ Patrón reportado."); 
         };
     })();
     </script>
