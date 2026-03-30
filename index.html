@@ -33,7 +33,7 @@
         .bola { width: 25px; height: 25px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold; }
         .wsp-f { margin-top: 15px; background: #25d366; padding: 14px; border-radius: 12px; display: flex; justify-content: center; align-items: center; color: white; font-size: 15px; font-weight: bold; text-decoration: none; gap: 10px; border: 1px solid #fff; }
         #alerta-meta { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.92); z-index: 10005; display: none; justify-content: center; align-items: center; flex-direction: column; }
-        .nube-voladora { background: linear-gradient(135deg, #f1c40f, #f39c12); color: #000; padding: 25px; border-radius: 30px; text-align: center; max-width: 90%; border: 4px solid #fff; box-shadow: 0px 15px 35px rgba(241,196,15,0.5); animation: entrarVuelo 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .nube-voladora { background: linear-gradient(135deg, #f1c40f, #f39c12); color: #000; padding: 25px; border-radius: 30px; text-align: center; max-width: 90%; border: 4px solid #fff; box-shadow: 0px 15px 35px rgba(241,196,15,0.5); }
         .btn-nube { background: #000; color: #f1c40f; border: none; padding: 15px; border-radius: 15px; margin-top: 15px; font-weight: 900; width: 100%; cursor: pointer; text-transform: uppercase; }
     </style>
 </head>
@@ -46,11 +46,11 @@
             <img src="https://cdn-icons-png.flaticon.com/512/1055/1055673.png" class="ruleta-logo">
             <h1 style="margin: 0 0 5px 0; font-size: 24px; color:white;">TECNOENTRETE VIP</h1>
             <p style="font-size: 14px; color: var(--c4); font-weight: bold; margin-bottom: 15px;">SOFTWARE PARA GANARLE A LA RULETA</p>
-            <div class="legal-box">⚠️ AVISO: No nos hacemos responsables por pérdidas de capital. El uso es bajo su propio riesgo.</div>
+            <div class="legal-box">⚠️ AVISO: No nos hacemos responsables por pérdidas. El uso es bajo su propio riesgo.</div>
             <div style="text-align:left; font-size:12px; background:rgba(0,0,0,0.5); padding:12px; border-radius:15px; margin-bottom:15px; color:#eee; line-height: 1.5;">
                 - Iniciar siempre con monto base <b>$0.20</b>.<br>
                 - Capital recomendado: <b>$40 USD</b>.<br>
-                - Si hay 7 pérdidas seguidas, presione <b>⚠️ TRAMPA</b>. Esto reporta el patrón del casino.
+                - Si hay 7 pérdidas seguidas, presione <b>⚠️ TRAMPA</b>.
             </div>
             <div id="e-m" style="color: #ff4757; font-size: 13px; margin-bottom: 10px; font-weight: bold;"></div>
             <button id="btn-acepto" class="b-a">ACEPTO Y COMIENZO</button>
@@ -91,7 +91,6 @@
 
         document.addEventListener('touchmove', e => e.preventDefault(), { passive: false });
         document.addEventListener('touchstart', e => { if (e.touches.length > 1) e.preventDefault(); }, { passive: false });
-        let _lTE=0; document.addEventListener('touchend', e => { let n = Date.now(); if(n-_lTE <= 300) e.preventDefault(); _lTE=n; }, false);
         document.onkeydown = e => { if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && e.keyCode == 73)) return false; };
 
         document.getElementById('btn-acepto').onclick = () => { document.getElementById('btn-acepto').style.display='none'; document.getElementById('step-1').style.display='block'; };
@@ -104,28 +103,19 @@
                 const d = await r.json();
                 if(d.status==="success"){
                     _uL=s; _uS=parseInt(d.segundos);
-                    if(d.estado_nube) {
-                        localStorage.setItem('tecno_save_'+_uL, d.estado_nube);
-                        const x = JSON.parse(d.estado_nube); _nG = x.nG || 0;
-                        document.getElementById('btn-continuar-box').style.display='block';
-                    }
+                    if(d.estado_nube) { localStorage.setItem('ts_'+_uL, d.estado_nube); document.getElementById('btn-continuar-box').style.display='block'; }
                     document.getElementById('step-1').style.display='none'; document.getElementById('step-2').style.display='block';
-                } else { document.getElementById('e-m').innerText=d.mensaje; this.innerText="VALIDAR LICENCIA"; }
-            } catch(e){ document.getElementById('e-m').innerText="ERROR DE RED"; }
+                } else { document.getElementById('e-m').innerText=d.mensaje; this.innerText="VALIDAR"; }
+            } catch(e){ document.getElementById('e-m').innerText="ERROR RED"; }
         };
 
         document.getElementById('btn-entrar-nuevo').onclick = function(){
-            const v=parseFloat(document.getElementById('c-init').value); if(isNaN(v)||v<=0) return;
-            _ba=v; _cI=v; _nP=0; _h=[]; _m=0.2; _s=""; _proMeta = _ba * 1.20; 
-            document.getElementById('val-inicial').innerText = "$" + v.toFixed(2); _arr();
+            _ba=parseFloat(document.getElementById('c-init').value)||0; _cI=_ba; _proMeta=_ba*1.2; document.getElementById('val-inicial').innerText="$"+_ba.toFixed(2); _arr();
         };
 
         document.getElementById('btn-continuar-sesion').onclick = function(){
-            const sv=localStorage.getItem('tecno_save_'+_uL);
-            if(sv){
-                const x=JSON.parse(sv); _ba=x.ba; _nP=x.nP||0; _nG=x.nG||0; _cI=x.cI||x.ba; _g=x.g||0; _p=x.p||0; _h=x.h||[]; _m=x.m||0.2; _s=x.s||""; _proMeta = _ba * 1.20;
-                document.getElementById('val-inicial').innerText = "$" + _cI.toFixed(2);
-            }
+            const sv=localStorage.getItem('ts_'+_uL);
+            if(sv){ const x=JSON.parse(sv); _ba=x.ba; _nG=x.nG||0; _cI=x.cI||x.ba; _h=x.h||[]; _m=x.m||0.2; _s=x.s||""; _proMeta=_ba*1.2; document.getElementById('val-inicial').innerText="$"+_cI.toFixed(2); }
             _arr();
         };
 
@@ -133,10 +123,10 @@
         window.aceptarMeta = () => { document.getElementById('alerta-meta').style.display='none'; _proMeta = _ba * 1.20; };
 
         function _fR(c){
-            _lS = JSON.parse(JSON.stringify({ba:_ba, nP:_nP, nG:_nG, g:_g, p:_p, h:_h, m:_m, s:_s}));
+            _lS = JSON.parse(JSON.stringify({ba:_ba, nG:_nG, g:_g, p:_p, h:_h, m:_m, s:_s}));
             if(_s!==""){
-                if(c.toUpperCase()===_s){ _ba+=_m; _nP+=_m; _nG+=_m; _m=0.2; _g++; _perS=0; }
-                else if(c!=='Cero'){ _ba-=_m; _nP-=_m; _nG-=_m; _m*=2; _p++; _perS++; }
+                if(c.toUpperCase()===_s){ _ba+=_m; _nG+=_m; _m=0.2; _g++; _perS=0; }
+                else if(c!=='Cero'){ _ba-=_m; _nG-=_m; _m*=2; _p++; _perS++; }
             }
             _h.unshift(c); _calc(); _upd(); _fUpd();
             if(_ba >= _proMeta) document.getElementById('alerta-meta').style.display = 'flex';
@@ -161,18 +151,17 @@
             document.getElementById('s-t').style.color=(_s==="ROJO")?"#e74c3c":"#fff";
             document.getElementById('m-t').innerText="$"+_m.toFixed(2);
             const ch=document.getElementById('c-h'); ch.innerHTML="";
-            _h.slice(0,28).forEach((v,idx)=>{
+            _h.slice(0,24).forEach((v,idx)=>{
                 const cl=(v==='Rojo')?'red':(v==='Negro'?'#fff':'green');
-                const bd=(idx===0)?'border:2px solid var(--c5); box-shadow:0 0 10px var(--c5);':'';
+                const bd=(idx===0)?'border:2px solid var(--c5);':'';
                 ch.innerHTML+=`<div class="bola" style="background:${cl}; color:${v==='Negro'?'#000':'#fff'}; ${bd}">${v==='Cero'?'0':''}</div>`;
             });
         }
 
         function _fUpd(){
-            // ESTO ES LO QUE GUARDA LA PARTIDA EN LA NUBE (COLUMNA F)
-            const est = JSON.stringify({ba:_ba, nP:_nP, nG:_nG, cI:_cI, g:_g, p:_p, h:_h.slice(0,12), m:_m, s:_s});
-            localStorage.setItem('tecno_save_'+_uL, est);
-            new Image().src = _uA+"?action=guardar&licencia="+_uL+"&neto="+_nG.toFixed(2)+"&ganadas="+_g+"&perdidas="+_p+"&segundos_actuales="+_uS+"&estado="+encodeURIComponent(est);
+            const est = JSON.stringify({ba:_ba, nG:_nG, cI:_cI, h:_h.slice(0,12), m:_m, s:_s});
+            localStorage.setItem('ts_'+_uL, est);
+            new Image().src = _uA+"?action=guardar&licencia="+_uL+"&neto="+_ba.toFixed(2)+"&ganadas="+_g+"&perdidas="+_p+"&segundos_actuales="+_uS+"&estado="+encodeURIComponent(est);
         }
 
         function _fClock(){
@@ -192,7 +181,8 @@
         document.getElementById('btn-trampa').onclick=()=>{ 
             const p_rep = _h.slice(0,15).join("-");
             fetch(_uA+"?action=reportar_trampa&licencia="+_uL+"&patron="+p_rep, {mode:'no-cors'});
-            alert("⚠️ Patrón de robo reportado. Esto ayudará al sistema a memorizar y mejorar el algoritmo para todos los usuarios."); 
+            _fUpd(); // Forzamos guardado de nube al reportar trampa
+            alert("⚠️ Patrón reportado. Gracias por ayudarnos a mejorar el sistema para todos los usuarios."); 
         };
     })();
     </script>
