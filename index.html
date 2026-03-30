@@ -45,11 +45,11 @@
             <img src="https://cdn-icons-png.flaticon.com/512/1055/1055673.png" class="ruleta-logo">
             <h1 style="margin: 0 0 5px 0; font-size: 24px; color:white;">TECNOENTRETE VIP</h1>
             <p style="font-size: 14px; color: var(--c4); font-weight: bold; margin-bottom: 15px;">SOFTWARE PARA GANARLE A LA RULETA</p>
-            <div class="legal-box">⚠️ AVISO: El uso es bajo su propio riesgo.</div>
+            <div class="legal-box">⚠️ AVISO: No nos hacemos responsables por pérdidas de capital. El uso es bajo su propio riesgo.</div>
             <div style="text-align:left; font-size:12px; background:rgba(0,0,0,0.5); padding:12px; border-radius:15px; margin-bottom:15px; color:#eee; line-height: 1.5;">
                 - Iniciar siempre con monto base <b>$0.20</b>.<br>
                 - Capital recomendado: <b>$40 USD</b>.<br>
-                - Si hay 7 pérdidas seguidas, presione <b>⚠️ TRAMPA</b>.
+                - Si hay 7 pérdidas seguidas, presione <b>⚠️ TRAMPA</b>. Esto reporta el patrón del casino.
             </div>
             <div id="e-m" style="color: #ff4757; font-size: 13px; margin-bottom: 10px; font-weight: bold;"></div>
             <button id="btn-acepto" class="b-a">ACEPTO Y COMIENZO</button>
@@ -80,13 +80,21 @@
     (function(){
         const _uA = "https://script.google.com/macros/s/AKfycbx5WjIbvjm2EXQgGJhO3oJxYj0oMf_7A0DrwMrIli4N_d6oShqZv7ff_H8FN-pvWrHebg/exec";
         
+        // --- LLAVE HID ORIGINAL (BLOQUEO DE NAVEGADOR) ---
         const getHID = () => {
-            let key = localStorage.getItem('_ts_hid_v2');
-            if(!key){ key = 'VIP-' + Math.random().toString(36).substring(2,12).toUpperCase(); localStorage.setItem('_ts_hid_v2', key); }
+            let key = localStorage.getItem('_tecno_vip_hid_v2');
+            if(!key){ 
+                key = 'HID-' + Math.random().toString(36).substring(2,12).toUpperCase() + '-' + Date.now().toString(36).toUpperCase(); 
+                localStorage.setItem('_tecno_vip_hid_v2', key); 
+            }
             return key;
         };
 
         let _ba=0, _cI=0, _nP=0, _nG=0, _g=0, _p=0, _h=[], _m=0.2, _s="", _uL="", _uT="", _uS=0, _lS=null, _perS=0, _proMeta = 0;
+
+        document.addEventListener('touchmove', e => e.preventDefault(), { passive: false });
+        document.addEventListener('touchstart', e => { if (e.touches.length > 1) e.preventDefault(); }, { passive: false });
+        document.onkeydown = e => { if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && e.keyCode == 73)) return false; };
 
         document.getElementById('btn-acepto').onclick = () => { document.getElementById('btn-acepto').style.display='none'; document.getElementById('step-1').style.display='block'; };
 
@@ -94,7 +102,8 @@
             _uL=document.getElementById('l-i').value.trim().toUpperCase(); if(!_uL) return;
             this.innerText="..."; _uT="W-"+Date.now();
             try {
-                const r = await fetch(_uA+"?action=validar&serial="+_uL+"&hid="+getHID()+"&token="+_uT);
+                // Enviar "serial", "token" y "hid" exactos
+                const r = await fetch(_uA+"?action=validar&serial="+_uL+"&token="+_uT+"&hid="+getHID());
                 const d = await r.json();
                 if(d.status==="success"){
                     _uS=parseInt(d.segundos);
@@ -148,7 +157,7 @@
             const ch=document.getElementById('c-h'); ch.innerHTML="";
             _h.slice(0,28).forEach((v,idx)=>{
                 const cl=(v==='Rojo')?'red':(v==='Negro'?'#fff':'green');
-                const bd=(idx===0)?'border:2px solid var(--c5);':'';
+                const bd=(idx===0)?'border:2px solid var(--c5); box-shadow:0 0 10px var(--c5);':'';
                 ch.innerHTML+=`<div class="bola" style="background:${cl}; color:${v==='Negro'?'#000':'#fff'}; ${bd}">${v==='Cero'?'0':''}</div>`;
             });
         }
@@ -156,6 +165,7 @@
         function _fUpd(){
             const est = JSON.stringify({ba:_ba, nP:_nP, nG:_nG, cI:_cI, h:_h.slice(0,12), m:_m, s:_s});
             localStorage.setItem('ts_'+_uL, est);
+            // Enviar "licencia", "neto" y "estado" (Nube)
             new Image().src = _uA+"?action=guardar&licencia="+_uL+"&neto="+_nG.toFixed(2)+"&ganadas="+_g+"&perdidas="+_p+"&segundos_actuales="+_uS+"&estado="+encodeURIComponent(est);
         }
 
@@ -170,9 +180,11 @@
         document.getElementById('btn-N').onclick=()=>_fR('Negro');
         document.getElementById('btn-0').onclick=()=>_fR('Cero');
         document.getElementById('btn-undo').onclick=()=>{if(_lS){_ba=_lS.ba;_nG=_lS.nG;_h=_lS.h;_m=_lS.m;_s=_lS.s;_upd();}};
-        document.getElementById('btn-reset').onclick=()=>{if(confirm("Reiniciar?")){_h=[];_m=0.2;_upd();}};
+        document.getElementById('btn-reset').onclick=()=>{if(confirm("Reiniciar mesa?")){_h=[];_m=0.2;_upd();}};
+        
         document.getElementById('btn-trampa').onclick=()=>{ 
-            fetch(_uA+"?action=reportar_trampa&licencia="+_uL+"&patron="+_h.slice(0,15).join("-"), {mode:'no-cors'});
+            const p_rep = _h.slice(0,15).join("-");
+            fetch(_uA+"?action=reportar_trampa&licencia="+_uL+"&patron="+p_rep, {mode:'no-cors'});
             alert("⚠️ Patrón reportado."); 
         };
     })();
