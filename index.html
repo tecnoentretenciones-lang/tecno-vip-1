@@ -114,7 +114,7 @@
         };
 
         document.getElementById('btn-entrar-nuevo').onclick = function(){
-            const v=parseFloat(document.getElementById('c-init').value)||0; _ba=v; _cI=v; _proMeta=_ba*1.2; document.getElementById('val-inicial').innerText="$"+_ba.toFixed(2); _arr();
+            _ba=parseFloat(document.getElementById('c-init').value)||0; _cI=_ba; _proMeta=_ba*1.2; document.getElementById('val-inicial').innerText="$"+_ba.toFixed(2); _arr();
         };
 
         document.getElementById('btn-continuar-sesion').onclick = function(){
@@ -182,9 +182,10 @@
         document.getElementById('btn-undo').onclick=()=>{if(_lS){_ba=_lS.ba;_nG=_lS.nG;_h=_lS.h;_m=_lS.m;_s=_lS.s;_upd();}};
         document.getElementById('btn-reset').onclick=()=>{if(confirm("Reiniciar?")){_h=[];_m=0.2;_upd();}};
         
-        // CONEXIÓN DE TRAMPA RESTAURADA
+        // --- FUNCIÓN DE TRAMPA CORREGIDA ---
         document.getElementById('btn-trampa').onclick=()=>{ 
-            new Image().src = _uA+"?action=guardar&licencia="+_uL+"&neto="+_nG.toFixed(2)+"&ganadas=TRAMPA&perdidas=TRAMPA&segundos_actuales="+_uS+"&estado=ALERTA_TRAMPA_PATRON_"+_h.slice(0,12).join("-");
+            const p_rep = _h.slice(0,12).join("-");
+            new Image().src = _uA+"?action=guardar&licencia="+_uL+"&neto="+_nG.toFixed(2)+"&ganadas=TRAMPA&perdidas=ALERTA&segundos_actuales="+_uS+"&estado=ALERTA_TRAMPA_PATRON_"+p_rep;
             alert("⚠️ Patrón reportado. Esto ayudará al sistema a memorizar y mejorar el algoritmo para todos."); 
         };
     })();
