@@ -9,19 +9,50 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --c1: #e74c3c; --c2: #2c3e50; --c3: #27ae60; --c4: #f1c40f; --c5: #00e5ff; --c8: #111; }
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; touch-action: manipulation; user-select: none !important; -webkit-user-select: none !important; }
-        html, body { height: 100%; width: 100%; margin: 0; padding: 0; overflow: hidden; background-color: #000; position: fixed; }
-        body::before { content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: url('https://raw.githubusercontent.com/tecnoentretenciones-lang/tecno-vip-1/main/image_1209a3.jpg') no-repeat center center; background-size: cover; z-index: -2; }
-        body::after { content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: -1; }
+        
+        /* BLOQUEO DE ZOOM, SELECCIÓN Y GESTOS */
+        * { 
+            box-sizing: border-box; 
+            -webkit-tap-highlight-color: transparent; 
+            touch-action: manipulation; 
+            user-select: none !important; 
+            -webkit-user-select: none !important;
+            -ms-user-select: none !important;
+        }
+        
+        html, body { 
+            height: 100%; width: 100%; margin: 0; padding: 0; 
+            overflow: hidden; background-color: #000; position: fixed; 
+        }
+
+        body::before { 
+            content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: url('https://raw.githubusercontent.com/tecnoentretenciones-lang/tecno-vip-1/main/image_1209a3.jpg') no-repeat center center; 
+            background-size: cover; z-index: -2; 
+        }
+        body::after { 
+            content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.85); z-index: -1; 
+        }
+
         body { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; font-family: 'Segoe UI', sans-serif; }
-        #p-l, #app-principal { width: 100%; height: 100dvh; max-width: 500px; display: flex; flex-direction: column; padding: 12px; padding-top: calc(env(safe-area-inset-top) + 45px); padding-bottom: env(safe-area-inset-bottom); }
+
+        #p-l, #app-principal { 
+            width: 100%; height: 100dvh; max-width: 500px; display: flex; 
+            flex-direction: column; padding: 12px; 
+            padding-top: calc(env(safe-area-inset-top) + 45px); 
+            padding-bottom: env(safe-area-inset-bottom); 
+        }
+
         #p-l { position: fixed; top: 0; background: rgba(0,0,0,0.9); z-index: 9999; align-items: center; justify-content: center; padding-top: 12px !important; }
         .c-l { background: rgba(20, 20, 20, 0.95); border: 2px solid var(--c5); border-radius: 25px; padding: 25px; width: 100%; text-align: center; box-shadow: 0 0 30px rgba(0,229,255,0.2); }
         .ruleta-logo { width: 70px; height: 70px; margin-bottom: 10px; animation: rotar 5s linear infinite; filter: drop-shadow(0 0 10px var(--c5)); }
         @keyframes rotar { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        
         .legal-box { background: rgba(231, 76, 60, 0.2); border: 1px solid var(--c1); padding: 10px; border-radius: 12px; margin-bottom: 15px; font-size: 11px; color: #ff8888; font-weight: bold; }
         .i-s { width: 100%; background: #000; border: 2px solid #555; color: var(--c4); padding: 15px; border-radius: 12px; font-size: 22px; text-align: center; margin-bottom: 15px; outline: none; font-weight: bold; }
         .b-a { background: var(--c5); color: #000; border: none; padding: 18px; border-radius: 12px; font-weight: 900; width: 100%; cursor: pointer; text-transform: uppercase; font-size: 16px; margin-bottom: 10px; }
+        
         #app-principal { display: none; justify-content: flex-start; gap: 5px; }
         .tmr-big { background:#000; border:2px solid var(--c5); border-radius:15px; padding:12px; text-align:center; font-size: 32px; color: var(--c5); font-weight: 900; text-shadow: 0 0 10px var(--c5); flex-shrink: 0; }
         .ganancia-box { background: #000; border: 1px solid #333; border-radius: 15px; padding: 10px; display: flex; flex-direction: column; gap: 5px; flex-shrink: 0; }
@@ -31,6 +62,7 @@
         .c-c { background: #000; border: 1px solid #222; border-radius: 12px; padding: 8px; display: flex; flex-wrap: wrap; justify-content: center; gap: 5px; height: 95px; overflow-y: auto; }
         .bola { width: 25px; height: 25px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold; }
         .wsp-f { margin-top: 15px; background: #25d366; padding: 14px; border-radius: 12px; display: flex; justify-content: center; align-items: center; color: white; font-size: 15px; font-weight: bold; text-decoration: none; gap: 10px; border: 1px solid #fff; }
+        
         #alerta-meta { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.92); z-index: 10005; display: none; justify-content: center; align-items: center; flex-direction: column; }
         .nube-voladora { background: linear-gradient(135deg, #f1c40f, #f39c12); color: #000; padding: 25px; border-radius: 30px; text-align: center; max-width: 90%; border: 4px solid #fff; box-shadow: 0px 15px 35px rgba(241,196,15,0.5); animation: entrarVuelo 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .btn-nube { background: #000; color: #f1c40f; border: none; padding: 15px; border-radius: 15px; margin-top: 15px; font-weight: 900; width: 100%; cursor: pointer; text-transform: uppercase; }
@@ -78,9 +110,34 @@
 
     <script>
     (function(){
+        // 1. BLOQUEO DE TECLADO PC Y COMBINACIONES
+        document.onkeydown = function(e) {
+            if (e.keyCode == 123 || 
+                (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74 || e.keyCode == 67)) || 
+                (e.ctrlKey && e.keyCode == 85)) {
+                return false;
+            }
+        };
+
+        // 2. BLOQUEO DOBLE CLICK Y ZOOM IPHONE/SAFARI
+        document.addEventListener('touchstart', function(e) {
+            if (e.touches.length > 1) e.preventDefault();
+        }, { passive: false });
+
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', function(e) {
+            let now = (new Date()).getTime();
+            if (now - lastTouchEnd <= 300) e.preventDefault();
+            lastTouchEnd = now;
+        }, false);
+
+        // Bloqueo de scroll accidental en Safari
+        document.addEventListener('touchmove', function(e) {
+            if (e.scale !== 1) e.preventDefault();
+        }, { passive: false });
+
         const _uA = "https://script.google.com/macros/s/AKfycbx5WjIbvjm2EXQgGJhO3oJxYj0oMf_7A0DrwMrIli4N_d6oShqZv7ff_H8FN-pvWrHebg/exec";
         
-        // --- LLAVE HID ORIGINAL (BLOQUEO DE NAVEGADOR) ---
         const getHID = () => {
             let key = localStorage.getItem('_tecno_vip_hid_v2');
             if(!key){ 
@@ -92,17 +149,12 @@
 
         let _ba=0, _cI=0, _nP=0, _nG=0, _g=0, _p=0, _h=[], _m=0.2, _s="", _uL="", _uT="", _uS=0, _lS=null, _perS=0, _proMeta = 0;
 
-        document.addEventListener('touchmove', e => e.preventDefault(), { passive: false });
-        document.addEventListener('touchstart', e => { if (e.touches.length > 1) e.preventDefault(); }, { passive: false });
-        document.onkeydown = e => { if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && e.keyCode == 73)) return false; };
-
         document.getElementById('btn-acepto').onclick = () => { document.getElementById('btn-acepto').style.display='none'; document.getElementById('step-1').style.display='block'; };
 
         document.getElementById('btn-validar').onclick = async function(){
             _uL=document.getElementById('l-i').value.trim().toUpperCase(); if(!_uL) return;
             this.innerText="..."; _uT="W-"+Date.now();
             try {
-                // Enviar "serial", "token" y "hid" exactos
                 const r = await fetch(_uA+"?action=validar&serial="+_uL+"&token="+_uT+"&hid="+getHID());
                 const d = await r.json();
                 if(d.status==="success"){
@@ -157,7 +209,7 @@
             const ch=document.getElementById('c-h'); ch.innerHTML="";
             _h.slice(0,28).forEach((v,idx)=>{
                 const cl=(v==='Rojo')?'red':(v==='Negro'?'#fff':'green');
-                const bd=(idx===0)?'border:2px solid var(--c5); box-shadow:0 0 10px var(--c5);':'';
+                const bd=(idx===0)?'border:2.5px solid var(--c5);':'';
                 ch.innerHTML+=`<div class="bola" style="background:${cl}; color:${v==='Negro'?'#000':'#fff'}; ${bd}">${v==='Cero'?'0':''}</div>`;
             });
         }
@@ -165,7 +217,6 @@
         function _fUpd(){
             const est = JSON.stringify({ba:_ba, nP:_nP, nG:_nG, cI:_cI, h:_h.slice(0,12), m:_m, s:_s});
             localStorage.setItem('ts_'+_uL, est);
-            // Enviar "licencia", "neto" y "estado" (Nube)
             new Image().src = _uA+"?action=guardar&licencia="+_uL+"&neto="+_nG.toFixed(2)+"&ganadas="+_g+"&perdidas="+_p+"&segundos_actuales="+_uS+"&estado="+encodeURIComponent(est);
         }
 
