@@ -10,57 +10,99 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --c1: #e74c3c; --c2: #2c3e50; --c3: #27ae60; --c4: #f1c40f; --c5: #00e5ff; --c8: #111; }
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; touch-action: manipulation; user-select: none !important; -webkit-user-select: none !important; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; touch-action: none; user-select: none !important; -webkit-user-select: none !important; }
         
         html, body { 
-            height: 100dvh; 
-            width: 100vw; 
+            height: 100%;
+            width: 100%;
+            overflow: hidden; 
             margin: 0; 
             padding: 0;
             color: white; 
             font-family: 'Segoe UI', sans-serif; 
             background: url('https://raw.githubusercontent.com/tecnoentretenciones-lang/tecno-vip-1/main/image_1209a3.jpg') no-repeat center center fixed; 
             background-size: cover;
-            overflow: hidden; /* Esto evita el sube y baja en Safari */
+            /* BLOQUEO CRÍTICO PARA SAFARI */
+            position: fixed;
+            left: 0;
+            top: 0;
         }
         
         body::before { content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: -1; }
-        body { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; }
         
+        /* Contenedores con ajuste automático para no cortarse */
         #p-l, #app-principal { 
-            width: 100%; 
+            width: 100vw; 
             height: 100dvh; 
             max-width: 500px; 
+            margin: 0 auto;
             display: flex; 
             flex-direction: column; 
-            padding: 12px;
-            padding-bottom: env(safe-area-inset-bottom); /* Protege el corte de abajo */
+            padding: 10px;
+            padding-top: env(safe-area-inset-top);
+            padding-bottom: env(safe-area-inset-bottom);
+            justify-content: flex-start;
         }
 
-        #p-l { position: fixed; top: 0; background: rgba(0,0,0,0.9); z-index: 9999; align-items: center; justify-content: center; }
-        .c-l { background: rgba(20, 20, 20, 0.95); border: 2px solid var(--c5); border-radius: 25px; padding: 25px; width: 100%; text-align: center; box-shadow: 0 0 30px rgba(0,229,255,0.2); }
-        .ruleta-logo { width: 70px; height: 70px; margin-bottom: 10px; animation: rotar 5s linear infinite; filter: drop-shadow(0 0 10px var(--c5)); }
+        #p-l { position: fixed; top: 0; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.9); z-index: 9999; align-items: center; justify-content: center; }
+        
+        .c-l { 
+            background: rgba(20, 20, 20, 0.95); 
+            border: 2px solid var(--c5); 
+            border-radius: 25px; 
+            padding: 20px; 
+            width: 95%; 
+            text-align: center; 
+            box-shadow: 0 0 30px rgba(0,229,255,0.2);
+            overflow-y: auto;
+            max-height: 95vh;
+        }
+
+        .ruleta-logo { width: 60px; height: 60px; margin-bottom: 10px; animation: rotar 5s linear infinite; filter: drop-shadow(0 0 10px var(--c5)); }
         @keyframes rotar { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-        .legal-box { background: rgba(231, 76, 60, 0.2); border: 1px solid var(--c1); padding: 10px; border-radius: 12px; margin-bottom: 15px; font-size: 11px; color: #ff8888; font-weight: bold; }
-        .i-s { width: 100%; background: #000; border: 2px solid #555; color: var(--c4); padding: 15px; border-radius: 12px; font-size: 22px; text-align: center; margin-bottom: 15px; outline: none; font-weight: bold; }
-        .b-a { background: var(--c5); color: #000; border: none; padding: 18px; border-radius: 12px; font-weight: 900; width: 100%; cursor: pointer; text-transform: uppercase; font-size: 16px; margin-bottom: 10px; }
-        #app-principal { display: none; justify-content: space-between; } /* Ajuste para que nada se corte */
-        .tmr-big { background:#000; border:2px solid var(--c5); border-radius:15px; padding:15px; text-align:center; font-size: 32px; color: var(--c5); font-weight: 900; margin-bottom:8px; text-shadow: 0 0 10px var(--c5); }
-        .ganancia-box { background: #000; border: 1px solid #333; border-radius: 15px; padding: 12px; display: flex; flex-direction: column; gap: 5px; margin-bottom: 10px; }
+        
+        .legal-box { background: rgba(231, 76, 60, 0.2); border: 1px solid var(--c1); padding: 8px; border-radius: 12px; margin-bottom: 10px; font-size: 11px; color: #ff8888; font-weight: bold; }
+        .i-s { width: 100%; background: #000; border: 2px solid #555; color: var(--c4); padding: 12px; border-radius: 12px; font-size: 20px; text-align: center; margin-bottom: 10px; outline: none; font-weight: bold; }
+        .b-a { background: var(--c5); color: #000; border: none; padding: 15px; border-radius: 12px; font-weight: 900; width: 100%; cursor: pointer; text-transform: uppercase; font-size: 14px; margin-bottom: 8px; }
+        
+        #app-principal { display: none; gap: 8px; }
+        .tmr-big { background:#000; border:2px solid var(--c5); border-radius:15px; padding:10px; text-align:center; font-size: 28px; color: var(--c5); font-weight: 900; text-shadow: 0 0 10px var(--c5); }
+        .ganancia-box { background: #000; border: 1px solid #333; border-radius: 15px; padding: 10px; display: flex; flex-direction: column; gap: 3px; }
         .stats-row { display: flex; justify-content: space-around; width: 100%; }
-        .panel { background: var(--c8); border: 1px solid #333; border-radius: 15px; padding: 15px; display: flex; flex-direction: column; gap: 10px; flex-grow: 1; justify-content: space-around; }
-        .b-i { flex: 1; height: 75px; border: none; border-radius: 15px; font-size: 32px; font-weight: bold; color: white; cursor: pointer; }
-        .c-c { background: #000; border: 1px solid #222; border-radius: 12px; padding: 8px; display: flex; flex-wrap: wrap; justify-content: center; gap: 5px; height: 95px; overflow-y: auto; }
-        .bola { width: 25px; height: 25px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold; }
-        .wsp-f { margin-top: 15px; background: #25d366; padding: 14px; border-radius: 12px; display: flex; justify-content: center; align-items: center; color: white; font-size: 15px; font-weight: bold; text-decoration: none; gap: 10px; border: 1px solid #fff; }
+        
+        .panel { 
+            background: var(--c8); 
+            border: 1px solid #333; 
+            border-radius: 15px; 
+            padding: 12px; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 8px; 
+            flex: 1; /* Esto hace que el panel ocupe el espacio sobrante sin salirse */
+            justify-content: center; 
+        }
+        
+        .b-i { flex: 1; height: 65px; border: none; border-radius: 15px; font-size: 28px; font-weight: bold; color: white; cursor: pointer; }
+        .c-c { background: #000; border: 1px solid #222; border-radius: 12px; padding: 8px; display: flex; flex-wrap: wrap; justify-content: center; gap: 4px; height: 85px; overflow-y: auto; }
+        .bola { width: 22px; height: 22px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; font-weight: bold; }
+        
+        .wsp-f { margin-top: 5px; background: #25d366; padding: 12px; border-radius: 12px; display: flex; justify-content: center; align-items: center; color: white; font-size: 14px; font-weight: bold; text-decoration: none; gap: 10px; border: 1px solid #fff; }
+        
         #alerta-meta { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.92); z-index: 10005; display: none; justify-content: center; align-items: center; flex-direction: column; }
         .nube-voladora { background: linear-gradient(135deg, #f1c40f, #f39c12); color: #000; padding: 25px; border-radius: 30px; text-align: center; max-width: 90%; border: 4px solid #fff; box-shadow: 0px 15px 35px rgba(241,196,15,0.5); }
-        .btn-nube { background: #000; color: #f1c40f; border: none; padding: 15px; border-radius: 15px; margin-top: 15px; font-weight: 900; width: 100%; cursor: pointer; text-transform: uppercase; }
     </style>
 </head>
-<body oncontextmenu="return false;">
+<body>
 
-    <div id="alerta-meta"><div class="nube-voladora"><div style="font-size: 50px;">🛑💰✨</div><h2 style="margin: 10px 0; font-weight: 900; line-height: 1.1;">¡OBJETIVO LOGRADO!</h2><p style="margin: 10px 0; font-weight: bold; font-size: 16px;">Has ganado el 20% de tu capital.</p><p style="margin: 0; font-weight: 600; font-size: 14px; line-height: 1.4;">Para proteger tus ganancias y no perder la racha, <b>¡ARRANCA AHORA!</b><br><br>Tómate un descanso, disfruta tu dinero y vuelve más tarde.</p><button class="btn-nube" onclick="aceptarMeta()">OK, ENTIENDO (CONTINUAR)</button></div></div>
+    <div id="alerta-meta">
+        <div class="nube-voladora">
+            <div style="font-size: 50px;">🛑💰✨</div>
+            <h2 style="margin: 10px 0; font-weight: 900; line-height: 1.1;">¡OBJETIVO LOGRADO!</h2>
+            <p style="margin: 10px 0; font-weight: bold; font-size: 16px;">Has ganado el 20% de tu capital.</p>
+            <p style="margin: 0; font-weight: 600; font-size: 14px; line-height: 1.4;">Para proteger tus ganancias y no perder la racha, <b>¡ARRANCA AHORA!</b><br><br>Tómate un descanso y vuelve más tarde.</p>
+            <button class="b-a" onclick="aceptarMeta()" style="background:#000; color:#f1c40f; margin-top:15px;">ACEPTAR NUEVO OBJETIVO</button>
+        </div>
+    </div>
 
     <div id="p-l">
         <div class="c-l">
@@ -68,7 +110,7 @@
             <h1 style="margin: 0 0 5px 0; font-size: 24px; color:white;">TECNOENTRETE VIP</h1>
             <p style="font-size: 14px; color: var(--c4); font-weight: bold; margin-bottom: 15px;">SOFTWARE PARA GANARLE A LA RULETA</p>
             <div class="legal-box">⚠️ AVISO: No nos hacemos responsables por pérdidas. El uso es bajo su propio riesgo.</div>
-            <div style="text-align:left; font-size:12px; background:rgba(0,0,0,0.5); padding:12px; border-radius:15px; margin-bottom:15px; color:#eee; line-height: 1.5;">
+            <div style="text-align:left; font-size:12px; background:rgba(0,0,0,0.5); padding:12px; border-radius:15px; margin-bottom:15px; color:#eee; line-height: 1.4;">
                 - Iniciar siempre con monto base <b>$0.20</b>.<br>
                 - Capital recomendado: <b>$40 USD</b>.<br>
                 - Si hay 7 pérdidas seguidas, presione <b>⚠️ TRAMPA</b>.
@@ -76,9 +118,8 @@
             <div id="e-m" style="color: #ff4757; font-size: 13px; margin-bottom: 10px; font-weight: bold;"></div>
             <button id="btn-acepto" class="b-a">ACEPTO Y COMIENZO</button>
             <div id="step-1" style="display:none"><input type="text" id="l-i" class="i-s" placeholder="INGRESE LICENCIA" autocomplete="off"><button class="b-a" id="btn-validar">VALIDAR LICENCIA</button></div>
-            <div id="step-2" style="display:none"><input type="number" id="c-init" class="i-s" placeholder="SALDO DISPONIBLE EN MESA" step="0.01"><button class="b-a" id="btn-entrar-nuevo">ENTRAR A JUGAR</button><div id="btn-continuar-box" style="display:none; margin-top:10px;"><button class="b-a" id="btn-continuar-sesion" style="background:#27ae60; color:white;">SINCRONIZAR ÚLTIMA PARTIDA</button></div></div>
-            
-            <div style="margin-top: 15px; font-size: 13px; color: #00e5ff; font-weight: bold;">Compra tu validación aquí:</div>
+            <div id="step-2" style="display:none"><input type="number" id="c-init" class="i-s" placeholder="SALDO EN MESA"><button class="b-a" id="btn-entrar-nuevo">ENTRAR A JUGAR</button><div id="btn-continuar-box" style="display:none; margin-top:5px;"><button class="b-a" id="btn-continuar-sesion" style="background:#27ae60; color:white;">SINCRONIZAR PARTIDA</button></div></div>
+            <div style="margin-top: 10px; font-size: 12px; color: #00e5ff; font-weight: bold;">Compra tu validación aquí:</div>
             <a href="https://wa.me/56995931641" class="wsp-f"><i class="fab fa-whatsapp"></i> CONTACTAR SOPORTE</a>
         </div>
     </div>
@@ -86,37 +127,36 @@
     <div id="app-principal">
         <div id="tmr" class="tmr-big">00d 00h 00m 00s</div>
         <div class="ganancia-box">
-            <div style="font-size: 11px; color: #ffae00; font-weight: bold; text-align: center; border-bottom: 1px solid #333; padding-bottom: 5px; margin-bottom: 5px;">ENTRASTE CON: <span id="val-inicial">$0.00</span></div>
+            <div style="font-size: 10px; color: #ffae00; font-weight: bold; text-align: center; border-bottom: 1px solid #333; padding-bottom: 3px; margin-bottom: 3px;">ENTRASTE CON: <span id="val-inicial">$0.00</span></div>
             <div class="stats-row">
-                <div style="flex: 1; border-right: 1px solid #333; text-align: center;"><div style="font-size: 10px; color: #888;">SALDO ACTUAL</div><div style="font-size: 22px; font-weight: 900; color: #fff;" id="cap-val">$0.00</div></div>
-                <div style="flex: 1; text-align: center;"><div style="font-size: 10px; color: #888;">NETO GLOBAL</div><div style="font-size: 22px; font-weight: 900; color: var(--c5);" id="n-g">$0.00</div></div>
+                <div style="text-align: center;"><div>SALDO</div><div id="cap-val" style="font-size: 20px; font-weight: 900;">$0.00</div></div>
+                <div style="text-align: center;"><div>NETO</div><div id="n-g" style="font-size: 20px; font-weight: 900; color: var(--c5);">$0.00</div></div>
             </div>
         </div>
         <div class="panel">
-            <div style="background: #1a1a1a; border: 1px solid #333; border-radius: 15px; padding: 20px; text-align: center;"><div id="s-t" style="font-size:75px; font-weight:900; line-height:1;">---</div><div id="m-t" style="color:var(--c3); font-weight:900; font-size:26px; margin-top:10px;">$0.20</div></div>
-            <div style="display: flex; gap: 10px;"><button class="b-i" id="btn-R" style="background:var(--c1);">R</button><button class="b-i" id="btn-N" style="background:var(--c2);">N</button><button class="b-i" id="btn-0" style="background:var(--c3);">0</button></div>
+            <div style="background: #1a1a1a; border: 1px solid #333; border-radius: 15px; padding: 15px; text-align: center;"><div id="s-t" style="font-size:60px; font-weight:900; line-height:1;">---</div><div id="m-t" style="color:var(--c3); font-weight:900; font-size:22px; margin-top:5px;">$0.20</div></div>
+            <div style="display: flex; gap: 8px;"><button class="b-i" id="btn-R" style="background:var(--c1);">R</button><button class="b-i" id="btn-N" style="background:var(--c2);">N</button><button class="b-i" id="btn-0" style="background:var(--c3);">0</button></div>
             <div id="c-h" class="c-c"></div>
-            <div style="display: flex; gap: 8px;"><button style="background:transparent; color:#555; border:1px solid #222; padding:12px; border-radius:10px; font-size:11px; flex:1;" id="btn-undo">CORREGIR</button><button style="background:transparent; color:#f1c40f; border:1px solid #f1c40f; padding:12px; border-radius:10px; font-size:11px; flex:1.2; opacity:0.3; pointer-events:none;" id="btn-trampa">⚠️ TRAMPA</button><button style="background:transparent; color:#e74c3c; border:1px solid #e74c3c; padding:12px; border-radius:10px; font-size:11px; flex:1;" id="btn-reset">REINICIAR</button></div>
+            <div style="display: flex; gap: 5px;"><button id="btn-undo" style="background:transparent; color:#555; border:1px solid #222; padding:10px; border-radius:10px; font-size:10px; flex:1;">CORREGIR</button><button id="btn-trampa" style="background:transparent; color:#f1c40f; border:1px solid #f1c40f; padding:10px; border-radius:10px; font-size:10px; flex:1.2; opacity:0.3; pointer-events:none;">⚠️ TRAMPA</button><button id="btn-reset" style="background:transparent; color:#e74c3c; border:1px solid #e74c3c; padding:10px; border-radius:10px; font-size:10px; flex:1;">REINICIAR</button></div>
         </div>
     </div>
 
     <script>
     (function(){
-        // BLOQUEOS DE PC
-        document.onkeydown = e => { if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && e.keyCode == 73)) return false; };
-        
-        // BLOQUEO DE ZOOM Y DOBLE CLIC SIN CORTAR PANTALLA
+        // BLOQUEO TOTAL DE GESTOS SAFARI
+        document.addEventListener('touchmove', e => e.preventDefault(), { passive: false });
         document.addEventListener('touchstart', e => { if (e.touches.length > 1) e.preventDefault(); }, { passive: false });
-        let _lTE=0; document.addEventListener('touchend', e => { let n=Date.now(); if(n-_lTE<=300) e.preventDefault(); _lTE=n; }, false);
+        let _lTE=0; document.addEventListener('touchend', e => { let n = Date.now(); if(n-_lTE <= 300) e.preventDefault(); _lTE=n; }, false);
+        document.onkeydown = e => { if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && e.keyCode == 73)) return false; };
 
         const _uA = "https://script.google.com/macros/s/AKfycbx5WjIbvjm2EXQgGJhO3oJxYj0oMf_7A0DrwMrIli4N_d6oShqZv7ff_H8FN-pvWrHebg/exec";
         const getHID = () => {
             let key = localStorage.getItem('_tecno_super_key_v2');
-            if(!key){ key = 'VIP-HID-' + Math.random().toString(36).substring(2,12).toUpperCase() + '-' + Date.now().toString(36).toUpperCase(); localStorage.setItem('_tecno_super_key_v2', key); }
+            if(!key){ key = 'VIP-HID-' + Math.random().toString(36).substring(2,12).toUpperCase(); localStorage.setItem('_tecno_super_key_v2', key); }
             return key;
         };
 
-        let _ba=0, _cI=0, _nP=0, _nG=0, _g=0, _p=0, _h=[], _m=0.2, _s="", _uL="", _uT="", _uS=0, _lS=null, _perSeguidas=0, _proximaMeta = 0;
+        let _ba=0, _cI=0, _nG=0, _g=0, _p=0, _h=[], _m=0.2, _s="", _uL="", _uT="", _uS=0, _lS=null, _perS=0, _proMeta=0;
 
         document.getElementById('btn-acepto').onclick = () => { document.getElementById('btn-acepto').style.display='none'; document.getElementById('step-1').style.display='block'; };
 
@@ -128,40 +168,35 @@
                 const d = await r.json();
                 if(d.status==="success"){
                     _uL=s; _uS=parseInt(d.segundos);
-                    if(d.estado_nube) {
-                        localStorage.setItem('ts_'+_uL, d.estado_nube);
-                        const x = JSON.parse(d.estado_nube); _nG = x.nG || 0;
-                        document.getElementById('btn-continuar-box').style.display='block';
-                    }
+                    if(d.estado_nube){ localStorage.setItem('ts_'+_uL, d.estado_nube); document.getElementById('btn-continuar-box').style.display='block'; }
                     document.getElementById('step-1').style.display='none'; document.getElementById('step-2').style.display='block';
-                } else { document.getElementById('e-m').innerText=d.mensaje; this.innerText="VALIDAR LICENCIA"; }
-            } catch(e){ document.getElementById('e-m').innerText="ERROR"; }
+                } else { document.getElementById('e-m').innerText=d.mensaje; this.innerText="VALIDAR"; }
+            } catch(e){ document.getElementById('e-m').innerText="ERROR RED"; }
         };
 
         document.getElementById('btn-entrar-nuevo').onclick = function(){
-            _ba=parseFloat(document.getElementById('c-init').value)||0; _cI=_ba; _proximaMeta=_ba*1.2; document.getElementById('val-inicial').innerText="$"+_ba.toFixed(2); _arr();
+            _ba=parseFloat(document.getElementById('c-init').value)||0; _cI=_ba; _proMeta=_ba*1.2; document.getElementById('val-inicial').innerText="$"+_ba.toFixed(2); _arr();
         };
 
         document.getElementById('btn-continuar-sesion').onclick = function(){
-            const sv = localStorage.getItem('ts_'+_uL);
-            if(sv){ const x=JSON.parse(sv); _ba=x.ba; _nG=x.nG||0; _cI=x.cI||x.ba; _h=x.h||[]; _m=x.m||0.2; _proximaMeta=_ba*1.2; document.getElementById('val-inicial').innerText="$"+_cI.toFixed(2); }
+            const sv=localStorage.getItem('ts_'+_uL);
+            if(sv){ const x=JSON.parse(sv); _ba=x.ba; _nG=x.nG||0; _cI=x.cI||x.ba; _h=x.h||[]; _m=x.m||0.2; _proMeta=_ba*1.2; document.getElementById('val-inicial').innerText="$"+_cI.toFixed(2); }
             _arr();
         };
 
         function _arr(){ document.getElementById('p-l').style.display='none'; document.getElementById('app-principal').style.display='flex'; setInterval(_fClock, 1000); setInterval(_fUpd, 10000); _upd(); }
-
-        window.aceptarMeta = function() { document.getElementById('alerta-meta').style.display = 'none'; _proximaMeta = _ba * 1.20; };
+        window.aceptarMeta = () => { document.getElementById('alerta-meta').style.display='none'; _proMeta = _ba * 1.20; };
 
         function _fR(c){
             _lS = JSON.parse(JSON.stringify({ba:_ba, nG:_nG, g:_g, p:_p, h:_h, m:_m, s:_s}));
             if(_s!==""){
-                if(c.toUpperCase()===_s){ _ba+=_m; _nG+=_m; _m=0.2; _g++; _perSeguidas=0; }
-                else if(c!=='Cero'){ _ba-=_m; _nG-=_m; _m*=2; _p++; _perSeguidas++; }
+                if(c.toUpperCase()===_s){ _ba+=_m; _nG+=_m; _m=0.2; _g++; _perS=0; }
+                else if(c!=='Cero'){ _ba-=_m; _nG-=_m; _m*=2; _p++; _perS++; }
             }
             _h.unshift(c); _calc(); _upd(); _fUpd();
-            if(_ba >= _proximaMeta) document.getElementById('alerta-meta').style.display = 'flex';
+            if(_ba >= _proMeta) document.getElementById('alerta-meta').style.display = 'flex';
             let bt=document.getElementById('btn-trampa');
-            if(_perSeguidas>=7){ bt.style.opacity="1"; bt.style.pointerEvents="auto"; } else { bt.style.opacity="0.3"; bt.style.pointerEvents="none"; }
+            if(_perS>=7){ bt.style.opacity="1"; bt.style.pointerEvents="auto"; } else { bt.style.opacity="0.3"; bt.style.pointerEvents="none"; }
         }
 
         function _calc() {
@@ -183,7 +218,7 @@
             const ch=document.getElementById('c-h'); ch.innerHTML="";
             _h.slice(0,24).forEach((v,idx)=>{
                 const cl=(v==='Rojo')?'red':(v==='Negro'?'#fff':'green');
-                const bd=(idx===0)?'border:2.5px solid var(--c5);':'';
+                const bd=(idx===0)?'border:2px solid var(--c5);':'';
                 ch.innerHTML+=`<div class="bola" style="background:${cl}; color:${v==='Negro'?'#000':'#fff'}; ${bd}">${v==='Cero'?'0':''}</div>`;
             });
         }
