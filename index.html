@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>TECNOENTRETE VIP v55.2</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
@@ -28,110 +30,54 @@
         .c-c { background: #000; border: 1px solid #222; border-radius: 12px; padding: 8px; display: flex; flex-wrap: wrap; justify-content: center; gap: 5px; height: 95px; overflow-y: auto; }
         .bola { width: 25px; height: 25px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold; }
         .wsp-f { margin-top: 15px; background: #25d366; padding: 14px; border-radius: 12px; display: flex; justify-content: center; align-items: center; color: white; font-size: 15px; font-weight: bold; text-decoration: none; gap: 10px; border: 1px solid #fff; }
+        #alerta-meta { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.92); z-index: 10005; display: none; justify-content: center; align-items: center; flex-direction: column; }
+        .nube-voladora { background: linear-gradient(135deg, #f1c40f, #f39c12); color: #000; padding: 25px; border-radius: 30px; text-align: center; max-width: 90%; border: 4px solid #fff; box-shadow: 0px 15px 35px rgba(241,196,15,0.5); animation: entrarVuelo 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .btn-nube { background: #000; color: #f1c40f; border: none; padding: 15px; border-radius: 15px; margin-top: 15px; font-weight: 900; width: 100%; cursor: pointer; text-transform: uppercase; }
     </style>
 </head>
-<body oncontextmenu="return false;">
+<body oncontextmenu="return false;" onkeydown="if(event.keyCode==123 || (event.ctrlKey && event.shiftKey && event.keyCode==73)) return false;">
+
+    <div id="alerta-meta"><div class="nube-voladora"><div style="font-size: 50px;">🛑💰✨</div><h2 style="margin: 10px 0; font-weight: 900; line-height: 1.1;">¡OBJETIVO LOGRADO!</h2><p style="margin: 10px 0; font-weight: bold; font-size: 16px;">Has ganado el 20% de tu capital.</p><p style="margin: 0; font-weight: 600; font-size: 14px; line-height: 1.4;">Para proteger tus ganancias y no perder la racha, <b>¡ARRANCA AHORA!</b><br><br>Tómate un descanso, disfruta tu dinero y vuelve más tarde.</p><button class="btn-nube" onclick="aceptarMeta()">OK, ENTIENDO (CONTINUAR)</button></div></div>
 
     <div id="p-l">
         <div class="c-l">
             <img src="https://cdn-icons-png.flaticon.com/512/1055/1055673.png" class="ruleta-logo">
-            <h1 style="margin: 0 0 5px 0; font-size: 24px;">TECNOENTRETE VIP</h1>
-            <div class="legal-box">AVISO: Software de análisis estadístico.</div>
+            <h1 style="margin: 0 0 5px 0; font-size: 24px; color:white;">TECNOENTRETE VIP</h1>
+            <p style="font-size: 14px; color: var(--c4); font-weight: bold; margin-bottom: 15px;">SOFTWARE PARA GANARLE A LA RULETA</p>
+            <div class="legal-box">⚠️ AVISO: No nos hacemos responsables por pérdidas de capital. El uso es bajo su propio riesgo.</div>
+            <div style="text-align:left; font-size:12px; background:rgba(0,0,0,0.5); padding:12px; border-radius:15px; margin-bottom:15px; color:#eee; line-height: 1.5;">
+                - Iniciar siempre con monto base <b>$0.20</b>.<br>
+                - Capital recomendado: <b>$40 USD</b>.<br>
+                - Si hay 7 pérdidas seguidas, presione <b>⚠️ TRAMPA</b>. Esto reporta el patrón del casino.
+            </div>
             <div id="e-m" style="color: #ff4757; font-size: 13px; margin-bottom: 10px; font-weight: bold;"></div>
-            <button id="btn-acepto" class="b-a">COMENZAR</button>
-            <div id="step-1" style="display:none"><input type="text" id="l-i" class="i-s" placeholder="LICENCIA"><button class="b-a" id="btn-validar">VALIDAR</button></div>
-            <div id="step-2" style="display:none"><input type="number" id="c-init" class="i-s" placeholder="SALDO"><button class="b-a" id="btn-entrar-nuevo">JUGAR</button></div>
+            <button id="btn-acepto" class="b-a">ACEPTO Y COMIENZO</button>
+            <div id="step-1" style="display:none"><input type="text" id="l-i" class="i-s" placeholder="INGRESE LICENCIA" autocomplete="off"><button class="b-a" id="btn-validar">VALIDAR LICENCIA</button></div>
+            <div id="step-2" style="display:none"><input type="number" id="c-init" class="i-s" placeholder="SALDO DISPONIBLE EN MESA" step="0.01"><button class="b-a" id="btn-entrar-nuevo">ENTRAR A JUGAR</button><div id="btn-continuar-box" style="display:none; margin-top:10px;"><button class="b-a" id="btn-continuar-sesion" style="background:#27ae60; color:white;">SINCRONIZAR ÚLTIMA PARTIDA</button></div></div>
+            <a href="https://wa.me/56995931641?text=Hola%20TECNOENTRETE,%20te%20escribo%20directamente%20desde%20la%20Ruleta%20VIP." class="wsp-f"><i class="fab fa-whatsapp"></i> CONTACTAR SOPORTE</a>
         </div>
     </div>
 
     <div id="app-principal">
-        <div id="tmr" class="tmr-big">00:00:00</div>
+        <div id="tmr" class="tmr-big">00d 00h 00m 00s</div>
         <div class="ganancia-box">
+            <div style="font-size: 11px; color: #ffae00; font-weight: bold; text-align: center; border-bottom: 1px solid #333; padding-bottom: 5px; margin-bottom: 5px;">ENTRASTE CON: <span id="val-inicial">$0.00</span></div>
             <div class="stats-row">
-                <div style="text-align: center;"><div>SALDO</div><div id="cap-val">$0.00</div></div>
-                <div style="text-align: center;"><div>NETO GLOBAL</div><div id="n-g" style="color: var(--c5);">$0.00</div></div>
+                <div style="flex: 1; border-right: 1px solid #333; text-align: center;"><div style="font-size: 10px; color: #888;">SALDO ACTUAL</div><div style="font-size: 22px; font-weight: 900; color: #fff;" id="cap-val">$0.00</div></div>
+                <div style="flex: 1; text-align: center;"><div style="font-size: 10px; color: #888;">NETO GLOBAL</div><div style="font-size: 22px; font-weight: 900; color: var(--c5);" id="n-g">$0.00</div></div>
             </div>
         </div>
         <div class="panel">
-            <div id="s-t" style="font-size:70px; text-align:center;">---</div>
-            <div id="m-t" style="color:var(--c3); text-align:center; font-size:24px;">$0.20</div>
+            <div style="background: #1a1a1a; border: 1px solid #333; border-radius: 15px; padding: 20px; text-align: center;"><div id="s-t" style="font-size:75px; font-weight:900; line-height:1;">---</div><div id="m-t" style="color:var(--c3); font-weight:900; font-size:26px; margin-top:10px;">$0.20</div></div>
             <div style="display: flex; gap: 10px;"><button class="b-i" id="btn-R" style="background:var(--c1);">R</button><button class="b-i" id="btn-N" style="background:var(--c2);">N</button><button class="b-i" id="btn-0" style="background:var(--c3);">0</button></div>
             <div id="c-h" class="c-c"></div>
+            <div style="display: flex; gap: 8px;"><button style="background:transparent; color:#555; border:1px solid #222; padding:12px; border-radius:10px; font-size:11px; flex:1;" id="btn-undo">CORREGIR</button><button style="background:transparent; color:#f1c40f; border:1px solid #f1c40f; padding:12px; border-radius:10px; font-size:11px; flex:1.2; opacity:0.3; pointer-events:none;" id="btn-trampa">⚠️ TRAMPA</button><button style="background:transparent; color:#e74c3c; border:1px solid #e74c3c; padding:12px; border-radius:10px; font-size:11px; flex:1;" id="btn-reset">REINICIAR</button></div>
         </div>
     </div>
 
     <script>
-    (function(){
-        const _uA = "https://script.google.com/macros/s/AKfycbxFg9jyzTaJQwjdOyvpeq0ZmhCf4BegqGdRIQsWoZjF68Rs4Yq7kAW-1Fc0xyc1a6Ru/exec";
-        
-        const getHID = () => {
-            let key = localStorage.getItem('_tecno_hid');
-            if(!key){
-                key = 'VIP-' + Math.random().toString(36).substring(2, 10).toUpperCase();
-                localStorage.setItem('_tecno_hid', key);
-            }
-            return key;
-        };
-
-        let _ba=0, _nG=0, _h=[], _m=0.2, _s="", _uL="", _uT="", _uS=0;
-
-        document.getElementById('btn-acepto').onclick = () => {
-            document.getElementById('btn-acepto').style.display='none';
-            document.getElementById('step-1').style.display='block';
-        };
-
-        document.getElementById('btn-validar').onclick = async function(){
-            _uL = document.getElementById('l-i').value.trim().toUpperCase();
-            _uT = "T-" + Date.now();
-            const r = await fetch(_uA + "?action=validar&serial="+_uL+"&token="+_uT+"&hid="+getHID());
-            const d = await r.json();
-            if(d.status === "success"){
-                _uS = d.segundos;
-                document.getElementById('step-1').style.display='none';
-                document.getElementById('step-2').style.display='block';
-            } else { alert(d.mensaje); }
-        };
-
-        document.getElementById('btn-entrar-nuevo').onclick = () => {
-            _ba = parseFloat(document.getElementById('c-init').value);
-            document.getElementById('p-l').style.display='none';
-            document.getElementById('app-principal').style.display='flex';
-            _upd();
-        };
-
-        function _fR(col){
-            if(_s !== ""){
-                if(col.toUpperCase() === _s){ _ba += _m; _nG += _m; _m = 0.2; }
-                else if(col !== "Cero"){ _ba -= _m; _nG -= _m; _m *= 2; }
-            }
-            _h.unshift(col);
-            _s = (col === "Rojo") ? "NEGRO" : "ROJO";
-            _upd();
-            _save();
-        }
-
-        function _upd(){
-            document.getElementById('cap-val').innerText = "$" + _ba.toFixed(2);
-            document.getElementById('n-g').innerText = "$" + _nG.toFixed(2);
-            document.getElementById('s-t').innerText = _s || "---";
-            document.getElementById('m-t').innerText = "$" + _m.toFixed(2);
-            const ch = document.getElementById('c-h'); ch.innerHTML = "";
-            _h.slice(0,15).forEach(v => {
-                const color = (v === "Rojo") ? "red" : (v === "Negro" ? "white" : "green");
-                ch.innerHTML += `<div class="bola" style="background:${color}; color:black;">${v[0]}</div>`;
-            });
-        }
-
-        async function _save(){
-            const estado = JSON.stringify({ba: _ba, nG: _nG, h: _h.slice(0,10), m: _m, s: _s});
-            // ESTA LÍNEA ENVÍA EL NETO GLOBAL AL EXCEL
-            new Image().src = _uA + "?action=guardar&licencia=" + _uL + "&token=" + _uT + "&estado=" + encodeURIComponent(estado);
-        }
-
-        document.getElementById('btn-R').onclick = () => _fR('Rojo');
-        document.getElementById('btn-N').onclick = () => _fR('Negro');
-        document.getElementById('btn-0').onclick = () => _fR('Cero');
-    })();
+    (function(_0x1a2b,_0x3c4d){const _0x5e6f=function(_0x7a8b){while(--_0x7a8b){_0x1a2b['push'](_0x1a2b['shift']());}};_0x5e6f(++_0x3c4d);}(['tecnoentretenciones-lang.github.io','localhost','_tecno_super_key_v2','CHR','SAF','VIP-','W-','https://script.google.com/macros/s/AKfycbx5WjIbvjm2EXQgGJhO3oJxYj0oMf_7A0DrwMrIli4N_d6oShqZv7ff_H8FN-pvWrHebg/exec','validar','success','tecno_save_','block','Rojo','Negro','Cero','ROJO','NEGRO','kick','guardar','reportar_fallo'],0x1d4));const _0x4d2e=function(_0x1a2b,_0x3c4d){_0x1a2b=_0x1a2b-0x0;let _0x5e6f=['tecnoentretenciones-lang.github.io','localhost','_tecno_super_key_v2','CHR','SAF','VIP-','W-','https://script.google.com/macros/s/AKfycbx5WjIbvjm2EXQgGJhO3oJxYj0oMf_7A0DrwMrIli4N_d6oShqZv7ff_H8FN-pvWrHebg/exec','validar','success','tecno_save_','block','Rojo','Negro','Cero','ROJO','NEGRO','kick','guardar','reportar_fallo'][_0x1a2b];return _0x5e6f;};
+    (function(){const _0x1=window['location']['hostname'];if(_0x1!==_0x4d2e(0)&&_0x1!==_0x4d2e(1)){document['body']['innerHTML']="<div style='color:red; text-align:center; padding:50px; font-weight:bold;'>⚠️ ACCESO DENEGADO</div>";return;}const _0x2=()=>{let _0x3=localStorage['getItem'](_0x4d2e(2));if(!_0x3){let _0x4="UKN";if(navigator['userAgent']['indexOf']("Chrome")>-1)_0x4=_0x4d2e(3);else if(navigator['userAgent']['indexOf']("Safari")>-1)_0x4=_0x4d2e(4);let _pool="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";let _r="";for(let i=0;i<12;i++){_r+=_pool['charAt'](Math['floor'](Math['random']()*_pool['length']));}_0x3=_0x4d2e(5)+_0x4+'-'+_r+'-'+Date['now']()['toString'](36)['toUpperCase']();localStorage['setItem'](_0x4d2e(2),_0x3);}return _0x3;};let _ba=0,_cI=0,_nP=0,_nG=0,_g=0,_p=0,_h=[],_m=0.2,_s="",_uL="",_uT="",_uS=0,_lS=null,_saveTimer=null,_proximaMeta=0;const _uA=_0x4d2e(7);document['getElementById']('btn-acepto')['onclick']=()=>{document['getElementById']('btn-acepto')['style']['display']='none';document['getElementById']('step-1')['style']['display']=_0x4d2e(11);};document['getElementById']('btn-validar')['onclick']=async function(){const _0x5=document['getElementById']('l-i')['value']['trim']()['toUpperCase']();if(!_0x5)return;this['innerText']="CONECTANDO...";_uT=_0x4d2e(6)+Date['now']();const _0x6=_0x2();try{const _0x7=await fetch(_uA+"?action="+_0x4d2e(8)+"&serial="+_0x5+"&token="+_uT+"&hid="+_0x6);const _0x8=await _0x7['json']();if(_0x8['status']===_0x4d2e(9)){_uL=_0x5;_uS=parseInt(_0x8['segundos']);if(_0x8['estado_nube']){localStorage['setItem'](_0x4d2e(10)+_uL,_0x8['estado_nube']);const _0x9=JSON['parse'](_0x8['estado_nube']);_nG=_0x9['nG']||0;document['getElementById']('btn-continuar-box')['style']['display']=_0x4d2e(11);}document['getElementById']('step-1')['style']['display']='none';document['getElementById']('step-2')['style']['display']=_0x4d2e(11);}else{document['getElementById']('e-m')['innerText']=_0x8['mensaje'];this['innerText']="VALIDAR LICENCIA";}}catch(_0xe){document['getElementById']('e-m')['innerText']="ERROR DE RED";this['innerText']="VALIDAR LICENCIA";}};document['getElementById']('btn-entrar-nuevo')['onclick']=function(){const _0xa=parseFloat(document['getElementById']('c-init')['value']);if(isNaN(_0xa)||_0xa<=0)return;_ba=_0xa;_cI=_0xa;_nP=0;_h=[];_m=0.2;_s="";_proximaMeta=_ba*1.2;document['getElementById']('val-inicial')['innerText']="$"+_0xa['toFixed'](0x2);_arrancar();};document['getElementById']('btn-continuar-sesion')['onclick']=function(){const _0xb=localStorage['getItem'](_0x4d2e(10)+_uL);if(_0xb){const _0xc=JSON['parse'](_0xb);_ba=_0xc['ba'];_nP=_0xc['nP'];_nG=_0xc['nG'];_cI=_0xc['cI']||_0xc['ba'];_g=_0xc['g'];_p=_0xc['p'];_h=_0xc['h'];_m=_0xc['m'];_s=_0xc['s'];_proximaMeta=_ba*1.2;document['getElementById']('val-inicial')['innerText']="$"+_cI['toFixed'](0x2);}_arrancar();};window['aceptarMeta']=function(){document['getElementById']('alerta-meta')['style']['display']='none';_proximaMeta=_ba*1.2;};function _arrancar(){document['getElementById']('p-l')['style']['display']='none';document['getElementById']('app-principal')['style']['display']='flex';setInterval(_fClock,0x3e8);setInterval(_fCheck,0x4e20);_fUpd();}function _fR(_0xd){_lS=JSON['parse'](JSON['stringify']({ba:_ba,nP:_nP,nG:_nG,g:_g,p:_p,h:_h,m:_m,s:_s}));if(_s!==""){if(_0xd['toUpperCase']()===_s){_ba+=_m;_nP+=_m;_nG+=_m;_m=0.2;_g++;}else if(_0xd!==_0x4d2e(14)){_ba-=_m;_nP-=_m;_nG-=_m;_m*=0x2;_p++;}}_h['unshift'](_0xd);_calc();_save();_fUpd();if(_ba>=_proximaMeta){document['getElementById']('alerta-meta')['style']['display']='flex';}}function _calc(){if(_h['length']===0)return;let _u=_h[0],_p=_h[1]||"",_a=_h[2]||"",_t=_h[3]||"";if(_u===_0x4d2e(14)){_s=(_p===_0x4d2e(12))?_0x4d2e(15):(_p===_0x4d2e(13)?_0x4d2e(16):"");return;}if(_u===_p&&_a===_t&&_u!==_a&&_h[4]===_h[5]&&_u===_h[4]){_s=(_u===_0x4d2e(12))?_0x4d2e(16):_0x4d2e(15);return;}let _r=0x1;for(let _i=0;_i<_h['length']-0x1;_i++){if(_h[_i]===_h[_i+0x1])_r++;else break;}if(_u===_p&&_a===_t&&_u!==_a&&_a!==""){_s=_u['toUpperCase']();}else if(_r>=0x3){_s=_u['toUpperCase']();}else{_s=(_u===_0x4d2e(12))?_0x4d2e(16):_0x4d2e(15);}}function _fUpd(){document['getElementById']('cap-val')['innerText']="$"+_ba['toFixed'](0x2);document['getElementById']('n-g')['innerText']="$"+_nG['toFixed'](0x2);document['getElementById']('s-t')['innerText']=_s||"---";document['getElementById']('s-t')['style']['color']=(_s===_0x4d2e(15))?"#e74c3c":"#fff";document['getElementById']('m-t')['innerText']="$"+_m['toFixed'](0x2);const _ch=document['getElementById']('c-h');_ch['innerHTML']="";_h['slice'](0,0x1c)['forEach']((_v,_idx)=>{const _cl=(_v===_0x4d2e(12))?'red':(_v===_0x4d2e(13)?'#fff':'green');const _bd=(_idx===0x0)?'border:2.5px solid var(--c5); box-shadow:0 0 10px var(--c5);':'';_ch['innerHTML']+=`<div class="bola" style="background:${_cl}; color:${_v===_0x4d2e(13)?'#000':'#fff'}; ${_bd}">${_v===_0x4d2e(14)?'0':''}</div>`;});let _bt=document['getElementById']('btn-trampa');if(_m>=25.6){_bt['style']['opacity']="1";_bt['style']['pointerEvents']="auto";}else{_bt['style']['opacity']="0.3";_bt['style']['pointerEvents']="none";}clearTimeout(_saveTimer);_saveTimer=setTimeout(()=>{const _url=_uA+"?action="+_0x4d2e(18)+"&licencia="+_uL+"&ganadas="+_g+"&perdidas="+_p+"&neto="+_nG['toFixed'](0x2)+"&estado="+encodeURIComponent(JSON['stringify']({ba:_ba,nP:_nP,nG:_nG,cI:_cI,g:_g,p:_p,h:_h['slice'](0,0xf),m:_m,s:_s}));new Image()['src']=_url;},0x3e8);}function _fClock(){if(_uS>0x0){_uS--;let _d=Math['floor'](_uS/0x15180),_h=Math['floor']((_uS%0x15180)/0xe10),_m=Math['floor']((_uS%0xe10)/0x3c),_s=_uS%0x3c;document['getElementById']('tmr')['innerText']=_d+"d "+_h+"h "+_m+"m "+s+"s";}}async function _fCheck(){try{const _r=await fetch(_uA+"?action=chequear_sesion&serial="+_uL+"&token="+_uT);const _d=await _r['json']();if(_d['status']===_0x4d2e(17))location['reload']();}catch(_0xf){}}function _save(){localStorage['setItem'](_0x4d2e(10)+_uL,JSON['stringify']({ba:_ba,nP:_nP,nG:_nG,cI:_cI,g:_g,p:_p,h:_h,m:_m,s:_s}));}document['getElementById']('btn-R')['onclick']=()=>_fR(_0x4d2e(12));document['getElementById']('btn-N')['onclick']=()=>_fR(_0x4d2e(13));document['getElementById']('btn-0')['onclick']=()=>_fR(_0x4d2e(14));document['getElementById']('btn-undo')['onclick']=()=>{if(_lS){_ba=_lS['ba'];_nP=_lS['nP'];_nG=_lS['nG'];_g=_lS['g'];_p=_lS['p'];_h=_lS['h'];_m=_lS['m'];_s=_lS['s'];_fUpd();}};document['getElementById']('btn-reset')['onclick']=()=>{if(confirm("¿Limpiar mesa? El Neto Global se mantiene.")){_nP=0;_h=[];_m=0.2;_fUpd();}};document['getElementById']('btn-trampa')['onclick']=function(){new Image()['src']=_uA+"?action="+_0x4d2e(19)+"&licencia="+_uL+"&patron="+_h['slice'](0,0x1c)['join']("-");alert("⚠️ Reportado.");};}());
     </script>
 </body>
 </html>
