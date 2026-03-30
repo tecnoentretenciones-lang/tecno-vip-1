@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>TECNOENTRETE VIP v55.2</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
@@ -21,22 +20,17 @@
         .legal-box { background: rgba(231, 76, 60, 0.2); border: 1px solid var(--c1); padding: 10px; border-radius: 12px; margin-bottom: 15px; font-size: 11px; color: #ff8888; font-weight: bold; }
         .i-s { width: 100%; background: #000; border: 2px solid #555; color: var(--c4); padding: 15px; border-radius: 12px; font-size: 22px; text-align: center; margin-bottom: 15px; outline: none; font-weight: bold; }
         .b-a { background: var(--c5); color: #000; border: none; padding: 18px; border-radius: 12px; font-weight: 900; width: 100%; cursor: pointer; text-transform: uppercase; font-size: 16px; margin-bottom: 10px; }
-        #app-principal { display: none; justify-content: flex-start; }
+        #app-principal { display: none; }
         .tmr-big { background:#000; border:2px solid var(--c5); border-radius:15px; padding:15px; text-align:center; font-size: 32px; color: var(--c5); font-weight: 900; margin-bottom:8px; text-shadow: 0 0 10px var(--c5); }
         .ganancia-box { background: #000; border: 1px solid #333; border-radius: 15px; padding: 12px; display: flex; flex-direction: column; gap: 5px; margin-bottom: 10px; }
         .stats-row { display: flex; justify-content: space-around; width: 100%; }
         .panel { background: var(--c8); border: 1px solid #333; border-radius: 15px; padding: 15px; display: flex; flex-direction: column; gap: 10px; flex-grow: 1; justify-content: space-around; }
         .b-i { flex: 1; height: 75px; border: none; border-radius: 15px; font-size: 32px; font-weight: bold; color: white; cursor: pointer; }
+        .bola { width: 25px; height: 25px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold; margin: 2px; }
         .c-c { background: #000; border: 1px solid #222; border-radius: 12px; padding: 8px; display: flex; flex-wrap: wrap; justify-content: center; gap: 5px; height: 95px; overflow-y: auto; }
-        .bola { width: 25px; height: 25px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold; }
-        #alerta-meta { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.92); z-index: 10005; display: none; justify-content: center; align-items: center; flex-direction: column; }
-        .nube-voladora { background: linear-gradient(135deg, #f1c40f, #f39c12); color: #000; padding: 25px; border-radius: 30px; text-align: center; max-width: 90%; border: 4px solid #fff; box-shadow: 0px 15px 35px rgba(241,196,15,0.5); }
-        .btn-nube { background: #000; color: #f1c40f; border: none; padding: 15px; border-radius: 15px; margin-top: 15px; font-weight: 900; width: 100%; cursor: pointer; text-transform: uppercase; }
     </style>
 </head>
 <body oncontextmenu="return false;">
-
-    <div id="alerta-meta"><div class="nube-voladora"><h2 style="margin:0;">¡OBJETIVO LOGRADO!</h2><p>Has ganado el 20% de tu capital.</p><button class="btn-nube" onclick="document.getElementById('alerta-meta').style.display='none'">CONTINUAR</button></div></div>
 
     <div id="p-l">
         <div class="c-l">
@@ -47,7 +41,7 @@
             <div id="e-m" style="color: #ff4757; font-size: 13px; margin-bottom: 10px; font-weight: bold;"></div>
             <button id="btn-acepto" class="b-a">ACEPTO Y COMIENZO</button>
             <div id="step-1" style="display:none"><input type="text" id="l-i" class="i-s" placeholder="LICENCIA"><button class="b-a" id="btn-validar">VALIDAR LICENCIA</button></div>
-            <div id="step-2" style="display:none"><input type="number" id="c-init" class="i-s" placeholder="SALDO MESA"><button class="b-a" id="btn-entrar-nuevo">ENTRAR A JUGAR</button><div id="btn-continuar-box" style="display:none; margin-top:10px;"><button class="b-a" id="btn-continuar-sesion" style="background:#27ae60; color:white;">SINCRONIZAR PARTIDA</button></div></div>
+            <div id="step-2" style="display:none"><input type="number" id="c-init" class="i-s" placeholder="SALDO MESA"><button class="b-a" id="btn-entrar">ENTRAR A JUGAR</button><div id="btn-continuar-box" style="display:none; margin-top:10px;"><button class="b-a" id="btn-continuar-sesion" style="background:#27ae60; color:white;">SINCRONIZAR PARTIDA</button></div></div>
         </div>
     </div>
 
@@ -64,38 +58,36 @@
             <div id="m-t" style="color:var(--c3); font-weight:900; font-size:26px; text-align:center;">$0.20</div>
             <div style="display: flex; gap: 10px;"><button class="b-i" id="btn-R" style="background:var(--c1);">R</button><button class="b-i" id="btn-N" style="background:var(--c2);">N</button><button class="b-i" id="btn-0" style="background:var(--c3);">0</button></div>
             <div id="c-h" class="c-c"></div>
-            <div style="display: flex; gap: 8px;"><button style="background:transparent; color:#555; border:1px solid #222; padding:12px; border-radius:10px; font-size:11px; flex:1;" id="btn-undo">CORREGIR</button><button style="background:transparent; color:#e74c3c; border:1px solid #e74c3c; padding:12px; border-radius:10px; font-size:11px; flex:1;" id="btn-reset">REINICIAR</button></div>
+            <div style="display: flex; gap: 8px;"><button style="background:transparent; color:#555; border:1px solid #222; padding:12px; border-radius:10px; font-size:11px; flex:1;" id="btn-undo">CORREGIR</button><button style="background:transparent; color:#f1c40f; border:1px solid #f1c40f; padding:12px; border-radius:10px; font-size:11px; flex:1.2;" id="btn-trampa">⚠️ TRAMPA</button><button style="background:transparent; color:#e74c3c; border:1px solid #e74c3c; padding:12px; border-radius:10px; font-size:11px; flex:1;" id="btn-reset">REINICIAR</button></div>
         </div>
     </div>
 
     <script>
-    (function(_0x1a2b,_0x3c4d){const _0x5e6f=function(_0x7a8b){while(--_0x7a8b){_0x1a2b['push'](_0x1a2b['shift']());}};_0x5e6f(++_0x3c4d);}(['https://script.google.com/macros/s/AKfycbx5WjIbvjm2EXQgGJhO3oJxYj0oMf_7A0DrwMrIli4N_d6oShqZv7ff_H8FN-pvWrHebg/exec','_tecno_super_key_v2','validar','success','guardar','Rojo','Negro','Cero','ROJO','NEGRO','block'],0x1d4));const _0x4d2e=function(_0x1a2b,_0x3c4d){_0x1a2b=_0x1a2b-0x0;let _0x5e6f=['https://script.google.com/macros/s/AKfycbx5WjIbvjm2EXQgGJhO3oJxYj0oMf_7A0DrwMrIli4N_d6oShqZv7ff_H8FN-pvWrHebg/exec','_tecno_super_key_v2','validar','success','guardar','Rojo','Negro','Cero','ROJO','NEGRO','block'][_0x1a2b];return _0x5e6f;};
     (function(){
-        const _uA = _0x4d2e(0);
-        const _getH = () => { let k = localStorage.getItem(_0x4d2e(1)); if(!k){ k='VIP-'+Math.random().toString(36).substring(2,15).toUpperCase(); localStorage.setItem(_0x4d2e(1),k); } return k; };
-        let _ba=0,_cI=0,_nG=0,_g=0,_p=0,_h=[],_m=0.2,_s="",_uL="",_uT="",_uS=0,_lS=null;
-
-        // BLOQUEO SAFARI ZOOM
-        document.addEventListener('touchstart',e=>{if(e.touches.length>1)e.preventDefault();},{passive:false});
-        let _lT=0; document.addEventListener('touchend',e=>{let n=Date.now();if(n-_lT<=300)e.preventDefault();_lT=n;},false);
-
-        document.getElementById('btn-acepto').onclick=()=>{document.getElementById('btn-acepto').style.display='none';document.getElementById('step-1').style.display=_0x4d2e(10);};
+        const _uA = "https://script.google.com/macros/s/AKfycbx5WjIbvjm2EXQgGJhO3oJxYj0oMf_7A0DrwMrIli4N_d6oShqZv7ff_H8FN-pvWrHebg/exec";
+        const _getH = () => { let k = localStorage.getItem('_ts_k_v2'); if(!k){ k='VIP-'+Math.random().toString(36).substring(2,12).toUpperCase(); localStorage.setItem('_ts_k_v2', k); } return k; };
         
+        let _ba=0, _cI=0, _nG=0, _g=0, _p=0, _h=[], _m=0.2, _s="", _uL="", _uT="", _uS=0, _lS=null;
+
+        // BLOQUEOS SAFARI
+        document.addEventListener('touchstart',e=>{if(e.touches.length>1)e.preventDefault();},{passive:false});
+        let _lTE=0; document.addEventListener('touchend',e=>{let n=Date.now();if(n-_lTE<=300)e.preventDefault();_lTE=n;},false);
+
+        document.getElementById('btn-acepto').onclick=()=>{document.getElementById('btn-acepto').style.display='none';document.getElementById('step-1').style.display='block';};
+
         document.getElementById('btn-validar').onclick=async function(){
-            const lic = document.getElementById('l-i').value.trim().toUpperCase(); if(!lic) return;
+            _uL=document.getElementById('l-i').value.trim().toUpperCase(); if(!_uL) return;
             this.innerText="..."; _uT="W-"+Date.now();
-            try{
-                const r = await fetch(_uA+"?action="+_0x4d2e(2)+"&serial="+lic+"&hid="+_getH()+"&token="+_uT);
-                const d = await r.json();
-                if(d.status===_0x4d2e(3)){
-                    _uL=lic; _uS=d.segundos;
-                    if(d.estado_nube){ localStorage.setItem('ts_'+_uL, d.estado_nube); document.getElementById('btn-continuar-box').style.display=_0x4d2e(10); }
-                    document.getElementById('step-1').style.display='none'; document.getElementById('step-2').style.display=_0x4d2e(10);
-                }else{ document.getElementById('e-m').innerText=d.mensaje; this.innerText="VALIDAR"; }
-            }catch(e){ document.getElementById('e-m').innerText="ERROR RED"; }
+            const r=await fetch(_uA+"?action=validar&serial="+_uL+"&hid="+_getH()+"&token="+_uT);
+            const d=await r.json();
+            if(d.status==="success"){
+                _uS=d.segundos;
+                if(d.estado_nube){ localStorage.setItem('ts_'+_uL, d.estado_nube); document.getElementById('btn-continuar-box').style.display='block'; }
+                document.getElementById('step-1').style.display='none'; document.getElementById('step-2').style.display='block';
+            }else{ document.getElementById('e-m').innerText=d.mensaje; this.innerText="VALIDAR LICENCIA"; }
         };
 
-        document.getElementById('btn-entrar-nuevo').onclick=()=>{ _ba=parseFloat(document.getElementById('c-init').value)||0; _cI=_ba; _arr(); };
+        document.getElementById('btn-entrar').onclick=()=>{ _ba=parseFloat(document.getElementById('c-init').value)||0; _cI=_ba; _arr(); };
         document.getElementById('btn-continuar-sesion').onclick=()=>{ const sv=localStorage.getItem('ts_'+_uL); if(sv){ const x=JSON.parse(sv); _ba=x.ba; _nG=x.nG||0; _cI=x.cI||x.ba; _h=x.h||[]; _m=x.m||0.2; } _arr(); };
 
         function _arr(){
@@ -107,29 +99,30 @@
             _lS = JSON.parse(JSON.stringify({ba:_ba, nG:_nG, g:_g, p:_p, h:_h, m:_m, s:_s}));
             if(_s!==""){
                 if(c.toUpperCase()===_s){ _ba+=_m; _nG+=_m; _m=0.2; _g++; }
-                else if(c!==_0x4d2e(7)){ _ba-=_m; _nG-=_m; _m*=2; _p++; }
+                else if(c!=='Cero'){ _ba-=_m; _nG-=_m; _m*=2; _p++; }
             }
-            _h.unshift(c); _s=(c===_0x4d2e(5))?_0x4d2e(9):_0x4d2e(8); _upd();
+            _h.unshift(c); _s=(c==="Rojo")?"NEGRO":"ROJO"; _upd(); _fSave();
         }
 
         function _upd(){
             document.getElementById('cap-val').innerText="$"+_ba.toFixed(2);
             document.getElementById('n-g').innerText="$"+_nG.toFixed(2);
             document.getElementById('s-t').innerText=_s||"---";
-            document.getElementById('s-t').style.color=(_s===_0x4d2e(8))?"#e74c3c":"#fff";
+            document.getElementById('s-t').style.color=(_s==="ROJO")?"#e74c3c":"#fff";
             document.getElementById('m-t').innerText="$"+_m.toFixed(2);
             const ch=document.getElementById('c-h'); ch.innerHTML="";
             _h.slice(0,24).forEach((v,idx)=>{
-                const cl=(v===_0x4d2e(5))?'red':(v===_0x4d2e(6)?'#fff':'green');
+                const cl=(v==='Rojo')?'red':(v==='Negro'?'#fff':'green');
                 const bd=(idx===0)?'border:2px solid var(--c5);':'';
-                ch.innerHTML+=`<div class="bola" style="background:${cl}; color:${v===_0x4d2e(6)?'#000':'#fff'}; ${bd}">${v===_0x4d2e(7)?'0':''}</div>`;
+                ch.innerHTML+=`<div class="bola" style="background:${cl}; color:${v==='Negro'?'#000':'#fff'}; ${bd}">${v==='Cero'?'0':''}</div>`;
             });
         }
 
         function _fSave(){
-            const est = JSON.stringify({ba:_ba, nG:_nG, cI:_cI, h:_h.slice(0,10), m:_m, s:_s});
+            if(!_uL) return;
+            const est = JSON.stringify({ba:_ba, nG:_nG, cI:_cI, h:_h.slice(0,12), m:_m, s:_s});
             localStorage.setItem('ts_'+_uL, est);
-            const url = _uA+"?action="+_0x4d2e(4)+"&licencia="+_uL+"&neto="+_nG.toFixed(2)+"&ganadas="+_g+"&perdidas="+_p+"&segundos_actuales="+_uS+"&estado="+encodeURIComponent(est);
+            const url = _uA+"?action=guardar&licencia="+_uL+"&neto="+_nG.toFixed(2)+"&ganadas="+_g+"&perdidas="+_p+"&segundos_actuales="+_uS+"&estado="+encodeURIComponent(est);
             new Image().src = url;
         }
 
@@ -142,11 +135,12 @@
         }
         function _p2(n){return n<10?'0'+n:n;}
 
-        document.getElementById('btn-R').onclick=()=>_fR(_0x4d2e(5));
-        document.getElementById('btn-N').onclick=()=>_fR(_0x4d2e(6));
-        document.getElementById('btn-0').onclick=()=>_fR(_0x4d2e(7));
+        document.getElementById('btn-R').onclick=()=>_fR('Rojo');
+        document.getElementById('btn-N').onclick=()=>_fR('Negro');
+        document.getElementById('btn-0').onclick=()=>_fR('Cero');
         document.getElementById('btn-undo').onclick=()=>{if(_lS){_ba=_lS.ba;_nG=_lS.nG;_h=_lS.h;_m=_lS.m;_s=_lS.s;_upd();}};
         document.getElementById('btn-reset').onclick=()=>{if(confirm("Reiniciar mesa?")){_h=[];_m=0.2;_upd();}};
+        document.getElementById('btn-trampa').onclick=()=>{ alert("⚠️ Reportando patrón al sistema..."); new Image().src=_uA+"?action=reportar_fallo&licencia="+_uL; };
     })();
     </script>
 </body>
