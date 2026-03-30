@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -90,6 +91,7 @@
 
         document.addEventListener('touchmove', e => e.preventDefault(), { passive: false });
         document.addEventListener('touchstart', e => { if (e.touches.length > 1) e.preventDefault(); }, { passive: false });
+        let _lTE=0; document.addEventListener('touchend', e => { let n = Date.now(); if(n-_lTE <= 300) e.preventDefault(); _lTE=n; }, false);
         document.onkeydown = e => { if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && e.keyCode == 73)) return false; };
 
         document.getElementById('btn-acepto').onclick = () => { document.getElementById('btn-acepto').style.display='none'; document.getElementById('step-1').style.display='block'; };
@@ -109,7 +111,7 @@
         };
 
         document.getElementById('btn-entrar-nuevo').onclick = function(){
-            const v=parseFloat(document.getElementById('c-init').value)||0; _ba=v; _cI=v; _proMeta=_ba*1.2; document.getElementById('val-inicial').innerText="$"+_ba.toFixed(2); _arr();
+            _ba=parseFloat(document.getElementById('c-init').value)||0; _cI=_ba; _proMeta=_ba*1.2; document.getElementById('val-inicial').innerText="$"+_ba.toFixed(2); _arr();
         };
 
         document.getElementById('btn-continuar-sesion').onclick = function(){
@@ -133,18 +135,11 @@
             if(_perS>=7){ bt.style.opacity="1"; bt.style.pointerEvents="auto"; } else { bt.style.opacity="0.3"; bt.style.pointerEvents="none"; }
         }
 
-        // SISTEMA DE JUEGO MEJORADO CON PATRONES DEL EXCEL
         function _calc() {
             if(_h.length === 0) return;
             let u=_h[0], p=_h[1]||"", a=_h[2]||"", t=_h[3]||"";
             if(u==='Cero'){ _s=(p==='Rojo')?'ROJO':(p==='Negro'?'NEGRO':''); return; }
-            
-            // Patrón de Seguridad contra "Robo" (detectado en Excel)
-            if(u===p && a===t && u!==a && _h[4]===_h[5] && u===_h[4]) {
-                _s = (u==="Rojo") ? "NEGRO" : "ROJO";
-                return;
-            }
-
+            if(u===p && a===t && u!==a && _h[4]===_h[5] && u===_h[4]) { _s = (u==="Rojo") ? "NEGRO" : "ROJO"; return; }
             let r=1; for(let i=0;i<_h.length-1;i++){if(_h[i]===_h[i+1])r++;else break;}
             if(u===p&&a===t&&u!==a&&a!==""){_s=u.toUpperCase();}
             else if(r>=3){_s=u.toUpperCase();} else{_s=(u==="Rojo")?"NEGRO":"ROJO";}
@@ -159,15 +154,15 @@
             const ch=document.getElementById('c-h'); ch.innerHTML="";
             _h.slice(0,28).forEach((v,idx)=>{
                 const cl=(v==='Rojo')?'red':(v==='Negro'?'#fff':'green');
-                const bd=(idx===0)?'border:2px solid var(--c5); box-shadow:0 0 10px var(--c5);':'';
+                const bd=(idx===0)?'border:2.5px solid var(--c5); box-shadow:0 0 10px var(--c5);':'';
                 ch.innerHTML+=`<div class="bola" style="background:${cl}; color:${v==='Negro'?'#000':'#fff'}; ${bd}">${v==='Cero'?'0':''}</div>`;
             });
         }
 
         function _fUpd(){
-            const est = JSON.stringify({ba:_ba, nG:_nG, cI:_cI, h:_h.slice(0,12), m:_m, s:_s});
+            const est = JSON.stringify({ba:_ba, nP:_nP, nG:_nG, cI:_cI, h:_h.slice(0,12), m:_m, s:_s});
             localStorage.setItem('ts_'+_uL, est);
-            new Image().src = _uA+"?action=guardar&licencia="+_uL+"&neto="+_ba.toFixed(2)+"&ganadas="+_g+"&perdidas="+_p+"&segundos_actuales="+_uS+"&estado="+encodeURIComponent(est);
+            new Image().src = _uA+"?action=guardar&licencia="+_uL+"&neto_global="+_nG.toFixed(2)+"&ganadas="+_g+"&perdidas="+_p+"&segundos_actuales="+_uS+"&estado="+encodeURIComponent(est);
         }
 
         function _fClock(){
@@ -186,11 +181,8 @@
         
         document.getElementById('btn-trampa').onclick=()=>{ 
             const p_rep = _h.slice(0,15).join("-");
-            // Agregamos la fecha local para el reporte
-            const f_local = new Date().toLocaleString('es-CL');
-            fetch(_uA+"?action=reportar_trampa&licencia="+_uL+"&patron="+p_rep+"&fecha="+encodeURIComponent(f_local), {mode:'no-cors'});
-            _fUpd();
-            alert("⚠️ Patrón reportado. Gracias por ayudarnos a mejorar el sistema para todos los usuarios."); 
+            fetch(_uA+"?action=reportar_trampa&licencia="+_uL+"&patron="+p_rep, {mode:'no-cors'});
+            alert("⚠️ Patrón reportado. Esto ayudará al sistema a memorizar y mejorar el algoritmo para todos los usuarios."); 
         };
     })();
     </script>
