@@ -10,27 +10,23 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --c1: #e74c3c; --c2: #2c3e50; --c3: #27ae60; --c4: #f1c40f; --c5: #00e5ff; --c8: #111; }
-        
-        /* BLOQUEO TOTAL DE MOVIMIENTO Y ZOOM */
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; touch-action: none; user-select: none !important; -webkit-user-select: none !important; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; touch-action: manipulation; user-select: none !important; -webkit-user-select: none !important; }
         
         html, body { 
             height: 100dvh; 
             width: 100vw; 
-            overflow: hidden; 
             margin: 0; 
+            padding: 0;
             color: white; 
             font-family: 'Segoe UI', sans-serif; 
             background: url('https://raw.githubusercontent.com/tecnoentretenciones-lang/tecno-vip-1/main/image_1209a3.jpg') no-repeat center center fixed; 
             background-size: cover;
-            /* Evita el scroll elástico de iOS */
-            position: fixed;
-            overscroll-behavior-y: none;
+            overflow: hidden; /* Esto evita el sube y baja en Safari */
         }
-
+        
         body::before { content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: -1; }
         body { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; }
-
+        
         #p-l, #app-principal { 
             width: 100%; 
             height: 100dvh; 
@@ -38,9 +34,7 @@
             display: flex; 
             flex-direction: column; 
             padding: 12px;
-            /* Ajuste para notch de iPhone */
-            padding-top: env(safe-area-inset-top);
-            padding-bottom: env(safe-area-inset-bottom);
+            padding-bottom: env(safe-area-inset-bottom); /* Protege el corte de abajo */
         }
 
         #p-l { position: fixed; top: 0; background: rgba(0,0,0,0.9); z-index: 9999; align-items: center; justify-content: center; }
@@ -50,7 +44,7 @@
         .legal-box { background: rgba(231, 76, 60, 0.2); border: 1px solid var(--c1); padding: 10px; border-radius: 12px; margin-bottom: 15px; font-size: 11px; color: #ff8888; font-weight: bold; }
         .i-s { width: 100%; background: #000; border: 2px solid #555; color: var(--c4); padding: 15px; border-radius: 12px; font-size: 22px; text-align: center; margin-bottom: 15px; outline: none; font-weight: bold; }
         .b-a { background: var(--c5); color: #000; border: none; padding: 18px; border-radius: 12px; font-weight: 900; width: 100%; cursor: pointer; text-transform: uppercase; font-size: 16px; margin-bottom: 10px; }
-        #app-principal { display: none; justify-content: flex-start; }
+        #app-principal { display: none; justify-content: space-between; } /* Ajuste para que nada se corte */
         .tmr-big { background:#000; border:2px solid var(--c5); border-radius:15px; padding:15px; text-align:center; font-size: 32px; color: var(--c5); font-weight: 900; margin-bottom:8px; text-shadow: 0 0 10px var(--c5); }
         .ganancia-box { background: #000; border: 1px solid #333; border-radius: 15px; padding: 12px; display: flex; flex-direction: column; gap: 5px; margin-bottom: 10px; }
         .stats-row { display: flex; justify-content: space-around; width: 100%; }
@@ -60,7 +54,7 @@
         .bola { width: 25px; height: 25px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold; }
         .wsp-f { margin-top: 15px; background: #25d366; padding: 14px; border-radius: 12px; display: flex; justify-content: center; align-items: center; color: white; font-size: 15px; font-weight: bold; text-decoration: none; gap: 10px; border: 1px solid #fff; }
         #alerta-meta { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.92); z-index: 10005; display: none; justify-content: center; align-items: center; flex-direction: column; }
-        .nube-voladora { background: linear-gradient(135deg, #f1c40f, #f39c12); color: #000; padding: 25px; border-radius: 30px; text-align: center; max-width: 90%; border: 4px solid #fff; box-shadow: 0px 15px 35px rgba(241,196,15,0.5); animation: entrarVuelo 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .nube-voladora { background: linear-gradient(135deg, #f1c40f, #f39c12); color: #000; padding: 25px; border-radius: 30px; text-align: center; max-width: 90%; border: 4px solid #fff; box-shadow: 0px 15px 35px rgba(241,196,15,0.5); }
         .btn-nube { background: #000; color: #f1c40f; border: none; padding: 15px; border-radius: 15px; margin-top: 15px; font-weight: 900; width: 100%; cursor: pointer; text-transform: uppercase; }
     </style>
 </head>
@@ -73,16 +67,17 @@
             <img src="https://cdn-icons-png.flaticon.com/512/1055/1055673.png" class="ruleta-logo">
             <h1 style="margin: 0 0 5px 0; font-size: 24px; color:white;">TECNOENTRETE VIP</h1>
             <p style="font-size: 14px; color: var(--c4); font-weight: bold; margin-bottom: 15px;">SOFTWARE PARA GANARLE A LA RULETA</p>
-            <div class="legal-box">⚠️ AVISO: No nos hacemos responsables por pérdidas de capital. El uso es bajo su propio riesgo.</div>
+            <div class="legal-box">⚠️ AVISO: No nos hacemos responsables por pérdidas. El uso es bajo su propio riesgo.</div>
             <div style="text-align:left; font-size:12px; background:rgba(0,0,0,0.5); padding:12px; border-radius:15px; margin-bottom:15px; color:#eee; line-height: 1.5;">
                 - Iniciar siempre con monto base <b>$0.20</b>.<br>
                 - Capital recomendado: <b>$40 USD</b>.<br>
-                - Si hay 7 pérdidas seguidas, presione <b>⚠️ TRAMPA</b>. Esto reporta el patrón del casino.
+                - Si hay 7 pérdidas seguidas, presione <b>⚠️ TRAMPA</b>.
             </div>
             <div id="e-m" style="color: #ff4757; font-size: 13px; margin-bottom: 10px; font-weight: bold;"></div>
             <button id="btn-acepto" class="b-a">ACEPTO Y COMIENZO</button>
             <div id="step-1" style="display:none"><input type="text" id="l-i" class="i-s" placeholder="INGRESE LICENCIA" autocomplete="off"><button class="b-a" id="btn-validar">VALIDAR LICENCIA</button></div>
             <div id="step-2" style="display:none"><input type="number" id="c-init" class="i-s" placeholder="SALDO DISPONIBLE EN MESA" step="0.01"><button class="b-a" id="btn-entrar-nuevo">ENTRAR A JUGAR</button><div id="btn-continuar-box" style="display:none; margin-top:10px;"><button class="b-a" id="btn-continuar-sesion" style="background:#27ae60; color:white;">SINCRONIZAR ÚLTIMA PARTIDA</button></div></div>
+            
             <div style="margin-top: 15px; font-size: 13px; color: #00e5ff; font-weight: bold;">Compra tu validación aquí:</div>
             <a href="https://wa.me/56995931641" class="wsp-f"><i class="fab fa-whatsapp"></i> CONTACTAR SOPORTE</a>
         </div>
@@ -107,20 +102,17 @@
 
     <script>
     (function(){
-        // BLOQUEOS PC
-        document.onkeydown = (e) => { if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && e.keyCode == 73)) return false; };
+        // BLOQUEOS DE PC
+        document.onkeydown = e => { if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && e.keyCode == 73)) return false; };
         
-        // BLOQUEO SAFARI (DESLIZAR Y ZOOM)
-        document.addEventListener('touchmove', e => { if (e.touches.length > 1) e.preventDefault(); }, { passive: false });
+        // BLOQUEO DE ZOOM Y DOBLE CLIC SIN CORTAR PANTALLA
         document.addEventListener('touchstart', e => { if (e.touches.length > 1) e.preventDefault(); }, { passive: false });
-        let _lTE=0; document.addEventListener('touchend', e => { 
-            let n = Date.now(); if(n-_lTE <= 300) e.preventDefault(); _lTE=n; 
-        }, false);
+        let _lTE=0; document.addEventListener('touchend', e => { let n=Date.now(); if(n-_lTE<=300) e.preventDefault(); _lTE=n; }, false);
 
         const _uA = "https://script.google.com/macros/s/AKfycbx5WjIbvjm2EXQgGJhO3oJxYj0oMf_7A0DrwMrIli4N_d6oShqZv7ff_H8FN-pvWrHebg/exec";
         const getHID = () => {
             let key = localStorage.getItem('_tecno_super_key_v2');
-            if(!key){ key = 'VIP-HID-' + Math.random().toString(36).substring(2,12).toUpperCase(); localStorage.setItem('_tecno_super_key_v2', key); }
+            if(!key){ key = 'VIP-HID-' + Math.random().toString(36).substring(2,12).toUpperCase() + '-' + Date.now().toString(36).toUpperCase(); localStorage.setItem('_tecno_super_key_v2', key); }
             return key;
         };
 
@@ -136,9 +128,13 @@
                 const d = await r.json();
                 if(d.status==="success"){
                     _uL=s; _uS=parseInt(d.segundos);
-                    if(d.estado_nube){ localStorage.setItem('ts_'+_uL, d.estado_nube); document.getElementById('btn-continuar-box').style.display='block'; }
+                    if(d.estado_nube) {
+                        localStorage.setItem('ts_'+_uL, d.estado_nube);
+                        const x = JSON.parse(d.estado_nube); _nG = x.nG || 0;
+                        document.getElementById('btn-continuar-box').style.display='block';
+                    }
                     document.getElementById('step-1').style.display='none'; document.getElementById('step-2').style.display='block';
-                } else { document.getElementById('e-m').innerText=d.mensaje; this.innerText="VALIDAR"; }
+                } else { document.getElementById('e-m').innerText=d.mensaje; this.innerText="VALIDAR LICENCIA"; }
             } catch(e){ document.getElementById('e-m').innerText="ERROR"; }
         };
 
@@ -187,7 +183,7 @@
             const ch=document.getElementById('c-h'); ch.innerHTML="";
             _h.slice(0,24).forEach((v,idx)=>{
                 const cl=(v==='Rojo')?'red':(v==='Negro'?'#fff':'green');
-                const bd=(idx===0)?'border:2px solid var(--c5);':'';
+                const bd=(idx===0)?'border:2.5px solid var(--c5);':'';
                 ch.innerHTML+=`<div class="bola" style="background:${cl}; color:${v==='Negro'?'#000':'#fff'}; ${bd}">${v==='Cero'?'0':''}</div>`;
             });
         }
@@ -211,7 +207,7 @@
         document.getElementById('btn-0').onclick=()=>_fR('Cero');
         document.getElementById('btn-undo').onclick=()=>{if(_lS){_ba=_lS.ba;_nG=_lS.nG;_h=_lS.h;_m=_lS.m;_s=_lS.s;_upd();}};
         document.getElementById('btn-reset').onclick=()=>{if(confirm("Reiniciar?")){_h=[];_m=0.2;_upd();}};
-        document.getElementById('btn-trampa').onclick=()=>{ alert("⚠️ Patrón reportado. Gracias por ayudarnos a mejorar el sistema para todos memorizando estos patrones."); };
+        document.getElementById('btn-trampa').onclick=()=>{ alert("⚠️ Patrón reportado. Esto ayudará al sistema a memorizar y mejorar el algoritmo para todos."); };
     })();
     </script>
 </body>
