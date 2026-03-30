@@ -36,9 +36,9 @@
         .btn-nube { background: #000; color: #f1c40f; border: none; padding: 15px; border-radius: 15px; margin-top: 15px; font-weight: 900; width: 100%; cursor: pointer; text-transform: uppercase; }
     </style>
 </head>
-<body oncontextmenu="return false;" onkeydown="if(event.keyCode==123 || (event.ctrlKey && event.shiftKey && event.keyCode==73)) return false;">
+<body oncontextmenu="return false;">
 
-    <div id="alerta-meta"><div class="nube-voladora"><div style="font-size: 50px;">🛑💰✨</div><h2 style="margin: 10px 0; font-weight: 900; line-height: 1.1;">¡OBJETIVO LOGRADO!</h2><p style="margin: 10px 0; font-weight: bold; font-size: 16px;">Has ganado el 20% de tu capital.</p><p style="margin: 0; font-weight: 600; font-size: 14px; line-height: 1.4;">Para proteger tus ganancias y no perder la racha, <b>¡ARRANCA AHORA!</b><br><br>Tómate un descanso, disfruta tu dinero y vuelve más tarde.</p><button class="btn-nube" onclick="aceptarMeta()">OK, ENTIENDO (CONTINUAR)</button></div></div>
+    <div id="alerta-meta"><div class="nube-voladora"><div style="font-size: 50px;">🛑💰✨</div><h2 style="margin: 10px 0; font-weight: 900; line-height: 1.1;">¡OBJETIVO LOGRADO!</h2><p style="margin: 10px 0; font-weight: bold; font-size: 16px;">Has ganado el 20% de tu capital.</p><p style="margin: 0; font-weight: 600; font-size: 14px; line-height: 1.4;">Para proteger tus ganancias, <b>¡ARRANCA AHORA!</b></p><button class="btn-nube" onclick="aceptarMeta()">ACEPTAR NUEVO OBJETIVO</button></div></div>
 
     <div id="p-l">
         <div class="c-l">
@@ -49,7 +49,7 @@
             <div style="text-align:left; font-size:12px; background:rgba(0,0,0,0.5); padding:12px; border-radius:15px; margin-bottom:15px; color:#eee; line-height: 1.5;">
                 - Iniciar siempre con monto base <b>$0.20</b>.<br>
                 - Capital recomendado: <b>$40 USD</b>.<br>
-                - Si hay 7 pérdidas seguidas, presione <b>⚠️ TRAMPA</b>. Esto reporta el patrón del casino.
+                - Si hay 7 pérdidas seguidas, presione <b>⚠️ TRAMPA</b> para reportar al sistema.
             </div>
             <div id="e-m" style="color: #ff4757; font-size: 13px; margin-bottom: 10px; font-weight: bold;"></div>
             <button id="btn-acepto" class="b-a">ACEPTO Y COMIENZO</button>
@@ -78,81 +78,49 @@
 
     <script>
     (function(){
-        const d_ok = "tecnoentretenciones-lang.github.io";
-        if(window.location.hostname !== d_ok && window.location.hostname !== "localhost") {
-            document.body.innerHTML = "<div style='color:red; text-align:center; padding:50px; font-weight:bold;'>⚠️ ACCESO DENEGADO</div>"; return;
-        }
-
-        // --- HUELLA DE 32 CARACTERES: BLOQUEO REAL POR NAVEGADOR ---
+        const _uA = "https://script.google.com/macros/s/AKfycbx5WjIbvjm2EXQgGJhO3oJxYj0oMf_7A0DrwMrIli4N_d6oShqZv7ff_H8FN-pvWrHebg/exec";
         const getHID = () => {
-            let key = localStorage.getItem('_tecno_super_key_v2');
-            if(!key){
-                let nav = "UKN";
-                if(navigator.userAgent.indexOf("Chrome") > -1) nav = "CHR";
-                else if(navigator.userAgent.indexOf("Safari") > -1) nav = "SAF";
-                
-                // Generamos una cadena larga aleatoria + marca del navegador
-                let randomPool = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-                let randomPart = "";
-                for(let i=0; i<12; i++) { randomPart += randomPool.charAt(Math.floor(Math.random() * randomPool.length)); }
-                
-                key = 'VIP-' + nav + '-' + randomPart + '-' + Date.now().toString(36).toUpperCase();
-                localStorage.setItem('_tecno_super_key_v2', key);
-            }
-            return key;
+            let k = localStorage.getItem('_ts_hid_vF');
+            if(!k){ k='VIP-'+Math.random().toString(36).substring(2,12).toUpperCase(); localStorage.setItem('_ts_hid_vF', k); }
+            return k;
         };
 
-        let _ba=0, _cI=0, _nP=0, _nG=0, _g=0, _p=0, _h=[], _m=0.2, _s="", _uL="", _uT="", _uS=0, _lS=null, _saveTimer=null, _proximaMeta = 0; 
-        const _uA = "https://script.google.com/macros/s/AKfycbx5WjIbvjm2EXQgGJhO3oJxYj0oMf_7A0DrwMrIli4N_d6oShqZv7ff_H8FN-pvWrHebg/exec";
+        let _ba=0, _cI=0, _nG=0, _g=0, _p=0, _h=[], _m=0.2, _s="", _uL="", _uT="", _uS=0, _lS=null, _proMeta=0, _perSeguidas=0;
+
+        // BLOQUEOS SAFARI
+        document.addEventListener('touchstart',e=>{if(e.touches.length>1)e.preventDefault();},{passive:false});
+        let _lTE=0; document.addEventListener('touchend',e=>{let n=Date.now();if(n-_lTE<=300)e.preventDefault();_lTE=n;},false);
 
         document.getElementById('btn-acepto').onclick = () => { document.getElementById('btn-acepto').style.display='none'; document.getElementById('step-1').style.display='block'; };
 
         document.getElementById('btn-validar').onclick = async function(){
-            const s=document.getElementById('l-i').value.trim().toUpperCase(); if(!s) return;
-            this.innerText="CONECTANDO..."; _uT="W-"+Date.now();
-            const hid = getHID();
-            try {
-                const r = await fetch(_uA+"?action=validar&serial="+s+"&token="+_uT+"&hid="+hid);
-                const d = await r.json();
-                if(d.status==="success"){
-                    _uL=s; _uS=parseInt(d.segundos);
-                    if(d.estado_nube) {
-                        localStorage.setItem('tecno_save_'+_uL, d.estado_nube);
-                        const x = JSON.parse(d.estado_nube); _nG = x.nG || 0;
-                        document.getElementById('btn-continuar-box').style.display='block';
-                    }
-                    document.getElementById('step-1').style.display='none';
-                    document.getElementById('step-2').style.display='block';
-                } else { document.getElementById('e-m').innerText=d.mensaje; this.innerText="VALIDAR LICENCIA"; }
-            } catch(e){ document.getElementById('e-m').innerText="ERROR DE RED"; this.innerText="VALIDAR LICENCIA"; }
+            _uL=document.getElementById('l-i').value.trim().toUpperCase(); if(!_uL) return;
+            this.innerText="..."; _uT="W-"+Date.now();
+            const r=await fetch(_uA+"?action=validar&serial="+_uL+"&hid="+getHID()+"&token="+_uT);
+            const d=await r.json();
+            if(d.status==="success"){
+                _uS=d.segundos;
+                if(d.estado_nube){ localStorage.setItem('ts_'+_uL, d.estado_nube); document.getElementById('btn-continuar-box').style.display='block'; }
+                document.getElementById('step-1').style.display='none'; document.getElementById('step-2').style.display='block';
+            }else{ document.getElementById('e-m').innerText=d.mensaje; this.innerText="VALIDAR"; }
         };
 
-        document.getElementById('btn-entrar-nuevo').onclick = function(){
-            const v=parseFloat(document.getElementById('c-init').value); if(isNaN(v)||v<=0) return;
-            _ba=v; _cI=v; _nP=0; _h=[]; _m=0.2; _s=""; _proximaMeta = _ba * 1.20; 
-            document.getElementById('val-inicial').innerText = "$" + v.toFixed(2); _arrancar();
-        };
+        document.getElementById('btn-entrar-nuevo').onclick = () => { _ba=parseFloat(document.getElementById('c-init').value)||0; _cI=_ba; _proMeta=_ba*1.2; document.getElementById('val-inicial').innerText = "$"+_ba.toFixed(2); _arr(); };
+        document.getElementById('btn-continuar-sesion').onclick = () => { const sv=localStorage.getItem('ts_'+_uL); if(sv){ const x=JSON.parse(sv); _ba=x.ba; _nG=x.nG||0; _cI=x.cI||x.ba; _h=x.h||[]; _m=x.m||0.2; _proMeta=_ba*1.2; } document.getElementById('val-inicial').innerText = "$"+_cI.toFixed(2); _arr(); };
 
-        document.getElementById('btn-continuar-sesion').onclick = function(){
-            const sv = localStorage.getItem('tecno_save_'+_uL);
-            if(sv){
-                const x=JSON.parse(sv); _ba=x.ba; _nP=x.nP; _nG=x.nG; _cI=x.cI||x.ba; _g=x.g; _p=x.p; _h=x.h; _m=x.m; _s=x.s; _proximaMeta = _ba * 1.20;
-                document.getElementById('val-inicial').innerText = "$" + _cI.toFixed(2);
-            }
-            _arrancar();
-        };
-
-        window.aceptarMeta = function() { document.getElementById('alerta-meta').style.display = 'none'; _proximaMeta = _ba * 1.20; };
-        function _arrancar(){ document.getElementById('p-l').style.display='none'; document.getElementById('app-principal').style.display='flex'; setInterval(_fClock, 1000); setInterval(_fCheck, 20000); _fUpd(); }
+        function _arr(){ document.getElementById('p-l').style.display='none'; document.getElementById('app-principal').style.display='flex'; setInterval(_fClock, 1000); setInterval(_fUpd, 10000); _upd(); }
 
         function _fR(c){
-            _lS = JSON.parse(JSON.stringify({ba:_ba, nP:_nP, nG:_nG, g:_g, p:_p, h:_h, m:_m, s:_s}));
+            _lS = JSON.parse(JSON.stringify({ba:_ba, nG:_nG, g:_g, p:_p, h:_h, m:_m, s:_s}));
             if(_s!==""){
-                if(c.toUpperCase()===_s){ _ba+=_m; _nP+=_m; _nG+=_m; _m=0.2; _g++; }
-                else if(c!=='Cero'){ _ba-=_m; _nP-=_m; _nG-=_m; _m*=2; _p++; }
+                if(c.toUpperCase()===_s){ _ba+=_m; _nG+=_m; _m=0.2; _g++; _perSeguidas=0; }
+                else if(c!=='Cero'){ _ba-=_m; _nG-=_m; _m*=2; _p++; _perSeguidas++; }
             }
-            _h.unshift(c); _calc(); _save(); _fUpd();
-            if(_ba >= _proximaMeta) { document.getElementById('alerta-meta').style.display = 'flex'; }
+            _h.unshift(c); _calc(); _upd(); _fUpd();
+            if(_ba >= _proMeta) document.getElementById('alerta-meta').style.display = 'flex';
+            let bt=document.getElementById('btn-trampa');
+            if(_perSeguidas>=7){ bt.style.opacity="1"; bt.style.pointerEvents="auto"; } 
+            else { bt.style.opacity="0.3"; bt.style.pointerEvents="none"; }
         }
 
         function _calc() {
@@ -165,9 +133,11 @@
             else if(r>=3){_s=u.toUpperCase();} else{_s=(u==="Rojo")?"NEGRO":"ROJO";}
         }
 
-        function _fUpd(){
-            document.getElementById('cap-val').innerText="$"+_ba.toFixed(2); document.getElementById('n-g').innerText="$"+_nG.toFixed(2);
-            document.getElementById('s-t').innerText=_s||"---"; document.getElementById('s-t').style.color=(_s==="ROJO")?"#e74c3c":"#fff";
+        function _upd(){
+            document.getElementById('cap-val').innerText="$"+_ba.toFixed(2);
+            document.getElementById('n-g').innerText="$"+_nG.toFixed(2);
+            document.getElementById('s-t').innerText=_s||"---";
+            document.getElementById('s-t').style.color=(_s==="ROJO")?"#e74c3c":"#fff";
             document.getElementById('m-t').innerText="$"+_m.toFixed(2);
             const ch=document.getElementById('c-h'); ch.innerHTML="";
             _h.slice(0,28).forEach((v,idx)=>{
@@ -175,22 +145,28 @@
                 const bd=(idx===0)?'border:2.5px solid var(--c5); box-shadow:0 0 10px var(--c5);':'';
                 ch.innerHTML+=`<div class="bola" style="background:${cl}; color:${v==='Negro'?'#000':'#fff'}; ${bd}">${v==='Cero'?'0':''}</div>`;
             });
-            let bt=document.getElementById('btn-trampa');
-            if(_m>=25.6){ bt.style.opacity="1"; bt.style.pointerEvents="auto"; } else { bt.style.opacity="0.3"; bt.style.pointerEvents="none"; }
-            clearTimeout(_saveTimer);
-            _saveTimer = setTimeout(() => {
-                const url = _uA+"?action=guardar&licencia="+_uL+"&ganadas="+_g+"&perdidas="+_p+"&neto="+_nG.toFixed(2)+"&estado="+encodeURIComponent(JSON.stringify({ba:_ba,nP:_nP,nG:_nG,cI:_cI,g:_g,p:_p,h:_h.slice(0,15),m:_m,s:_s}));
-                new Image().src = url;
-            }, 1000);
         }
 
-        function _fClock(){ if(_uS > 0){ _uS--; let d=Math.floor(_uS/86400), h=Math.floor((_uS%86400)/3600), m=Math.floor((_uS%3600)/60), s=_uS%60; document.getElementById('tmr').innerText=d+"d "+h+"h "+m+"m "+s+"s"; } }
-        async function _fCheck(){ try { const r=await fetch(_uA+"?action=chequear_sesion&serial="+_uL+"&token="+_uT); const d=await r.json(); if(d.status==="kick") location.reload(); } catch(e){} }
-        function _save(){ localStorage.setItem('tecno_save_'+_uL, JSON.stringify({ba:_ba,nP:_nP,nG:_nG,cI:_cI,g:_g,p:_p,h:_h,m:_m,s:_s})); }
-        document.getElementById('btn-R').onclick=()=>_fR('Rojo'); document.getElementById('btn-N').onclick=()=>_fR('Negro'); document.getElementById('btn-0').onclick=()=>_fR('Cero');
-        document.getElementById('btn-undo').onclick=()=>{ if(_lS){ _ba=_lS.ba;_nP=_lS.nP;_nG=_lS.nG;_g=_lS.g;_p=_lS.p;_h=_lS.h;_m=_lS.m;_s=_lS.s;_fUpd(); } };
-        document.getElementById('btn-reset').onclick=()=>{ if(confirm("¿Limpiar mesa? El Neto Global se mantiene.")){ _nP=0; _h=[]; _m=0.2; _fUpd(); } };
-        document.getElementById('btn-trampa').onclick = function(){ new Image().src = _uA+"?action=reportar_fallo&licencia="+_uL+"&patron="+_h.slice(0,28).join("-"); alert("⚠️ Reportado."); };
+        function _fUpd(){
+            const est = JSON.stringify({ba:_ba, nG:_nG, cI:_cI, h:_h.slice(0,12), m:_m, s:_s});
+            localStorage.setItem('ts_'+_uL, est);
+            new Image().src = _uA+"?action=guardar&licencia="+_uL+"&neto="+_nG.toFixed(2)+"&ganadas="+_g+"&perdidas="+_p+"&segundos_actuales="+_uS+"&estado="+encodeURIComponent(est);
+        }
+
+        function _fClock(){
+            if(_uS > 0){ _uS--;
+                let d=Math.floor(_uS/86400), h=Math.floor((_uS%86400)/3600), m=Math.floor((_uS%3600)/60), s=_uS%60;
+                document.getElementById('tmr').innerText=_p(d)+"d "+_p(h)+"h "+_p(m)+"m "+_p(s)+"s";
+            }
+        }
+        function _p(n){return n<10?'0'+n:n;}
+        window.aceptarMeta = () => { document.getElementById('alerta-meta').style.display='none'; _proMeta = _ba * 1.20; };
+        document.getElementById('btn-R').onclick=()=>_fR('Rojo');
+        document.getElementById('btn-N').onclick=()=>_fR('Negro');
+        document.getElementById('btn-0').onclick=()=>_fR('Cero');
+        document.getElementById('btn-undo').onclick=()=>{if(_lS){_ba=_lS.ba;_nG=_lS.nG;_h=_lS.h;_m=_lS.m;_s=_lS.s;_upd();}};
+        document.getElementById('btn-reset').onclick=()=>{if(confirm("Reiniciar?")){_h=[];_m=0.2;_upd();}};
+        document.getElementById('btn-trampa').onclick=()=>{ alert("⚠️ Patrón reportado. Gracias por ayudarnos a mejorar el sistema para todos."); };
     })();
     </script>
 </body>
