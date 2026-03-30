@@ -10,41 +10,33 @@
     <style>
         :root { --c1: #e74c3c; --c2: #2c3e50; --c3: #27ae60; --c4: #f1c40f; --c5: #00e5ff; --c8: #111; }
         
-        /* BLOQUEO TOTAL DE ZOOM Y GESTOS */
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; touch-action: none; user-select: none !important; -webkit-user-select: none !important; }
+        /* BLOQUEO DE GESTOS Y SELECCIÓN */
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; touch-action: manipulation; user-select: none !important; -webkit-user-select: none !important; }
         
         html, body { 
-            height: 100%;
-            width: 100%;
+            height: 100%; 
+            width: 100%; 
             margin: 0; 
-            padding: 0;
-            overflow: hidden;
+            padding: 0; 
+            overflow: hidden; 
             background-color: #000;
-            position: fixed; /* Evita que Safari mueva la pantalla */
+            font-family: 'Segoe UI', sans-serif;
+            position: fixed; /* Clave para Safari */
         }
 
-        /* FONDO OPTIMIZADO PARA SAFARI SIN CORTES */
-        body::before { 
-            content: ""; 
-            position: fixed; 
-            top: 0; 
-            left: 0; 
-            width: 100%; 
-            height: 100%; 
-            background: url('https://raw.githubusercontent.com/tecnoentretenciones-lang/tecno-vip-1/main/image_1209a3.jpg') no-repeat center center; 
+        /* FONDO FIJO PARA QUE NO SE CORTE */
+        .bg-fix {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: url('https://raw.githubusercontent.com/tecnoentretenciones-lang/tecno-vip-1/main/image_1209a3.jpg') no-repeat center center;
             background-size: cover;
-            z-index: -2; 
+            z-index: -2;
         }
-
-        body::after { 
-            content: ""; 
-            position: fixed; 
-            top: 0; 
-            left: 0; 
-            width: 100%; 
-            height: 100%; 
-            background: rgba(0,0,0,0.85); 
-            z-index: -1; 
+        .bg-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            z-index: -1;
         }
 
         body { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; }
@@ -57,12 +49,13 @@
             display: flex; 
             flex-direction: column; 
             padding: 12px;
-            padding-top: env(safe-area-inset-top);
+            /* Protege el contenido de la isla dinámica y barras de Safari */
+            padding-top: calc(env(safe-area-inset-top) + 5px);
             padding-bottom: env(safe-area-inset-bottom);
         }
 
         #p-l { position: fixed; top: 0; background: rgba(0,0,0,0.9); z-index: 9999; align-items: center; justify-content: center; }
-        .c-l { background: rgba(20, 20, 20, 0.95); border: 2px solid var(--c5); border-radius: 25px; padding: 25px; width: 100%; text-align: center; box-shadow: 0 0 30px rgba(0,229,255,0.2); }
+        .c-l { background: rgba(20, 20, 20, 0.95); border: 2px solid var(--c5); border-radius: 25px; padding: 20px; width: 100%; text-align: center; box-shadow: 0 0 30px rgba(0,229,255,0.2); overflow-y: auto; max-height: 90vh; }
         
         .ruleta-logo { width: 70px; height: 70px; margin-bottom: 10px; animation: rotar 5s linear infinite; filter: drop-shadow(0 0 10px var(--c5)); }
         @keyframes rotar { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
@@ -71,11 +64,11 @@
         .i-s { width: 100%; background: #000; border: 2px solid #555; color: var(--c4); padding: 15px; border-radius: 12px; font-size: 22px; text-align: center; margin-bottom: 15px; outline: none; font-weight: bold; }
         .b-a { background: var(--c5); color: #000; border: none; padding: 18px; border-radius: 12px; font-weight: 900; width: 100%; cursor: pointer; text-transform: uppercase; font-size: 16px; margin-bottom: 10px; }
 
-        #app-principal { display: none; justify-content: space-between; gap: 5px; }
+        #app-principal { display: none; justify-content: flex-start; gap: 8px; }
         
-        .tmr-big { background:#000; border:2px solid var(--c5); border-radius:15px; padding:12px; text-align:center; font-size: 32px; color: var(--c5); font-weight: 900; text-shadow: 0 0 10px var(--c5); }
+        .tmr-big { background:#000; border:2px solid var(--c5); border-radius:15px; padding:12px; text-align:center; font-size: 32px; color: var(--c5); font-weight: 900; text-shadow: 0 0 10px var(--c5); flex-shrink: 0; }
         
-        .ganancia-box { background: #000; border: 1px solid #333; border-radius: 15px; padding: 10px; display: flex; flex-direction: column; gap: 5px; }
+        .ganancia-box { background: #000; border: 1px solid #333; border-radius: 15px; padding: 10px; display: flex; flex-direction: column; gap: 5px; flex-shrink: 0; }
         .stats-row { display: flex; justify-content: space-around; width: 100%; }
         
         .panel { 
@@ -86,12 +79,12 @@
             display: flex; 
             flex-direction: column; 
             gap: 10px; 
-            flex-grow: 1; 
+            flex-grow: 1; /* Esto hace que el panel ocupe el resto de la pantalla sin empujar */
             justify-content: space-around;
-            max-height: 55dvh; /* Evita que el panel empuje los botones fuera de pantalla */
+            min-height: 0; /* Permite que el flex se encoja en Safari */
         }
         
-        .b-i { flex: 1; height: 70px; border: none; border-radius: 15px; font-size: 32px; font-weight: bold; color: white; cursor: pointer; }
+        .b-i { flex: 1; height: 75px; border: none; border-radius: 15px; font-size: 32px; font-weight: bold; color: white; cursor: pointer; }
         .c-c { background: #000; border: 1px solid #222; border-radius: 12px; padding: 8px; display: flex; flex-wrap: wrap; justify-content: center; gap: 5px; height: 95px; overflow-y: auto; }
         .bola { width: 25px; height: 25px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold; }
         
@@ -102,7 +95,9 @@
         .btn-nube { background: #000; color: #f1c40f; border: none; padding: 15px; border-radius: 15px; margin-top: 15px; font-weight: 900; width: 100%; cursor: pointer; text-transform: uppercase; }
     </style>
 </head>
-<body oncontextmenu="return false;">
+<body>
+    <div class="bg-fix"></div>
+    <div class="bg-overlay"></div>
 
     <div id="alerta-meta"><div class="nube-voladora"><div style="font-size: 50px;">🛑💰✨</div><h2 style="margin: 10px 0; font-weight: 900; line-height: 1.1;">¡OBJETIVO LOGRADO!</h2><p style="margin: 10px 0; font-weight: bold; font-size: 16px;">Has ganado el 20% de tu capital.</p><p style="margin: 0; font-weight: 600; font-size: 14px; line-height: 1.4;">Para proteger tus ganancias y no perder la racha, <b>¡ARRANCA AHORA!</b><br><br>Tómate un descanso, disfruta tu dinero y vuelve más tarde.</p><button class="btn-nube" onclick="aceptarMeta()">OK, ENTIENDO (CONTINUAR)</button></div></div>
 
@@ -120,7 +115,7 @@
             <div id="e-m" style="color: #ff4757; font-size: 13px; margin-bottom: 10px; font-weight: bold;"></div>
             <button id="btn-acepto" class="b-a">ACEPTO Y COMIENZO</button>
             <div id="step-1" style="display:none"><input type="text" id="l-i" class="i-s" placeholder="INGRESE LICENCIA" autocomplete="off"><button class="b-a" id="btn-validar">VALIDAR LICENCIA</button></div>
-            <div id="step-2" style="display:none"><input type="number" id="c-init" class="i-s" placeholder="SALDO EN MESA" step="0.01"><button class="b-a" id="btn-entrar-nuevo">ENTRAR A JUGAR</button><div id="btn-continuar-box" style="display:none; margin-top:10px;"><button class="b-a" id="btn-continuar-sesion" style="background:#27ae60; color:white;">SINCRONIZAR ÚLTIMA PARTIDA</button></div></div>
+            <div id="step-2" style="display:none"><input type="number" id="c-init" class="i-s" placeholder="SALDO DISPONIBLE EN MESA" step="0.01"><button class="b-a" id="btn-entrar-nuevo">ENTRAR A JUGAR</button><div id="btn-continuar-box" style="display:none; margin-top:10px;"><button class="b-a" id="btn-continuar-sesion" style="background:#27ae60; color:white;">SINCRONIZAR ÚLTIMA PARTIDA</button></div></div>
             
             <div style="margin-top: 15px; font-size: 13px; color: #00e5ff; font-weight: bold;">Compra tu validación aquí:</div>
             <a href="https://wa.me/56995931641" class="wsp-f"><i class="fab fa-whatsapp"></i> CONTACTAR SOPORTE</a>
@@ -161,7 +156,7 @@
             return key;
         };
 
-        let _ba=0, _cI=0, _nP=0, _nG=0, _g=0, _p=0, _h=[], _m=0.2, _s="", _uL="", _uT="", _uS=0, _lS=null, _perS=0, _proMeta = 0;
+        let _ba=0, _cI=0, _nP=0, _nG=0, _g=0, _p=0, _h=[], _m=0.2, _s="", _uL="", _uT="", _uS=0, _lS=null, _perSeguidas=0, _proximaMeta = 0;
 
         document.getElementById('btn-acepto').onclick = () => { document.getElementById('btn-acepto').style.display='none'; document.getElementById('step-1').style.display='block'; };
 
@@ -179,33 +174,38 @@
                         document.getElementById('btn-continuar-box').style.display='block';
                     }
                     document.getElementById('step-1').style.display='none'; document.getElementById('step-2').style.display='block';
-                } else { document.getElementById('e-m').innerText=d.mensaje; this.innerText="VALIDAR"; }
-            } catch(e){ document.getElementById('e-m').innerText="ERROR RED"; }
+                } else { document.getElementById('e-m').innerText=d.mensaje; this.innerText="VALIDAR LICENCIA"; }
+            } catch(e){ document.getElementById('e-m').innerText="ERROR DE RED"; }
         };
 
         document.getElementById('btn-entrar-nuevo').onclick = function(){
-            _ba=parseFloat(document.getElementById('c-init').value)||0; _cI=_ba; _proMeta=_ba*1.2; document.getElementById('val-inicial').innerText="$"+_ba.toFixed(2); _arr();
+            const v=parseFloat(document.getElementById('c-init').value); if(isNaN(v)||v<=0) return;
+            _ba=v; _cI=v; _nP=0; _h=[]; _m=0.2; _s=""; _proximaMeta = _ba * 1.20; 
+            document.getElementById('val-inicial').innerText = "$" + v.toFixed(2); _arr();
         };
 
         document.getElementById('btn-continuar-sesion').onclick = function(){
-            const sv=localStorage.getItem('ts_'+_uL);
-            if(sv){ const x=JSON.parse(sv); _ba=x.ba; _nG=x.nG||0; _cI=x.cI||x.ba; _h=x.h||[]; _m=x.m||0.2; _proMeta=_ba*1.2; document.getElementById('val-inicial').innerText="$"+_cI.toFixed(2); }
+            const sv = localStorage.getItem('ts_'+_uL);
+            if(sv){
+                const x=JSON.parse(sv); _ba=x.ba; _nP=x.nP; _nG=x.nG; _cI=x.cI||x.ba; _g=x.g; _p=x.p; _h=x.h; _m=x.m; _s=x.s; _proximaMeta = _ba * 1.20;
+                document.getElementById('val-inicial').innerText = "$" + _cI.toFixed(2);
+            }
             _arr();
         };
 
-        function _arr(){ document.getElementById('p-l').style.display='none'; document.getElementById('app-principal').style.display='flex'; setInterval(_fClock, 1000); setInterval(_fUpd, 10000); _upd(); }
-        window.aceptarMeta = () => { document.getElementById('alerta-meta').style.display='none'; _proMeta = _ba * 1.20; };
+        function _arr(){ document.getElementById('p-l').style.display='none'; document.getElementById('app-principal').style.display='flex'; setInterval(_fClock, 1000); setInterval(_fUpd, 10000); _fUpd(); }
+        window.aceptarMeta = function() { document.getElementById('alerta-meta').style.display = 'none'; _proximaMeta = _ba * 1.20; };
 
         function _fR(c){
-            _lS = JSON.parse(JSON.stringify({ba:_ba, nG:_nG, g:_g, p:_p, h:_h, m:_m, s:_s}));
+            _lS = JSON.parse(JSON.stringify({ba:_ba, nP:_nP, nG:_nG, g:_g, p:_p, h:_h, m:_m, s:_s}));
             if(_s!==""){
-                if(c.toUpperCase()===_s){ _ba+=_m; _nG+=_m; _m=0.2; _g++; _perS=0; }
-                else if(c!=='Cero'){ _ba-=_m; _nG-=_m; _m*=2; _p++; _perS++; }
+                if(c.toUpperCase()===_s){ _ba+=_m; _nP+=_m; _nG+=_m; _m=0.2; _g++; _perSeguidas=0; }
+                else if(c!=='Cero'){ _ba-=_m; _nP-=_m; _nG-=_m; _m*=2; _p++; _perSeguidas++; }
             }
-            _h.unshift(c); _calc(); _upd(); _fUpd();
-            if(_ba >= _proMeta) document.getElementById('alerta-meta').style.display = 'flex';
+            _h.unshift(c); _calc(); _fUpd();
+            if(_ba >= _proximaMeta) { document.getElementById('alerta-meta').style.display = 'flex'; }
             let bt=document.getElementById('btn-trampa');
-            if(_perS>=7){ bt.style.opacity="1"; bt.style.pointerEvents="auto"; } else { bt.style.opacity="0.3"; bt.style.pointerEvents="none"; }
+            if(_perSeguidas>=7){ bt.style.opacity="1"; bt.style.pointerEvents="auto"; } else { bt.style.opacity="0.3"; bt.style.pointerEvents="none"; }
         }
 
         function _calc() {
@@ -218,39 +218,25 @@
             else if(r>=3){_s=u.toUpperCase();} else{_s=(u==="Rojo")?"NEGRO":"ROJO";}
         }
 
-        function _upd(){
-            document.getElementById('cap-val').innerText="$"+_ba.toFixed(2);
-            document.getElementById('n-g').innerText="$"+_nG.toFixed(2);
-            document.getElementById('s-t').innerText=_s||"---";
-            document.getElementById('s-t').style.color=(_s==="ROJO")?"#e74c3c":"#fff";
+        function _fUpd(){
+            document.getElementById('cap-val').innerText="$"+_ba.toFixed(2); document.getElementById('n-g').innerText="$"+_nG.toFixed(2);
+            document.getElementById('s-t').innerText=_s||"---"; document.getElementById('s-t').style.color=(_s==="ROJO")?"#e74c3c":"#fff";
             document.getElementById('m-t').innerText="$"+_m.toFixed(2);
             const ch=document.getElementById('c-h'); ch.innerHTML="";
             _h.slice(0,28).forEach((v,idx)=>{
                 const cl=(v==='Rojo')?'red':(v==='Negro'?'#fff':'green');
-                const bd=(idx===0)?'border:2px solid var(--c5); box-shadow:0 0 10px var(--c5);':'';
+                const bd=(idx===0)?'border:2.5px solid var(--c5); box-shadow:0 0 10px var(--c5);':'';
                 ch.innerHTML+=`<div class="bola" style="background:${cl}; color:${v==='Negro'?'#000':'#fff'}; ${bd}">${v==='Cero'?'0':''}</div>`;
             });
+            const url = _uA+"?action=guardar&licencia="+_uL+"&ganadas="+_g+"&perdidas="+_p+"&neto="+_nG.toFixed(2)+"&segundos_actuales="+_uS+"&estado="+encodeURIComponent(JSON.stringify({ba:_ba,nP:_nP,nG:_nG,cI:_cI,g:_g,p:_p,h:_h.slice(0,15),m:_m,s:_s}));
+            new Image().src = url;
         }
 
-        function _fUpd(){
-            const est = JSON.stringify({ba:_ba, nG:_nG, cI:_cI, h:_h.slice(0,12), m:_m, s:_s});
-            localStorage.setItem('ts_'+_uL, est);
-            new Image().src = _uA+"?action=guardar&licencia="+_uL+"&neto="+_nG.toFixed(2)+"&ganadas="+_g+"&perdidas="+_p+"&segundos_actuales="+_uS+"&estado="+encodeURIComponent(est);
-        }
-
-        function _fClock(){
-            if(_uS > 0){ _uS--;
-                let d=Math.floor(_uS/86400), h=Math.floor((_uS%86400)/3600), m=Math.floor((_uS%3600)/60), s=_uS%60;
-                document.getElementById('tmr').innerText=d+"d "+h+"h "+m+"m "+s+"s";
-                if(_uS===0) location.reload();
-            }
-        }
+        function _fClock(){ if(_uS > 0){ _uS--; let d=Math.floor(_uS/86400), h=Math.floor((_uS%86400)/3600), m=Math.floor((_uS%3600)/60), s=_uS%60; document.getElementById('tmr').innerText=d+"d "+h+"h "+m+"m "+s+"s"; } }
         function _p2(n){return n<10?'0'+n:n;}
-        document.getElementById('btn-R').onclick=()=>_fR('Rojo');
-        document.getElementById('btn-N').onclick=()=>_fR('Negro');
-        document.getElementById('btn-0').onclick=()=>_fR('Cero');
-        document.getElementById('btn-undo').onclick=()=>{if(_lS){_ba=_lS.ba;_nG=_lS.nG;_h=_lS.h;_m=_lS.m;_s=_lS.s;_upd();}};
-        document.getElementById('btn-reset').onclick=()=>{if(confirm("Reiniciar?")){_h=[];_m=0.2;_upd();}};
+        document.getElementById('btn-R').onclick=()=>_fR('Rojo'); document.getElementById('btn-N').onclick=()=>_fR('Negro'); document.getElementById('btn-0').onclick=()=>_fR('Cero');
+        document.getElementById('btn-undo').onclick=()=>{ if(_lS){ _ba=_lS.ba;_nG=_lS.nG;_h=_lS.h;_m=_lS.m;_s=_lS.s;_fUpd(); } };
+        document.getElementById('btn-reset').onclick=()=>{ if(confirm("¿Limpiar mesa?")){ _h=[]; _m=0.2; _fUpd(); } };
         document.getElementById('btn-trampa').onclick=()=>{ alert("⚠️ Patrón reportado. Esto ayudará al sistema a memorizar y mejorar el algoritmo para todos."); };
     })();
     </script>
