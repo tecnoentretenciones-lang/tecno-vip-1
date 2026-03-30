@@ -81,6 +81,7 @@
     (function(){
         const _uA = "https://script.google.com/macros/s/AKfycbx5WjIbvjm2EXQgGJhO3oJxYj0oMf_7A0DrwMrIli4N_d6oShqZv7ff_H8FN-pvWrHebg/exec";
         
+        // HID ORIGINAL PARA EVITAR ERROR DE RED
         const getHID = () => {
             let key = localStorage.getItem('_tecno_super_key_v2');
             if(!key){ key = 'VIP-' + Math.random().toString(36).substring(2,12).toUpperCase(); localStorage.setItem('_tecno_super_key_v2', key); }
@@ -106,7 +107,7 @@
                     if(d.estado_nube) { localStorage.setItem('ts_'+_uL, d.estado_nube); document.getElementById('btn-continuar-box').style.display='block'; }
                     document.getElementById('step-1').style.display='none'; document.getElementById('step-2').style.display='block';
                 } else { document.getElementById('e-m').innerText=d.mensaje; this.innerText="VALIDAR"; }
-            } catch(e){ document.getElementById('e-m').innerText="ERROR RED"; }
+            } catch(e){ document.getElementById('e-m').innerText="ERROR DE RED"; }
         };
 
         document.getElementById('btn-entrar-nuevo').onclick = function(){
@@ -123,7 +124,7 @@
         window.aceptarMeta = () => { document.getElementById('alerta-meta').style.display='none'; _proMeta = _ba * 1.20; };
 
         function _fR(c){
-            _lS = JSON.parse(JSON.stringify({ba:_ba, nP:_nP, nG:_nG, g:_g, p:_p, h:_h, m:_m, s:_s}));
+            _lS = JSON.parse(JSON.stringify({ba:_ba, nG:_nG, g:_g, p:_p, h:_h, m:_m, s:_s}));
             if(_s!==""){
                 if(c.toUpperCase()===_s){ _ba+=_m; _nG+=_m; _m=0.2; _g++; _perS=0; }
                 else if(c!=='Cero'){ _ba-=_m; _nG-=_m; _m*=2; _p++; _perS++; }
@@ -153,7 +154,7 @@
             const ch=document.getElementById('c-h'); ch.innerHTML="";
             _h.slice(0,28).forEach((v,idx)=>{
                 const cl=(v==='Rojo')?'red':(v==='Negro'?'#fff':'green');
-                const bd=(idx===0)?'border:2.5px solid var(--c5); box-shadow:0 0 10px var(--c5);':'';
+                const bd=(idx===0)?'border:2px solid var(--c5); box-shadow:0 0 10px var(--c5);':'';
                 ch.innerHTML+=`<div class="bola" style="background:${cl}; color:${v==='Negro'?'#000':'#fff'}; ${bd}">${v==='Cero'?'0':''}</div>`;
             });
         }
@@ -175,7 +176,7 @@
         document.getElementById('btn-N').onclick=()=>_fR('Negro');
         document.getElementById('btn-0').onclick=()=>_fR('Cero');
         document.getElementById('btn-undo').onclick=()=>{if(_lS){_ba=_lS.ba;_nG=_lS.nG;_h=_lS.h;_m=_lS.m;_s=_lS.s;_upd();}};
-        document.getElementById('btn-reset').onclick=()=>{if(confirm("Reiniciar mesa?")){_h=[];_m=0.2;_upd();}};
+        document.getElementById('btn-reset').onclick=()=>{if(confirm("¿Limpiar mesa?")){_h=[];_m=0.2;_upd();}};
         
         document.getElementById('btn-trampa').onclick=()=>{ 
             const p_rep = _h.slice(0,15).join("-");
