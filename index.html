@@ -35,7 +35,7 @@
         .btn-nube { background: #000; color: #f1c40f; border: none; padding: 15px; border-radius: 15px; margin-top: 15px; font-weight: 900; width: 100%; cursor: pointer; text-transform: uppercase; }
     </style>
 </head>
-<body oncontextmenu="return false;" onkeydown="if(event.keyCode==123 || (event.ctrlKey && event.shiftKey && event.keyCode==73)) return false;">
+<body oncontextmenu="return false;" onkeydown="if(event.keyCode==123)return false;">
 
     <div id="alerta-meta"><div class="nube-voladora"><div style="font-size: 50px;">🛑💰✨</div><h2 style="margin: 10px 0; font-weight: 900; line-height: 1.1;">¡OBJETIVO LOGRADO!</h2><p style="margin: 10px 0; font-weight: bold; font-size: 16px;">Has ganado el 20% de tu capital.</p><p style="margin: 0; font-weight: 600; font-size: 14px; line-height: 1.4;">Para proteger tus ganancias y no perder la racha, <b>¡ARRANCA AHORA!</b><br><br>Tómate un descanso, disfruta tu dinero y vuelve más tarde.</p><button class="btn-nube" onclick="aceptarMeta()">OK, ENTIENDO (CONTINUAR)</button></div></div>
 
@@ -82,21 +82,19 @@
             document.body.innerHTML = "<div style='color:red; text-align:center; padding:50px; font-weight:bold;'>⚠️ ACCESO DENEGADO</div>"; return;
         }
 
-        // --- HUELLA DE 32 CARACTERES: BLOQUEO REAL POR NAVEGADOR ---
+        // --- HUELLA AGRESIVA: BLOQUEO POR NOMBRE DE NAVEGADOR ---
         const getHID = () => {
-            let key = localStorage.getItem('_tecno_super_key_v2');
+            let key = localStorage.getItem('_tecno_full_key');
             if(!key){
+                // Detectamos el navegador real
                 let nav = "UKN";
                 if(navigator.userAgent.indexOf("Chrome") > -1) nav = "CHR";
                 else if(navigator.userAgent.indexOf("Safari") > -1) nav = "SAF";
+                else if(navigator.userAgent.indexOf("Firefox") > -1) nav = "FFX";
                 
-                // Generamos una cadena larga aleatoria + marca del navegador
-                let randomPool = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-                let randomPart = "";
-                for(let i=0; i<12; i++) { randomPart += randomPool.charAt(Math.floor(Math.random() * randomPool.length)); }
-                
-                key = 'VIP-' + nav + '-' + randomPart + '-' + Date.now().toString(36).toUpperCase();
-                localStorage.setItem('_tecno_super_key_v2', key);
+                // Mezclamos: Navegador + Hardware + Aleatorio Único
+                key = 'VIP-' + nav + '-' + Math.random().toString(36).substring(2, 9) + Date.now().toString(36);
+                localStorage.setItem('_tecno_full_key', key);
             }
             return key;
         };
