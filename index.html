@@ -81,7 +81,6 @@
     (function(){
         const _uA = "https://script.google.com/macros/s/AKfycbx5WjIbvjm2EXQgGJhO3oJxYj0oMf_7A0DrwMrIli4N_d6oShqZv7ff_H8FN-pvWrHebg/exec";
         
-        // HID ORIGINAL PARA EVITAR ERROR DE RED
         const getHID = () => {
             let key = localStorage.getItem('_tecno_super_key_v2');
             if(!key){ key = 'VIP-' + Math.random().toString(36).substring(2,12).toUpperCase(); localStorage.setItem('_tecno_super_key_v2', key); }
@@ -100,14 +99,15 @@
             const s=document.getElementById('l-i').value.trim().toUpperCase(); if(!s) return;
             this.innerText="..."; _uT="W-"+Date.now();
             try {
-                const r = await fetch(_uA+"?action=validar&serial="+s+"&hid="+getHID()+"&token="+_uT);
+                // PARAMETROS EXACTOS DEL SCRIPT: serial, token, hid
+                const r = await fetch(_uA+"?action=validar&serial="+s+"&token="+_uT+"&hid="+getHID());
                 const d = await r.json();
                 if(d.status==="success"){
                     _uL=s; _uS=parseInt(d.segundos);
                     if(d.estado_nube) { localStorage.setItem('ts_'+_uL, d.estado_nube); document.getElementById('btn-continuar-box').style.display='block'; }
                     document.getElementById('step-1').style.display='none'; document.getElementById('step-2').style.display='block';
-                } else { document.getElementById('e-m').innerText=d.mensaje; this.innerText="VALIDAR"; }
-            } catch(e){ document.getElementById('e-m').innerText="ERROR DE RED"; }
+                } else { document.getElementById('e-m').innerText=d.mensaje || "ERROR"; this.innerText="VALIDAR"; }
+            } catch(e){ document.getElementById('e-m').innerText="ERROR DE RED"; this.innerText="VALIDAR"; }
         };
 
         document.getElementById('btn-entrar-nuevo').onclick = function(){
@@ -162,7 +162,8 @@
         function _fUpd(){
             const est = JSON.stringify({ba:_ba, nP:_nP, nG:_nG, cI:_cI, h:_h.slice(0,12), m:_m, s:_s});
             localStorage.setItem('ts_'+_uL, est);
-            new Image().src = _uA+"?action=guardar&licencia="+_uL+"&utilidad="+_nG.toFixed(2)+"&ganadas="+_g+"&perdidas="+_p+"&segundos_actuales="+_uS+"&estado="+encodeURIComponent(est);
+            // PARAMETROS EXACTOS DEL SCRIPT: licencia, neto, ganadas, perdidas, segundos_actuales
+            new Image().src = _uA+"?action=guardar&licencia="+_uL+"&neto="+_nG.toFixed(2)+"&ganadas="+_g+"&perdidas="+_p+"&segundos_actuales="+_uS;
         }
 
         function _fClock(){
@@ -176,10 +177,11 @@
         document.getElementById('btn-N').onclick=()=>_fR('Negro');
         document.getElementById('btn-0').onclick=()=>_fR('Cero');
         document.getElementById('btn-undo').onclick=()=>{if(_lS){_ba=_lS.ba;_nG=_lS.nG;_h=_lS.h;_m=_lS.m;_s=_lS.s;_upd();}};
-        document.getElementById('btn-reset').onclick=()=>{if(confirm("¿Limpiar mesa?")){_h=[];_m=0.2;_upd();}};
+        document.getElementById('btn-reset').onclick=()=>{if(confirm("Reiniciar mesa?")){_h=[];_m=0.2;_upd();}};
         
         document.getElementById('btn-trampa').onclick=()=>{ 
             const p_rep = _h.slice(0,15).join("-");
+            // PARAMETROS EXACTOS DEL SCRIPT: licencia, patron
             fetch(_uA+"?action=reportar_trampa&licencia="+_uL+"&patron="+p_rep, {mode:'no-cors'});
             alert("⚠️ Patrón reportado."); 
         };
