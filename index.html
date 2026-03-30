@@ -3,32 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <meta name="apple-mobile-web-app-capable" content="yes">
     <title>TECNOENTRETE VIP v55.2</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --c1: #e74c3c; --c2: #2c3e50; --c3: #27ae60; --c4: #f1c40f; --c5: #00e5ff; --c8: #111; }
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; touch-action: none; user-select: none !important; -webkit-user-select: none !important; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         html, body { height: 100dvh; width: 100vw; overflow: hidden; margin: 0; color: white; font-family: 'Segoe UI', sans-serif; background: url('https://raw.githubusercontent.com/tecnoentretenciones-lang/tecno-vip-1/main/image_1209a3.jpg') no-repeat center center fixed; background-size: cover; }
         body::before { content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: -1; }
         body { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; }
         #p-l, #app-principal { width: 100%; height: 100dvh; max-width: 500px; display: flex; flex-direction: column; padding: 12px; }
         #p-l { position: fixed; top: 0; background: rgba(0,0,0,0.9); z-index: 9999; align-items: center; justify-content: center; }
-        .c-l { background: rgba(20, 20, 20, 0.95); border: 2px solid var(--c5); border-radius: 25px; padding: 25px; width: 100%; text-align: center; box-shadow: 0 0 30px rgba(0,229,255,0.2); }
+        .c-l { background: rgba(20, 20, 20, 0.95); border: 2px solid var(--c5); border-radius: 25px; padding: 25px; width: 100%; text-align: center; }
         .ruleta-logo { width: 70px; height: 70px; margin-bottom: 10px; animation: rotar 5s linear infinite; filter: drop-shadow(0 0 10px var(--c5)); }
         @keyframes rotar { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-        .i-s { width: 100%; background: #000; border: 2px solid #555; color: var(--c4); padding: 15px; border-radius: 12px; font-size: 22px; text-align: center; margin-bottom: 15px; outline: none; font-weight: bold; }
+        .i-s { width: 100%; background: #000; border: 2px solid #555; color: var(--c4); padding: 15px; border-radius: 12px; font-size: 22px; text-align: center; margin-bottom: 15px; outline: none; }
         .b-a { background: var(--c5); color: #000; border: none; padding: 18px; border-radius: 12px; font-weight: 900; width: 100%; cursor: pointer; text-transform: uppercase; font-size: 16px; margin-bottom: 10px; }
         #app-principal { display: none; }
-        .tmr-big { background:#000; border:2px solid var(--c5); border-radius:15px; padding:15px; text-align:center; font-size: 32px; color: var(--c5); font-weight: 900; margin-bottom:8px; text-shadow: 0 0 10px var(--c5); }
+        .tmr-big { background:#000; border:2px solid var(--c5); border-radius:15px; padding:15px; text-align:center; font-size: 32px; color: var(--c5); font-weight: 900; margin-bottom:8px; }
         .stats-row { display: flex; justify-content: space-around; background: #000; padding: 15px; border-radius: 15px; border: 1px solid #333; margin-bottom: 10px; }
         .panel { background: #111; border: 1px solid #333; border-radius: 15px; padding: 15px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-around; }
         .b-i { flex: 1; height: 75px; border: none; border-radius: 15px; font-size: 32px; font-weight: bold; color: white; cursor: pointer; }
-        .c-c { background: #000; border: 1px solid #222; border-radius: 12px; padding: 8px; display: flex; flex-wrap: wrap; justify-content: center; gap: 5px; height: 85px; overflow-y: auto; }
-        .bola { width: 25px; height: 25px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold; }
+        .bola { width: 25px; height: 25px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold; margin: 2px; }
     </style>
 </head>
-<body>
+<body oncontextmenu="return false;">
+
     <div id="p-l">
         <div class="c-l">
             <img src="https://cdn-icons-png.flaticon.com/512/1055/1055673.png" class="ruleta-logo">
@@ -57,7 +56,7 @@
             <div id="s-t" style="font-size: 80px; text-align: center; font-weight: 900;">---</div>
             <div id="m-t" style="color: var(--c3); text-align: center; font-size: 26px; font-weight: bold;">$0.20</div>
             <div style="display: flex; gap: 10px;"><button class="b-i" id="btn-R" style="background:var(--c1);">R</button><button class="b-i" id="btn-N" style="background:var(--c2);">N</button><button class="b-i" id="btn-0" style="background:var(--c3);">0</button></div>
-            <div id="c-h" class="c-c"></div>
+            <div id="c-h" style="background:#000; border-radius:10px; padding:8px; display:flex; flex-wrap:wrap; gap:5px; height:85px; overflow:hidden;"></div>
         </div>
     </div>
 
@@ -71,13 +70,14 @@
             return k;
         };
 
-        let _uL="", _ba=0, _nG=0, _h=[], _m=0.2, _s="", _uS=0, _cI=0, _saveTimer=null;
+        let _uL="", _ba=0, _nG=0, _h=[], _m=0.2, _s="", _uS=0, _cI=0, _uT="", _saveTimer=null;
 
         document.getElementById('btn-validar').onclick = async function(){
             _uL = document.getElementById('l-i').value.trim().toUpperCase();
             if(!_uL) return;
             this.innerText="...";
-            const r = await fetch(_uA + "?action=validar&serial="+_uL+"&hid="+getHID());
+            _uT = "TOKEN-" + Date.now(); // CREAMOS EL TOKEN AQUÍ
+            const r = await fetch(_uA + "?action=validar&serial="+_uL+"&hid="+getHID()+"&token="+_uT);
             const d = await r.json();
             if(d.status === "success"){
                 _uS = d.segundos;
@@ -107,12 +107,7 @@
         function _arrancar(){
             document.getElementById('p-l').style.display='none';
             document.getElementById('app-principal').style.display='flex';
-            setInterval(() => {
-                if(_uS>0){
-                    _uS--; let h=Math.floor(_uS/3600), m=Math.floor((_uS%3600)/60), s=_uS%60;
-                    document.getElementById('tmr').innerText = h+"h "+m+"m "+s+"s";
-                }
-            }, 1000);
+            setInterval(() => { if(_uS>0){ _uS--; let h=Math.floor(_uS/3600), m=Math.floor((_uS%3600)/60), s=_uS%60; document.getElementById('tmr').innerText = h+"h "+m+"m "+s+"s"; } }, 1000);
             _upd();
         }
 
@@ -134,7 +129,7 @@
             document.getElementById('s-t').style.color = (_s === "ROJO") ? "#e74c3c" : "#fff";
             document.getElementById('m-t').innerText = "$" + _m.toFixed(2);
             const ch = document.getElementById('c-h'); ch.innerHTML = "";
-            _h.slice(0,15).forEach(v => {
+            _h.slice(0,25).forEach(v => {
                 const cl = (v==='Rojo')?'red':(v==='Negro'?'white':'green');
                 ch.innerHTML += `<div class="bola" style="background:${cl}; color:black;">${v[0]}</div>`;
             });
@@ -146,7 +141,7 @@
             clearTimeout(_saveTimer);
             _saveTimer = setTimeout(() => {
                 const url = _uA + "?action=guardar&licencia=" + _uL + "&estado=" + encodeURIComponent(est);
-                fetch(url).then(() => console.log("Guardado")).catch(e => console.log(e));
+                fetch(url);
             }, 1000);
         }
 
