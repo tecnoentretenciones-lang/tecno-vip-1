@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>TECNOENTRETE VIP v73 - RADAR PERFECTO</title>
+    <title>TECNOENTRETE VIP v74 - PRECIOS Y VALIDACIÓN</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --c1: #e74c3c; --c2: #2c3e50; --c3: #27ae60; --c4: #f1c40f; --c5: #00e5ff; --c8: #111; }
@@ -22,7 +22,7 @@
         .b-a { background: var(--c5); color: #000; border: none; padding: 18px; border-radius: 12px; font-weight: 900; width: 100%; cursor: pointer; text-transform: uppercase; font-size: 13px; margin-bottom: 10px; }
         #app-principal { display: none; gap: 8px; }
         .tmr-big { background:#000; border:2px solid var(--c5); border-radius:15px; padding:10px; text-align:center; font-size: 26px; color: var(--c5); font-weight: 900; }
-        #modal-demo { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 10000; display: none; justify-content: center; align-items: center; padding: 20px; }
+        #modal-demo, #modal-planes { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 10000; display: none; justify-content: center; align-items: center; padding: 20px; }
         .bola { width: 24px; height: 24px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; font-weight: bold; }
     </style>
 </head>
@@ -32,10 +32,25 @@
         <div class="c-l" style="max-width: 400px;">
             <h2 style="color:var(--c5); margin-top:0;">🎁 DEMO GRATIS</h2>
             <p style="color:#eee; font-size:13px;">Juega 15 min de prueba.</p>
-            <input type="text" id="reg-nombre" class="i-s" placeholder="TU NOMBRE">
+            <input type="text" id="reg-nombre" class="i-s" placeholder="NOMBRE Y APELLIDO">
             <input type="number" id="reg-wsp" class="i-s" placeholder="WHATSAPP (569...)">
             <button class="b-a" id="btn-activar-demo">ACTIVAR AHORA</button>
             <button onclick="document.getElementById('modal-demo').style.display='none'" style="color:#888; background:none; border:none; text-decoration:underline;">Volver al Inicio</button>
+        </div>
+    </div>
+
+    <div id="modal-planes">
+        <div class="c-l" style="max-width: 400px;">
+            <h2 style="color:var(--c4); margin-top:0;"><i class="fas fa-gem"></i> PLANES VIP</h2>
+            <div style="background:#111; border:1px solid #333; border-radius:12px; padding:15px; text-align:left; color:#fff; margin-bottom:15px;">
+                <p style="margin:8px 0; font-size:16px;">⏱️ <b>12 Horas:</b> <span style="color:var(--c3); float:right;">$8.000 CLP</span></p>
+                <hr style="border:0; border-top:1px solid #333;">
+                <p style="margin:8px 0; font-size:16px;">📅 <b>24 Horas:</b> <span style="color:var(--c3); float:right;">$15.000 CLP</span></p>
+                <hr style="border:0; border-top:1px solid #333;">
+                <p style="margin:8px 0; font-size:16px;">🔥 <b>1 Semana:</b> <span style="color:var(--c3); float:right;">$50.000 CLP</span></p>
+            </div>
+            <button class="b-a" style="background:#25d366; color:white;" onclick="window.open('https://wa.me/56995931641?text=Hola Felipe, me gustaría adquirir un plan VIP.')"><i class="fab fa-whatsapp"></i> HABLAR CON SOPORTE</button>
+            <button onclick="document.getElementById('modal-planes').style.display='none'" style="color:#888; background:none; border:none; text-decoration:underline;">Volver al Inicio</button>
         </div>
     </div>
 
@@ -55,7 +70,8 @@
             <input type="text" id="l-i" class="i-s" placeholder="LICENCIA VIP" autocomplete="off">
             <button class="b-a" id="btn-validar">ENTRAR AL SISTEMA</button>
             <button class="b-a" style="background:rgba(0,229,255,0.1); color:var(--c5); border:1px solid var(--c5);" onclick="document.getElementById('modal-demo').style.display='flex'">PROBAR DEMO GRATIS</button>
-            <button class="b-a" style="background:#25d366; color:white;" onclick="window.open('https://wa.me/56995931641?text=Hola Felipe, quiero comprar un plan VIP. Precios: 12h: $8.000 | 24h: $15.000 | Semana: $50.000')"><i class="fab fa-whatsapp"></i> COMPRAR LICENCIA / PROMOS</button>
+            
+            <button class="b-a" style="background:var(--c4); color:#000;" onclick="document.getElementById('modal-planes').style.display='flex'"><i class="fas fa-list"></i> VER PLANES Y PRECIOS</button>
         </div>
     </div>
 
@@ -89,6 +105,7 @@
     </div>
 
     <script>
+    // TU URL OFICIAL INTACTA
     const _URL = "https://script.google.com/macros/s/AKfycbwQCtzmfYUH_N2rhdSMjn9eN1fz4CK8fa-ha0RuXVXZP4sfs6dTJ795XtDF3cDeYmQifQ/exec";
 
     let _HID = localStorage.getItem('VIP_HID');
@@ -144,7 +161,15 @@
     document.getElementById('btn-activar-demo').onclick = async function() {
         const nom = document.getElementById('reg-nombre').value.trim();
         const wsp = document.getElementById('reg-wsp').value.trim();
-        if(!nom || !wsp) return alert("Completa los datos");
+        
+        if(!nom || !wsp) return alert("Completa todos los datos.");
+        
+        // VALIDACIÓN DE NOMBRE Y APELLIDO (Debe tener al menos un espacio entre palabras)
+        const partesNombre = nom.split(" ").filter(p => p.length > 0);
+        if(partesNombre.length < 2) {
+            return alert("Por favor, ingresa tu Nombre y Apellido.");
+        }
+
         this.innerText = "...";
         try {
             const r = await fetch(_URL + "?action=validar_demo&nombre=" + encodeURIComponent(nom) + "&wsp=" + encodeURIComponent(wsp) + "&hid=" + _HID);
@@ -161,6 +186,7 @@
     function iniciarApp() {
         document.getElementById('p-l').style.display='none';
         document.getElementById('modal-demo').style.display='none';
+        document.getElementById('modal-planes').style.display='none';
         document.getElementById('app-principal').style.display='flex';
         
         if(_0xlS && _L !== "DEMO") {
@@ -259,6 +285,23 @@
         } catch(e) {}
     }
 
+    function notificarSalida() {
+        if(_L !== "") {
+            let url = _URL + `?action=salir&serial=${_L}&segundos_actuales=${_S}&wsp=${encodeURIComponent(_WSP)}`;
+            if (navigator.sendBeacon) {
+                navigator.sendBeacon(url);
+            } else {
+                new Image().src = url;
+            }
+        }
+    }
+
+    window.addEventListener('visibilitychange', function() {
+        if (document.visibilityState === 'hidden') notificarSalida();
+    });
+
+    window.addEventListener('pagehide', function() { notificarSalida(); });
+
     document.getElementById('btn-R').onclick=()=>xfR('Rojo');
     document.getElementById('btn-N').onclick=()=>xfR('Negro');
     document.getElementById('btn-0').onclick=()=>xfR('Cero');
@@ -280,29 +323,6 @@
         document.getElementById('btn-trampa').style.opacity="0.3";
         document.getElementById('btn-trampa').style.pointerEvents="none";
     };
-
-    // --- NUEVO DETECTOR DE CIERRE DE PESTAÑA BLINDADO (Bengala de Emergencia) ---
-    function notificarSalida() {
-        if(_L !== "") {
-            let url = _URL + `?action=salir&serial=${_L}&segundos_actuales=${_S}&wsp=${encodeURIComponent(_WSP)}`;
-            if (navigator.sendBeacon) {
-                navigator.sendBeacon(url);
-            } else {
-                new Image().src = url;
-            }
-        }
-    }
-
-    window.addEventListener('visibilitychange', function() {
-        if (document.visibilityState === 'hidden') {
-            notificarSalida();
-        }
-    });
-
-    window.addEventListener('pagehide', function() {
-        notificarSalida();
-    });
-    // -----------------------------------------------------------------------------
     </script>
 </body>
 </html>
