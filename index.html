@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>TECNOENTRETE VIP v80</title>
+    <title>TECNOENTRETE VIP v81 - TOTALMENTE RESTAURADO</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --c1: #e74c3c; --c2: #2c3e50; --c3: #27ae60; --c4: #f1c40f; --c5: #00e5ff; --c8: #111; }
@@ -17,15 +17,22 @@
         #p-l, #app-principal { width: 100%; height: 100dvh; max-width: 500px; display: flex; flex-direction: column; padding: 12px; padding-top: calc(env(safe-area-inset-top) + 45px); margin: auto; }
         #p-l { position: fixed; top: 0; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.95); z-index: 9999; justify-content: center; align-items: center; overflow-y: auto; }
         .c-l { background: rgba(20, 20, 20, 0.98); border: 2px solid var(--c5); border-radius: 25px; padding: 25px; width: 90%; text-align: center; }
+        
+        /* CUADRO DE REGLAS RESTAURADO */
         .legal-box { background: rgba(231, 76, 60, 0.2); border: 1px solid var(--c1); padding: 12px; border-radius: 12px; margin-bottom: 15px; font-size: 11px; color: #ff8888; text-align: left; line-height: 1.4; }
+        
         .i-s { width: 100%; background: #000; border: 2px solid #555; color: var(--c4); padding: 15px; border-radius: 12px; font-size: 18px; text-align: center; margin-bottom: 10px; outline: none; font-weight: bold; }
         .b-a { background: var(--c5); color: #000; border: none; padding: 18px; border-radius: 12px; font-weight: 900; width: 100%; cursor: pointer; text-transform: uppercase; font-size: 13px; margin-bottom: 10px; }
+        
         #app-principal { display: none; gap: 8px; }
         .tmr-big { background:#000; border:2px solid var(--c5); border-radius:15px; padding:10px; text-align:center; font-size: 26px; color: var(--c5); font-weight: 900; }
         
+        /* MODALES */
         .modal-base { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 10000; display: none; justify-content: center; align-items: center; padding: 20px; overflow-y:auto; }
         .modal-content { background: rgba(20, 20, 20, 0.98); border: 2px solid var(--c5); border-radius: 25px; padding: 25px; width: 90%; text-align: center; max-width: 450px; }
         .manual-text { text-align: left; font-size: 13px; line-height: 1.5; color: #fff; background: rgba(0,0,0,0.5); border: 1px solid #333; padding: 15px; border-radius: 12px; max-height: 350px; overflow-y: auto; margin-bottom: 15px; }
+        .manual-text p { margin: 8px 0; }
+        .manual-text strong { color: var(--c4); }
         .bola { width: 24px; height: 24px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; font-weight: bold; }
     </style>
 </head>
@@ -75,7 +82,15 @@
         <div class="c-l">
             <img src="https://cdn-icons-png.flaticon.com/512/1055/1055673.png" style="width:70px; animation: rotar 5s linear infinite; margin-bottom:10px;">
             <h1 style="color:white; font-size:22px; margin:0 0 10px 0;">TECNOENTRETE VIP</h1>
-            <div class="legal-box"><b>REGLAS:</b> Base $0.20 | Capital $40 USD. Si pierde 7 veces seguidas use ⚠️ TRAMPA.</div>
+            
+            <div class="legal-box">
+                <b>REGLAS DE ORO:</b><br>
+                - Iniciar siempre con monto base <b>$0.20</b>.<br>
+                - Capital recomendado: <b>$40 USD</b>.<br>
+                - Si hay 7 pérdidas seguidas, presione <b>⚠️ TRAMPA</b>.<br><br>
+                <b>AVISO:</b> Software de uso estadístico. El usuario asume total responsabilidad.
+            </div>
+            
             <input type="text" id="l-i" class="i-s" placeholder="LICENCIA VIP" autocomplete="off">
             <button class="b-a" id="btn-validar">ENTRAR AL SISTEMA</button>
             <button class="b-a" style="background:rgba(0,229,255,0.1); color:var(--c5); border:1px solid var(--c5);" onclick="document.getElementById('modal-demo').style.display='flex'">PROBAR DEMO GRATIS</button>
@@ -86,11 +101,13 @@
 
     <div id="app-principal">
         <div id="tmr" class="tmr-big">00d-00h:00m:00s</div>
+        
         <div style="background:#000; border:1px solid #333; border-radius:15px; padding:10px; display:flex; justify-content:space-around; margin-bottom:5px;">
             <div style="text-align:center;"><div style="font-size:10px; color:#888;">CAPITAL</div><div id="c-i" style="font-size:18px; font-weight:900; color:#fff;">$0.00</div></div>
             <div style="text-align:center;"><div style="font-size:10px; color:#888;">UTILIDAD</div><div id="u-s" style="font-size:18px; font-weight:900; color:var(--c3);">$0.00</div></div>
             <div style="text-align:center;"><div style="font-size:10px; color:#888;">GLOBAL</div><div id="n-g" style="font-size:18px; font-weight:900; color:var(--c5);">$0.00</div></div>
         </div>
+
         <div style="background:var(--c8); padding:15px; border-radius:15px; display:flex; flex-direction:column; gap:10px; flex-grow:1; border:1px solid #333; overflow-y:auto;">
             <div style="background:#1a1a1a; padding:15px; border-radius:15px; text-align:center; border:1px solid #333;">
                 <div id="s-t" style="font-size:75px; font-weight:900; line-height:1;">---</div>
@@ -101,7 +118,9 @@
                 <button class="b-i" id="btn-N" style="background:var(--c2); height:70px; border-radius:15px; border:none; font-size:30px; color:white; flex:1;">N</button>
                 <button class="b-i" id="btn-0" style="background:var(--c3); height:70px; border-radius:15px; border:none; font-size:30px; color:white; flex:1;">0</button>
             </div>
+            
             <div id="c-h" style="background:#000; height:95px; border-radius:12px; border:1px solid #222; padding:8px; display:flex; flex-wrap:wrap; justify-content:center; gap:5px; overflow-y:auto;"></div>
+            
             <div style="display:flex; gap:5px;">
                 <button style="background:transparent; color:#555; border:1px solid #333; padding:10px; border-radius:10px; font-size:10px; flex:1;" id="btn-undo">CORREGIR</button>
                 <button style="background:transparent; color:var(--c4); border:1px solid var(--c4); padding:10px; border-radius:10px; font-size:10px; flex:1.5; opacity:0.3; pointer-events:none;" id="btn-trampa">⚠️ TRAMPA</button>
@@ -145,7 +164,12 @@
         document.getElementById('app-principal').style.display='flex';
         _0xcI = parseFloat(prompt("Capital mesa:", "40.00")) || 40;
         _0xba = _0xcI; _TS = Date.now(); _IS = _S;
-        setInterval(tick, 1000); setInterval(save, 15000); update();
+        setInterval(tick, 1000); 
+        setInterval(() => {
+            let url = _URL + `?action=guardar&serial=${_L}&neto_global=${_0xnG.toFixed(2)}&ganadas=${_0xg}&perdidas=${_0xp}&wsp=${encodeURIComponent(_WSP)}`;
+            fetch(url);
+        }, 15000); 
+        update();
     }
 
     function xfR(c) {
@@ -181,11 +205,6 @@
             const cl=(v==='Rojo')?'red':(v==='Negro'?'#fff':'green');
             ch.innerHTML+=`<div class="bola" style="background:${cl}; color:${v==='Negro'?'#000':'#fff'}">${v==='Cero'?'0':''}</div>`;
         });
-    }
-
-    async function save() {
-        let url = _URL + `?action=guardar&serial=${_L}&neto_global=${_0xnG.toFixed(2)}&ganadas=${_0xg}&perdidas=${_0xp}&wsp=${encodeURIComponent(_WSP)}`;
-        fetch(url);
     }
 
     document.getElementById('btn-R').onclick=()=>xfR('Rojo');
