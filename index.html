@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>TECNOENTRETE VIP v78 - PLANES Y MANUAL</title>
+    <title>TECNOENTRETE VIP v79 - OPTIMIZADO</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --c1: #e74c3c; --c2: #2c3e50; --c3: #27ae60; --c4: #f1c40f; --c5: #00e5ff; --c8: #111; }
@@ -23,7 +23,6 @@
         #app-principal { display: none; gap: 8px; }
         .tmr-big { background:#000; border:2px solid var(--c5); border-radius:15px; padding:10px; text-align:center; font-size: 26px; color: var(--c5); font-weight: 900; }
         
-        /* Estilos base de los Visores Visuales (Modales) */
         .modal-base { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 10000; display: none; justify-content: center; align-items: center; padding: 20px; overflow-y:auto; }
         .modal-content { background: rgba(20, 20, 20, 0.98); border: 2px solid var(--c5); border-radius: 25px; padding: 25px; width: 90%; text-align: center; max-width: 450px; }
         .manual-text { text-align: left; font-size: 13px; line-height: 1.5; color: #fff; background: rgba(0,0,0,0.5); border: 1px solid #333; padding: 15px; border-radius: 12px; max-height: 350px; overflow-y: auto; margin-bottom: 15px; }
@@ -95,9 +94,6 @@
             <button class="b-a" style="background:rgba(0,229,255,0.1); color:var(--c5); border:1px solid var(--c5);" onclick="document.getElementById('modal-demo').style.display='flex'">PROBAR DEMO GRATIS</button>
             
             <button class="b-a" style="background:var(--c5); color:#000;" onclick="document.getElementById('modal-planes').style.display='flex'"><i class="fas fa-list"></i> VER PLANES Y PRECIOS</button>
-
-            <button class="b-a" style="background:#25d366; color:white;" onclick="window.open('https://wa.me/56995931641?text=Hola Felipe, quiero comprar un plan VIP. Precios: 12h: $8.000 | 24h: $15.000 | Semana: $50.000')"><i class="fab fa-whatsapp"></i> COMPRAR LICENCIA / PROMOS</button>
-            
             <button class="b-a" style="background:var(--c4); color:#000; border: none; font-weight: bold;" onclick="document.getElementById('modal-manual').style.display='flex'"><i class="fas fa-book-open"></i> CÓMO JUGAR: MANUAL VIP</button>
         </div>
     </div>
@@ -140,7 +136,6 @@
     </div>
 
     <script>
-    // TU URL OFICIAL INTACTA
     const _URL = "https://script.google.com/macros/s/AKfycbwQCtzmfYUH_N2rhdSMjn9eN1fz4CK8fa-ha0RuXVXZP4sfs6dTJ795XtDF3cDeYmQifQ/exec";
 
     let _HID = localStorage.getItem('VIP_HID');
@@ -225,7 +220,6 @@
     };
 
     function iniciarApp() {
-        // Cerrar modales y pantallas iniciales
         document.getElementById('p-l').style.display='none';
         document.getElementById('modal-demo').style.display='none';
         document.getElementById('modal-planes').style.display='none';
@@ -261,7 +255,6 @@
         update(); 
     }
 
-    // --- MOTOR INTACTO ---
     function xfR(c) {
         if(_0xs!==""){
             if(c.toUpperCase()===_0xs){ _0xba+=_0xm; _0xnG+=_0xm; _0xnP+=_0xm; _0xm=0.2; _0xg++; _consecutivas=0; }
@@ -365,7 +358,6 @@
 
     window.addEventListener('pagehide', function() { notificarSalida(); });
 
-    // BOTONES MOTOR (INTACTO)
     document.getElementById('btn-R').onclick=()=>xfR('Rojo');
     document.getElementById('btn-N').onclick=()=>xfR('Negro');
     document.getElementById('btn-0').onclick=()=>xfR('Cero');
