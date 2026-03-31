@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>TECNOENTRETE VIP v60.5 - ORIGINAL</title>
+    <title>TECNOENTRETE VIP v60.5 - OFICIAL</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --c1: #e74c3c; --c2: #2c3e50; --c3: #27ae60; --c4: #f1c40f; --c5: #00e5ff; --c8: #111; }
@@ -12,6 +13,7 @@
         body::before { content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: url('https://raw.githubusercontent.com/tecnoentretenciones-lang/tecno-vip-1/main/image_1209a3.jpg') no-repeat center center; background-size: cover; z-index: -2; }
         body::after { content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: -1; }
         
+        /* INICIO Y CARGA (ESTRICTAMENTE ORIGINAL) */
         #p-l, #app-principal { width: 100%; height: 100dvh; max-width: 500px; display: flex; flex-direction: column; padding: 12px; padding-top: calc(env(safe-area-inset-top) + 45px); margin: auto; }
         #p-l { position: fixed; top: 0; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.95); z-index: 9999; justify-content: center; align-items: center; }
         .c-l { background: rgba(20, 20, 20, 0.98); border: 2px solid var(--c5); border-radius: 25px; padding: 25px; width: 90%; text-align: center; box-shadow: 0 0 30px rgba(0,229,255,0.2); }
@@ -20,21 +22,20 @@
         .i-s { width: 100%; background: #000; border: 2px solid #555; color: var(--c4); padding: 15px; border-radius: 12px; font-size: 18px; text-align: center; margin-bottom: 10px; outline: none; font-weight: bold; }
         .b-a { background: var(--c5); color: #000; border: none; padding: 18px; border-radius: 12px; font-weight: 900; width: 100%; cursor: pointer; text-transform: uppercase; font-size: 14px; margin-bottom: 10px; }
         
+        /* PANEL DE JUEGO */
         #app-principal { display: none; gap: 8px; overflow-y: auto; }
         .tmr-big { background:#000; border:2px solid var(--c5); border-radius:15px; padding:10px; text-align:center; font-size: 28px; color: var(--c5); font-weight: 900; text-shadow: 0 0 10px var(--c5); }
-        
         .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; margin-bottom: 5px; }
         .stat-card { background: rgba(255,255,255,0.05); border: 1px solid #333; border-radius: 10px; padding: 5px; text-align: center; }
         .stat-label { font-size: 9px; color: #888; text-transform: uppercase; }
         .stat-val { font-size: 16px; font-weight: bold; color: #fff; }
-
         .ganancia-box { background: #000; border: 1px solid #333; border-radius: 15px; padding: 10px; display: flex; flex-direction: column; gap: 5px; }
         .panel { background: var(--c8); border: 1px solid #333; border-radius: 15px; padding: 12px; display: flex; flex-direction: column; gap: 10px; flex-grow: 1; justify-content: space-around; }
-        
         .b-i { flex: 1; height: 65px; border: none; border-radius: 15px; font-size: 28px; font-weight: bold; color: white; cursor: pointer; }
         .c-c { background: #000; border: 1px solid #222; border-radius: 12px; padding: 8px; display: flex; flex-wrap: wrap; justify-content: center; gap: 5px; height: 80px; overflow-y: auto; }
         .bola { width: 24px; height: 24px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; font-weight: bold; }
 
+        /* MODALES */
         #modal-registro, #modal-tienda { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 10000; display: none; justify-content: center; align-items: center; padding: 20px; }
         .modal-content { background: #1a1a1a; border: 2px solid var(--c5); border-radius: 20px; padding: 25px; width: 100%; max-width: 400px; text-align: center; }
     </style>
@@ -55,15 +56,15 @@
     <div id="modal-tienda">
         <div class="modal-content">
             <h2 style="color:var(--c4); margin-top:0;">🛒 PLANES VIP</h2>
-            <p style="color:white; font-size:13px;">12 HORAS: $8.000<br>24 HORAS: $15.000<br>SEMANAL: $50.000</p>
-            <button class="b-a" style="background:#25d366; color:white;" onclick="window.open('https://wa.me/56995931641?text=Hola, quiero comprar un plan VIP')"><i class="fab fa-whatsapp"></i> COMPRAR POR WHATSAPP</button>
+            <p style="color:white; font-size:13px; margin-bottom:15px;">PASE 12 HORAS: $8.000<br>PASE 24 HORAS: $15.000<br>PROMO SEMANAL: $50.000</p>
+            <button class="b-a" style="background:#25d366; color:white;" onclick="window.open('https://wa.me/56995931641?text=Hola Felipe, quiero comprar un Plan VIP. Mi clave es: ')"><i class="fab fa-whatsapp"></i> COMPRAR POR WHATSAPP</button>
             <button onclick="document.getElementById('modal-tienda').style.display='none'" style="background:none; border:none; color:#888; text-decoration:underline; margin-top:10px;">Cerrar</button>
         </div>
     </div>
 
     <div id="p-l">
         <div class="c-l">
-            <img src="https://cdn-icons-png.flaticon.com/512/1055/1055673.png" style="width:70px; animation: rotar 5s linear infinite;">
+            <img src="https://cdn-icons-png.flaticon.com/512/1055/1055673.png" style="width:70px;">
             <h1 style="color:white; font-size:22px; margin: 10px 0;">TECNOENTRETE VIP</h1>
             <p style="font-size: 14px; color: var(--c4); font-weight: bold; margin-bottom: 10px;">SOFTWARE PARA GANARLE A LA RULETA</p>
             <div class="legal-box">⚠️ AVISO: No nos hacemos responsables por pérdidas de capital. El uso es bajo su propio riesgo.</div>
@@ -156,6 +157,7 @@
         actualizarPantalla();
     }
 
+    /* MOTOR DE JUEGO ORIGINAL (ESTRICTAMENTE NO TOCADO) */
     function procesarJugada(color) {
         if(_XS !== "") {
             if(color.toUpperCase() === _XS) { _BA += _M; _NG += _M; _M = 0.2; _PER = 0; }
