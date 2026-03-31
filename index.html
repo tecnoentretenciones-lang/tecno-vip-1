@@ -3,23 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>TECNOENTRETE VIP v92 - MOTOR PRO RESTAURADO</title>
+    <title>TECNOENTRETE VIP v93 - MOTOR PRO ORIGINAL</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --c1: #e74c3c; --c2: #2c3e50; --c3: #27ae60; --c4: #f1c40f; --c5: #00e5ff; --c8: #111; }
+        
+        /* BLOQUEO TOTAL DE GESTOS Y ZOOM */
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; touch-action: none !important; user-select: none !important; -webkit-user-drag: none; overscroll-behavior: none; }
+        
         html, body { height: 100%; width: 100%; margin: 0; padding: 0; overflow: hidden !important; background-color: #000; position: fixed; font-family: 'Segoe UI', sans-serif; }
         body::before { content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: url('https://raw.githubusercontent.com/tecnoentretenciones-lang/tecno-vip-1/main/image_1209a3.jpg') no-repeat center center; background-size: cover; z-index: -2; }
         body::after { content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: -1; }
+        
         @keyframes rotar { 100% { transform: rotate(360deg); } }
+        
         #p-l, #app-principal { width: 100%; height: 100dvh; max-width: 500px; display: flex; flex-direction: column; padding: 10px; margin: auto; }
         #p-l { position: fixed; top: 0; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.95); z-index: 9999; justify-content: center; align-items: center; }
+        
         .c-l { background: rgba(20, 20, 20, 0.98); border: 2px solid var(--c5); border-radius: 20px; padding: 15px; width: 95%; text-align: center; box-shadow: 0 0 20px rgba(0,229,255,0.2); }
         .legal-box { background: rgba(231, 76, 60, 0.2); border: 1px solid var(--c1); padding: 10px; border-radius: 10px; margin-bottom: 12px; font-size: 11px; color: #ff8888; text-align: left; line-height: 1.4; }
         .i-s { width: 100%; background: #000; border: 2px solid #555; color: var(--c4); padding: 12px; border-radius: 10px; font-size: 16px; text-align: center; margin-bottom: 8px; outline: none; font-weight: bold; }
         .b-a { background: var(--c5); color: #000; border: none; padding: 15px; border-radius: 10px; font-weight: 900; width: 100%; cursor: pointer; text-transform: uppercase; font-size: 12px; margin-bottom: 8px; }
+        
         #app-principal { display: none; gap: 8px; padding-top: calc(env(safe-area-inset-top) + 10px); }
         .tmr-big { background:#000; border:2px solid var(--c5); border-radius: 12px; padding:10px; text-align:center; font-size: 26px; color: var(--c5); font-weight: 900; }
+        
         .modal-base { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 10000; display: none; justify-content: center; align-items: center; padding: 20px; }
         .modal-content { background: rgba(20, 20, 20, 0.98); border: 2px solid var(--c5); border-radius: 25px; padding: 25px; width: 90%; text-align: center; max-width: 450px; }
         .manual-text { text-align: left; font-size: 13px; line-height: 1.5; color: #fff; background: rgba(0,0,0,0.5); border: 1px solid #333; padding: 15px; border-radius: 12px; max-height: 350px; overflow-y: auto; margin-bottom: 15px; }
@@ -27,6 +35,16 @@
     </style>
 </head>
 <body oncontextmenu="return false;">
+
+    <div id="alerta-meta" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.92); z-index: 10005; display: none; justify-content: center; align-items: center; flex-direction: column;">
+        <div style="background: linear-gradient(135deg, #f1c40f, #f39c12); color: #000; padding: 25px; border-radius: 30px; text-align: center; max-width: 90%; border: 4px solid #fff; box-shadow: 0px 15px 35px rgba(241,196,15,0.5);">
+            <div style="font-size: 50px;">🛑💰✨</div>
+            <h2 style="margin: 10px 0; font-weight: 900; line-height: 1.1;">¡OBJETIVO LOGRADO!</h2>
+            <p style="margin: 10px 0; font-weight: bold; font-size: 16px;">Has ganado el 20% de tu capital.</p>
+            <p style="margin: 0; font-weight: 600; font-size: 14px; line-height: 1.4;">Para proteger tus ganancias y no perder la racha, <b>¡ARRANCA AHORA!</b><br><br>Tómate un descanso, disfruta tu dinero y vuelve más tarde.</p>
+            <button style="background: #000; color: #f1c40f; border: none; padding: 15px; border-radius: 15px; margin-top: 15px; font-weight: 900; width: 100%; cursor: pointer; text-transform: uppercase;" onclick="aceptarMeta()">OK, ENTIENDO (CONTINUAR)</button>
+        </div>
+    </div>
 
     <div id="p-l">
         <div class="c-l">
@@ -116,16 +134,16 @@
     let lastTouchEnd = 0;
     document.addEventListener('touchend', e => { const now = (new Date()).getTime(); if (now - lastTouchEnd <= 300) e.preventDefault(); lastTouchEnd = now; }, { passive: false });
 
-    // TU ENLACE NUEVO:
+    // TU ENLACE
     const _URL = "https://script.google.com/macros/s/AKfycbzUIdq4jKKOi3_fu3kLsO_cP3Z9ckXp7B6sUiP78B7Km7bDVmaecAIdsWGgGcA8nlE8JA/exec";
     
     let _HID = localStorage.getItem('VIP_HID') || 'VIP-'+Math.random().toString(36).substr(2,10).toUpperCase();
     localStorage.setItem('VIP_HID', _HID);
     
-    let _L="", _S=0, _ba=0, _cI=40, _nP=0, _nG=0, _g=0, _p=0, _h=[], _m=0.2, _s="", _per=0, _TS=0, _IS=0, _WSP="";
-    let _lS = null; // Guardar partida para corregir
+    // VARIABLES ORIGINALES
+    let _L="", _S=0, _ba=0, _cI=40, _nP=0, _nG=0, _g=0, _p=0, _h=[], _m=0.2, _s="", _per=0, _Meta=0, _TS=0, _IS=0, _WSP="", _lS=null;
 
-    // Patrones de trampa extraídos de tu respaldo
+    // PATRONES DE CASINO (DE TU RESPALDO)
     const _TR = [
         "Rojo-Rojo-Rojo-Negro-Negro-Negro-Rojo-Rojo-Rojo",
         "Negro-Negro-Negro-Rojo-Rojo-Rojo-Negro-Negro-Negro",
@@ -146,7 +164,7 @@
                 _S = d.segundos; 
                 _nG = parseFloat(d.neto_global) || 0; 
                 
-                // RESTAURAR PARTIDA DE LA NUBE (COLUMNA F)
+                // SISTEMA DE SINCRONIZACIÓN DE PARTIDAS REPARADO
                 let savedJSON = d.estado_nube || localStorage.getItem('ts_'+_L);
                 let restored = false;
                 if(savedJSON && savedJSON.includes("{")) {
@@ -160,6 +178,7 @@
                             _m = parseFloat(st.m) || 0.2;
                             _s = st.s || "";
                             _cI = parseFloat(st.cI) || _ba;
+                            _Meta = _cI * 1.20; // 20%
                             restored = true;
                         } catch(e) {}
                     }
@@ -167,6 +186,7 @@
                 if(!restored) {
                     _cI = parseFloat(prompt("Capital disponible en mesa:", "40.00")) || 40;
                     _ba = _cI;
+                    _Meta = _ba * 1.20;
                 }
                 iniciarApp(); 
             }
@@ -196,20 +216,45 @@
             document.getElementById('tmr').innerText = `${d}d-${h}h:${m}m:${s}s`;
             if(_S<=0) location.reload();
         }, 1000);
-        
         setInterval(saveState, 15000);
         update();
     }
 
-    // ENVÍA EL PAQUETE JSON A LA COLUMNA F PARA RECORDAR LA SESIÓN
+    // GUARDA EL JSON COMPLETO EN LA COLUMNA F PARA SINCRONIZAR
     function saveState() {
         let est = JSON.stringify({ba:_ba, nP:_nP, nG:_nG, cI:_cI, h:_h.slice(0,12), m:_m, s:_s});
         localStorage.setItem('ts_'+_L, est);
-        let url = _URL + `?action=guardar&serial=${_L}&neto_global=${_nG.toFixed(2)}&ganadas=${_g}&perdidas=${_p}&estado=${encodeURIComponent(est)}&wsp=${encodeURIComponent(_WSP)}`;
+        let url = _URL + `?action=guardar&serial=${_L}&licencia=${_L}&neto_global=${_nG.toFixed(2)}&neto=${_nG.toFixed(2)}&ganadas=${_g}&perdidas=${_p}&estado=${encodeURIComponent(est)}&wsp=${encodeURIComponent(_WSP)}`;
+        new Image().src = url; // Fuerza el envío
         fetch(url).catch(e=>{});
     }
 
-    // MOTOR ORIGINAL DEL JUEGO EXTRAÍDO DE TU RESPALDO
+    window.aceptarMeta = () => {
+        document.getElementById('alerta-meta').style.display = 'none';
+        _Meta = _ba * 1.20; // Nueva meta
+    };
+
+    // EL CEREBRO DEL JUEGO (MOTOR PRO DE TU RESPALDO)
+    function _CALC() {
+        if(_h.length === 0) return;
+        let u = _h[0], p = _h[1] || "", a = _h[2] || "", t = _h[3] || "";
+        const hA = _h.slice(0,20).join("-");
+        
+        for(let tr of _TR) {
+            if(hA.includes(tr)) { _s = (u === "Rojo") ? "NEGRO" : "ROJO"; return; }
+        }
+        
+        if(u === 'Cero'){ _s = (p === 'Rojo') ? 'ROJO' : (p === 'Negro' ? 'NEGRO' : ''); return; }
+        if(u === p && a === t && u !== a && _h[4] === _h[5] && u === _h[4]){ _s = (u === "Rojo") ? "NEGRO" : "ROJO"; return; }
+        
+        let r = 1;
+        for(let i=0; i<_h.length-1; i++){ if(_h[i] === _h[i+1]) r++; else break; }
+        
+        if(u === p && a === t && u !== a && a !== ""){ _s = u.toUpperCase(); }
+        else if(r >= 3){ _s = u.toUpperCase(); }
+        else { _s = (u === "Rojo") ? "NEGRO" : "ROJO"; }
+    }
+
     function xfR(c) {
         _lS = {ba:_ba, nP:_nP, nG:_nG, g:_g, p:_p, h:[..._h], m:_m, s:_s, per:_per};
 
@@ -222,31 +267,12 @@
         }
         _h.unshift(c);
         
-        // CALCULO DE MOTOR PRO (DE TU RESPALDO)
-        if(_h.length > 0) {
-            let u = _h[0], p = _h[1] || "", a = _h[2] || "", t = _h[3] || "";
-            const hA = _h.slice(0, 20).join("-");
-            let foundTrap = false;
-            for(let tr of _TR) {
-                if(hA.includes(tr)) { _s = (u === "Rojo") ? "NEGRO" : "ROJO"; foundTrap = true; break; }
-            }
-            if(!foundTrap) {
-                if(u === 'Cero'){
-                    _s = (p === 'Rojo') ? 'ROJO' : (p === 'Negro' ? 'NEGRO' : '');
-                } else if(u === p && a === t && u !== a && _h[4] === _h[5] && u === _h[4]){
-                    _s = (u === "Rojo") ? "NEGRO" : "ROJO";
-                } else {
-                    let r = 1;
-                    for(let i=0; i<_h.length-1; i++){ if(_h[i] === _h[i+1]) r++; else break; }
-                    if(u === p && a === t && u !== a && a !== ""){
-                        _s = u.toUpperCase();
-                    } else if(r >= 3){
-                        _s = u.toUpperCase();
-                    } else {
-                        _s = (u === "Rojo") ? "NEGRO" : "ROJO";
-                    }
-                }
-            }
+        _CALC();
+        update();
+        saveState();
+
+        if(_ba >= _Meta) {
+            document.getElementById('alerta-meta').style.display='flex';
         }
 
         if(_per >= 7) {
@@ -256,17 +282,17 @@
             document.getElementById('btn-trampa').style.opacity="0.3";
             document.getElementById('btn-trampa').style.pointerEvents="none";
         }
-        
-        update();
-        saveState();
     }
 
+    // BOTÓN TRAMPA: AHORA MANDA PALABRAS COMPLETAS (Negro-Negro...)
     document.getElementById('btn-trampa').onclick = async () => {
         if(!confirm("¿Deseas reportar este patrón como TRAMPA?")) return;
-        let patron = _h.slice(0,7).map(v => v.charAt(0)).reverse().join("-");
+        let patron = _h.slice(0,15).join("-");
         try {
-            await fetch(_URL + "?action=reportar_trampa&licencia=" + _L + "&patron=" + patron);
-            alert("⚠️ PATRÓN REPORTADO.");
+            let url = _URL + "?action=reportar_trampa&licencia=" + _L + "&serial=" + _L + "&patron=" + patron;
+            new Image().src = url;
+            fetch(url).catch(e=>{});
+            alert("⚠️ Gracias por reportar. Tu aporte nos ayuda a detectar patrones de robo y mejorar el algoritmo.");
             _h=[]; _m=0.2; _per=0; _s="";
             document.getElementById('btn-trampa').style.opacity="0.3";
             document.getElementById('btn-trampa').style.pointerEvents="none";
