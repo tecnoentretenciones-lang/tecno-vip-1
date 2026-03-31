@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>TECNOENTRETE VIP v76 - MANUAL INTEGRADO</title>
+    <title>TECNOENTRETE VIP v77 - INICIO RESTAURADO</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --c1: #e74c3c; --c2: #2c3e50; --c3: #27ae60; --c4: #f1c40f; --c5: #00e5ff; --c8: #111; }
@@ -23,7 +23,7 @@
         #app-principal { display: none; gap: 8px; }
         .tmr-big { background:#000; border:2px solid var(--c5); border-radius:15px; padding:10px; text-align:center; font-size: 26px; color: var(--c5); font-weight: 900; }
         
-        /* Modales (se heredan los estilos .c-l y .modal-content) */
+        /* Estilos base de los Visores Visuales (Modales) */
         .modal-base { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 10000; display: none; justify-content: center; align-items: center; padding: 20px; overflow-y:auto; }
         .modal-content { background: rgba(20, 20, 20, 0.98); border: 2px solid var(--c5); border-radius: 25px; padding: 25px; width: 90%; text-align: center; max-width: 450px; }
         .manual-text { text-align: left; font-size: 13px; line-height: 1.5; color: #fff; background: rgba(0,0,0,0.5); border: 1px solid #333; padding: 15px; border-radius: 12px; max-height: 350px; overflow-y: auto; margin-bottom: 15px; }
@@ -45,21 +45,6 @@
         </div>
     </div>
 
-    <div id="modal-planes" class="modal-base">
-        <div class="modal-content">
-            <h2 style="color:var(--c4); margin-top:0;"><i class="fas fa-gem"></i> PLANES VIP</h2>
-            <div style="background:#111; border:1px solid #333; border-radius:12px; padding:15px; text-align:left; color:#fff; margin-bottom:15px;">
-                <p style="margin:8px 0; font-size:16px;">⏱️ <b>12 Horas:</b> <span style="color:var(--c3); float:right;">$8.000 CLP</span></p>
-                <hr style="border:0; border-top:1px solid #333;">
-                <p style="margin:8px 0; font-size:16px;">📅 <b>24 Horas:</b> <span style="color:var(--c3); float:right;">$15.000 CLP</span></p>
-                <hr style="border:0; border-top:1px solid #333;">
-                <p style="margin:8px 0; font-size:16px;">🔥 <b>1 Semana:</b> <span style="color:var(--c3); float:right;">$50.000 CLP</span></p>
-            </div>
-            <button class="b-a" style="background:#25d366; color:white;" onclick="window.open('https://wa.me/56995931641?text=Hola Felipe, me gustaría adquirir un plan VIP.')"><i class="fab fa-whatsapp"></i> HABLAR CON SOPORTE</button>
-            <button onclick="document.getElementById('modal-planes').style.display='none'" style="color:#888; background:none; border:none; text-decoration:underline;">Volver al Inicio</button>
-        </div>
-    </div>
-
     <div id="modal-manual" class="modal-base" style="z-index: 10001;">
         <div class="modal-content">
             <h2 style="color:var(--c4); margin-top:0;"><i class="fas fa-book-open"></i> MANUAL VIP (Cómo Jugar)</h2>
@@ -73,7 +58,7 @@
                 <p><strong>7. TRAMPA (⚠️ TRAMPA):</strong> Si la racha contraria llega a <strong>7 pérdidas seguidas</strong>, el botón ⚠️ TRAMPA se activará. Presiónelo para reportar el patrón y resetear la racha (el sistema le sugerirá resetear sesión). ¡No siga doblando!</p>
                 <p><strong>8. SEGURIDAD:</strong> Su tiempo de licencia corre continuamente. El sistema guarda su estado automáticamente cada 15s.</p>
             </div>
-            <button onclick="document.getElementById('modal-manual').style.display='none'" class="b-a" style="background:#555; color:white; width: 100%;">Volver al Inicio</button>
+            <button onclick="document.getElementById('modal-manual').style.display='none'" class="b-a" style="background:#555; color:white; width: 100%;">Cerrar Manual</button>
         </div>
     </div>
 
@@ -94,7 +79,9 @@
             <button class="b-a" id="btn-validar">ENTRAR AL SISTEMA</button>
             <button class="b-a" style="background:rgba(0,229,255,0.1); color:var(--c5); border:1px solid var(--c5);" onclick="document.getElementById('modal-demo').style.display='flex'">PROBAR DEMO GRATIS</button>
             
-            <button class="b-a" style="background:var(--c4); color:#000;" onclick="document.getElementById('modal-manual').style.display='flex'"><i class="fas fa-book-open"></i> MANUAL: CÓMO JUGAR</button>
+            <button class="b-a" style="background:#25d366; color:white;" onclick="window.open('https://wa.me/56995931641?text=Hola Felipe, quiero comprar un plan VIP. Precios: 12h: $8.000 | 24h: $15.000 | Semana: $50.000')"><i class="fab fa-whatsapp"></i> COMPRAR LICENCIA / PROMOS</button>
+            
+            <button class="b-a" style="background:var(--c4); color:#000; border: none; font-weight: bold;" onclick="document.getElementById('modal-manual').style.display='flex'"><i class="fas fa-book-open"></i> CÓMO JUGAR: MANUAL VIP</button>
         </div>
     </div>
 
@@ -117,6 +104,7 @@
                 <button class="b-i" id="btn-N" style="background:var(--c2); height:70px; border-radius:15px; border:none; font-size:30px; color:white; flex:1;">N</button>
                 <button class="b-i" id="btn-0" style="background:var(--c3); height:70px; border-radius:15px; border:none; font-size:30px; color:white; flex:1;">0</button>
             </div>
+            
             <div id="c-h" style="background:#000; height:95px; border-radius:12px; border:1px solid #222; padding:8px; display:flex; flex-wrap:wrap; justify-content:center; gap:5px; overflow-y:auto;"></div>
             
             <div style="background:#000; border:1px solid #222; border-radius:12px; padding:10px; display:flex; justify-content:space-around; align-items:center;">
@@ -135,6 +123,7 @@
     </div>
 
     <script>
+    // TU URL OFICIAL INTACTA
     const _URL = "https://script.google.com/macros/s/AKfycbwQCtzmfYUH_N2rhdSMjn9eN1fz4CK8fa-ha0RuXVXZP4sfs6dTJ795XtDF3cDeYmQifQ/exec";
 
     let _HID = localStorage.getItem('VIP_HID');
@@ -222,7 +211,6 @@
         // Cerrar modales y pantallas iniciales
         document.getElementById('p-l').style.display='none';
         document.getElementById('modal-demo').style.display='none';
-        document.getElementById('modal-planes').style.display='none';
         document.getElementById('modal-manual').style.display='none';
         document.getElementById('app-principal').style.display='flex';
         
