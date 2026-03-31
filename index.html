@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>TECNOENTRETE VIP v91 - MOTOR ORIGINAL</title>
+    <title>TECNOENTRETE VIP v92 - MOTOR PRO RESTAURADO</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --c1: #e74c3c; --c2: #2c3e50; --c3: #27ae60; --c4: #f1c40f; --c5: #00e5ff; --c8: #111; }
@@ -116,12 +116,24 @@
     let lastTouchEnd = 0;
     document.addEventListener('touchend', e => { const now = (new Date()).getTime(); if (now - lastTouchEnd <= 300) e.preventDefault(); lastTouchEnd = now; }, { passive: false });
 
-    // TU URL NUEVA:
+    // TU ENLACE NUEVO:
     const _URL = "https://script.google.com/macros/s/AKfycbzUIdq4jKKOi3_fu3kLsO_cP3Z9ckXp7B6sUiP78B7Km7bDVmaecAIdsWGgGcA8nlE8JA/exec";
     
     let _HID = localStorage.getItem('VIP_HID') || 'VIP-'+Math.random().toString(36).substr(2,10).toUpperCase();
     localStorage.setItem('VIP_HID', _HID);
-    let _L="", _S=0, _0xba=0, _0xnP=0, _0xnG=0, _0xcI=40, _0xh=[], _0xm=0.2, _0xs="", _0xg=0, _0xp=0, _consecutivas=0, _TS=0, _IS=0, _WSP="";
+    
+    let _L="", _S=0, _ba=0, _cI=40, _nP=0, _nG=0, _g=0, _p=0, _h=[], _m=0.2, _s="", _per=0, _TS=0, _IS=0, _WSP="";
+    let _lS = null; // Guardar partida para corregir
+
+    // Patrones de trampa extraídos de tu respaldo
+    const _TR = [
+        "Rojo-Rojo-Rojo-Negro-Negro-Negro-Rojo-Rojo-Rojo",
+        "Negro-Negro-Negro-Rojo-Rojo-Rojo-Negro-Negro-Negro",
+        "Rojo-Rojo-Negro-Negro-Negro-Rojo-Rojo-Negro-Negro-Negro",
+        "Negro-Negro-Negro-Rojo-Rojo-Negro-Negro-Negro-Rojo-Rojo",
+        "Negro-Rojo-Negro-Rojo-Negro-Rojo-Negro-Rojo-Negro",
+        "Rojo-Negro-Rojo-Negro-Rojo-Negro-Rojo-Negro-Rojo"
+    ];
 
     document.getElementById('btn-validar').onclick = async function() {
         _L = document.getElementById('l-i').value.trim().toUpperCase();
@@ -130,7 +142,34 @@
         try {
             const r = await fetch(_URL + "?action=validar&serial=" + _L + "&hid=" + _HID);
             const d = await r.json();
-            if(d.status === "success") { _S = d.segundos; _0xnG = parseFloat(d.neto_global) || 0; iniciarApp(); }
+            if(d.status === "success") { 
+                _S = d.segundos; 
+                _nG = parseFloat(d.neto_global) || 0; 
+                
+                // RESTAURAR PARTIDA DE LA NUBE (COLUMNA F)
+                let savedJSON = d.estado_nube || localStorage.getItem('ts_'+_L);
+                let restored = false;
+                if(savedJSON && savedJSON.includes("{")) {
+                    if(confirm("☁️ Tienes una sesión guardada en la Nube.\n\n¿Deseas CONTINUAR la partida anterior?")) {
+                        try {
+                            let st = JSON.parse(savedJSON);
+                            _ba = parseFloat(st.ba) || 40;
+                            _nP = parseFloat(st.nP) || 0;
+                            _nG = parseFloat(st.nG) || _nG;
+                            _h = st.h || [];
+                            _m = parseFloat(st.m) || 0.2;
+                            _s = st.s || "";
+                            _cI = parseFloat(st.cI) || _ba;
+                            restored = true;
+                        } catch(e) {}
+                    }
+                }
+                if(!restored) {
+                    _cI = parseFloat(prompt("Capital disponible en mesa:", "40.00")) || 40;
+                    _ba = _cI;
+                }
+                iniciarApp(); 
+            }
             else { alert(d.mensaje); this.innerText = "ENTRAR AL SISTEMA"; }
         } catch(e) { alert("Error de Conexión."); this.innerText = "ENTRAR AL SISTEMA"; }
     };
@@ -150,8 +189,7 @@
     function iniciarApp() {
         document.getElementById('p-l').style.display='none';
         document.getElementById('app-principal').style.display='flex';
-        _0xcI = parseFloat(prompt("Capital mesa:", "40.00")) || 40;
-        _0xba = _0xcI; _TS = Date.now(); _IS = _S;
+        _TS = Date.now(); _IS = _S;
         setInterval(() => {
             let e = Math.floor((Date.now()-_TS)/1000); _S = Math.max(0, _IS - e);
             let d=Math.floor(_S/86400), h=Math.floor((_S%86400)/3600), m=Math.floor((_S%3600)/60), s=_S%60;
@@ -159,53 +197,106 @@
             if(_S<=0) location.reload();
         }, 1000);
         
-        setInterval(() => {
-            let estadoF = _0xh.slice(0,5).map(v => v.charAt(0)).join("-"); // Esto manda R-N-R a la columna F
-            if(estadoF === "") estadoF = "ONLINE";
-            let url = _URL + `?action=guardar&serial=${_L}&neto_global=${_0xnG.toFixed(2)}&ganadas=${_0xg}&perdidas=${_0xp}&estado=${estadoF}&wsp=${encodeURIComponent(_WSP)}`;
-            fetch(url).catch(e=>{});
-        }, 15000);
+        setInterval(saveState, 15000);
         update();
     }
 
-    // TU MOTOR ORIGINAL 100% INTACTO
+    // ENVÍA EL PAQUETE JSON A LA COLUMNA F PARA RECORDAR LA SESIÓN
+    function saveState() {
+        let est = JSON.stringify({ba:_ba, nP:_nP, nG:_nG, cI:_cI, h:_h.slice(0,12), m:_m, s:_s});
+        localStorage.setItem('ts_'+_L, est);
+        let url = _URL + `?action=guardar&serial=${_L}&neto_global=${_nG.toFixed(2)}&ganadas=${_g}&perdidas=${_p}&estado=${encodeURIComponent(est)}&wsp=${encodeURIComponent(_WSP)}`;
+        fetch(url).catch(e=>{});
+    }
+
+    // MOTOR ORIGINAL DEL JUEGO EXTRAÍDO DE TU RESPALDO
     function xfR(c) {
-        if(_0xs!==""){
-            if(c.toUpperCase()===_0xs){ _0xba+=_0xm; _0xnG+=_0xm; _0xnP+=_0xm; _0xm=0.2; _0xg++; _consecutivas=0; }
-            else if(c!=='Cero'){ _0xba-=_0xm; _0xnG-=_0xm; _0xnP-=_0xm; _0xm*=2; _0xp++; _consecutivas++; }
+        _lS = {ba:_ba, nP:_nP, nG:_nG, g:_g, p:_p, h:[..._h], m:_m, s:_s, per:_per};
+
+        if(_s !== "") {
+            if(c.toUpperCase() === _s){ 
+                _ba += _m; _nP += _m; _nG += _m; _m = 0.2; _g++; _per = 0; 
+            } else if(c !== 'Cero'){ 
+                _ba -= _m; _nP -= _m; _nG -= _m; _m *= 2; _p++; _per++; 
+            }
         }
-        _0xh.unshift(c);
-        _0xs = (_0xh[0]==="Rojo"?"NEGRO":"ROJO");
-        if(_consecutivas >= 7) {
+        _h.unshift(c);
+        
+        // CALCULO DE MOTOR PRO (DE TU RESPALDO)
+        if(_h.length > 0) {
+            let u = _h[0], p = _h[1] || "", a = _h[2] || "", t = _h[3] || "";
+            const hA = _h.slice(0, 20).join("-");
+            let foundTrap = false;
+            for(let tr of _TR) {
+                if(hA.includes(tr)) { _s = (u === "Rojo") ? "NEGRO" : "ROJO"; foundTrap = true; break; }
+            }
+            if(!foundTrap) {
+                if(u === 'Cero'){
+                    _s = (p === 'Rojo') ? 'ROJO' : (p === 'Negro' ? 'NEGRO' : '');
+                } else if(u === p && a === t && u !== a && _h[4] === _h[5] && u === _h[4]){
+                    _s = (u === "Rojo") ? "NEGRO" : "ROJO";
+                } else {
+                    let r = 1;
+                    for(let i=0; i<_h.length-1; i++){ if(_h[i] === _h[i+1]) r++; else break; }
+                    if(u === p && a === t && u !== a && a !== ""){
+                        _s = u.toUpperCase();
+                    } else if(r >= 3){
+                        _s = u.toUpperCase();
+                    } else {
+                        _s = (u === "Rojo") ? "NEGRO" : "ROJO";
+                    }
+                }
+            }
+        }
+
+        if(_per >= 7) {
             document.getElementById('btn-trampa').style.opacity="1";
             document.getElementById('btn-trampa').style.pointerEvents="auto";
+        } else {
+            document.getElementById('btn-trampa').style.opacity="0.3";
+            document.getElementById('btn-trampa').style.pointerEvents="none";
         }
+        
         update();
+        saveState();
     }
 
-    // BOTÓN TRAMPA ORIGINAL (Manda el patrón R-R-N)
     document.getElementById('btn-trampa').onclick = async () => {
         if(!confirm("¿Deseas reportar este patrón como TRAMPA?")) return;
-        let patron = _0xh.slice(0,7).map(v => v.charAt(0)).reverse().join("-");
+        let patron = _h.slice(0,7).map(v => v.charAt(0)).reverse().join("-");
         try {
             await fetch(_URL + "?action=reportar_trampa&licencia=" + _L + "&patron=" + patron);
             alert("⚠️ PATRÓN REPORTADO.");
-            _0xh=[]; _0xm=0.2; _consecutivas=0; 
+            _h=[]; _m=0.2; _per=0; _s="";
             document.getElementById('btn-trampa').style.opacity="0.3";
             document.getElementById('btn-trampa').style.pointerEvents="none";
             update();
+            saveState();
         } catch(e) { alert("Error al enviar reporte."); }
     };
 
+    document.getElementById('btn-undo').onclick = () => {
+        if(_lS) {
+            _ba = _lS.ba; _nP = _lS.nP; _nG = _lS.nG; _g = _lS.g; _p = _lS.p; _h = [..._lS.h]; _m = _lS.m; _s = _lS.s; _per = _lS.per;
+            update(); saveState(); _lS = null;
+        }
+    };
+
+    document.getElementById('btn-reset').onclick = () => {
+        if(confirm("¿Resetear mesa?")) {
+            _h=[]; _m=0.2; _s=""; _per=0; update(); saveState();
+        }
+    };
+
     function update() {
-        document.getElementById('c-i').innerText="$"+_0xba.toFixed(2);
-        document.getElementById('u-s').innerText="$"+_0xnP.toFixed(2);
-        document.getElementById('n-g').innerText="$"+_0xnG.toFixed(2);
-        document.getElementById('s-t').innerText=_0xs||"---";
-        document.getElementById('s-t').style.color=(_0xs==="ROJO")?"#e74c3c":"#fff";
-        document.getElementById('m-t').innerText="$"+_0xm.toFixed(2);
+        document.getElementById('c-i').innerText="$"+_ba.toFixed(2);
+        document.getElementById('u-s').innerText="$"+_nP.toFixed(2);
+        document.getElementById('n-g').innerText="$"+_nG.toFixed(2);
+        document.getElementById('s-t').innerText=_s||"---";
+        document.getElementById('s-t').style.color=(_s==="ROJO")?"#e74c3c":"#fff";
+        document.getElementById('m-t').innerText="$"+_m.toFixed(2);
         const ch=document.getElementById('c-h'); ch.innerHTML="";
-        _0xh.slice(0,18).forEach(v => {
+        _h.slice(0,18).forEach(v => {
             const cl=(v==='Rojo')?'red':(v==='Negro'?'#fff':'green');
             ch.innerHTML+=`<div class="bola" style="background:${cl}; color:${v==='Negro'?'#000':'#fff'}">${v==='Cero'?'0':''}</div>`;
         });
@@ -214,8 +305,6 @@
     document.getElementById('btn-R').onclick=()=>xfR('Rojo');
     document.getElementById('btn-N').onclick=()=>xfR('Negro');
     document.getElementById('btn-0').onclick=()=>xfR('Cero');
-    document.getElementById('btn-undo').onclick=()=>{ if(_0xh.length > 0) { _0xh.shift(); update(); } };
-    document.getElementById('btn-reset').onclick=()=>{ if(confirm("¿Resetear?")){ _0xh=[]; _0xm=0.2; update(); } };
     </script>
 </body>
 </html>
