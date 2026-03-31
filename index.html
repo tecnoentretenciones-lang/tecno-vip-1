@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>TECNOENTRETE VIP v86 - AJUSTE FINAL PROPORCIONAL</title>
+    <title>TECNOENTRETE VIP v87 - ENLACE NUEVO</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --c1: #e74c3c; --c2: #2c3e50; --c3: #27ae60; --c4: #f1c40f; --c5: #00e5ff; --c8: #111; }
@@ -174,9 +174,11 @@
         const now = (new Date()).getTime();
         if (now - lastTouchEnd <= 300) e.preventDefault();
         lastTouchEnd = now;
-    }, false);
+    }, { passive: false });
 
-    const _URL = "https://script.google.com/macros/s/AKfycbwQCtzmfYUH_N2rhdSMjn9eN1fz4CK8fa-ha0RuXVXZP4sfs6dTJ795XtDF3cDeYmQifQ/exec";
+    // TU NUEVO ENLACE EXACTO YA INYECTADO AQUÍ:
+    const _URL = "https://script.google.com/macros/s/AKfycbzH3iwjZvBZrVBrlg29VsOCWiAsriZkmDYMEkc0PIKfSUhXRRjcWH_u2qqM_gE0zKiAdw/exec";
+    
     let _HID = localStorage.getItem('VIP_HID') || 'VIP-'+Math.random().toString(36).substr(2,10).toUpperCase();
     localStorage.setItem('VIP_HID', _HID);
     let _L="", _S=0, _0xba=0, _0xnP=0, _0xnG=0, _0xcI=40, _0xh=[], _0xm=0.2, _0xs="", _0xg=0, _0xp=0, _consecutivas=0, _TS=0, _IS=0, _WSP="";
