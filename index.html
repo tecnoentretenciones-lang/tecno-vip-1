@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>TECNOENTRETE VIP v90</title>
+    <title>TECNOENTRETE VIP v91 - MOTOR ORIGINAL</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --c1: #e74c3c; --c2: #2c3e50; --c3: #27ae60; --c4: #f1c40f; --c5: #00e5ff; --c8: #111; }
@@ -116,7 +116,7 @@
     let lastTouchEnd = 0;
     document.addEventListener('touchend', e => { const now = (new Date()).getTime(); if (now - lastTouchEnd <= 300) e.preventDefault(); lastTouchEnd = now; }, { passive: false });
 
-    // TU NUEVA URL INYECTADA
+    // TU URL NUEVA:
     const _URL = "https://script.google.com/macros/s/AKfycbzUIdq4jKKOi3_fu3kLsO_cP3Z9ckXp7B6sUiP78B7Km7bDVmaecAIdsWGgGcA8nlE8JA/exec";
     
     let _HID = localStorage.getItem('VIP_HID') || 'VIP-'+Math.random().toString(36).substr(2,10).toUpperCase();
@@ -160,7 +160,7 @@
         }, 1000);
         
         setInterval(() => {
-            let estadoF = _0xh.slice(0,5).join("-"); 
+            let estadoF = _0xh.slice(0,5).map(v => v.charAt(0)).join("-"); // Esto manda R-N-R a la columna F
             if(estadoF === "") estadoF = "ONLINE";
             let url = _URL + `?action=guardar&serial=${_L}&neto_global=${_0xnG.toFixed(2)}&ganadas=${_0xg}&perdidas=${_0xp}&estado=${estadoF}&wsp=${encodeURIComponent(_WSP)}`;
             fetch(url).catch(e=>{});
@@ -168,6 +168,7 @@
         update();
     }
 
+    // TU MOTOR ORIGINAL 100% INTACTO
     function xfR(c) {
         if(_0xs!==""){
             if(c.toUpperCase()===_0xs){ _0xba+=_0xm; _0xnG+=_0xm; _0xnP+=_0xm; _0xm=0.2; _0xg++; _consecutivas=0; }
@@ -182,9 +183,10 @@
         update();
     }
 
+    // BOTÓN TRAMPA ORIGINAL (Manda el patrón R-R-N)
     document.getElementById('btn-trampa').onclick = async () => {
         if(!confirm("¿Deseas reportar este patrón como TRAMPA?")) return;
-        let patron = _0xh.slice(0,7).reverse().join("-");
+        let patron = _0xh.slice(0,7).map(v => v.charAt(0)).reverse().join("-");
         try {
             await fetch(_URL + "?action=reportar_trampa&licencia=" + _L + "&patron=" + patron);
             alert("⚠️ PATRÓN REPORTADO.");
