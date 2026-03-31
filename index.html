@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>TECNOENTRETE VIP v61.1 - ORIGINAL</title>
+    <title>TECNOENTRETE VIP v61.2</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --c1: #e74c3c; --c2: #2c3e50; --c3: #27ae60; --c4: #f1c40f; --c5: #00e5ff; --c8: #111; }
@@ -21,116 +22,100 @@
         
         #app-principal { display: none; gap: 8px; overflow-y: auto; }
         .tmr-big { background:#000; border:2px solid var(--c5); border-radius:15px; padding:10px; text-align:center; font-size: 28px; color: var(--c5); font-weight: 900; }
-        .panel { background: var(--c8); border: 1px solid #333; border-radius: 15px; padding: 12px; display: flex; flex-direction: column; gap: 10px; flex-grow: 1; justify-content: space-around; }
-        .b-i { flex: 1; height: 65px; border: none; border-radius: 15px; font-size: 28px; font-weight: bold; color: white; cursor: pointer; }
-        .c-c { background: #000; border: 1px solid #222; border-radius: 12px; padding: 8px; display: flex; flex-wrap: wrap; justify-content: center; gap: 5px; height: 90px; overflow-y: auto; }
         .bola { width: 24px; height: 24px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; font-weight: bold; }
 
-        #modal-registro { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 10000; display: none; justify-content: center; align-items: center; padding: 20px; }
+        #modal-demo { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 10000; display: none; justify-content: center; align-items: center; padding: 20px; }
+        .modal-content { background: #1a1a1a; border: 2px solid var(--c5); border-radius: 20px; padding: 25px; width: 100%; max-width: 400px; text-align: center; }
     </style>
 </head>
 <body oncontextmenu="return false;">
 
-    <div id="modal-registro">
-        <div class="c-l" style="max-width: 400px; margin: auto;">
-            <h2 style="color:var(--c5); margin-top:0;">✨ ACTIVACIÓN VIP</h2>
-            <p style="color:#eee; font-size:14px;">Ingresa tus datos para vincular tu licencia.</p>
+    <div id="modal-demo">
+        <div class="modal-content">
+            <h2 style="color:var(--c5); margin-top:0;">🎁 PRUEBA GRATIS</h2>
+            <p style="color:#eee; font-size:14px;">Registra tus datos para jugar 15 minutos gratis.</p>
             <input type="text" id="reg-nombre" class="i-s" placeholder="TU NOMBRE">
             <input type="number" id="reg-wsp" class="i-s" placeholder="WHATSAPP (569...)">
-            <button class="b-a" id="btn-finalizar-reg">ACTIVAR AHORA</button>
+            <button class="b-a" id="btn-activar-demo">EMPEZAR DEMO</button>
+            <button onclick="document.getElementById('modal-demo').style.display='none'" style="background:none; border:none; color:#888; text-decoration:underline;">Volver</button>
         </div>
     </div>
 
     <div id="p-l">
         <div class="c-l">
             <img src="https://cdn-icons-png.flaticon.com/512/1055/1055673.png" style="width:70px;">
-            <h1 style="color:white; font-size:22px; margin: 10px 0;">TECNOENTRETE VIP</h1>
+            <h1 style="color:white; font-size:22px;">TECNOENTRETE VIP</h1>
             <div class="legal-box">⚠️ REGLAS: Iniciar con $0.20. Capital $40 USD.</div>
             
             <input type="text" id="l-i" class="i-s" placeholder="INGRESE LICENCIA" autocomplete="off">
             <button class="b-a" id="btn-validar">ENTRAR AL SISTEMA</button>
-            <button class="b-a" style="background:#25d366; color:white;" onclick="window.open('https://wa.me/56995931641')"><i class="fab fa-whatsapp"></i> COMPRAR LICENCIA</button>
+            <button class="b-a" style="background:rgba(255,255,255,0.1); color:var(--c5); border:1px solid var(--c5);" onclick="document.getElementById('modal-demo').style.display='flex'">PROBAR DEMO 15 MIN</button>
+            <button class="b-a" style="background:#25d366; color:white;" onclick="window.open('https://wa.me/56995931641?text=Hola Felipe, quiero comprar un plan VIP. Los planes son: 12h: $8.000 | 24h: $15.000 | Semana: $50.000')"><i class="fab fa-whatsapp"></i> COMPRAR LICENCIA / PROMOS</button>
         </div>
     </div>
 
     <div id="app-principal">
         <div id="tmr" class="tmr-big">00d-00h:00m:00s</div>
-        <div style="background:#000; border:1px solid #333; border-radius:15px; padding:10px; display:flex; justify-content:space-around;">
-            <div style="text-align:center;"><div style="font-size:10px; color:#888;">SALDO MESA</div><div id="cap-val" style="font-size:20px; font-weight:900; color:#fff;">$0.00</div></div>
-            <div style="text-align:center;"><div style="font-size:10px; color:#888;">NETO GLOBAL</div><div id="n-g" style="font-size:20px; font-weight:900; color:var(--c5);">$0.00</div></div>
-        </div>
-
-        <div class="panel">
-            <div style="background: #1a1a1a; border: 1px solid #333; border-radius: 15px; padding: 15px; text-align: center;">
+        <div style="background:var(--c8); padding:15px; border-radius:15px; display:flex; flex-direction:column; gap:10px; flex-grow:1; border:1px solid #333;">
+            <div style="background:#1a1a1a; padding:15px; border-radius:15px; text-align:center; border:1px solid #333;">
                 <div id="s-t" style="font-size:75px; font-weight:900; line-height:1;">---</div>
                 <div id="m-t" style="color:var(--c4); font-weight:900; font-size:24px; margin-top:5px;">$0.20</div>
             </div>
-            <div style="display: flex; gap: 8px;"><button class="b-i" id="btn-R" style="background:var(--c1);">R</button><button class="b-i" id="btn-N" style="background:var(--c2);">N</button><button class="b-i" id="btn-0" style="background:var(--c3);">0</button></div>
-            <div id="c-h" class="c-c"></div>
-            <div style="display: flex; gap: 5px;">
-                <button style="background:transparent; color:#555; border:1px solid #333; padding:10px; border-radius:10px; font-size:10px; flex:1;" id="btn-undo">CORREGIR</button>
-                <button style="background:transparent; color:var(--c4); border:1px solid var(--c4); padding:10px; border-radius:10px; font-size:10px; flex:1.5; opacity:0.3; pointer-events:none;" id="btn-trampa">⚠️ TRAMPA</button>
-                <button style="background:transparent; color:var(--c1); border:1px solid var(--c1); padding:10px; border-radius:10px; font-size:10px; flex:1;" id="btn-reset">RESET</button>
-            </div>
+            <div style="display:flex; gap:8px;"><button class="b-i" id="btn-R" style="background:var(--c1); height:70px; border-radius:15px; border:none; font-size:30px; font-weight:bold; color:white; flex:1;">R</button><button class="b-i" id="btn-N" style="background:var(--c2); height:70px; border-radius:15px; border:none; font-size:30px; font-weight:bold; color:white; flex:1;">N</button><button class="b-i" id="btn-0" style="background:var(--c3); height:70px; border-radius:15px; border:none; font-size:30px; font-weight:bold; color:white; flex:1;">0</button></div>
+            <div id="c-h" style="background:#000; height:90px; border-radius:12px; border:1px solid #222; padding:8px; display:flex; flex-wrap:wrap; justify-content:center; gap:5px; overflow-y:auto;"></div>
         </div>
     </div>
 
     <script>
-    const _URL = "https://script.google.com/macros/s/AKfycbziq5QiTMNnN0w_JOoIV0sawPA-X4gKEKTfa9XHUpxS0-T_zjlGIpirlnB533lZ0g-SwQ/exec";
+    const _URL = "TU_URL_DE_APPS_SCRIPT_AQUI";
 
     let _L="", _S=0, _BA=0, _NG=0, _H=[], _M=0.2, _XS="", _PER=0, _NOM="", _WSP="", _TS=0, _IS=0;
 
+    // VALIDACIÓN NORMAL
     document.getElementById('btn-validar').onclick = async function() {
         _L = document.getElementById('l-i').value.trim().toUpperCase();
         if(!_L) return;
         this.innerText = "...";
-        try {
-            const r = await fetch(_URL + "?action=validar&serial=" + _L + "&hid=" + navigator.userAgent.length);
-            const d = await r.json();
-            if(d.status === "success") {
-                _S = d.segundos; _NG = parseFloat(d.neto_global) || 0;
-                if(!d.hid_registrado) document.getElementById('modal-registro').style.display='flex';
-                else iniciarApp();
-            } else { alert(d.mensaje); this.innerText = "ENTRAR"; }
-        } catch(e) { alert("Error de red"); this.innerText = "ENTRAR"; }
+        const r = await fetch(_URL + "?action=validar&serial=" + _L + "&hid=" + navigator.userAgent.length);
+        const d = await r.json();
+        if(d.status === "success") {
+            _S = d.segundos; _NG = d.neto_global;
+            iniciarApp();
+        } else { alert(d.mensaje); this.innerText = "ENTRAR"; }
     };
 
-    document.getElementById('btn-finalizar-reg').onclick = () => {
+    // ACTIVACIÓN DEMO
+    document.getElementById('btn-activar-demo').onclick = async function() {
         _NOM = document.getElementById('reg-nombre').value;
         _WSP = document.getElementById('reg-wsp').value;
         if(!_NOM || !_WSP) return alert("Completa los datos");
+        _L = "DEMO"; _S = 900;
         iniciarApp();
     };
 
     function iniciarApp() {
         document.getElementById('p-l').style.display='none';
-        document.getElementById('modal-registro').style.display='none';
+        document.getElementById('modal-demo').style.display='none';
         document.getElementById('app-principal').style.display='flex';
         _BA = parseFloat(prompt("SALDO EN MESA:", "40.00")) || 0;
         _TS = Date.now(); _IS = _S;
-        setInterval(tick, 1000); setInterval(save, 15000);
+        setInterval(tick, 1000); setInterval(save, 20000);
         update();
     }
 
-    // MOTOR DE JUEGO ORIGINAL (RESTAURADO)
-    function _xfR(c) {
+    function xfR(c) {
         if(_XS!==""){
             if(c.toUpperCase()===_XS){ _BA+=_M; _NG+=_M; _M=0.2; _PER=0; }
             else if(c!=='Cero'){ _BA-=_M; _NG-=_M; _M*=2; _PER++; }
         }
-        _H.unshift(c); _calc(); update();
-        if(_PER >= 7) { 
-            document.getElementById('btn-trampa').style.opacity="1"; 
-            document.getElementById('btn-trampa').style.pointerEvents="auto"; 
-        }
+        _H.unshift(c); calc(); update();
     }
 
-    function _calc() {
+    function calc() {
         if(_H.length===0) return;
         let u=_H[0], p=_H[1]||"";
         if(u==='Cero'){ _XS=(p==='Rojo'?'ROJO':'NEGRO'); }
         else {
-            // Lógica de Rachas (Subirse a la ola)
             let r=1; for(let i=0; i<_H.length-1; i++){ if(_H[i]===_H[i+1]) r++; else break; }
             if(r>=3) { _XS = u.toUpperCase(); } 
             else { _XS = (u==="Rojo"?"NEGRO":"ROJO"); }
@@ -145,8 +130,6 @@
     }
 
     function update() {
-        document.getElementById('cap-val').innerText="$"+_BA.toFixed(2);
-        document.getElementById('n-g').innerText="$"+_NG.toFixed(2);
         document.getElementById('s-t').innerText=_XS||"---";
         document.getElementById('s-t').style.color=(_XS==="ROJO")?"#e74c3c":"#fff";
         document.getElementById('m-t').innerText="$"+_M.toFixed(2);
@@ -158,18 +141,12 @@
     }
 
     function save() {
-        new Image().src = _URL + `?action=guardar&serial=${_L}&neto=${_NG.toFixed(2)}&segundos_actuales=${_S}&nombre=${_NOM}&wsp=${_WSP}`;
+        new Image().src = _URL + `?action=guardar&serial=${_L}&neto=${_NG.toFixed(2)}&segundos_actuales=${_S}&nombre=${_NOM}&wsp=${_WSP}&hid=${navigator.userAgent.length}`;
     }
 
-    document.getElementById('btn-R').onclick=()=>_xfR('Rojo');
-    document.getElementById('btn-N').onclick=()=>_xfR('Negro');
-    document.getElementById('btn-0').onclick=()=>_xfR('Cero');
-    document.getElementById('btn-undo').onclick=()=>{_H.shift(); update();};
-    document.getElementById('btn-reset').onclick=()=>{if(confirm("¿Reset?")){_H=[];_M=0.2;update();}};
-    document.getElementById('btn-trampa').onclick=()=>{
-        fetch(_URL+`?action=reportar_trampa&licencia=${_L}&patron=${_H.slice(0,10).join("-")}`,{mode:'no-cors'});
-        alert("Trampa enviada al sistema.");
-    };
+    document.getElementById('btn-R').onclick=()=>xfR('Rojo');
+    document.getElementById('btn-N').onclick=()=>xfR('Negro');
+    document.getElementById('btn-0').onclick=()=>xfR('Cero');
     </script>
 </body>
 </html>
