@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>TECNOENTRETE VIP v76 - FIX VISUAL Y WSP</title>
+    <title>TECNOENTRETE VIP v77 - ENLACE OFICIAL WSP</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --c1: #e74c3c; --c2: #2c3e50; --c3: #27ae60; --c4: #f1c40f; --c5: #00e5ff; --c8: #111; }
@@ -112,7 +112,8 @@
     </div>
 
     <script>
-    const _URL = "https://script.google.com/macros/s/AKfycbwQCtzmfYUH_N2rhdSMjn9eN1fz4CK8fa-ha0RuXVXZP4sfs6dTJ795XtDF3cDeYmQifQ/exec";
+    // TU NUEVO ENLACE OFICIAL DE GOOGLE SCRIPT
+    const _URL = "https://script.google.com/macros/s/AKfycbyukI8tmkqWvSLyk_Pyp3pFRP4emLwi-XV3t0GATU09kJpnZTe8uFuXc4L-Fch8-aKx6A/exec";
 
     let _HID = localStorage.getItem('VIP_HID');
     if(!_HID) {
@@ -161,7 +162,7 @@
 
                 iniciarApp();
             } else { alert(d.mensaje); this.innerText = "ENTRAR AL SISTEMA"; }
-        } catch(e) { alert("Error de Conexión."); this.innerText = "ENTRAR AL SISTEMA"; }
+        } catch(e) { alert("Error de Conexión. Asegúrate de tener internet."); this.innerText = "ENTRAR AL SISTEMA"; }
     };
 
     document.getElementById('btn-activar-demo').onclick = async function() {
@@ -170,7 +171,6 @@
         
         if(!nom || !wsp) return alert("Completa todos los datos.");
         
-        // CANDADO WSP: Debe iniciar con +
         if(!wsp.startsWith("+")) {
             return alert("El número de WhatsApp debe comenzar con el signo + (Ejemplo: +569...)");
         }
@@ -193,7 +193,7 @@
                 _0xh = []; 
                 iniciarApp();
             } else { alert(d.mensaje); this.innerText = "ACTIVAR AHORA"; }
-        } catch(e) { alert("Error de Conexión."); this.innerText = "ACTIVAR AHORA"; }
+        } catch(e) { alert("Error de Conexión. Espera unos segundos e intenta de nuevo."); this.innerText = "ACTIVAR AHORA"; }
     };
 
     function iniciarApp() {
