@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>TECNOENTRETE VIP v69 - DASHBOARD READY</title>
+    <title>TECNOENTRETE VIP v70 - PROFESIONAL</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --c1: #e74c3c; --c2: #2c3e50; --c3: #27ae60; --c4: #f1c40f; --c5: #00e5ff; --c8: #111; }
@@ -55,7 +55,7 @@
             <input type="text" id="l-i" class="i-s" placeholder="LICENCIA VIP" autocomplete="off">
             <button class="b-a" id="btn-validar">ENTRAR AL SISTEMA</button>
             <button class="b-a" style="background:rgba(0,229,255,0.1); color:var(--c5); border:1px solid var(--c5);" onclick="document.getElementById('modal-demo').style.display='flex'">PROBAR DEMO GRATIS</button>
-            <button class="b-a" style="background:#25d366; color:white;" onclick="window.open('https://wa.me/56995931641?text=Hola Felipe, quiero comprar un plan VIP. Precios: 12h: $8.000 | 24h: $15.000 | Semana: $50.000')"><i class="fab fa-whatsapp"></i> COMPRAR LICENCIA / PROMOS</button>
+            <button class="b-a" style="background:#25d366; color:white;" onclick="window.open('https://wa.me/56995931641?text=Hola Felipe, quiero comprar un plan VIP.')"><i class="fab fa-whatsapp"></i> COMPRAR LICENCIA / PROMOS</button>
         </div>
     </div>
 
@@ -117,6 +117,7 @@
         }
     }
 
+    // BOTÓN ENTRAR VIP
     document.getElementById('btn-validar').onclick = async function() {
         _L = document.getElementById('l-i').value.trim().toUpperCase();
         if(!_L) return;
@@ -125,9 +126,8 @@
             const r = await fetch(_URL + "?action=validar&serial=" + _L + "&hid=" + _HID);
             const d = await r.json();
             if(d.status === "success") {
-                if(d.segundos <= 0) { alert("SU LICENCIA HA EXPIRADO."); this.innerText = "ENTRAR AL SISTEMA"; return; }
                 _S = d.segundos; 
-                _0xnG = parseFloat(d.neto_global) || 0;
+                _0xnG = parseFloat(d.neto_global) || 0; // Lee el Neto Global desde la Base de Datos
                 
                 if(d.estado_nube && d.estado_nube !== "") {
                     _0xlS = parseExcelJSON(d.estado_nube);
@@ -144,6 +144,7 @@
         } catch(e) { alert("Error de Conexión."); this.innerText = "ENTRAR AL SISTEMA"; }
     };
 
+    // BOTÓN ACTIVAR DEMO
     document.getElementById('btn-activar-demo').onclick = async function() {
         const nom = document.getElementById('reg-nombre').value.trim();
         const wsp = document.getElementById('reg-wsp').value.trim();
@@ -166,17 +167,31 @@
         document.getElementById('modal-demo').style.display='none';
         document.getElementById('app-principal').style.display='flex';
         
+        // LOGICA DE REINICIO DE SESIÓN
         if(_0xlS && _L !== "DEMO") {
-            _0xcI = parseFloat(_0xlS.cI) || 40;
-            _0xba = parseFloat(_0xlS.ba) || _0xcI;
-            _0xnP = parseFloat(_0xlS.nP) || 0;
-            _0xnG = parseFloat(_0xlS.nG) || 0;
-            _0xh  = Array.isArray(_0xlS.h) ? _0xlS.h : [];
-            _0xm  = parseFloat(_0xlS.m) || 0.2;
-            _0xs  = _0xlS.s || "";
+            if(confirm("Hemos detectado una partida guardada.\n\n¿Deseas continuar donde lo dejaste?")) {
+                // SÍ, CONTINUAR PARTIDA (Mantiene Utilidad de Sesión)
+                _0xcI = parseFloat(_0xlS.cI) || 40;
+                _0xba = parseFloat(_0xlS.ba) || _0xcI;
+                _0xnP = parseFloat(_0xlS.nP) || 0;
+                _0xh  = Array.isArray(_0xlS.h) ? _0xlS.h : [];
+                _0xm  = parseFloat(_0xlS.m) || 0.2;
+                _0xs  = _0xlS.s || "";
+            } else {
+                // NO, NUEVA SESIÓN (Utilidad de Sesión vuelve a 0, Neto Global Intacto)
+                _0xcI = parseFloat(prompt("NUEVA PARTIDA\nCapital inicial en mesa:", "40.00")) || 40;
+                _0xba = _0xcI;
+                _0xnP = 0; 
+                _0xh = []; 
+                _0xm = 0.2;
+                _0xs = "";
+            }
         } else {
+            // PRIMERA VEZ QUE JUEGA O MODO DEMO
             _0xcI = parseFloat(prompt("CAPITAL INICIAL EN MESA:", "40.00")) || 40;
             _0xba = _0xcI;
+            _0xnP = 0;
+            _0xh = [];
         }
 
         _TS = Date.now(); _IS = _S;
@@ -233,7 +248,7 @@
 
     function save() {
         if(_L === "DEMO") {
-            let url = _URL + `?action=guardar&serial=${_L}&neto=${_0xnP.toFixed(2)}&neto_global=${_0xnG.toFixed(2)}&ganadas=${_0xg}&perdidas=${_0xp}&segundos_actuales=${_S}&wsp=${encodeURIComponent(_WSP)}`;
+            let url = _URL + `?action=guardar&serial=${_L}&neto_global=${_0xnG.toFixed(2)}&ganadas=${_0xg}&perdidas=${_0xp}&segundos_actuales=${_S}&wsp=${encodeURIComponent(_WSP)}`;
             new Image().src = url;
             return;
         }
@@ -241,7 +256,7 @@
         const est = JSON.stringify({ba:_0xba, nP:_0xnP, nG:_0xnG, cI:_0xcI, h:_0xh.slice(0,12), m:_0xm, s:_0xs});
         localStorage.setItem('VIP_STATE_' + _L, est); 
         
-        let url = _URL + `?action=guardar&serial=${_L}&neto=${_0xnP.toFixed(2)}&neto_global=${_0xnG.toFixed(2)}&ganadas=${_0xg}&perdidas=${_0xp}&segundos_actuales=${_S}&estado=${encodeURIComponent(est)}`;
+        let url = _URL + `?action=guardar&serial=${_L}&neto_global=${_0xnG.toFixed(2)}&ganadas=${_0xg}&perdidas=${_0xp}&segundos_actuales=${_S}&estado=${encodeURIComponent(est)}`;
         new Image().src = url;
     }
 
