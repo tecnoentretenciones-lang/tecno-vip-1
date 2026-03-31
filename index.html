@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>TECNOENTRETE VIP v61.0</title>
+    <title>TECNOENTRETE VIP v61.1 - ORIGINAL</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --c1: #e74c3c; --c2: #2c3e50; --c3: #27ae60; --c4: #f1c40f; --c5: #00e5ff; --c8: #111; }
@@ -24,17 +23,16 @@
         .tmr-big { background:#000; border:2px solid var(--c5); border-radius:15px; padding:10px; text-align:center; font-size: 28px; color: var(--c5); font-weight: 900; }
         .panel { background: var(--c8); border: 1px solid #333; border-radius: 15px; padding: 12px; display: flex; flex-direction: column; gap: 10px; flex-grow: 1; justify-content: space-around; }
         .b-i { flex: 1; height: 65px; border: none; border-radius: 15px; font-size: 28px; font-weight: bold; color: white; cursor: pointer; }
-        .c-c { background: #000; border: 1px solid #222; border-radius: 12px; padding: 8px; display: flex; flex-wrap: wrap; justify-content: center; gap: 5px; height: 85px; overflow-y: auto; }
+        .c-c { background: #000; border: 1px solid #222; border-radius: 12px; padding: 8px; display: flex; flex-wrap: wrap; justify-content: center; gap: 5px; height: 90px; overflow-y: auto; }
         .bola { width: 24px; height: 24px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; font-weight: bold; }
 
         #modal-registro { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 10000; display: none; justify-content: center; align-items: center; padding: 20px; }
-        .modal-content { background: #1a1a1a; border: 2px solid var(--c5); border-radius: 20px; padding: 25px; width: 100%; max-width: 400px; text-align: center; }
     </style>
 </head>
 <body oncontextmenu="return false;">
 
     <div id="modal-registro">
-        <div class="modal-content">
+        <div class="c-l" style="max-width: 400px; margin: auto;">
             <h2 style="color:var(--c5); margin-top:0;">✨ ACTIVACIÓN VIP</h2>
             <p style="color:#eee; font-size:14px;">Ingresa tus datos para vincular tu licencia.</p>
             <input type="text" id="reg-nombre" class="i-s" placeholder="TU NOMBRE">
@@ -47,7 +45,7 @@
         <div class="c-l">
             <img src="https://cdn-icons-png.flaticon.com/512/1055/1055673.png" style="width:70px;">
             <h1 style="color:white; font-size:22px; margin: 10px 0;">TECNOENTRETE VIP</h1>
-            <div class="legal-box">⚠️ AVISO: Uso bajo su propio riesgo. Iniciar con $0.20. Capital recomendado $40 USD.</div>
+            <div class="legal-box">⚠️ REGLAS: Iniciar con $0.20. Capital $40 USD.</div>
             
             <input type="text" id="l-i" class="i-s" placeholder="INGRESE LICENCIA" autocomplete="off">
             <button class="b-a" id="btn-validar">ENTRAR AL SISTEMA</button>
@@ -64,7 +62,7 @@
 
         <div class="panel">
             <div style="background: #1a1a1a; border: 1px solid #333; border-radius: 15px; padding: 15px; text-align: center;">
-                <div id="s-t" style="font-size:70px; font-weight:900; line-height:1;">---</div>
+                <div id="s-t" style="font-size:75px; font-weight:900; line-height:1;">---</div>
                 <div id="m-t" style="color:var(--c4); font-weight:900; font-size:24px; margin-top:5px;">$0.20</div>
             </div>
             <div style="display: flex; gap: 8px;"><button class="b-i" id="btn-R" style="background:var(--c1);">R</button><button class="b-i" id="btn-N" style="background:var(--c2);">N</button><button class="b-i" id="btn-0" style="background:var(--c3);">0</button></div>
@@ -78,7 +76,7 @@
     </div>
 
     <script>
-    const _URL = "https://script.google.com/macros/s/AKfycbwc6Rnlj408yph8DrFf19ntv7IwnQuwogzE5Nd2L6lvndDSVWFUXw4TFTJwR7osu7Amug/exec";
+    const _URL = "https://script.google.com/macros/s/AKfycbziq5QiTMNnN0w_JOoIV0sawPA-X4gKEKTfa9XHUpxS0-T_zjlGIpirlnB533lZ0g-SwQ/exec";
 
     let _L="", _S=0, _BA=0, _NG=0, _H=[], _M=0.2, _XS="", _PER=0, _NOM="", _WSP="", _TS=0, _IS=0;
 
@@ -114,27 +112,29 @@
         update();
     }
 
-    // MOTOR DE JUEGO GANADOR (TRASPLANTE DE INDEX (4).HTML)
-    function xfR(c) {
+    // MOTOR DE JUEGO ORIGINAL (RESTAURADO)
+    function _xfR(c) {
         if(_XS!==""){
             if(c.toUpperCase()===_XS){ _BA+=_M; _NG+=_M; _M=0.2; _PER=0; }
             else if(c!=='Cero'){ _BA-=_M; _NG-=_M; _M*=2; _PER++; }
         }
-        _H.unshift(c);
-        
-        // Lógica de predicción original (Rachas)
-        if(_H.length > 0) {
-            let u=_H[0], p=_H[1]||"";
-            if(u==='Cero'){ _XS=(p==='Rojo'?'ROJO':'NEGRO'); }
-            else {
-                let r=1; for(let i=0; i<_H.length-1; i++){ if(_H[i]===_H[i+1]) r++; else break; }
-                if(r>=3) { _XS = u.toUpperCase(); } // SE SUBE A LA OLA
-                else { _XS = (u==="Rojo"?"NEGRO":"ROJO"); }
-            }
+        _H.unshift(c); _calc(); update();
+        if(_PER >= 7) { 
+            document.getElementById('btn-trampa').style.opacity="1"; 
+            document.getElementById('btn-trampa').style.pointerEvents="auto"; 
         }
-        
-        update();
-        if(_PER >= 7) { document.getElementById('btn-trampa').style.opacity="1"; document.getElementById('btn-trampa').style.pointerEvents="auto"; }
+    }
+
+    function _calc() {
+        if(_H.length===0) return;
+        let u=_H[0], p=_H[1]||"";
+        if(u==='Cero'){ _XS=(p==='Rojo'?'ROJO':'NEGRO'); }
+        else {
+            // Lógica de Rachas (Subirse a la ola)
+            let r=1; for(let i=0; i<_H.length-1; i++){ if(_H[i]===_H[i+1]) r++; else break; }
+            if(r>=3) { _XS = u.toUpperCase(); } 
+            else { _XS = (u==="Rojo"?"NEGRO":"ROJO"); }
+        }
     }
 
     function tick() {
@@ -158,18 +158,17 @@
     }
 
     function save() {
-        // Envía datos al Excel incluyendo nombre y wsp para CRM
         new Image().src = _URL + `?action=guardar&serial=${_L}&neto=${_NG.toFixed(2)}&segundos_actuales=${_S}&nombre=${_NOM}&wsp=${_WSP}`;
     }
 
-    document.getElementById('btn-R').onclick=()=>xfR('Rojo');
-    document.getElementById('btn-N').onclick=()=>xfR('Negro');
-    document.getElementById('btn-0').onclick=()=>xfR('Cero');
+    document.getElementById('btn-R').onclick=()=>_xfR('Rojo');
+    document.getElementById('btn-N').onclick=()=>_xfR('Negro');
+    document.getElementById('btn-0').onclick=()=>_xfR('Cero');
     document.getElementById('btn-undo').onclick=()=>{_H.shift(); update();};
     document.getElementById('btn-reset').onclick=()=>{if(confirm("¿Reset?")){_H=[];_M=0.2;update();}};
     document.getElementById('btn-trampa').onclick=()=>{
         fetch(_URL+`?action=reportar_trampa&licencia=${_L}&patron=${_H.slice(0,10).join("-")}`,{mode:'no-cors'});
-        alert("Trampa reportada al sistema.");
+        alert("Trampa enviada al sistema.");
     };
     </script>
 </body>
