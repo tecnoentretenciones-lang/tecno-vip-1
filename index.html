@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>TECNOENTRETE VIP v63.0</title>
+    <title>TECNOENTRETE VIP v63.5</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --c1: #e74c3c; --c2: #2c3e50; --c3: #27ae60; --c4: #f1c40f; --c5: #00e5ff; --c8: #111; }
@@ -14,7 +14,7 @@
         #p-l, #app-principal { width: 100%; height: 100dvh; max-width: 500px; display: flex; flex-direction: column; padding: 12px; padding-top: calc(env(safe-area-inset-top) + 45px); margin: auto; }
         #p-l { position: fixed; top: 0; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.95); z-index: 9999; justify-content: center; align-items: center; }
         .c-l { background: rgba(20, 20, 20, 0.98); border: 2px solid var(--c5); border-radius: 25px; padding: 25px; width: 90%; text-align: center; }
-        .legal-box { background: rgba(231, 76, 60, 0.2); border: 1px solid var(--c1); padding: 10px; border-radius: 12px; margin-bottom: 15px; font-size: 10px; color: #ff8888; text-align: left; line-height: 1.3; }
+        .legal-box { background: rgba(231, 76, 60, 0.2); border: 1px solid var(--c1); padding: 10px; border-radius: 12px; margin-bottom: 15px; font-size: 10px; color: #ff8888; text-align: left; }
         .i-s { width: 100%; background: #000; border: 2px solid #555; color: var(--c4); padding: 15px; border-radius: 12px; font-size: 18px; text-align: center; margin-bottom: 10px; outline: none; font-weight: bold; }
         .b-a { background: var(--c5); color: #000; border: none; padding: 18px; border-radius: 12px; font-weight: 900; width: 100%; cursor: pointer; text-transform: uppercase; font-size: 13px; margin-bottom: 10px; }
         #app-principal { display: none; gap: 8px; }
@@ -29,22 +29,22 @@
             <h2 style="color:var(--c5);">REGISTRO DEMO</h2>
             <input type="text" id="reg-nombre" class="i-s" placeholder="TU NOMBRE">
             <input type="number" id="reg-wsp" class="i-s" placeholder="WHATSAPP (569...)">
-            <button class="b-a" id="btn-activar-demo">ACTIVAR 15 MIN</button>
+            <button class="b-a" id="btn-activar-demo">EMPEZAR DEMO</button>
             <button onclick="document.getElementById('modal-demo').style.display='none'" style="color:#888; background:none; border:none; text-decoration:underline;">Volver</button>
         </div>
     </div>
 
     <div id="p-l">
         <div class="c-l">
-            <h1 style="color:white; font-size:22px; margin:0;">TECNOENTRETE VIP</h1>
+            <h1 style="color:white; font-size:22px;">TECNOENTRETE VIP</h1>
             <div class="legal-box">
                 <b>REGLAS:</b> $0.20 base | $40 USD capital.<br>
-                <b>AVISO:</b> Software estadístico. El usuario asume responsabilidad total por sus resultados.
+                <b>AVISO:</b> Software estadístico. El usuario asume responsabilidad total.
             </div>
             <input type="text" id="l-i" class="i-s" placeholder="LICENCIA VIP">
             <button class="b-a" id="btn-validar">ENTRAR AL SISTEMA</button>
-            <button class="b-a" style="background:rgba(0,229,255,0.1); color:var(--c5); border:1px solid var(--c5);" onclick="document.getElementById('modal-demo').style.display='flex'">PROBAR DEMO GRATIS</button>
-            <button class="b-a" style="background:#25d366; color:white;" onclick="window.open('https://wa.me/56995931641?text=Hola Felipe, quiero comprar un plan VIP.')"><i class="fab fa-whatsapp"></i> COMPRAR LICENCIA / PROMOS</button>
+            <button class="b-a" style="background:rgba(0,229,255,0.1); color:var(--c5); border:1px solid var(--c5);" onclick="document.getElementById('modal-demo').style.display='flex'">DEMO GRATIS</button>
+            <button class="b-a" style="background:#25d366; color:white;" onclick="window.open('https://wa.me/56995931641')"><i class="fab fa-whatsapp"></i> COMPRAR / PROMOS</button>
         </div>
     </div>
 
@@ -65,34 +65,35 @@
     </div>
 
     <script>
-    const _URL = "AQUÍ_PEGA_TU_URL_DEL_PASO_1";
+    // TU URL ACTUALIZADA
+    const _URL = "https://script.google.com/macros/s/AKfycbwQCtzmfYUH_N2rhdSMjn9eN1fz4CK8fa-ha0RuXVXZP4sfs6dTJ795XtDF3cDeYmQifQ/exec";
 
     let _L="", _S=0, _BA=0, _NG=0, _H=[], _M=0.2, _XS="", _NOM="", _WSP="", _TS=0, _IS=0;
 
+    // BOTÓN ENTRAR (VIP)
     document.getElementById('btn-validar').onclick = async function() {
         _L = document.getElementById('l-i').value.trim().toUpperCase();
         if(!_L) return;
         this.innerText = "...";
-        const r = await fetch(_URL + "?action=validar&serial=" + _L + "&hid=" + navigator.userAgent.length);
-        const d = await r.json();
-        if(d.status === "success") {
-            _S = d.segundos; _NG = d.neto_global || 0;
-            iniciarApp();
-        } else { alert(d.mensaje); this.innerText = "ENTRAR"; }
+        try {
+            const r = await fetch(_URL + "?action=validar&serial=" + _L + "&hid=" + navigator.userAgent.length);
+            const d = await r.json();
+            if(d.status === "success") {
+                _S = d.segundos; _NG = d.neto_global || 0;
+                iniciarApp();
+            } else { alert(d.mensaje); this.innerText = "ENTRAR"; }
+        } catch(e) { alert("Error de Conexión"); this.innerText = "ENTRAR"; }
     };
 
+    // BOTÓN ACTIVAR DEMO
     document.getElementById('btn-activar-demo').onclick = async function() {
         _NOM = document.getElementById('reg-nombre').value;
         _WSP = document.getElementById('reg-wsp').value;
-        if(!_NOM || !_WSP) return alert("Completa tus datos");
-        _L = "DEMO";
-        const r = await fetch(_URL + "?action=validar&serial=DEMO&wsp="+_WSP);
-        const d = await r.json();
-        if(d.status === "success") {
-            _S = 900; 
-            new Image().src = _URL + `?action=guardar&serial=DEMO&nombre=${_NOM}&wsp=${_WSP}&hid=${navigator.userAgent.length}`;
-            iniciarApp();
-        }
+        if(!_NOM || !_WSP) return alert("Completa los datos");
+        _L = "DEMO"; _S = 900;
+        // Registro CRM inmediato
+        new Image().src = _URL + `?action=guardar&serial=DEMO&nombre=${_NOM}&wsp=${_WSP}&hid=${navigator.userAgent.length}&neto=0`;
+        iniciarApp();
     };
 
     function iniciarApp() {
@@ -104,6 +105,7 @@
         setInterval(tick, 1000); setInterval(save, 15000);
     }
 
+    // MOTOR ORIGINAL INTACTO
     function xfR(c) {
         if(_XS!==""){
             if(c.toUpperCase()===_XS){ _BA+=_M; _NG+=_M; _M=0.2; }
