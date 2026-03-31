@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>TECNOENTRETE VIP v72 - FINAL</title>
+    <title>TECNOENTRETE VIP v73 - RADAR PERFECTO</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --c1: #e74c3c; --c2: #2c3e50; --c3: #27ae60; --c4: #f1c40f; --c5: #00e5ff; --c8: #111; }
@@ -259,13 +259,6 @@
         } catch(e) {}
     }
 
-    // DETECTOR DE CIERRE DE PESTAÑA BLINDADO
-    window.addEventListener('beforeunload', function (e) {
-        if(_L !== "") {
-            fetch(_URL + `?action=salir&serial=${_L}&segundos_actuales=${_S}&wsp=${encodeURIComponent(_WSP)}`, { method: 'GET', keepalive: true }).catch(()=>{});
-        }
-    });
-
     document.getElementById('btn-R').onclick=()=>xfR('Rojo');
     document.getElementById('btn-N').onclick=()=>xfR('Negro');
     document.getElementById('btn-0').onclick=()=>xfR('Cero');
@@ -287,6 +280,29 @@
         document.getElementById('btn-trampa').style.opacity="0.3";
         document.getElementById('btn-trampa').style.pointerEvents="none";
     };
+
+    // --- NUEVO DETECTOR DE CIERRE DE PESTAÑA BLINDADO (Bengala de Emergencia) ---
+    function notificarSalida() {
+        if(_L !== "") {
+            let url = _URL + `?action=salir&serial=${_L}&segundos_actuales=${_S}&wsp=${encodeURIComponent(_WSP)}`;
+            if (navigator.sendBeacon) {
+                navigator.sendBeacon(url);
+            } else {
+                new Image().src = url;
+            }
+        }
+    }
+
+    window.addEventListener('visibilitychange', function() {
+        if (document.visibilityState === 'hidden') {
+            notificarSalida();
+        }
+    });
+
+    window.addEventListener('pagehide', function() {
+        notificarSalida();
+    });
+    // -----------------------------------------------------------------------------
     </script>
 </body>
 </html>
