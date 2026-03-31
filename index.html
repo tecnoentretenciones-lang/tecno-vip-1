@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>TECNOENTRETE VIP v75 - ESTADÍSTICAS</title>
+    <title>TECNOENTRETE VIP v76 - FIX VISUAL Y WSP</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --c1: #e74c3c; --c2: #2c3e50; --c3: #27ae60; --c4: #f1c40f; --c5: #00e5ff; --c8: #111; }
@@ -33,7 +33,7 @@
             <h2 style="color:var(--c5); margin-top:0;">🎁 DEMO GRATIS</h2>
             <p style="color:#eee; font-size:13px;">Juega 15 min de prueba.</p>
             <input type="text" id="reg-nombre" class="i-s" placeholder="NOMBRE Y APELLIDO">
-            <input type="number" id="reg-wsp" class="i-s" placeholder="WHATSAPP (569...)">
+            <input type="tel" id="reg-wsp" class="i-s" placeholder="WHATSAPP (+569...)">
             <button class="b-a" id="btn-activar-demo">ACTIVAR AHORA</button>
             <button onclick="document.getElementById('modal-demo').style.display='none'" style="color:#888; background:none; border:none; text-decoration:underline;">Volver al Inicio</button>
         </div>
@@ -93,7 +93,8 @@
                 <button class="b-i" id="btn-N" style="background:var(--c2); height:70px; border-radius:15px; border:none; font-size:30px; color:white; flex:1;">N</button>
                 <button class="b-i" id="btn-0" style="background:var(--c3); height:70px; border-radius:15px; border:none; font-size:30px; color:white; flex:1;">0</button>
             </div>
-            <div id="c-h" style="background:#000; height:70px; border-radius:12px; border:1px solid #222; padding:8px; display:flex; flex-wrap:wrap; justify-content:center; gap:5px; overflow-y:hidden;"></div>
+            
+            <div id="c-h" style="background:#000; height:95px; border-radius:12px; border:1px solid #222; padding:8px; display:flex; flex-wrap:wrap; justify-content:center; gap:5px; overflow-y:auto;"></div>
             
             <div style="background:#000; border:1px solid #222; border-radius:12px; padding:10px; display:flex; justify-content:space-around; align-items:center;">
                 <div style="text-align:center;"><div style="font-size:10px; color:#888;">🔴 ROJOS</div><div id="st-r" style="font-size:16px; font-weight:bold; color:var(--c1);">0</div></div>
@@ -168,6 +169,14 @@
         const wsp = document.getElementById('reg-wsp').value.trim();
         
         if(!nom || !wsp) return alert("Completa todos los datos.");
+        
+        // CANDADO WSP: Debe iniciar con +
+        if(!wsp.startsWith("+")) {
+            return alert("El número de WhatsApp debe comenzar con el signo + (Ejemplo: +569...)");
+        }
+        if(wsp.length < 10) {
+            return alert("Por favor ingresa un número de WhatsApp válido.");
+        }
         
         const partesNombre = nom.split(" ").filter(p => p.length > 0);
         if(partesNombre.length < 2) {
@@ -259,20 +268,17 @@
         
         const ch=document.getElementById('c-h'); ch.innerHTML="";
         
-        // Lógica de cálculo de estadísticas
         let cR = 0, cN = 0, cZ = 0, sinVerde = 0;
         let foundZero = false;
         
         if(Array.isArray(_0xh)) {
             _0xh.forEach((v, idx) => {
-                // Dibujo de bolas (solo mostramos las últimas 28 para no saturar la vista)
                 if(idx < 28) {
                     const cl=(v==='Rojo')?'red':(v==='Negro'?'#fff':'green');
                     const bd=(idx===0)?'border:2px solid var(--c5);':'';
                     ch.innerHTML+=`<div class="bola" style="background:${cl}; color:${v==='Negro'?'#000':'#fff'}; ${bd}">${v==='Cero'?'0':''}</div>`;
                 }
                 
-                // Cálculo total del historial
                 if(v === 'Rojo') cR++;
                 else if(v === 'Negro') cN++;
                 else if(v === 'Cero') {
@@ -283,7 +289,6 @@
             });
         }
         
-        // Actualizar UI del panel de estadísticas
         document.getElementById('st-r').innerText = cR;
         document.getElementById('st-n').innerText = cN;
         document.getElementById('st-z').innerText = cZ;
@@ -297,7 +302,7 @@
             return;
         }
         
-        const est = JSON.stringify({ba:_0xba, nP:_0xnP, nG:_0xnG, cI:_0xcI, h:_0xh, m:_0xm, s:_0xs}); // Guardamos historial completo para stats
+        const est = JSON.stringify({ba:_0xba, nP:_0xnP, nG:_0xnG, cI:_0xcI, h:_0xh, m:_0xm, s:_0xs}); 
         localStorage.setItem('VIP_STATE_' + _L, est); 
         
         let url = _URL + `?action=guardar&serial=${_L}&neto_global=${_0xnG.toFixed(2)}&ganadas=${_0xg}&perdidas=${_0xp}&segundos_actuales=${_S}&estado=${encodeURIComponent(est)}`;
