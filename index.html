@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -78,17 +79,20 @@
 
     <script>
     (function(){
-        // SEGURIDAD Y BLOQUEOS
+        // BLOQUEOS SEGURIDAD
         document.onkeydown = e => { if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74)) || (e.ctrlKey && e.keyCode == 85)) return false; };
-        let lTouch = 0; document.addEventListener('touchend', e => { let n = Date.now(); if (n - lTouch <= 300) e.preventDefault(); lTouch = n; }, false);
+        let lT = 0; document.addEventListener('touchend', e => { let n = Date.now(); if (n - lT <= 300) e.preventDefault(); lT = n; }, false);
 
         const _uA = "https://script.google.com/macros/s/AKfycbx5WjIbvjm2EXQgGJhO3oJxYj0oMf_7A0DrwMrIli4N_d6oShqZv7ff_H8FN-pvWrHebg/exec";
         
-        // --- MEMORIA DE TRAMPAS CARGADA DESDE TU EXCEL (ULTIMA ACTUALIZACION) ---
+        // --- MEMORIA DE TRAMPAS ACTUALIZADA SEGÚN IMAGEN Y EXCEL ---
         const _mTrampas = [
-            "Rojo-Rojo-Negro-Negro-Negro-Rojo-Rojo-Negro-Negro-Negro-Rojo-Rojo-Negro-Negro-Negro-Rojo-Rojo-Negro-Negro-Negro-Rojo-Rojo-Negro-Negro-Negro-Rojo-Rojo-Negro",
-            "Negro-Negro-Negro-Rojo-Rojo-Negro-Negro-Negro-Rojo-Rojo-Negro-Negro-Negro-Rojo-Rojo-Negro-Negro-Negro-Rojo-Rojo-Negro-Negro-Negro-Rojo-Rojo-Negro-Negro-Negro",
-            "Negro-Negro-Negro-Rojo-Rojo-Negro-Negro-Negro-Rojo-Negro-Rojo-Negro-Rojo-Negro-Rojo-Negro"
+            "Rojo-Rojo-Rojo-Negro-Negro-Negro-Rojo-Rojo-Rojo", // Tripletes alternados
+            "Negro-Negro-Negro-Rojo-Rojo-Rojo-Negro-Negro-Negro",
+            "Rojo-Rojo-Negro-Negro-Negro-Rojo-Rojo-Negro-Negro-Negro",
+            "Negro-Negro-Negro-Rojo-Rojo-Negro-Negro-Negro-Rojo-Rojo",
+            "Negro-Rojo-Negro-Rojo-Negro-Rojo-Negro-Rojo-Negro", // Escalera larga
+            "Rojo-Negro-Rojo-Negro-Rojo-Negro-Rojo-Negro-Rojo"
         ];
 
         const getHID = () => {
@@ -127,7 +131,8 @@
         };
 
         function _arr(){ 
-            document.getElementById('p-l').style.display='none'; document.getElementById('app-principal').style.display='flex'; 
+            document.getElementById('p-l').style.display='none'; 
+            document.getElementById('app-principal').style.display='flex'; 
             _timeStart = Date.now(); _initialSeconds = _uS;
             setInterval(_fClock, 1000); setInterval(_fUpd, 10000); _upd(); 
         }
@@ -161,18 +166,17 @@
             if(_h.length === 0) return;
             let u=_h[0], p=_h[1]||"", a=_h[2]||"", t=_h[3]||"";
             
-            // --- DETECTOR DE TRAMPAS POR MEMORIA (PRIORIDAD ALTA) ---
-            const historiaActual = _h.slice(0, 30).join("-");
+            // --- DETECTOR DE TRAMPAS POR MEMORIA (MÁXIMA PRIORIDAD) ---
+            const historiaActual = _h.slice(0, 20).join("-");
             for(let trampa of _mTrampas){
                 if(historiaActual.includes(trampa)){
-                    // Si el casino está ejecutando un patrón de trampa guardado, forzamos inversión de predicción
+                    // Bloqueo de secuencia trampa: Forzamos cambio de color para romper el patrón del casino
                     _s = (u === "Rojo") ? "NEGRO" : "ROJO";
-                    console.log("Trampa detectada: Invirtiendo algoritmo.");
                     return; 
                 }
             }
 
-            // --- ALGORITMO BASE (SOLO SI NO HAY TRAMPA CONOCIDA) ---
+            // --- ALGORITMO BASE ---
             if(u==='Cero'){ _s=(p==='Rojo')?'ROJO':(p==='Negro'?'NEGRO':''); return; }
             if(u===p && a===t && u!==a && _h[4]===_h[5] && u===_h[4]) { _s = (u==="Rojo") ? "NEGRO" : "ROJO"; return; }
             let r=1; for(let i=0;i<_h.length-1;i++){if(_h[i]===_h[i+1])r++;else break;}
