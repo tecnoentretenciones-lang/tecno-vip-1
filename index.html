@@ -3,64 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>TECNOENTRETE VIP v85 - RESTAURACIÓN TOTAL</title>
+    <title>TECNOENTRETE VIP v86 - AJUSTE FINAL PROPORCIONAL</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --c1: #e74c3c; --c2: #2c3e50; --c3: #27ae60; --c4: #f1c40f; --c5: #00e5ff; --c8: #111; }
         
-        /* BLOQUEO TOTAL DE ZOOM Y GESTOS */
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; touch-action: none !important; user-select: none !important; -webkit-user-drag: none; }
+        /* BLOQUEO TOTAL DE GESTOS Y ZOOM (REFORZADO) */
+        * { 
+            box-sizing: border-box; 
+            -webkit-tap-highlight-color: transparent; 
+            touch-action: none !important; 
+            user-select: none !important; 
+            -webkit-user-drag: none;
+            overscroll-behavior: none;
+        }
         
         html, body { 
             height: 100%; width: 100%; margin: 0; padding: 0; 
-            overflow: hidden !important; background-color: #000; 
-            position: fixed; font-family: 'Segoe UI', sans-serif; 
-            overscroll-behavior: none;
+            overflow: hidden !important; /* Bloqueo de scroll */
+            background-color: #000; position: fixed; 
+            font-family: 'Segoe UI', sans-serif; 
         }
         
         body::before { content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: url('https://raw.githubusercontent.com/tecnoentretenciones-lang/tecno-vip-1/main/image_1209a3.jpg') no-repeat center center; background-size: cover; z-index: -2; }
         body::after { content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: -1; }
         
-        /* ANIMACIÓN DE LA RULETA */
         @keyframes rotar { 100% { transform: rotate(360deg); } }
         
-        #p-l, #app-principal { width: 100%; height: 100dvh; max-width: 500px; display: flex; flex-direction: column; padding: 15px; margin: auto; }
+        #p-l, #app-principal { width: 100%; height: 100dvh; max-width: 500px; display: flex; flex-direction: column; padding: 10px; margin: auto; }
         
-        #p-l { position: fixed; top: 0; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.95); z-index: 9999; justify-content: center; align-items: center; }
+        /* CONTENEDOR INICIAL COMPACTADO PROPORCIONALMENTE */
+        #p-l { 
+            position: fixed; top: 0; left: 50%; transform: translateX(-50%); 
+            background: rgba(0,0,0,0.95); z-index: 9999; 
+            justify-content: center; align-items: center; 
+        }
         
-        /* EL RECTÁNGULO QUE NO SE DEBE CORTAR */
         .c-l { 
             background: rgba(20, 20, 20, 0.98); 
             border: 2px solid var(--c5); 
-            border-radius: 25px; 
-            padding: 25px; 
+            border-radius: 20px; 
+            padding: 15px; /* Reducido proporcionalmente */
             width: 95%; 
             text-align: center;
             box-shadow: 0 0 20px rgba(0,229,255,0.2);
         }
         
+        /* TEXTOS ACHICADOS PROPORCIONALMENTE */
         .legal-box { 
             background: rgba(231, 76, 60, 0.2); 
             border: 1px solid var(--c1); 
-            padding: 15px; 
-            border-radius: 12px; 
-            margin-bottom: 20px; 
-            font-size: 12px; 
+            padding: 10px; /* Reducido */
+            border-radius: 10px; 
+            margin-bottom: 12px; /* Reducido */
+            font-size: 11px; /* Reducido */
             color: #ff8888; 
             text-align: left; 
-            line-height: 1.5; 
+            line-height: 1.4; 
         }
         
-        .i-s { width: 100%; background: #000; border: 2px solid #555; color: var(--c4); padding: 15px; border-radius: 12px; font-size: 18px; text-align: center; margin-bottom: 12px; outline: none; font-weight: bold; }
-        .b-a { background: var(--c5); color: #000; border: none; padding: 18px; border-radius: 12px; font-weight: 900; width: 100%; cursor: pointer; text-transform: uppercase; font-size: 14px; margin-bottom: 10px; }
+        .i-s { width: 100%; background: #000; border: 2px solid #555; color: var(--c4); padding: 12px; border-radius: 10px; font-size: 16px; text-align: center; margin-bottom: 8px; outline: none; font-weight: bold; }
+        .b-a { background: var(--c5); color: #000; border: none; padding: 15px; border-radius: 10px; font-weight: 900; width: 100%; cursor: pointer; text-transform: uppercase; font-size: 12px; margin-bottom: 8px; }
         
-        #app-principal { display: none; gap: 10px; }
-        .tmr-big { background:#000; border:2px solid var(--c5); border-radius: 15px; padding:12px; text-align:center; font-size: 28px; color: var(--c5); font-weight: 900; }
+        /* APP PRINCIPAL (MOTOR INTACTO) */
+        #app-principal { display: none; gap: 8px; padding-top: calc(env(safe-area-inset-top) + 10px); }
+        .tmr-big { background:#000; border:2px solid var(--c5); border-radius: 12px; padding:10px; text-align:center; font-size: 26px; color: var(--c5); font-weight: 900; }
         
         .modal-base { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 10000; display: none; justify-content: center; align-items: center; padding: 20px; }
         .modal-content { background: rgba(20, 20, 20, 0.98); border: 2px solid var(--c5); border-radius: 25px; padding: 25px; width: 90%; text-align: center; max-width: 450px; }
         .manual-text { text-align: left; font-size: 13px; line-height: 1.5; color: #fff; background: rgba(0,0,0,0.5); border: 1px solid #333; padding: 15px; border-radius: 12px; max-height: 350px; overflow-y: auto; margin-bottom: 15px; }
-        .bola { width: 24px; height: 24px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; font-weight: bold; }
+        .bola { width: 22px; height: 22px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 9px; font-weight: bold; }
     </style>
 </head>
 <body oncontextmenu="return false;">
@@ -106,14 +118,14 @@
 
     <div id="p-l">
         <div class="c-l">
-            <img src="https://cdn-icons-png.flaticon.com/512/1055/1055673.png" style="width:75px; animation: rotar 5s linear infinite; margin-bottom:15px;">
-            <h1 style="color:white; font-size:24px; margin:0 0 10px 0;">TECNOENTRETE VIP</h1>
+            <img src="https://cdn-icons-png.flaticon.com/512/1055/1055673.png" style="width:60px; animation: rotar 5s linear infinite; margin-bottom:10px;">
+            <h1 style="color:white; font-size:22px; margin:0 0 8px 0;">TECNOENTRETE VIP</h1>
             
             <div class="legal-box">
                 <b>REGLAS DE ORO Y PATRÓN DE ROBO:</b><br>
                 - Iniciar siempre con monto base <b>$0.20</b>.<br>
                 - Capital recomendado en mesa: <b>$40 USD</b>.<br>
-                - Si la racha contraria llega a 7 veces seguidas, presione inmediatamente el botón <b>⚠️ TRAMPA</b> para reportar el patrón de robo y resetear sesión.
+                - Si la racha contraria llega a 7 veces seguidas, use el botón <b>⚠️ TRAMPA</b> para reportar el patrón y resetear sesión.
             </div>
             
             <input type="text" id="l-i" class="i-s" placeholder="LICENCIA VIP" autocomplete="off">
@@ -156,7 +168,7 @@
     document.addEventListener('keydown', e => {
         if(e.key === "F12" || (e.ctrlKey && e.shiftKey && e.key === "I") || (e.ctrlKey && e.key === "u")) e.preventDefault();
     });
-    // Bloqueo de Zoom / Doble Tap
+    // Bloqueo de Zoom / Doble Tap (Candado visual y lógico)
     let lastTouchEnd = 0;
     document.addEventListener('touchend', e => {
         const now = (new Date()).getTime();
