@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>TECNOENTRETE VIP v71 - DASHBOARD</title>
+    <title>TECNOENTRETE VIP v72 - FINAL</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --c1: #e74c3c; --c2: #2c3e50; --c3: #27ae60; --c4: #f1c40f; --c5: #00e5ff; --c8: #111; }
@@ -55,7 +55,7 @@
             <input type="text" id="l-i" class="i-s" placeholder="LICENCIA VIP" autocomplete="off">
             <button class="b-a" id="btn-validar">ENTRAR AL SISTEMA</button>
             <button class="b-a" style="background:rgba(0,229,255,0.1); color:var(--c5); border:1px solid var(--c5);" onclick="document.getElementById('modal-demo').style.display='flex'">PROBAR DEMO GRATIS</button>
-            <button class="b-a" style="background:#25d366; color:white;" onclick="window.open('https://wa.me/56995931641?text=Hola Felipe, quiero comprar un plan VIP.')"><i class="fab fa-whatsapp"></i> COMPRAR LICENCIA / PROMOS</button>
+            <button class="b-a" style="background:#25d366; color:white;" onclick="window.open('https://wa.me/56995931641?text=Hola Felipe, quiero comprar un plan VIP. Precios: 12h: $8.000 | 24h: $15.000 | Semana: $50.000')"><i class="fab fa-whatsapp"></i> COMPRAR LICENCIA / PROMOS</button>
         </div>
     </div>
 
@@ -89,7 +89,6 @@
     </div>
 
     <script>
-    // PEGA AQUÍ TU URL
     const _URL = "https://script.google.com/macros/s/AKfycbwQCtzmfYUH_N2rhdSMjn9eN1fz4CK8fa-ha0RuXVXZP4sfs6dTJ795XtDF3cDeYmQifQ/exec";
 
     let _HID = localStorage.getItem('VIP_HID');
@@ -238,7 +237,6 @@
         }
     }
 
-    // NUEVO MÉTODO DE GUARDADO (Pateador en tiempo real)
     async function save() {
         if(_L === "DEMO") {
             let url = _URL + `?action=guardar&serial=${_L}&neto_global=${_0xnG.toFixed(2)}&ganadas=${_0xg}&perdidas=${_0xp}&segundos_actuales=${_S}&wsp=${encodeURIComponent(_WSP)}`;
@@ -256,15 +254,15 @@
             const d = await r.json();
             if(d.status === "kicked") {
                 alert("⛔ TU LICENCIA HA SIDO DESACTIVADA O SUSPENDIDA POR EL ADMINISTRADOR.");
-                location.reload(); // Cierra el juego al instante
+                location.reload(); 
             }
         } catch(e) {}
     }
 
-    // DETECTOR DE CIERRE DE PESTAÑA (Para poner "OFFLINE" en Excel)
+    // DETECTOR DE CIERRE DE PESTAÑA BLINDADO
     window.addEventListener('beforeunload', function (e) {
-        if(_L !== "" && _L !== "DEMO") {
-            navigator.sendBeacon(_URL + `?action=salir&serial=${_L}&segundos_actuales=${_S}`);
+        if(_L !== "") {
+            fetch(_URL + `?action=salir&serial=${_L}&segundos_actuales=${_S}&wsp=${encodeURIComponent(_WSP)}`, { method: 'GET', keepalive: true }).catch(()=>{});
         }
     });
 
