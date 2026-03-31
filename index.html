@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>TECNOENTRETE VIP v66 - ORIGINAL</title>
+    <title>TECNOENTRETE VIP v67 - PERFECTO</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --c1: #e74c3c; --c2: #2c3e50; --c3: #27ae60; --c4: #f1c40f; --c5: #00e5ff; --c8: #111; }
@@ -23,6 +23,7 @@
         #app-principal { display: none; gap: 8px; }
         .tmr-big { background:#000; border:2px solid var(--c5); border-radius:15px; padding:10px; text-align:center; font-size: 26px; color: var(--c5); font-weight: 900; }
         #modal-demo { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 10000; display: none; justify-content: center; align-items: center; padding: 20px; }
+        .bola { width: 24px; height: 24px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; font-weight: bold; }
     </style>
 </head>
 <body oncontextmenu="return false;">
@@ -88,8 +89,8 @@
     </div>
 
     <script>
-    // TU URL OFICIAL CONSERVADA
-    const _URL = "https://script.google.com/macros/s/AKfycbwQCtzmfYUH_N2rhdSMjn9eN1fz4CK8fa-ha0RuXVXZP4sfs6dTJ795XtDF3cDeYmQifQ/exec";
+    // TU URL OFICIAL YA IMPLEMENTADA (NO TOCAR EXCEL)
+    const _URL = "https://script.google.com/macros/s/AKfycbyxPqr436zdH1mHgCZLk_jVLEvz66hoCJUKJe3WnOsXnx_Uk_rjusri56CENDYVCG1T1Q/exec";
 
     let _HID = localStorage.getItem('VIP_HID');
     if(!_HID) {
@@ -99,8 +100,26 @@
 
     let _L="", _S=0, _0xba=0, _0xnP=0, _0xnG=0, _0xcI=40, _0xh=[], _0xm=0.2, _0xs="", _0xg=0, _0xp=0, _consecutivas=0, _TS=0, _IS=0;
     let _NOM="", _WSP=""; 
-    let _0xlS = null; // Variable para recuperar el Estado de la Nube
+    let _0xlS = null; 
 
+    // LIMPIADOR DE JSON A PRUEBA DE BALAS (Evita que el Excel rompa el código)
+    function parseExcelJSON(str) {
+        if (!str) return null;
+        try {
+            if (typeof str === 'object') return str;
+            let cleanStr = str.trim();
+            if (cleanStr.startsWith('"') && cleanStr.endsWith('"')) {
+                cleanStr = cleanStr.substring(1, cleanStr.length - 1);
+            }
+            cleanStr = cleanStr.replace(/""/g, '"');
+            return JSON.parse(cleanStr);
+        } catch (e) {
+            console.error("No se pudo leer la nube, cargando memoria local:", e);
+            return null;
+        }
+    }
+
+    // BOTÓN ENTRAR (VIP)
     document.getElementById('btn-validar').onclick = async function() {
         _L = document.getElementById('l-i').value.trim().toUpperCase();
         if(!_L) return;
@@ -112,15 +131,25 @@
                 if(d.segundos <= 0) { alert("SU LICENCIA HA EXPIRADO."); this.innerText = "ENTRAR AL SISTEMA"; return; }
                 _S = d.segundos; 
                 _0xnG = parseFloat(d.neto_global) || 0;
-                // SI HAY JUEGO GUARDADO, LO PREPARAMOS PARA CARGAR
+                
+                // INTENTA CARGAR DESDE LA NUBE
                 if(d.estado_nube && d.estado_nube !== "") {
-                    try { _0xlS = JSON.parse(d.estado_nube); } catch(e){}
+                    _0xlS = parseExcelJSON(d.estado_nube);
                 }
+                
+                // INTENTA CARGAR DESDE EL NAVEGADOR (RESPALDO)
+                let localMem = localStorage.getItem('VIP_STATE_' + _L);
+                if(localMem) {
+                    let pLocal = parseExcelJSON(localMem);
+                    if(pLocal) _0xlS = pLocal; // La memoria local manda si existe
+                }
+
                 iniciarApp();
             } else { alert(d.mensaje); this.innerText = "ENTRAR AL SISTEMA"; }
         } catch(e) { alert("Error de Conexión."); this.innerText = "ENTRAR AL SISTEMA"; }
     };
 
+    // BOTÓN ACTIVAR DEMO
     document.getElementById('btn-activar-demo').onclick = async function() {
         const nom = document.getElementById('reg-nombre').value.trim();
         const wsp = document.getElementById('reg-wsp').value.trim();
@@ -142,24 +171,25 @@
         document.getElementById('modal-demo').style.display='none';
         document.getElementById('app-principal').style.display='flex';
         
-        // RECUPERACIÓN DE SESIÓN EN LA NUBE
+        // RECUPERACIÓN DE LA PARTIDA EXACTA
         if(_0xlS && _L !== "DEMO") {
-            _0xcI = _0xlS.cI || 40;
-            _0xba = _0xlS.ba || _0xcI;
-            _0xnP = _0xlS.nP || 0;
-            _0xnG = _0xlS.nG || 0;
-            _0xh  = _0xlS.h || [];
-            _0xm  = _0xlS.m || 0.2;
+            _0xcI = parseFloat(_0xlS.cI) || 40;
+            _0xba = parseFloat(_0xlS.ba) || _0xcI;
+            _0xnP = parseFloat(_0xlS.nP) || 0;
+            _0xnG = parseFloat(_0xlS.nG) || 0;
+            _0xh  = Array.isArray(_0xlS.h) ? _0xlS.h : [];
+            _0xm  = parseFloat(_0xlS.m) || 0.2;
             _0xs  = _0xlS.s || "";
         } else {
             _0xcI = parseFloat(prompt("CAPITAL INICIAL EN MESA:", "40.00")) || 40;
             _0xba = _0xcI;
+            _0xh = []; // Asegura que el historial empiece limpio y sin errores
         }
 
         _TS = Date.now(); _IS = _S;
         setInterval(tick, 1000); 
         setInterval(save, 15000); 
-        update();
+        update(); // Renderiza la pantalla inicial
     }
 
     // MOTOR INTACTO DE LA VERSIÓN v55.2 (Rachas)
@@ -199,10 +229,15 @@
         document.getElementById('m-t').innerText="$"+_0xm.toFixed(2);
         
         const ch=document.getElementById('c-h'); ch.innerHTML="";
-        _0xh.slice(0,24).forEach(v => {
-            const cl=(v==='Rojo')?'red':(v==='Negro'?'#fff':'green');
-            ch.innerHTML+=`<div class="bola" style="background:${cl}; color:${v==='Negro'?'#000':'#fff'}">${v==='Cero'?'0':''}</div>`;
-        });
+        
+        // DIBUJO DE BOLITAS CORREGIDO (Seguro contra caídas)
+        if(Array.isArray(_0xh)) {
+            _0xh.slice(0,28).forEach((v, idx) => {
+                const cl=(v==='Rojo')?'red':(v==='Negro'?'#fff':'green');
+                const bd=(idx===0)?'border:2px solid var(--c5);':'';
+                ch.innerHTML+=`<div class="bola" style="background:${cl}; color:${v==='Negro'?'#000':'#fff'}; ${bd}">${v==='Cero'?'0':''}</div>`;
+            });
+        }
     }
 
     function save() {
@@ -212,8 +247,10 @@
             return;
         }
         
-        // ENVÍA EL ESTADO COMPLETO PARA RECUPERAR EL JUEGO AL VOLVER A ENTRAR
+        // RESPALDO SEGURO A LA NUBE Y LOCAL
         const est = JSON.stringify({ba:_0xba, nP:_0xnP, nG:_0xnG, cI:_0xcI, h:_0xh.slice(0,12), m:_0xm, s:_0xs});
+        localStorage.setItem('VIP_STATE_' + _L, est); // Respaldo blindado en el teléfono
+        
         let url = _URL + `?action=guardar&serial=${_L}&neto=${_0xnP.toFixed(2)}&ganadas=${_0xg}&perdidas=${_0xp}&segundos_actuales=${_S}&estado=${encodeURIComponent(est)}`;
         new Image().src = url;
     }
@@ -221,8 +258,16 @@
     document.getElementById('btn-R').onclick=()=>xfR('Rojo');
     document.getElementById('btn-N').onclick=()=>xfR('Negro');
     document.getElementById('btn-0').onclick=()=>xfR('Cero');
-    document.getElementById('btn-undo').onclick=()=>{_0xh.shift(); update();};
-    document.getElementById('btn-reset').onclick=()=>{if(confirm("¿Resetear?")){_0xh=[];_0xm=0.2;update();}};
+    
+    document.getElementById('btn-undo').onclick=()=>{
+        if(_0xh.length > 0) { _0xh.shift(); update(); }
+    };
+    
+    document.getElementById('btn-reset').onclick=()=>{
+        if(confirm("¿Resetear?")){
+            _0xh=[]; _0xm=0.2; update();
+        }
+    };
     
     document.getElementById('btn-trampa').onclick=()=>{
         new Image().src = _URL+`?action=reportar_trampa&licencia=${_L}&patron=${_0xh.slice(0,10).join("-")}`;
