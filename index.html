@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>TECNOENTRETE VIP v62.5</title>
+    <title>TECNOENTRETE VIP v63.0</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --c1: #e74c3c; --c2: #2c3e50; --c3: #27ae60; --c4: #f1c40f; --c5: #00e5ff; --c8: #111; }
@@ -12,14 +12,13 @@
         body::before { content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: url('https://raw.githubusercontent.com/tecnoentretenciones-lang/tecno-vip-1/main/image_1209a3.jpg') no-repeat center center; background-size: cover; z-index: -2; }
         body::after { content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: -1; }
         #p-l, #app-principal { width: 100%; height: 100dvh; max-width: 500px; display: flex; flex-direction: column; padding: 12px; padding-top: calc(env(safe-area-inset-top) + 45px); margin: auto; }
-        #p-l { position: fixed; top: 0; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.95); z-index: 9999; justify-content: center; align-items: center; overflow-y: auto; }
+        #p-l { position: fixed; top: 0; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.95); z-index: 9999; justify-content: center; align-items: center; }
         .c-l { background: rgba(20, 20, 20, 0.98); border: 2px solid var(--c5); border-radius: 25px; padding: 25px; width: 90%; text-align: center; }
         .legal-box { background: rgba(231, 76, 60, 0.2); border: 1px solid var(--c1); padding: 10px; border-radius: 12px; margin-bottom: 15px; font-size: 10px; color: #ff8888; text-align: left; line-height: 1.3; }
-        .i-s { width: 100%; background: #000; border: 2px solid #555; color: var(--c4); padding: 15px; border-radius: 12px; font-size: 20px; text-align: center; margin-bottom: 10px; outline: none; font-weight: bold; }
-        .b-a { background: var(--c5); color: #000; border: none; padding: 18px; border-radius: 12px; font-weight: 900; width: 100%; cursor: pointer; text-transform: uppercase; font-size: 14px; margin-bottom: 10px; }
+        .i-s { width: 100%; background: #000; border: 2px solid #555; color: var(--c4); padding: 15px; border-radius: 12px; font-size: 18px; text-align: center; margin-bottom: 10px; outline: none; font-weight: bold; }
+        .b-a { background: var(--c5); color: #000; border: none; padding: 18px; border-radius: 12px; font-weight: 900; width: 100%; cursor: pointer; text-transform: uppercase; font-size: 13px; margin-bottom: 10px; }
         #app-principal { display: none; gap: 8px; }
-        .tmr-big { background:#000; border:2px solid var(--c5); border-radius:15px; padding:10px; text-align:center; font-size: 28px; color: var(--c5); font-weight: 900; }
-        .bola { width: 24px; height: 24px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; font-weight: bold; }
+        .tmr-big { background:#000; border:2px solid var(--c5); border-radius:15px; padding:10px; text-align:center; font-size: 26px; color: var(--c5); font-weight: 900; }
         #modal-demo { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 10000; display: none; justify-content: center; align-items: center; padding: 20px; }
     </style>
 </head>
@@ -27,11 +26,10 @@
 
     <div id="modal-demo">
         <div class="c-l" style="max-width: 400px;">
-            <h2 style="color:var(--c5);">🎁 REGISTRO DEMO</h2>
-            <p style="color:#eee; font-size:13px;">Registra tus datos para activar 15 min gratis:</p>
+            <h2 style="color:var(--c5);">REGISTRO DEMO</h2>
             <input type="text" id="reg-nombre" class="i-s" placeholder="TU NOMBRE">
             <input type="number" id="reg-wsp" class="i-s" placeholder="WHATSAPP (569...)">
-            <button class="b-a" id="btn-activar-demo">EMPEZAR PRUEBA</button>
+            <button class="b-a" id="btn-activar-demo">ACTIVAR 15 MIN</button>
             <button onclick="document.getElementById('modal-demo').style.display='none'" style="color:#888; background:none; border:none; text-decoration:underline;">Volver</button>
         </div>
     </div>
@@ -40,17 +38,13 @@
         <div class="c-l">
             <h1 style="color:white; font-size:22px; margin:0;">TECNOENTRETE VIP</h1>
             <div class="legal-box">
-                <b>REGLAS Y CONDICIONES:</b><br>
-                - Iniciar siempre con monto base <b>$0.20</b>.<br>
-                - Capital sugerido: <b>$40 USD</b>.<br>
-                - Meta: Ganar 20% y retirarse.<br><br>
-                <b>DESCARGO DE RESPONSABILIDAD:</b><br>
-                Esta App es una herramienta estadística. TecnoEntrete no garantiza ganancias. El usuario asume toda responsabilidad por sus apuestas y posibles pérdidas. Prohibido para menores de edad.
+                <b>REGLAS:</b> $0.20 base | $40 USD capital.<br>
+                <b>AVISO:</b> Software estadístico. El usuario asume responsabilidad total por sus resultados.
             </div>
             <input type="text" id="l-i" class="i-s" placeholder="LICENCIA VIP">
             <button class="b-a" id="btn-validar">ENTRAR AL SISTEMA</button>
             <button class="b-a" style="background:rgba(0,229,255,0.1); color:var(--c5); border:1px solid var(--c5);" onclick="document.getElementById('modal-demo').style.display='flex'">PROBAR DEMO GRATIS</button>
-            <button class="b-a" style="background:#25d366; color:white;" onclick="window.open('https://wa.me/56995931641?text=Hola Felipe, quiero comprar un plan VIP. Los planes son: 12h: $8.000 | 24h: $15.000 | Semana: $50.000')"><i class="fab fa-whatsapp"></i> COMPRAR LICENCIA / PROMOS</button>
+            <button class="b-a" style="background:#25d366; color:white;" onclick="window.open('https://wa.me/56995931641?text=Hola Felipe, quiero comprar un plan VIP.')"><i class="fab fa-whatsapp"></i> COMPRAR LICENCIA / PROMOS</button>
         </div>
     </div>
 
@@ -59,7 +53,7 @@
         <div style="background:var(--c8); padding:15px; border-radius:15px; display:flex; flex-direction:column; gap:10px; flex-grow:1; border:1px solid #333;">
             <div style="background:#1a1a1a; padding:15px; border-radius:15px; text-align:center; border:1px solid #333;">
                 <div id="s-t" style="font-size:75px; font-weight:900; line-height:1;">---</div>
-                <div id="m-t" style="color:var(--c4); font-weight:900; font-size:24px; margin-top:5px;">$0.20</div>
+                <div id="m-t" style="color:var(--c4); font-weight:900; font-size:24px;">$0.20</div>
             </div>
             <div style="display:flex; gap:8px;">
                 <button class="b-i" id="btn-R" style="background:var(--c1); height:70px; border-radius:15px; border:none; font-size:30px; color:white; flex:1;">R</button>
@@ -71,7 +65,7 @@
     </div>
 
     <script>
-    const _URL = "https://script.google.com/macros/s/AKfycbyxPqr436zdH1mHgCZLk_jVLEvz66hoCJUKJe3WnOsXnx_Uk_rjusri56CENDYVCG1T1Q/exec";
+    const _URL = "AQUÍ_PEGA_TU_URL_DEL_PASO_1";
 
     let _L="", _S=0, _BA=0, _NG=0, _H=[], _M=0.2, _XS="", _NOM="", _WSP="", _TS=0, _IS=0;
 
@@ -91,10 +85,14 @@
         _NOM = document.getElementById('reg-nombre').value;
         _WSP = document.getElementById('reg-wsp').value;
         if(!_NOM || !_WSP) return alert("Completa tus datos");
-        _L = "DEMO"; _S = 900;
-        // Registro CRM inmediato en Excel
-        new Image().src = _URL + `?action=guardar&serial=DEMO&nombre=${_NOM}&wsp=${_WSP}&hid=${navigator.userAgent.length}`;
-        iniciarApp();
+        _L = "DEMO";
+        const r = await fetch(_URL + "?action=validar&serial=DEMO&wsp="+_WSP);
+        const d = await r.json();
+        if(d.status === "success") {
+            _S = 900; 
+            new Image().src = _URL + `?action=guardar&serial=DEMO&nombre=${_NOM}&wsp=${_WSP}&hid=${navigator.userAgent.length}`;
+            iniciarApp();
+        }
     };
 
     function iniciarApp() {
@@ -104,7 +102,6 @@
         _BA = parseFloat(prompt("SALDO EN MESA:", "40.00")) || 0;
         _TS = Date.now(); _IS = _S;
         setInterval(tick, 1000); setInterval(save, 15000);
-        update();
     }
 
     function xfR(c) {
@@ -113,15 +110,11 @@
             else if(c!=='Cero'){ _BA-=_M; _NG-=_M; _M*=2; }
         }
         _H.unshift(c);
-        // MOTOR ORIGINAL (RACHAS)
-        if(_H.length > 0) {
-            let u=_H[0], p=_H[1]||"";
-            if(u==='Cero'){ _XS=(p==='Rojo'?'ROJO':'NEGRO'); }
-            else {
-                let r=1; for(let i=0; i<_H.length-1; i++){ if(_H[i]===_H[i+1]) r++; else break; }
-                if(r>=3) _XS = u.toUpperCase(); // SUBIRSE A LA OLA
-                else _XS = (u==="Rojo"?"NEGRO":"ROJO");
-            }
+        let u=_H[0], p=_H[1]||"";
+        if(u==='Cero'){ _XS=(p==='Rojo'?'ROJO':'NEGRO'); }
+        else {
+            let r=1; for(let i=0; i<_H.length-1; i++){ if(_H[i]===_H[i+1]) r++; else break; }
+            if(r>=3) _XS = u.toUpperCase(); else _XS = (u==="Rojo"?"NEGRO":"ROJO");
         }
         update();
     }
@@ -145,8 +138,7 @@
     }
 
     function save() {
-        if(_L === "DEMO") return;
-        new Image().src = _URL + `?action=guardar&serial=${_L}&neto=${_NG.toFixed(2)}&segundos_actuales=${_S}&nombre=${_NOM}&wsp=${_WSP}`;
+        new Image().src = _URL + `?action=guardar&serial=${_L}&neto=${_NG.toFixed(2)}&segundos_actuales=${_S}&nombre=${_NOM}&wsp=${_WSP}&hid=${navigator.userAgent.length}`;
     }
 
     document.getElementById('btn-R').onclick=()=>xfR('Rojo');
