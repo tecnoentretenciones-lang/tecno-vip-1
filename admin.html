@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>PANEL VIP</title>
+    <style>
+        body { background: #0b0b0b; color: white; font-family: sans-serif; padding: 20px; }
+        .panel { max-width: 1000px; margin: auto; background: #1a1a1a; padding: 20px; border-radius: 15px; border: 2px solid #00e5ff; }
+        h1 { color: #00e5ff; text-align: center; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 12px; }
+        th, td { border: 1px solid #333; padding: 10px; text-align: left; }
+        th { background: #00e5ff; color: black; }
+        .btn-borrar { background: #e74c3c; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; }
+        .btn-refresh { background: #27ae60; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; width: 100%; font-weight: bold; }
+    </style>
+</head>
+<body>
+<div class="panel">
+    <h1>ADMIN TECNOENTRETE VIP</h1>
+    <button class="btn-refresh" onclick="cargar()">🔄 ACTUALIZAR LISTA</button>
+    <table id="t">
+        <thead><tr><th>FILA</th><th>LICENCIA</th><th>NOMBRE</th><th>ESTADO</th><th>WHATSAPP</th><th>ACCIONES</th></tr></thead>
+        <tbody></tbody>
+    </table>
+</div>
+<script>
+    const API = "TU_URL_DE_GOOGLE_SCRIPT"; // REEMPLAZA ESTO
+    async function cargar() {
+        const r = await fetch(API + "?action=panel_datos"); const d = await r.json();
+        const b = document.querySelector("#t tbody"); b.innerHTML = "";
+        d.datos.forEach((f, i) => {
+            if (i === 0) return;
+            const tr = document.createElement("tr");
+            tr.innerHTML = `<td>${i+1}</td><td>${f[0]}</td><td>${f[11]||''}</td><td>${f[2]}</td><td>${f[12]||''}</td><td><button class="btn-borrar" onclick="borrar(${i+1})">BORRAR</button></td>`;
+            b.appendChild(tr);
+        });
+    }
+    async function borrar(n) { if(confirm("¿Borrar?")){ await fetch(API + "?action=borrar_fila&fila=" + n); cargar(); } }
+    window.onload = cargar;
+</script>
+</body>
+</html>
