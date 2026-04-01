@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>TECNOENTRETE VIP v102 - TRAMPAS CORREGIDAS</title>
+    <title>TECNOENTRETE VIP v103 - DEMO PAÍSES</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --c1: #e74c3c; --c2: #2c3e50; --c3: #27ae60; --c4: #f1c40f; --c5: #00e5ff; --c8: #111; }
@@ -125,7 +125,21 @@
         <div class="modal-content">
             <h2 style="color:var(--c5); margin-top:0;">🎁 DEMO GRATIS</h2>
             <input type="text" id="reg-nombre" class="i-s" placeholder="NOMBRE Y APELLIDO (Ej: Juan Perez)">
-            <input type="tel" id="reg-wsp" class="i-s" placeholder="WHATSAPP (+569...)">
+            
+            <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                <select id="reg-pais" class="i-s" style="width: 38%; margin-bottom: 0; padding: 0 5px; font-size: 14px;">
+                    <option value="569" selected>🇨🇱 +569</option>
+                    <option value="51">🇵🇪 +51</option>
+                    <option value="54">🇦🇷 +54</option>
+                    <option value="57">🇨🇴 +57</option>
+                    <option value="52">🇲🇽 +52</option>
+                    <option value="593">🇪🇨 +593</option>
+                    <option value="58">🇻🇪 +58</option>
+                    <option value="591">🇧🇴 +591</option>
+                </select>
+                <input type="tel" id="reg-wsp" class="i-s" placeholder="Número (Ej: 87654321)" style="width: 62%; margin-bottom: 0;">
+            </div>
+
             <button class="b-a" id="btn-activar-demo">ACTIVAR AHORA</button>
             <button onclick="document.getElementById('modal-demo').style.display='none'" style="color:#888; background:none; border:none; text-decoration:underline;">Volver</button>
         </div>
@@ -270,12 +284,18 @@
         } catch(e) { alert("Error de Conexión."); this.innerText = "ENTRAR AL SISTEMA"; }
     };
 
+    // FUNCIÓN DE ACTIVACIÓN DEMO ACTUALIZADA CON EL CÓDIGO DE PAÍS
     document.getElementById('btn-activar-demo').onclick = async function() {
         const nom = document.getElementById('reg-nombre').value.trim();
-        const wsp = document.getElementById('reg-wsp').value.trim();
+        const rawWsp = document.getElementById('reg-wsp').value.trim();
+        const codPais = document.getElementById('reg-pais').value;
         
         if(!nom || !nom.includes(' ')) return alert("⚠️ Por favor ingresa tu NOMBRE y APELLIDO (separados por un espacio).");
-        if(!wsp) return alert("⚠️ Falta el número de WhatsApp.");
+        if(!rawWsp) return alert("⚠️ Falta tu número celular.");
+        
+        // Limpiamos los espacios y armamos el número perfecto para la API
+        const numLimpio = rawWsp.replace(/\D/g, '');
+        const wsp = codPais + numLimpio;
         
         this.innerText = "...";
         try {
