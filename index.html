@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>TECNOENTRETE VIP v98 - TRAMPAS SOLO EN PÉRDIDAS</title>
+    <title>TECNOENTRETE VIP v99 - ANTI BLOQUEOS Y RESET REPARADO</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --c1: #e74c3c; --c2: #2c3e50; --c3: #27ae60; --c4: #f1c40f; --c5: #00e5ff; --c8: #111; }
@@ -28,6 +29,26 @@
     </style>
 </head>
 <body oncontextmenu="return false;">
+
+    <div id="alerta-trampa-custom" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.92); z-index: 10006; display: none; justify-content: center; align-items: center; flex-direction: column; padding:20px;">
+        <div style="background: rgba(20,20,20,0.98); border: 2px solid var(--c1); color: #fff; padding: 25px; border-radius: 20px; text-align: center; max-width: 400px; box-shadow: 0 0 20px rgba(231,76,60,0.5);">
+            <div style="font-size: 50px;">⚠️</div>
+            <h2 style="color: var(--c1); margin: 10px 0;">¡ALERTA DE CASINO!</h2>
+            <p id="txt-alerta-trampa" style="font-size: 15px; line-height: 1.5; color: #ccc; margin-bottom: 20px;"></p>
+            <button style="background: var(--c1); color: #fff; border: none; padding: 15px; border-radius: 10px; font-weight: bold; width: 100%; cursor: pointer;" onclick="document.getElementById('alerta-trampa-custom').style.display='none'">ENTENDIDO</button>
+        </div>
+    </div>
+
+    <div id="modal-reset-confirm" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.92); z-index: 10006; display: none; justify-content: center; align-items: center; flex-direction: column; padding:20px;">
+        <div style="background: rgba(20,20,20,0.98); border: 2px solid var(--c1); color: #fff; padding: 25px; border-radius: 20px; text-align: center; max-width: 400px;">
+            <h2 style="color: var(--c1); margin: 10px 0;">¿RESETEAR MESA?</h2>
+            <p style="color: #ccc; font-size: 14px;">¿Estás seguro de que deseas borrar el historial de esta mesa y empezar de cero?</p>
+            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                <button style="background: #555; color: #fff; border: none; padding: 15px; border-radius: 10px; font-weight: bold; flex: 1; cursor: pointer;" onclick="document.getElementById('modal-reset-confirm').style.display='none'">CANCELAR</button>
+                <button style="background: var(--c1); color: #fff; border: none; padding: 15px; border-radius: 10px; font-weight: bold; flex: 1; cursor: pointer;" onclick="ejecutarReset()">SÍ, RESETEAR</button>
+            </div>
+        </div>
+    </div>
 
     <div id="alerta-meta" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.92); z-index: 10005; display: none; justify-content: center; align-items: center; flex-direction: column;">
         <div style="background: linear-gradient(135deg, #f1c40f, #f39c12); color: #000; padding: 25px; border-radius: 30px; text-align: center; max-width: 90%; border: 4px solid #fff; box-shadow: 0px 15px 35px rgba(241,196,15,0.5);">
@@ -153,6 +174,26 @@
         "Rojo-Negro-Rojo-Negro-Rojo-Negro-Rojo-Negro-Rojo"
     ];
 
+    // FUNCIÓN PARA MOSTRAR LA ALERTA PERSONALIZADA (NO BLOQUEABLE)
+    function mostrarAlerta(mensaje) {
+        document.getElementById('txt-alerta-trampa').innerHTML = mensaje;
+        document.getElementById('alerta-trampa-custom').style.display = 'flex';
+    }
+
+    // FUNCIÓN DEL RESET DIRECTO
+    window.ejecutarReset = () => {
+        _h=[]; _m=0.2; _s=""; _per=0; _cR=0; _cN=0; _c0=0; _s0=0; 
+        document.getElementById('btn-trampa').style.opacity="0.3";
+        document.getElementById('btn-trampa').style.pointerEvents="none";
+        update(); 
+        saveState();
+        document.getElementById('modal-reset-confirm').style.display='none';
+    };
+
+    document.getElementById('btn-reset').onclick = () => {
+        document.getElementById('modal-reset-confirm').style.display='flex';
+    };
+
     document.getElementById('btn-validar').onclick = async function() {
         _L = document.getElementById('l-i').value.trim().toUpperCase();
         if(!_L) return;
@@ -166,7 +207,8 @@
                 
                 if(d.trampas && d.trampas.length > 0) {
                     _TR = d.trampas;
-                    alert("✅ BASE DE DATOS CONECTADA\n\nEl sistema ha cargado exitosamente " + _TR.length + " patrones de trampa únicos desde tu Nube VIP para proteger esta sesión.");
+                    // Se usa la alerta personalizada que construimos
+                    mostrarAlerta("<b>✅ BASE DE DATOS CONECTADA</b><br><br>El sistema ha cargado exitosamente <b>" + _TR.length + " patrones de trampa únicos</b> desde tu Nube VIP para proteger esta sesión.");
                 }
                 
                 let savedJSON = d.estado_nube || localStorage.getItem('ts_'+_L);
@@ -297,15 +339,12 @@
         
         _CALC();
 
-        // ⚠️ CONDICIÓN AÑADIDA: SOLO DISPARA LA TRAMPA DE LA BASE DE DATOS SI VAS PERDIENDO
         if(_trampaAutomaticaActivada && _per > 0) {
             let patronAuto = _h.slice(0,15).join("-");
             let urlAuto = _URL + "?action=reportar_trampa&licencia=" + _L + "&serial=" + _L + "&patron=" + patronAuto + "_AUTO_BASE_DATOS";
             navigator.sendBeacon(urlAuto); 
 
-            setTimeout(() => {
-                alert("⚠️ ¡ALERTA DE CASINO DETECTADA!\n\nHemos identificado un patrón oculto del casino diseñado para quitarte ganancias.\n\nPor favor, PRESIONA EL BOTÓN '⚠️ TRAMPA' AHORA para confirmar este reporte y ayudarnos a mejorar el algoritmo VIP para toda la comunidad.");
-            }, 500);
+            mostrarAlerta("Hemos identificado un <b>patrón oculto</b> del casino diseñado para quitarte ganancias.<br><br>Por favor, PRESIONA EL BOTÓN <b>⚠️ TRAMPA</b> AHORA para confirmar este reporte y ayudarnos a mejorar el algoritmo VIP.");
         }
 
         update();
@@ -324,9 +363,7 @@
                 let urlAuto = _URL + "?action=reportar_trampa&licencia=" + _L + "&serial=" + _L + "&patron=" + patronAuto + "_AUTO_7_ERRORES";
                 navigator.sendBeacon(urlAuto);
 
-                setTimeout(() => {
-                    alert("⚠️ ¡ALERTA DE PATRÓN INUSUAL!\n\nHas acumulado 7 pérdidas seguidas. Esto podría ser una trampa del casino.\n\nPor favor, presiona el botón '⚠️ TRAMPA' para reportarlo al sistema y ayudarnos a mejorar el algoritmo.");
-                }, 300);
+                mostrarAlerta("Has acumulado <b>7 pérdidas seguidas</b>. Esto podría ser una trampa del casino.<br><br>Por favor, presiona el botón <b>⚠️ TRAMPA</b> para reportarlo al sistema y ayudarnos a mejorar el algoritmo.");
             }
         } else {
             document.getElementById('btn-trampa').style.opacity="0.3";
@@ -340,12 +377,12 @@
             let url = _URL + "?action=reportar_trampa&licencia=" + _L + "&serial=" + _L + "&patron=" + patron + "_MANUAL";
             navigator.sendBeacon(url);
             
-            alert("⚠️ GRACIAS POR REPORTAR.\n\nTu reporte ha sido enviado con éxito al servidor. El sistema registrará este patrón para evitarlo en el futuro.");
+            mostrarAlerta("<b>✅ GRACIAS POR REPORTAR.</b><br><br>Tu reporte ha sido enviado con éxito al servidor. El sistema registrará este patrón para evitarlo en el futuro.");
             
             document.getElementById('btn-trampa').style.opacity="0.3";
             document.getElementById('btn-trampa').style.pointerEvents="none";
             
-        } catch(e) { alert("Error al enviar reporte."); }
+        } catch(e) {}
     };
 
     document.getElementById('btn-undo').onclick = () => {
@@ -353,12 +390,6 @@
             _ba = _lS.ba; _nP = _lS.nP; _nG = _lS.nG; _g = _lS.g; _p = _lS.p; _h = [..._lS.h]; _m = _lS.m; _s = _lS.s; _per = _lS.per;
             _cR = _lS.cR; _cN = _lS.cN; _c0 = _lS.c0; _s0 = _lS.s0;
             update(); saveState(); _lS = null;
-        }
-    };
-
-    document.getElementById('btn-reset').onclick = () => {
-        if(confirm("¿Resetear mesa por completo?")) {
-            _h=[]; _m=0.2; _s=""; _per=0; _cR=0; _cN=0; _c0=0; _s0=0; update(); saveState();
         }
     };
 
