@@ -3,31 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>TECNOENTRETE VIP v93 - MOTOR PRO ORIGINAL</title>
+    <title>TECNOENTRETE VIP v94 - OFFLINE Y TRAMPA AUTO</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --c1: #e74c3c; --c2: #2c3e50; --c3: #27ae60; --c4: #f1c40f; --c5: #00e5ff; --c8: #111; }
-        
-        /* BLOQUEO TOTAL DE GESTOS Y ZOOM */
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; touch-action: none !important; user-select: none !important; -webkit-user-drag: none; overscroll-behavior: none; }
-        
         html, body { height: 100%; width: 100%; margin: 0; padding: 0; overflow: hidden !important; background-color: #000; position: fixed; font-family: 'Segoe UI', sans-serif; }
         body::before { content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: url('https://raw.githubusercontent.com/tecnoentretenciones-lang/tecno-vip-1/main/image_1209a3.jpg') no-repeat center center; background-size: cover; z-index: -2; }
         body::after { content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: -1; }
-        
         @keyframes rotar { 100% { transform: rotate(360deg); } }
-        
         #p-l, #app-principal { width: 100%; height: 100dvh; max-width: 500px; display: flex; flex-direction: column; padding: 10px; margin: auto; }
         #p-l { position: fixed; top: 0; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.95); z-index: 9999; justify-content: center; align-items: center; }
-        
         .c-l { background: rgba(20, 20, 20, 0.98); border: 2px solid var(--c5); border-radius: 20px; padding: 15px; width: 95%; text-align: center; box-shadow: 0 0 20px rgba(0,229,255,0.2); }
         .legal-box { background: rgba(231, 76, 60, 0.2); border: 1px solid var(--c1); padding: 10px; border-radius: 10px; margin-bottom: 12px; font-size: 11px; color: #ff8888; text-align: left; line-height: 1.4; }
         .i-s { width: 100%; background: #000; border: 2px solid #555; color: var(--c4); padding: 12px; border-radius: 10px; font-size: 16px; text-align: center; margin-bottom: 8px; outline: none; font-weight: bold; }
         .b-a { background: var(--c5); color: #000; border: none; padding: 15px; border-radius: 10px; font-weight: 900; width: 100%; cursor: pointer; text-transform: uppercase; font-size: 12px; margin-bottom: 8px; }
-        
         #app-principal { display: none; gap: 8px; padding-top: calc(env(safe-area-inset-top) + 10px); }
         .tmr-big { background:#000; border:2px solid var(--c5); border-radius: 12px; padding:10px; text-align:center; font-size: 26px; color: var(--c5); font-weight: 900; }
-        
         .modal-base { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 10000; display: none; justify-content: center; align-items: center; padding: 20px; }
         .modal-content { background: rgba(20, 20, 20, 0.98); border: 2px solid var(--c5); border-radius: 25px; padding: 25px; width: 90%; text-align: center; max-width: 450px; }
         .manual-text { text-align: left; font-size: 13px; line-height: 1.5; color: #fff; background: rgba(0,0,0,0.5); border: 1px solid #333; padding: 15px; border-radius: 12px; max-height: 350px; overflow-y: auto; margin-bottom: 15px; }
@@ -134,7 +126,7 @@
     let lastTouchEnd = 0;
     document.addEventListener('touchend', e => { const now = (new Date()).getTime(); if (now - lastTouchEnd <= 300) e.preventDefault(); lastTouchEnd = now; }, { passive: false });
 
-    // TU ENLACE
+    // TU ENLACE ACTUAL
     const _URL = "https://script.google.com/macros/s/AKfycbzUIdq4jKKOi3_fu3kLsO_cP3Z9ckXp7B6sUiP78B7Km7bDVmaecAIdsWGgGcA8nlE8JA/exec";
     
     let _HID = localStorage.getItem('VIP_HID') || 'VIP-'+Math.random().toString(36).substr(2,10).toUpperCase();
@@ -142,6 +134,7 @@
     
     // VARIABLES ORIGINALES
     let _L="", _S=0, _ba=0, _cI=40, _nP=0, _nG=0, _g=0, _p=0, _h=[], _m=0.2, _s="", _per=0, _Meta=0, _TS=0, _IS=0, _WSP="", _lS=null;
+    let _trampaAutomaticaActivada = false;
 
     // PATRONES DE CASINO (DE TU RESPALDO)
     const _TR = [
@@ -164,7 +157,6 @@
                 _S = d.segundos; 
                 _nG = parseFloat(d.neto_global) || 0; 
                 
-                // SISTEMA DE SINCRONIZACIÓN DE PARTIDAS REPARADO
                 let savedJSON = d.estado_nube || localStorage.getItem('ts_'+_L);
                 let restored = false;
                 if(savedJSON && savedJSON.includes("{")) {
@@ -220,28 +212,41 @@
         update();
     }
 
-    // GUARDA EL JSON COMPLETO EN LA COLUMNA F PARA SINCRONIZAR
+    // DISPARADOR OFFLINE AUTOMÁTICO AL CERRAR O MINIMIZAR LA APP
+    document.addEventListener("visibilitychange", () => {
+        if(document.visibilityState === "hidden" && _L !== "") {
+            let url = _URL + "?action=salir&serial=" + _L + "&wsp=" + encodeURIComponent(_WSP);
+            navigator.sendBeacon(url);
+        }
+    });
+
     function saveState() {
         let est = JSON.stringify({ba:_ba, nP:_nP, nG:_nG, cI:_cI, h:_h.slice(0,12), m:_m, s:_s});
         localStorage.setItem('ts_'+_L, est);
         let url = _URL + `?action=guardar&serial=${_L}&licencia=${_L}&neto_global=${_nG.toFixed(2)}&neto=${_nG.toFixed(2)}&ganadas=${_g}&perdidas=${_p}&estado=${encodeURIComponent(est)}&wsp=${encodeURIComponent(_WSP)}`;
-        new Image().src = url; // Fuerza el envío
+        new Image().src = url; 
         fetch(url).catch(e=>{});
     }
 
     window.aceptarMeta = () => {
         document.getElementById('alerta-meta').style.display = 'none';
-        _Meta = _ba * 1.20; // Nueva meta
+        _Meta = _ba * 1.20; 
     };
 
-    // EL CEREBRO DEL JUEGO (MOTOR PRO DE TU RESPALDO)
+    // EL CEREBRO DEL JUEGO (MOTOR PRO INTACTO + DETECTOR DE TRAMPA)
     function _CALC() {
         if(_h.length === 0) return;
         let u = _h[0], p = _h[1] || "", a = _h[2] || "", t = _h[3] || "";
         const hA = _h.slice(0,20).join("-");
         
+        _trampaAutomaticaActivada = false;
+
         for(let tr of _TR) {
-            if(hA.includes(tr)) { _s = (u === "Rojo") ? "NEGRO" : "ROJO"; return; }
+            if(hA.includes(tr)) { 
+                _s = (u === "Rojo") ? "NEGRO" : "ROJO"; 
+                _trampaAutomaticaActivada = true; // Gatillo de Trampa
+                return; 
+            }
         }
         
         if(u === 'Cero'){ _s = (p === 'Rojo') ? 'ROJO' : (p === 'Negro' ? 'NEGRO' : ''); return; }
@@ -268,6 +273,18 @@
         _h.unshift(c);
         
         _CALC();
+
+        // ACCIÓN: SI EL SISTEMA DETECTA LA TRAMPA, ENVÍA Y AVISA AL CLIENTE
+        if(_trampaAutomaticaActivada) {
+            let patronAuto = _h.slice(0,15).join("-");
+            let urlAuto = _URL + "?action=reportar_trampa&licencia=" + _L + "&serial=" + _L + "&patron=" + patronAuto + "_AUTO";
+            navigator.sendBeacon(urlAuto); // Envía automático oculto
+
+            setTimeout(() => {
+                alert("⚠️ ¡ALERTA DE CASINO DETECTADA!\n\nHemos identificado un patrón oculto del casino diseñado para quitarte ganancias.\n\nPor favor, PRESIONA EL BOTÓN '⚠️ TRAMPA' AHORA para confirmar este reporte y ayudarnos a mejorar el algoritmo VIP para toda la comunidad.");
+            }, 500);
+        }
+
         update();
         saveState();
 
@@ -284,15 +301,13 @@
         }
     }
 
-    // BOTÓN TRAMPA: AHORA MANDA PALABRAS COMPLETAS (Negro-Negro...)
+    // BOTÓN TRAMPA MANUAL (CONFIRMACIÓN DEL CLIENTE)
     document.getElementById('btn-trampa').onclick = async () => {
-        if(!confirm("¿Deseas reportar este patrón como TRAMPA?")) return;
         let patron = _h.slice(0,15).join("-");
         try {
-            let url = _URL + "?action=reportar_trampa&licencia=" + _L + "&serial=" + _L + "&patron=" + patron;
-            new Image().src = url;
-            fetch(url).catch(e=>{});
-            alert("⚠️ Gracias por reportar. Tu aporte nos ayuda a detectar patrones de robo y mejorar el algoritmo.");
+            let url = _URL + "?action=reportar_trampa&licencia=" + _L + "&serial=" + _L + "&patron=" + patron + "_MANUAL";
+            navigator.sendBeacon(url);
+            alert("⚠️ GRACIAS POR REPORTAR.\n\nTu aporte es vital para detectar robos y mejorar el sistema para todos. \n\nLa sesión se reiniciará por tu seguridad.");
             _h=[]; _m=0.2; _per=0; _s="";
             document.getElementById('btn-trampa').style.opacity="0.3";
             document.getElementById('btn-trampa').style.pointerEvents="none";
