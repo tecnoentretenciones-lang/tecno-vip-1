@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>TECNOENTRETE VIP v103 - DEMO PAÍSES</title>
+    <title>TECNOENTRETE VIP v104 - MENTE COLMENA PREDICTIVA</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --c1: #e74c3c; --c2: #2c3e50; --c3: #27ae60; --c4: #f1c40f; --c5: #00e5ff; --c8: #111; }
@@ -190,7 +190,6 @@
     let _trampaAutomaticaActivada = false;
     let demoInterval = null; 
 
-    // TUS 6 TRAMPAS BASE
     let _TR = [
         "Rojo-Rojo-Rojo-Negro-Negro-Negro-Rojo-Rojo-Rojo",
         "Negro-Negro-Negro-Rojo-Rojo-Rojo-Negro-Negro-Negro",
@@ -243,7 +242,6 @@
                 _S = d.segundos; 
                 _nG = parseFloat(d.neto_global) || 0; 
                 
-                // CARGA DE TRAMPAS CORREGIDA
                 if(d.trampas && d.trampas.length > 0) {
                     _TR = [...new Set([..._TR, ...d.trampas])]; 
                     mostrarAlerta("<b>✅ BASE DE DATOS CONECTADA</b><br><br>El sistema ha cargado exitosamente <b>" + _TR.length + " patrones de trampa únicos</b> desde tu Nube VIP para proteger esta sesión.");
@@ -284,7 +282,6 @@
         } catch(e) { alert("Error de Conexión."); this.innerText = "ENTRAR AL SISTEMA"; }
     };
 
-    // FUNCIÓN DE ACTIVACIÓN DEMO ACTUALIZADA CON EL CÓDIGO DE PAÍS
     document.getElementById('btn-activar-demo').onclick = async function() {
         const nom = document.getElementById('reg-nombre').value.trim();
         const rawWsp = document.getElementById('reg-wsp').value.trim();
@@ -293,7 +290,6 @@
         if(!nom || !nom.includes(' ')) return alert("⚠️ Por favor ingresa tu NOMBRE y APELLIDO (separados por un espacio).");
         if(!rawWsp) return alert("⚠️ Falta tu número celular.");
         
-        // Limpiamos los espacios y armamos el número perfecto para la API
         const numLimpio = rawWsp.replace(/\D/g, '');
         const wsp = codPais + numLimpio;
         
@@ -307,23 +303,33 @@
                 iniciarDemo(d.segundos, wsp);
             }
             else { 
-                alert(d.mensaje); 
                 if(d.mensaje.includes("ESPERANDO") || d.mensaje.includes("TE ENVIAMOS")) {
                     this.innerText = "ESPERANDO CONFIRMACIÓN...";
-                    if(!demoInterval) {
-                        demoInterval = setInterval(async () => {
-                            try {
-                                let rr = await fetch(_URL + "?action=validar_demo&nombre="+encodeURIComponent(nom)+"&wsp="+encodeURIComponent(wsp)+"&hid="+_HID);
-                                let dd = await rr.json();
-                                if(dd.status === "success") {
-                                    clearInterval(demoInterval); 
-                                    document.getElementById('modal-demo').style.display='none';
-                                    iniciarDemo(dd.segundos, wsp); 
-                                }
-                            } catch(e) {}
-                        }, 4000); 
-                    }
+                    let intentos = 0;
+                    if(demoInterval) clearInterval(demoInterval);
+                    
+                    demoInterval = setInterval(async () => {
+                        intentos++;
+                        // TIMEOUT: Si pasan 60 segundos (15 intentos de 4s), detiene la búsqueda
+                        if(intentos > 15) {
+                            clearInterval(demoInterval);
+                            document.getElementById('btn-activar-demo').innerText = "ACTIVAR AHORA";
+                            alert("⚠️ ERROR DE WHATSAPP: No llegó el mensaje o no respondiste 'SÍ'.\n\n¿Ingresaste mal tu número? Asegúrate de escoger el país correcto y escribir bien tu celular.");
+                            return;
+                        }
+                        
+                        try {
+                            let rr = await fetch(_URL + "?action=validar_demo&nombre="+encodeURIComponent(nom)+"&wsp="+encodeURIComponent(wsp)+"&hid="+_HID);
+                            let dd = await rr.json();
+                            if(dd.status === "success") {
+                                clearInterval(demoInterval); 
+                                document.getElementById('modal-demo').style.display='none';
+                                iniciarDemo(dd.segundos, wsp); 
+                            }
+                        } catch(e) {}
+                    }, 4000); 
                 } else {
+                    alert(d.mensaje);
                     this.innerText = "ACTIVAR AHORA"; 
                 }
             }
@@ -374,12 +380,11 @@
         _Meta = _ba * 1.20; 
     };
 
-    // EL CEREBRO DEL JUEGO CON EL QUIEBRE DE TRAMPAS CORREGIDO
+    // MOTOR PREDICTIVO: Evalúa antes de sugerir para evitar caer en la trampa
     function _CALC() {
         if(_h.length === 0) return;
         let u = _h[0], p = _h[1] || "", a = _h[2] || "", t = _h[3] || "";
         
-        // 1. EL MOTOR PIENSA NORMALMENTE (TU LÓGICA INTACTA)
         let sugerencia_normal = "";
         if(u === 'Cero'){ sugerencia_normal = (p === 'Rojo') ? 'ROJO' : (p === 'Negro' ? 'NEGRO' : ''); }
         else if(u === p && a === t && u !== a && _h[4] === _h[5] && u === _h[4]){ sugerencia_normal = (u === "Rojo") ? "NEGRO" : "ROJO"; }
@@ -394,21 +399,23 @@
         _s = sugerencia_normal; 
         _trampaAutomaticaActivada = false;
 
-        // 2. EL TRADUCTOR LEE EL EXCEL Y HACE EL QUIEBRE
-        const hA_limpio = _h.slice(0,30).map(v => v.charAt(0).toUpperCase()).join("-");
-        
-        for(let tr of _TR) {
-            if(!tr) continue;
-            let tr_limpia = tr.toString().toUpperCase().split('_')[0]
-                              .replace(/ROJO/g, 'R').replace(/NEGRO/g, 'N').replace(/CERO/g, '0').trim();
+        let next_c = sugerencia_normal === "ROJO" ? "R" : (sugerencia_normal === "NEGRO" ? "N" : "");
+        if (next_c !== "") {
+            // Construimos la jugada hipotética (Lo que pasaría si siguiéramos la sugerencia)
+            let h_hipotetico = [next_c, ..._h.map(v => v.charAt(0).toUpperCase())].join("-");
             
-            // Verificamos si la jugada actual en mesa comienza EXACTAMENTE con la trampa
-            if(tr_limpia.length > 2 && hA_limpio.startsWith(tr_limpia)) { 
-                _s = (sugerencia_normal === "ROJO") ? "NEGRO" : "ROJO"; 
-                if(_s === "") _s = (u === "Rojo") ? "NEGRO" : "ROJO"; 
+            for(let tr of _TR) {
+                if(!tr) continue;
+                let tr_limpia = tr.toString().toUpperCase().split('_')[0]
+                                  .replace(/ROJO/g, 'R').replace(/NEGRO/g, 'N').replace(/CERO/g, '0').trim();
                 
-                _trampaAutomaticaActivada = true; 
-                return; // ROMPE EL CICLO PARA NO REPETIR
+                // Si la jugada hipotética forma la trampa completa desde el inicio
+                if(tr_limpia.length > 2 && h_hipotetico.startsWith(tr_limpia)) { 
+                    // ¡QUIEBRE! Detecta la trampa antes de caer e invierte la sugerencia
+                    _s = (sugerencia_normal === "ROJO") ? "NEGRO" : "ROJO"; 
+                    _trampaAutomaticaActivada = true; 
+                    return; 
+                }
             }
         }
     }
@@ -431,14 +438,6 @@
         
         _CALC();
 
-        if(_trampaAutomaticaActivada && _per > 0) {
-            let patronAuto = _h.slice(0,15).join("-");
-            let urlAuto = _URL + "?action=reportar_trampa&licencia=" + _L + "&serial=" + _L + "&patron=" + patronAuto + "_AUTO_BASE_DATOS";
-            navigator.sendBeacon(urlAuto); 
-
-            mostrarAlerta("Hemos identificado un <b>patrón oculto</b> del casino diseñado para quitarte ganancias.<br><br>Por favor, PRESIONA EL BOTÓN <b>⚠️ TRAMPA</b> AHORA para confirmar este reporte y ayudarnos a mejorar el algoritmo VIP.");
-        }
-
         update();
         saveState();
 
@@ -446,12 +445,13 @@
             document.getElementById('alerta-meta').style.display='flex';
         }
 
+        // TRAMPAS RESTRINGIDAS A 7 JUGADAS DE BASURA
         if(_per >= 7) {
             document.getElementById('btn-trampa').style.opacity="1";
             document.getElementById('btn-trampa').style.pointerEvents="auto";
             
             if(_per === 7) {
-                let patronAuto = _h.slice(0,15).join("-");
+                let patronAuto = _h.slice(0,7).join("-");
                 let urlAuto = _URL + "?action=reportar_trampa&licencia=" + _L + "&serial=" + _L + "&patron=" + patronAuto + "_AUTO_7_ERRORES";
                 navigator.sendBeacon(urlAuto);
 
@@ -463,13 +463,14 @@
         }
     }
 
+    // BOTÓN TRAMPA MANUAL: SOLO GUARDA LAS ÚLTIMAS 7
     document.getElementById('btn-trampa').onclick = async () => {
-        let patron = _h.slice(0,15).join("-");
+        let patron = _h.slice(0,7).join("-");
         try {
             let url = _URL + "?action=reportar_trampa&licencia=" + _L + "&serial=" + _L + "&patron=" + patron + "_MANUAL";
             navigator.sendBeacon(url);
             
-            mostrarAlerta("<b>✅ GRACIAS POR REPORTAR.</b><br><br>Tu reporte ha sido enviado con éxito al servidor. El sistema registrará este patrón para evitarlo en el futuro.");
+            mostrarAlerta("<b>✅ GRACIAS POR REPORTAR.</b><br><br>Tu reporte ha sido enviado con éxito al servidor. El sistema registrará este patrón de 7 jugadas para evitarlo en el futuro.");
             
             document.getElementById('btn-trampa').style.opacity="0.3";
             document.getElementById('btn-trampa').style.pointerEvents="none";
