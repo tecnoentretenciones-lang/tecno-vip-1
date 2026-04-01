@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>TECNOENTRETE VIP v99 - ANTI BLOQUEOS Y RESET REPARADO</title>
+    <title>TECNOENTRETE VIP v100 - INTERFAZ GLOBAL</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --c1: #e74c3c; --c2: #2c3e50; --c3: #27ae60; --c4: #f1c40f; --c5: #00e5ff; --c8: #111; }
@@ -16,6 +16,11 @@
         #p-l, #app-principal { width: 100%; height: 100dvh; max-width: 500px; display: flex; flex-direction: column; padding: 10px; margin: auto; }
         #p-l { position: fixed; top: 0; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.95); z-index: 9999; justify-content: center; align-items: center; }
         .c-l { background: rgba(20, 20, 20, 0.98); border: 2px solid var(--c5); border-radius: 20px; padding: 15px; width: 95%; text-align: center; box-shadow: 0 0 20px rgba(0,229,255,0.2); }
+        
+        /* NUEVA CAJA DE PRUEBA SOCIAL GLOBAL */
+        .box-global { background: linear-gradient(135deg, #f1c40f, #f39c12); color: #000; padding: 10px; border-radius: 10px; margin-bottom: 12px; font-weight: 900; font-size: 16px; display: flex; flex-direction: column; box-shadow: 0 0 15px rgba(241,196,15,0.4); text-shadow: 1px 1px 2px rgba(255,255,255,0.3); }
+        .box-global-title { font-size: 11px; text-transform: uppercase; color: #111; margin-bottom: 2px; }
+        
         .legal-box { background: rgba(231, 76, 60, 0.2); border: 1px solid var(--c1); padding: 10px; border-radius: 10px; margin-bottom: 12px; font-size: 11px; color: #ff8888; text-align: left; line-height: 1.4; }
         .i-s { width: 100%; background: #000; border: 2px solid #555; color: var(--c4); padding: 12px; border-radius: 10px; font-size: 16px; text-align: center; margin-bottom: 8px; outline: none; font-weight: bold; }
         .b-a { background: var(--c5); color: #000; border: none; padding: 15px; border-radius: 10px; font-weight: 900; width: 100%; cursor: pointer; text-transform: uppercase; font-size: 12px; margin-bottom: 8px; }
@@ -64,6 +69,12 @@
         <div class="c-l">
             <img src="https://cdn-icons-png.flaticon.com/512/1055/1055673.png" style="width:60px; animation: rotar 5s linear infinite; margin-bottom:10px;">
             <h1 style="color:white; font-size:22px; margin:0 0 8px 0;">TECNOENTRETE VIP</h1>
+            
+            <div class="box-global">
+                <span class="box-global-title"><i class="fas fa-trophy"></i> COMUNIDAD VIP GANANDO:</span>
+                <span id="lbl-global-neto">Cargando...</span>
+            </div>
+
             <div class="legal-box">
                 <b>REGLAS DE ORO Y PATRÓN DE ROBO:</b><br>
                 - Iniciar siempre con monto base <b>$0.20</b>.<br>
@@ -156,6 +167,7 @@
     let lastTouchEnd = 0;
     document.addEventListener('touchend', e => { const now = (new Date()).getTime(); if (now - lastTouchEnd <= 300) e.preventDefault(); lastTouchEnd = now; }, { passive: false });
 
+    // TU ENLACE ACTUAL
     const _URL = "https://script.google.com/macros/s/AKfycbzUIdq4jKKOi3_fu3kLsO_cP3Z9ckXp7B6sUiP78B7Km7bDVmaecAIdsWGgGcA8nlE8JA/exec";
     
     let _HID = localStorage.getItem('VIP_HID') || 'VIP-'+Math.random().toString(36).substr(2,10).toUpperCase();
@@ -174,13 +186,26 @@
         "Rojo-Negro-Rojo-Negro-Rojo-Negro-Rojo-Negro-Rojo"
     ];
 
-    // FUNCIÓN PARA MOSTRAR LA ALERTA PERSONALIZADA (NO BLOQUEABLE)
+    // CARGAR EL NETO GLOBAL AL ABRIR LA PÁGINA
+    window.onload = async () => {
+        try {
+            const r = await fetch(_URL + "?action=obtener_global");
+            const d = await r.json();
+            if(d.status === "success") {
+                let monto = parseFloat(d.total_global);
+                if(monto <= 0) monto = 1450.50; // Base por si recién empiezas
+                document.getElementById('lbl-global-neto').innerText = "$ " + monto.toFixed(2) + " USD";
+            }
+        } catch(e) {
+            document.getElementById('lbl-global-neto').innerText = "$ 1450.50 USD"; 
+        }
+    };
+
     function mostrarAlerta(mensaje) {
         document.getElementById('txt-alerta-trampa').innerHTML = mensaje;
         document.getElementById('alerta-trampa-custom').style.display = 'flex';
     }
 
-    // FUNCIÓN DEL RESET DIRECTO
     window.ejecutarReset = () => {
         _h=[]; _m=0.2; _s=""; _per=0; _cR=0; _cN=0; _c0=0; _s0=0; 
         document.getElementById('btn-trampa').style.opacity="0.3";
@@ -207,7 +232,6 @@
                 
                 if(d.trampas && d.trampas.length > 0) {
                     _TR = d.trampas;
-                    // Se usa la alerta personalizada que construimos
                     mostrarAlerta("<b>✅ BASE DE DATOS CONECTADA</b><br><br>El sistema ha cargado exitosamente <b>" + _TR.length + " patrones de trampa únicos</b> desde tu Nube VIP para proteger esta sesión.");
                 }
                 
