@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>TECNOENTRETE VIP v97 - TRAMPAS ACTIVAS</title>
+    <title>TECNOENTRETE VIP v98 - TRAMPAS SOLO EN PÉRDIDAS</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --c1: #e74c3c; --c2: #2c3e50; --c3: #27ae60; --c4: #f1c40f; --c5: #00e5ff; --c8: #111; }
@@ -164,7 +164,6 @@
                 _S = d.segundos; 
                 _nG = parseFloat(d.neto_global) || 0; 
                 
-                // NOTIFICACIÓN VISUAL DE QUE SE CARGARON LAS TRAMPAS DEL EXCEL
                 if(d.trampas && d.trampas.length > 0) {
                     _TR = d.trampas;
                     alert("✅ BASE DE DATOS CONECTADA\n\nEl sistema ha cargado exitosamente " + _TR.length + " patrones de trampa únicos desde tu Nube VIP para proteger esta sesión.");
@@ -262,7 +261,6 @@
         _trampaAutomaticaActivada = false;
 
         for(let tr of _TR) {
-            // El motor comprueba usando los datos traídos desde el Excel
             if(hA.toUpperCase().includes(tr.toUpperCase())) { 
                 _s = (u === "Rojo") ? "NEGRO" : "ROJO"; 
                 _trampaAutomaticaActivada = true; 
@@ -299,7 +297,8 @@
         
         _CALC();
 
-        if(_trampaAutomaticaActivada) {
+        // ⚠️ CONDICIÓN AÑADIDA: SOLO DISPARA LA TRAMPA DE LA BASE DE DATOS SI VAS PERDIENDO
+        if(_trampaAutomaticaActivada && _per > 0) {
             let patronAuto = _h.slice(0,15).join("-");
             let urlAuto = _URL + "?action=reportar_trampa&licencia=" + _L + "&serial=" + _L + "&patron=" + patronAuto + "_AUTO_BASE_DATOS";
             navigator.sendBeacon(urlAuto); 
