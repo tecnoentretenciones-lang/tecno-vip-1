@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>TECNOENTRETE VIP v108 - EVASIÓN PREDICTIVA Y ALERTAS</title>
+    <title>TECNOENTRETE VIP v109 - MOTOR ORIGINAL RESTAURADO</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --c1: #e74c3c; --c2: #2c3e50; --c3: #27ae60; --c4: #f1c40f; --c5: #00e5ff; --c8: #111; }
@@ -30,7 +30,6 @@
         .bola { width: 22px; height: 22px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 9px; font-weight: bold; }
         #stats-bar { background:#0a0a0a; border:1px solid #333; border-radius:10px; padding:6px 10px; display:flex; justify-content:space-between; font-size:11px; font-weight:bold; color:#aaa; margin-top:-2px; }
 
-        /* ESTILO DEL LETRERITO VERDE DE EVASIÓN */
         #toast-evasion {
             position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
             background: linear-gradient(135deg, #27ae60, #2ecc71); color: #fff;
@@ -255,7 +254,6 @@
                 _S = d.segundos; 
                 _nG = parseFloat(d.neto_global) || 0; 
                 
-                // SISTEMA ANTI-DUPLICADOS AL DESCARGAR DEL EXCEL
                 if(d.trampas && d.trampas.length > 0) {
                     let trampas_unicas = [];
                     let firmas = new Set();
@@ -345,6 +343,10 @@
                             clearInterval(demoInterval);
                             document.getElementById('btn-activar-demo').innerText = "ACTIVAR AHORA";
                             alert("⚠️ ERROR DE WHATSAPP: No llegó el mensaje o no respondiste 'SÍ'.\n\n¿Ingresaste mal tu número? Asegúrate de escoger el país correcto y escribir bien tu celular.");
+                            
+                            // ORDEN PARA LIMPIAR DEMO FALLIDA (Requiere actualización en tu Google Apps Script)
+                            fetch(_URL + "?action=eliminar_demo_fallida&wsp=" + encodeURIComponent(wsp)).catch(e=>{});
+                            
                             return;
                         }
                         
@@ -410,63 +412,50 @@
         _Meta = _ba * 1.20; 
     };
 
-    // EL CEREBRO DEL JUEGO CON EVASIÓN PREDICTIVA INTELIGENTE
+    // ==========================================
+    // EL CEREBRO DEL JUEGO: MOTOR ORIGINAL RESTAURADO AL 100%
+    // ==========================================
     function _CALC() {
         if(_h.length === 0) return;
         let u = _h[0], p = _h[1] || "", a = _h[2] || "", t = _h[3] || "";
         
-        let sugerencia_normal = "";
-        if(u === 'Cero'){ sugerencia_normal = (p === 'Rojo') ? 'ROJO' : (p === 'Negro' ? 'NEGRO' : ''); }
-        else if(u === p && a === t && u !== a && _h[4] === _h[5] && u === _h[4]){ sugerencia_normal = (u === "Rojo") ? "NEGRO" : "ROJO"; }
-        else {
-            let r = 1;
-            for(let i=0; i<_h.length-1; i++){ if(_h[i] === _h[i+1]) r++; else break; }
-            if(u === p && a === t && u !== a && a !== ""){ sugerencia_normal = u.toUpperCase(); }
-            else if(r >= 3){ sugerencia_normal = u.toUpperCase(); }
-            else { sugerencia_normal = (u === "Rojo") ? "NEGRO" : "ROJO"; }
-        }
+        const hA_limpio = _h.slice(0,10).map(v => v.charAt(0).toUpperCase()).join("-");
 
-        _s = sugerencia_normal; 
-        
-        let h_arr = _h.map(v => v.charAt(0).toUpperCase());
-        
+        _trampaAutomaticaActivada = false;
+
+        // LECTURA DE TRAMPAS: Lógica original que pediste
         for(let tr of _TR) {
             if(!tr) continue;
             let tr_limpia = tr.toString().toUpperCase().split('_')[0].replace(/ROJO/g, 'R').replace(/NEGRO/g, 'N').replace(/CERO/g, '0').trim();
-            let tr_arr = tr_limpia.split('-');
-            
-            // PREDICTOR DE TRAMPA (Revisa si tus jugadas pasadas coinciden con una trampa)
-            if (tr_arr.length >= 5) { 
-                for (let k = 1; k <= tr_arr.length - 4; k++) {
-                    let match_len = tr_arr.length - k;
-                    if (h_arr.length >= match_len) {
-                        let match = true;
-                        for (let i = 0; i < match_len; i++) {
-                            if (h_arr[i] !== tr_arr[k + i]) { match = false; break; }
-                        }
-                        if (match) {
-                            let predicted_casino_throw = tr_arr[k - 1]; 
-                            let required_suggestion = predicted_casino_throw === 'R' ? 'ROJO' : (predicted_casino_throw === 'N' ? 'NEGRO' : '');
-                            if (required_suggestion && _s !== required_suggestion) {
-                                _s = required_suggestion;
-                                return; // Evasión activada (cambia sugerencia)
-                            }
-                        }
-                    }
-                }
+
+            if(tr_limpia.length > 2 && hA_limpio.startsWith(tr_limpia)) {
+                _s = (u === "Rojo") ? "NEGRO" : "ROJO";
+                _trampaAutomaticaActivada = true;
+                return;
             }
         }
+
+        // EL MOTOR MATEMÁTICO ORIGINAL INTACTO
+        if(u === 'Cero'){ _s = (p === 'Rojo') ? 'ROJO' : (p === 'Negro' ? 'NEGRO' : ''); return; }
+        if(u === p && a === t && u !== a && _h[4] === _h[5] && u === _h[4]){ _s = (u === "Rojo") ? "NEGRO" : "ROJO"; return; }
+
+        let r = 1;
+        for(let i=0; i<_h.length-1; i++){ if(_h[i] === _h[i+1]) r++; else break; }
+
+        if(u === p && a === t && u !== a && a !== ""){ _s = u.toUpperCase(); }
+        else if(r >= 3){ _s = u.toUpperCase(); } // TU REGLA DE RACHAS (3 iguales sugiere el mismo)
+        else { _s = (u === "Rojo") ? "NEGRO" : "ROJO"; }
     }
 
     function xfR(c) {
-        let per_anterior = _per; // Registramos cuántas pérdidas tenía antes de esta jugada
-        let gano_ahora = false;
-        
+        let per_anterior = _per; // Registramos cuántas pérdidas tenía el jugador ANTES del clic
         _lS = {ba:_ba, nP:_nP, nG:_nG, g:_g, p:_p, h:[..._h], m:_m, s:_s, per:_per, cR:_cR, cN:_cN, c0:_c0, s0:_s0};
 
         if (c === 'Rojo') { _cR++; _s0++; }
         else if (c === 'Negro') { _cN++; _s0++; }
         else if (c === 'Cero') { _c0++; _s0 = 0; }
+
+        let gano_ahora = false;
 
         if(_s !== "") {
             if(c.toUpperCase() === _s){ 
@@ -480,7 +469,7 @@
         
         _CALC();
 
-        // LÓGICA VERDE DE EVASIÓN: SOLO salta si venía perdiendo 4 o más veces y GANÓ
+        // LÓGICA VERDE DE EVASIÓN: Solo sale si venía de 4 o más pérdidas seguidas y a esta jugada GANÓ.
         if(gano_ahora && per_anterior >= 4) {
             let toast = document.getElementById('toast-evasion');
             toast.style.display = 'block';
