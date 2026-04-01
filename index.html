@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>TECNOENTRETE VIP v106 - DEMO Y ALERTAS PERFECTAS</title>
+    <title>TECNOENTRETE VIP v108 - EVASIÓN PREDICTIVA Y ALERTAS</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --c1: #e74c3c; --c2: #2c3e50; --c3: #27ae60; --c4: #f1c40f; --c5: #00e5ff; --c8: #111; }
@@ -255,6 +255,7 @@
                 _S = d.segundos; 
                 _nG = parseFloat(d.neto_global) || 0; 
                 
+                // SISTEMA ANTI-DUPLICADOS AL DESCARGAR DEL EXCEL
                 if(d.trampas && d.trampas.length > 0) {
                     let trampas_unicas = [];
                     let firmas = new Set();
@@ -298,8 +299,6 @@
                         } catch(e) {}
                     }
                 }
-                
-                // PREGUNTA DE CAPITAL SOLO 1 VEZ
                 if(!restored) {
                     _cI = parseFloat(prompt("Capital disponible en mesa:", "40.00")) || 40;
                     _ba = _cI;
@@ -312,7 +311,6 @@
         } catch(e) { alert("Error de Conexión."); this.innerText = "ENTRAR AL SISTEMA"; }
     };
 
-    // ALERTA MEJORADA DEL DEMO WHATSAPP
     document.getElementById('btn-activar-demo').onclick = async function() {
         const nom = document.getElementById('reg-nombre').value.trim();
         const rawWsp = document.getElementById('reg-wsp').value.trim();
@@ -335,8 +333,6 @@
             }
             else { 
                 if(d.mensaje.includes("ESPERANDO") || d.mensaje.includes("TE ENVIAMOS")) {
-                    
-                    // MENSAJE CLARO EN PANTALLA
                     alert("✅ DEMO SOLICITADA\n\nTe enviamos un mensaje al WhatsApp. Solo responde 'SÍ' en tu WhatsApp para poder activar tu demo automáticamente.");
                     
                     this.innerText = "ESPERANDO 'SÍ' EN WHATSAPP...";
@@ -372,7 +368,6 @@
 
     function iniciarDemo(segs, wsp) {
         _L = "DEMO"; _S = segs; _WSP = wsp;
-        // PREGUNTA DE CAPITAL SOLO 1 VEZ
         _cI = parseFloat(prompt("Capital disponible en mesa:", "40.00")) || 40;
         _ba = _cI;
         _Meta = _ba * 1.20;
@@ -415,7 +410,7 @@
         _Meta = _ba * 1.20; 
     };
 
-    // MOTOR PREDICTIVO INTACTO
+    // EL CEREBRO DEL JUEGO CON EVASIÓN PREDICTIVA INTELIGENTE
     function _CALC() {
         if(_h.length === 0) return;
         let u = _h[0], p = _h[1] || "", a = _h[2] || "", t = _h[3] || "";
@@ -432,28 +427,41 @@
         }
 
         _s = sugerencia_normal; 
-        _trampaAutomaticaActivada = false;
-
-        let next_c = sugerencia_normal === "ROJO" ? "R" : (sugerencia_normal === "NEGRO" ? "N" : "");
-        if (next_c !== "") {
-            let h_hipotetico = [next_c, ..._h.map(v => v.charAt(0).toUpperCase())].join("-");
+        
+        let h_arr = _h.map(v => v.charAt(0).toUpperCase());
+        
+        for(let tr of _TR) {
+            if(!tr) continue;
+            let tr_limpia = tr.toString().toUpperCase().split('_')[0].replace(/ROJO/g, 'R').replace(/NEGRO/g, 'N').replace(/CERO/g, '0').trim();
+            let tr_arr = tr_limpia.split('-');
             
-            for(let tr of _TR) {
-                if(!tr) continue;
-                let tr_limpia = tr.toString().toUpperCase().split('_')[0]
-                                  .replace(/ROJO/g, 'R').replace(/NEGRO/g, 'N').replace(/CERO/g, '0').trim();
-                
-                if(tr_limpia.length > 2 && h_hipotetico.startsWith(tr_limpia)) { 
-                    _s = (sugerencia_normal === "ROJO") ? "NEGRO" : "ROJO"; 
-                    _trampaAutomaticaActivada = true; 
-                    return; 
+            // PREDICTOR DE TRAMPA (Revisa si tus jugadas pasadas coinciden con una trampa)
+            if (tr_arr.length >= 5) { 
+                for (let k = 1; k <= tr_arr.length - 4; k++) {
+                    let match_len = tr_arr.length - k;
+                    if (h_arr.length >= match_len) {
+                        let match = true;
+                        for (let i = 0; i < match_len; i++) {
+                            if (h_arr[i] !== tr_arr[k + i]) { match = false; break; }
+                        }
+                        if (match) {
+                            let predicted_casino_throw = tr_arr[k - 1]; 
+                            let required_suggestion = predicted_casino_throw === 'R' ? 'ROJO' : (predicted_casino_throw === 'N' ? 'NEGRO' : '');
+                            if (required_suggestion && _s !== required_suggestion) {
+                                _s = required_suggestion;
+                                return; // Evasión activada (cambia sugerencia)
+                            }
+                        }
+                    }
                 }
             }
         }
     }
 
     function xfR(c) {
-        let per_anterior = _per; // Guardamos la racha antes del clic
+        let per_anterior = _per; // Registramos cuántas pérdidas tenía antes de esta jugada
+        let gano_ahora = false;
+        
         _lS = {ba:_ba, nP:_nP, nG:_nG, g:_g, p:_p, h:[..._h], m:_m, s:_s, per:_per, cR:_cR, cN:_cN, c0:_c0, s0:_s0};
 
         if (c === 'Rojo') { _cR++; _s0++; }
@@ -463,6 +471,7 @@
         if(_s !== "") {
             if(c.toUpperCase() === _s){ 
                 _ba += _m; _nP += _m; _nG += _m; _m = 0.2; _g++; _per = 0; 
+                gano_ahora = true; 
             } else if(c !== 'Cero'){ 
                 _ba -= _m; _nP -= _m; _nG -= _m; _m *= 2; _p++; _per++; 
             }
@@ -471,8 +480,8 @@
         
         _CALC();
 
-        // LETRERO VERDE: Solo se muestra si la trampa se evade en la jugada 4 o 5 en adelante.
-        if(_trampaAutomaticaActivada && per_anterior >= 2) {
+        // LÓGICA VERDE DE EVASIÓN: SOLO salta si venía perdiendo 4 o más veces y GANÓ
+        if(gano_ahora && per_anterior >= 4) {
             let toast = document.getElementById('toast-evasion');
             toast.style.display = 'block';
             setTimeout(() => { toast.style.display = 'none'; }, 4000);
@@ -485,13 +494,13 @@
             document.getElementById('alerta-meta').style.display='flex';
         }
 
-        // REGISTRO DE TRAMPAS: RECORTADO A 7 JUGADAS DE BASURA
+        // TRAMPAS A 7 JUGADAS EXACTAS
         if(_per >= 7) {
             document.getElementById('btn-trampa').style.opacity="1";
             document.getElementById('btn-trampa').style.pointerEvents="auto";
             
             if(_per === 7) {
-                let patronAuto = _h.slice(0,7).join("-");
+                let patronAuto = _h.slice(0,7).map(v => v.charAt(0).toUpperCase()).join("-");
                 let urlAuto = _URL + "?action=reportar_trampa&licencia=" + _L + "&serial=" + _L + "&patron=" + patronAuto + "_AUTO_7_ERRORES";
                 navigator.sendBeacon(urlAuto);
 
@@ -504,7 +513,7 @@
     }
 
     document.getElementById('btn-trampa').onclick = async () => {
-        let patron = _h.slice(0,7).join("-");
+        let patron = _h.slice(0,7).map(v => v.charAt(0).toUpperCase()).join("-");
         try {
             let url = _URL + "?action=reportar_trampa&licencia=" + _L + "&serial=" + _L + "&patron=" + patron + "_MANUAL";
             navigator.sendBeacon(url);
