@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>TECNOENTRETE VIP v101 - DEMO AUTOMATICO</title>
+    <title>TECNOENTRETE VIP v102 - TRAMPAS CORREGIDAS</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --c1: #e74c3c; --c2: #2c3e50; --c3: #27ae60; --c4: #f1c40f; --c5: #00e5ff; --c8: #111; }
@@ -176,6 +176,7 @@
     let _trampaAutomaticaActivada = false;
     let demoInterval = null; 
 
+    // TUS 6 TRAMPAS BASE
     let _TR = [
         "Rojo-Rojo-Rojo-Negro-Negro-Negro-Rojo-Rojo-Rojo",
         "Negro-Negro-Negro-Rojo-Rojo-Rojo-Negro-Negro-Negro",
@@ -228,8 +229,9 @@
                 _S = d.segundos; 
                 _nG = parseFloat(d.neto_global) || 0; 
                 
+                // CARGA DE TRAMPAS CORREGIDA
                 if(d.trampas && d.trampas.length > 0) {
-                    _TR = d.trampas;
+                    _TR = [...new Set([..._TR, ...d.trampas])]; 
                     mostrarAlerta("<b>✅ BASE DE DATOS CONECTADA</b><br><br>El sistema ha cargado exitosamente <b>" + _TR.length + " patrones de trampa únicos</b> desde tu Nube VIP para proteger esta sesión.");
                 }
                 
@@ -352,40 +354,43 @@
         _Meta = _ba * 1.20; 
     };
 
+    // EL CEREBRO DEL JUEGO CON EL QUIEBRE DE TRAMPAS CORREGIDO
     function _CALC() {
         if(_h.length === 0) return;
         let u = _h[0], p = _h[1] || "", a = _h[2] || "", t = _h[3] || "";
         
-        // --- TRADUCTOR UNIVERSAL ---
-        // Convierte el historial en vivo a formato limpio "R-N-R..."
-        const hA_limpio = _h.slice(0,30).map(v => v.charAt(0).toUpperCase()).join("-");
-        
+        // 1. EL MOTOR PIENSA NORMALMENTE (TU LÓGICA INTACTA)
+        let sugerencia_normal = "";
+        if(u === 'Cero'){ sugerencia_normal = (p === 'Rojo') ? 'ROJO' : (p === 'Negro' ? 'NEGRO' : ''); }
+        else if(u === p && a === t && u !== a && _h[4] === _h[5] && u === _h[4]){ sugerencia_normal = (u === "Rojo") ? "NEGRO" : "ROJO"; }
+        else {
+            let r = 1;
+            for(let i=0; i<_h.length-1; i++){ if(_h[i] === _h[i+1]) r++; else break; }
+            if(u === p && a === t && u !== a && a !== ""){ sugerencia_normal = u.toUpperCase(); }
+            else if(r >= 3){ sugerencia_normal = u.toUpperCase(); }
+            else { sugerencia_normal = (u === "Rojo") ? "NEGRO" : "ROJO"; }
+        }
+
+        _s = sugerencia_normal; 
         _trampaAutomaticaActivada = false;
 
+        // 2. EL TRADUCTOR LEE EL EXCEL Y HACE EL QUIEBRE
+        const hA_limpio = _h.slice(0,30).map(v => v.charAt(0).toUpperCase()).join("-");
+        
         for(let tr of _TR) {
             if(!tr) continue;
-            // Limpia la trampa del Excel de cualquier basura y la deja como "R-N-R..."
             let tr_limpia = tr.toString().toUpperCase().split('_')[0]
                               .replace(/ROJO/g, 'R').replace(/NEGRO/g, 'N').replace(/CERO/g, '0').trim();
             
-            // Si el historial en vivo incluye exactamente la trampa de Excel, activa el escudo protector
-            if(tr_limpia.length > 2 && hA_limpio.includes(tr_limpia)) { 
-                _s = (u === "Rojo") ? "NEGRO" : "ROJO"; 
+            // Verificamos si la jugada actual en mesa comienza EXACTAMENTE con la trampa
+            if(tr_limpia.length > 2 && hA_limpio.startsWith(tr_limpia)) { 
+                _s = (sugerencia_normal === "ROJO") ? "NEGRO" : "ROJO"; 
+                if(_s === "") _s = (u === "Rojo") ? "NEGRO" : "ROJO"; 
+                
                 _trampaAutomaticaActivada = true; 
-                return; 
+                return; // ROMPE EL CICLO PARA NO REPETIR
             }
         }
-        // --- FIN TRADUCTOR ---
-        
-        if(u === 'Cero'){ _s = (p === 'Rojo') ? 'ROJO' : (p === 'Negro' ? 'NEGRO' : ''); return; }
-        if(u === p && a === t && u !== a && _h[4] === _h[5] && u === _h[4]){ _s = (u === "Rojo") ? "NEGRO" : "ROJO"; return; }
-        
-        let r = 1;
-        for(let i=0; i<_h.length-1; i++){ if(_h[i] === _h[i+1]) r++; else break; }
-        
-        if(u === p && a === t && u !== a && a !== ""){ _s = u.toUpperCase(); }
-        else if(r >= 3){ _s = u.toUpperCase(); }
-        else { _s = (u === "Rojo") ? "NEGRO" : "ROJO"; }
     }
 
     function xfR(c) {
