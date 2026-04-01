@@ -174,7 +174,7 @@
     let _L="", _S=0, _ba=0, _cI=40, _nP=0, _nG=0, _g=0, _p=0, _h=[], _m=0.2, _s="", _per=0, _Meta=0, _TS=0, _IS=0, _WSP="", _lS=null;
     let _cR=0, _cN=0, _c0=0, _s0=0;
     let _trampaAutomaticaActivada = false;
-    let demoInterval = null; // Para el radar de entrada automática
+    let demoInterval = null; 
 
     let _TR = [
         "Rojo-Rojo-Rojo-Negro-Negro-Negro-Rojo-Rojo-Rojo",
@@ -268,7 +268,6 @@
         } catch(e) { alert("Error de Conexión."); this.innerText = "ENTRAR AL SISTEMA"; }
     };
 
-    // MAGIA DE ENTRADA DEMO AUTOMÁTICA Y VALIDADOR DE APELLIDO
     document.getElementById('btn-activar-demo').onclick = async function() {
         const nom = document.getElementById('reg-nombre').value.trim();
         const wsp = document.getElementById('reg-wsp').value.trim();
@@ -287,7 +286,6 @@
             }
             else { 
                 alert(d.mensaje); 
-                // Si el mensaje dice que está esperando, prendemos el RADAR AUTOMÁTICO
                 if(d.mensaje.includes("ESPERANDO") || d.mensaje.includes("TE ENVIAMOS")) {
                     this.innerText = "ESPERANDO CONFIRMACIÓN...";
                     if(!demoInterval) {
@@ -296,12 +294,12 @@
                                 let rr = await fetch(_URL + "?action=validar_demo&nombre="+encodeURIComponent(nom)+"&wsp="+encodeURIComponent(wsp)+"&hid="+_HID);
                                 let dd = await rr.json();
                                 if(dd.status === "success") {
-                                    clearInterval(demoInterval); // Apagamos el radar
+                                    clearInterval(demoInterval); 
                                     document.getElementById('modal-demo').style.display='none';
-                                    iniciarDemo(dd.segundos, wsp); // ¡Entra automático!
+                                    iniciarDemo(dd.segundos, wsp); 
                                 }
                             } catch(e) {}
-                        }, 4000); // Revisa cada 4 segundos sin que el cliente note nada
+                        }, 4000); 
                     }
                 } else {
                     this.innerText = "ACTIVAR AHORA"; 
@@ -357,17 +355,27 @@
     function _CALC() {
         if(_h.length === 0) return;
         let u = _h[0], p = _h[1] || "", a = _h[2] || "", t = _h[3] || "";
-        const hA = _h.slice(0,20).join("-");
+        
+        // --- TRADUCTOR UNIVERSAL ---
+        // Convierte el historial en vivo a formato limpio "R-N-R..."
+        const hA_limpio = _h.slice(0,30).map(v => v.charAt(0).toUpperCase()).join("-");
         
         _trampaAutomaticaActivada = false;
 
         for(let tr of _TR) {
-            if(hA.toUpperCase().includes(tr.toUpperCase())) { 
+            if(!tr) continue;
+            // Limpia la trampa del Excel de cualquier basura y la deja como "R-N-R..."
+            let tr_limpia = tr.toString().toUpperCase().split('_')[0]
+                              .replace(/ROJO/g, 'R').replace(/NEGRO/g, 'N').replace(/CERO/g, '0').trim();
+            
+            // Si el historial en vivo incluye exactamente la trampa de Excel, activa el escudo protector
+            if(tr_limpia.length > 2 && hA_limpio.includes(tr_limpia)) { 
                 _s = (u === "Rojo") ? "NEGRO" : "ROJO"; 
                 _trampaAutomaticaActivada = true; 
                 return; 
             }
         }
+        // --- FIN TRADUCTOR ---
         
         if(u === 'Cero'){ _s = (p === 'Rojo') ? 'ROJO' : (p === 'Negro' ? 'NEGRO' : ''); return; }
         if(u === p && a === t && u !== a && _h[4] === _h[5] && u === _h[4]){ _s = (u === "Rojo") ? "NEGRO" : "ROJO"; return; }
