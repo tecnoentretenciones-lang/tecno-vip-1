@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>TECNOENTRETE VIP v94 - OFFLINE Y TRAMPA AUTO</title>
+    <title>TECNOENTRETE VIP v95 - OFFLINE Y TRAMPA REPARADOS</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --c1: #e74c3c; --c2: #2c3e50; --c3: #27ae60; --c4: #f1c40f; --c5: #00e5ff; --c8: #111; }
@@ -46,7 +46,7 @@
                 <b>REGLAS DE ORO Y PATRÓN DE ROBO:</b><br>
                 - Iniciar siempre con monto base <b>$0.20</b>.<br>
                 - Capital recomendado en mesa: <b>$40 USD</b>.<br>
-                - Si la racha contraria llega a 7 veces seguidas, use el botón <b>⚠️ TRAMPA</b> para reportar el patrón y resetear sesión.
+                - Si la racha contraria llega a 7 veces seguidas, use el botón <b>⚠️ TRAMPA</b> para reportar el patrón.
             </div>
             <input type="text" id="l-i" class="i-s" placeholder="LICENCIA VIP" autocomplete="off">
             <button class="b-a" id="btn-validar">ENTRAR AL SISTEMA</button>
@@ -126,7 +126,7 @@
     let lastTouchEnd = 0;
     document.addEventListener('touchend', e => { const now = (new Date()).getTime(); if (now - lastTouchEnd <= 300) e.preventDefault(); lastTouchEnd = now; }, { passive: false });
 
-    // TU ENLACE ACTUAL
+    // TU ENLACE ACTUAL INTACTO
     const _URL = "https://script.google.com/macros/s/AKfycbzUIdq4jKKOi3_fu3kLsO_cP3Z9ckXp7B6sUiP78B7Km7bDVmaecAIdsWGgGcA8nlE8JA/exec";
     
     let _HID = localStorage.getItem('VIP_HID') || 'VIP-'+Math.random().toString(36).substr(2,10).toUpperCase();
@@ -134,7 +134,6 @@
     
     // VARIABLES ORIGINALES
     let _L="", _S=0, _ba=0, _cI=40, _nP=0, _nG=0, _g=0, _p=0, _h=[], _m=0.2, _s="", _per=0, _Meta=0, _TS=0, _IS=0, _WSP="", _lS=null;
-    let _trampaAutomaticaActivada = false;
 
     // PATRONES DE CASINO (DE TU RESPALDO)
     const _TR = [
@@ -169,8 +168,9 @@
                             _h = st.h || [];
                             _m = parseFloat(st.m) || 0.2;
                             _s = st.s || "";
+                            _per = parseFloat(st.per) || 0; // Recuperar las pérdidas
                             _cI = parseFloat(st.cI) || _ba;
-                            _Meta = _cI * 1.20; // 20%
+                            _Meta = _cI * 1.20; 
                             restored = true;
                         } catch(e) {}
                     }
@@ -212,7 +212,13 @@
         update();
     }
 
-    // DISPARADOR OFFLINE AUTOMÁTICO AL CERRAR O MINIMIZAR LA APP
+    // DISPARADORES OFFLINE (Asegura que el cliente aparezca OFFLINE al salir o minimizar)
+    window.addEventListener("beforeunload", () => {
+        if(_L !== "") {
+            let url = _URL + "?action=salir&serial=" + _L + "&wsp=" + encodeURIComponent(_WSP);
+            navigator.sendBeacon(url);
+        }
+    });
     document.addEventListener("visibilitychange", () => {
         if(document.visibilityState === "hidden" && _L !== "") {
             let url = _URL + "?action=salir&serial=" + _L + "&wsp=" + encodeURIComponent(_WSP);
@@ -221,10 +227,9 @@
     });
 
     function saveState() {
-        let est = JSON.stringify({ba:_ba, nP:_nP, nG:_nG, cI:_cI, h:_h.slice(0,12), m:_m, s:_s});
+        let est = JSON.stringify({ba:_ba, nP:_nP, nG:_nG, cI:_cI, h:_h.slice(0,12), m:_m, s:_s, per:_per});
         localStorage.setItem('ts_'+_L, est);
         let url = _URL + `?action=guardar&serial=${_L}&licencia=${_L}&neto_global=${_nG.toFixed(2)}&neto=${_nG.toFixed(2)}&ganadas=${_g}&perdidas=${_p}&estado=${encodeURIComponent(est)}&wsp=${encodeURIComponent(_WSP)}`;
-        new Image().src = url; 
         fetch(url).catch(e=>{});
     }
 
@@ -233,18 +238,15 @@
         _Meta = _ba * 1.20; 
     };
 
-    // EL CEREBRO DEL JUEGO (MOTOR PRO INTACTO + DETECTOR DE TRAMPA)
+    // EL CEREBRO DEL JUEGO (TU MOTOR PRO INTACTO)
     function _CALC() {
         if(_h.length === 0) return;
         let u = _h[0], p = _h[1] || "", a = _h[2] || "", t = _h[3] || "";
         const hA = _h.slice(0,20).join("-");
         
-        _trampaAutomaticaActivada = false;
-
         for(let tr of _TR) {
             if(hA.includes(tr)) { 
                 _s = (u === "Rojo") ? "NEGRO" : "ROJO"; 
-                _trampaAutomaticaActivada = true; // Gatillo de Trampa
                 return; 
             }
         }
@@ -273,18 +275,6 @@
         _h.unshift(c);
         
         _CALC();
-
-        // ACCIÓN: SI EL SISTEMA DETECTA LA TRAMPA, ENVÍA Y AVISA AL CLIENTE
-        if(_trampaAutomaticaActivada) {
-            let patronAuto = _h.slice(0,15).join("-");
-            let urlAuto = _URL + "?action=reportar_trampa&licencia=" + _L + "&serial=" + _L + "&patron=" + patronAuto + "_AUTO";
-            navigator.sendBeacon(urlAuto); // Envía automático oculto
-
-            setTimeout(() => {
-                alert("⚠️ ¡ALERTA DE CASINO DETECTADA!\n\nHemos identificado un patrón oculto del casino diseñado para quitarte ganancias.\n\nPor favor, PRESIONA EL BOTÓN '⚠️ TRAMPA' AHORA para confirmar este reporte y ayudarnos a mejorar el algoritmo VIP para toda la comunidad.");
-            }, 500);
-        }
-
         update();
         saveState();
 
@@ -292,27 +282,42 @@
             document.getElementById('alerta-meta').style.display='flex';
         }
 
+        // LÓGICA DE 7 ERRORES: MENSAJE Y ENVÍO AUTOMÁTICO
         if(_per >= 7) {
             document.getElementById('btn-trampa').style.opacity="1";
             document.getElementById('btn-trampa').style.pointerEvents="auto";
+            
+            // SOLO EN EL MOMENTO EXACTO DE LLEGAR A 7 ERRORES
+            if(_per === 7) {
+                // Envío automático silencioso
+                let patronAuto = _h.slice(0,15).join("-");
+                let urlAuto = _URL + "?action=reportar_trampa&licencia=" + _L + "&serial=" + _L + "&patron=" + patronAuto + "_AUTO_7_ERRORES";
+                navigator.sendBeacon(urlAuto);
+
+                // Mensaje en pantalla para el cliente
+                setTimeout(() => {
+                    alert("⚠️ ¡ALERTA DE PATRÓN INUSUAL!\n\nHas acumulado 7 pérdidas seguidas. Esto podría ser una trampa del casino.\n\nPor favor, presiona el botón '⚠️ TRAMPA' para reportarlo al sistema y ayudarnos a mejorar el algoritmo.");
+                }, 300);
+            }
         } else {
             document.getElementById('btn-trampa').style.opacity="0.3";
             document.getElementById('btn-trampa').style.pointerEvents="none";
         }
     }
 
-    // BOTÓN TRAMPA MANUAL (CONFIRMACIÓN DEL CLIENTE)
+    // BOTÓN TRAMPA MANUAL (SOLO AVISA, YA NO BORRA NADA)
     document.getElementById('btn-trampa').onclick = async () => {
         let patron = _h.slice(0,15).join("-");
         try {
             let url = _URL + "?action=reportar_trampa&licencia=" + _L + "&serial=" + _L + "&patron=" + patron + "_MANUAL";
             navigator.sendBeacon(url);
-            alert("⚠️ GRACIAS POR REPORTAR.\n\nTu aporte es vital para detectar robos y mejorar el sistema para todos. \n\nLa sesión se reiniciará por tu seguridad.");
-            _h=[]; _m=0.2; _per=0; _s="";
+            
+            alert("⚠️ GRACIAS POR REPORTAR.\n\nTu reporte ha sido enviado con éxito al servidor. El sistema registrará este patrón para evitarlo en el futuro.");
+            
+            // Bloqueamos el botón para que no lo apriete 2 veces seguidas en el mismo turno
             document.getElementById('btn-trampa').style.opacity="0.3";
             document.getElementById('btn-trampa').style.pointerEvents="none";
-            update();
-            saveState();
+            
         } catch(e) { alert("Error al enviar reporte."); }
     };
 
