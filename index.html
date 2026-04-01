@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>TECNOENTRETE VIP v105 - EVASIÓN Y FILTRO</title>
+    <title>TECNOENTRETE VIP v106 - DEMO Y ALERTAS PERFECTAS</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --c1: #e74c3c; --c2: #2c3e50; --c3: #27ae60; --c4: #f1c40f; --c5: #00e5ff; --c8: #111; }
@@ -255,12 +255,9 @@
                 _S = d.segundos; 
                 _nG = parseFloat(d.neto_global) || 0; 
                 
-                // SISTEMA ANTI-DUPLICADOS AL DESCARGAR DEL EXCEL
                 if(d.trampas && d.trampas.length > 0) {
                     let trampas_unicas = [];
                     let firmas = new Set();
-                    
-                    // Guarda las 6 bases primero
                     _TR.forEach(t => firmas.add(t.toString().toUpperCase().split('_')[0].replace(/ROJO/g, 'R').replace(/NEGRO/g, 'N').replace(/CERO/g, '0').trim()));
                     
                     d.trampas.forEach(t => {
@@ -268,15 +265,13 @@
                         let firma = t.toString().toUpperCase().split('_')[0].replace(/ROJO/g, 'R').replace(/NEGRO/g, 'N').replace(/CERO/g, '0').trim();
                         if(firma.length > 2 && !firmas.has(firma)) {
                             firmas.add(firma);
-                            trampas_unicas.push(firma); // Se guarda versión limpia y sin repetir
+                            trampas_unicas.push(firma); 
                         }
                     });
                     
                     if(trampas_unicas.length > 0) {
                         _TR = [..._TR, ...trampas_unicas];
                         mostrarAlerta("<b>✅ BASE DE DATOS CONECTADA</b><br><br>El sistema limpió los duplicados y cargó <b>" + trampas_unicas.length + " patrones NUEVOS</b> desde tu Nube VIP.");
-                    } else {
-                        mostrarAlerta("<b>✅ BASE DE DATOS CONECTADA</b><br><br>Sistema sincronizado con tu Nube VIP. No se encontraron patrones nuevos.");
                     }
                 }
                 
@@ -303,6 +298,8 @@
                         } catch(e) {}
                     }
                 }
+                
+                // PREGUNTA DE CAPITAL SOLO 1 VEZ
                 if(!restored) {
                     _cI = parseFloat(prompt("Capital disponible en mesa:", "40.00")) || 40;
                     _ba = _cI;
@@ -315,6 +312,7 @@
         } catch(e) { alert("Error de Conexión."); this.innerText = "ENTRAR AL SISTEMA"; }
     };
 
+    // ALERTA MEJORADA DEL DEMO WHATSAPP
     document.getElementById('btn-activar-demo').onclick = async function() {
         const nom = document.getElementById('reg-nombre').value.trim();
         const rawWsp = document.getElementById('reg-wsp').value.trim();
@@ -337,7 +335,11 @@
             }
             else { 
                 if(d.mensaje.includes("ESPERANDO") || d.mensaje.includes("TE ENVIAMOS")) {
-                    this.innerText = "ESPERANDO CONFIRMACIÓN...";
+                    
+                    // MENSAJE CLARO EN PANTALLA
+                    alert("✅ DEMO SOLICITADA\n\nTe enviamos un mensaje al WhatsApp. Solo responde 'SÍ' en tu WhatsApp para poder activar tu demo automáticamente.");
+                    
+                    this.innerText = "ESPERANDO 'SÍ' EN WHATSAPP...";
                     let intentos = 0;
                     if(demoInterval) clearInterval(demoInterval);
                     
@@ -370,6 +372,7 @@
 
     function iniciarDemo(segs, wsp) {
         _L = "DEMO"; _S = segs; _WSP = wsp;
+        // PREGUNTA DE CAPITAL SOLO 1 VEZ
         _cI = parseFloat(prompt("Capital disponible en mesa:", "40.00")) || 40;
         _ba = _cI;
         _Meta = _ba * 1.20;
@@ -412,7 +415,7 @@
         _Meta = _ba * 1.20; 
     };
 
-    // MOTOR PREDICTIVO (INTACTO)
+    // MOTOR PREDICTIVO INTACTO
     function _CALC() {
         if(_h.length === 0) return;
         let u = _h[0], p = _h[1] || "", a = _h[2] || "", t = _h[3] || "";
@@ -450,6 +453,7 @@
     }
 
     function xfR(c) {
+        let per_anterior = _per; // Guardamos la racha antes del clic
         _lS = {ba:_ba, nP:_nP, nG:_nG, g:_g, p:_p, h:[..._h], m:_m, s:_s, per:_per, cR:_cR, cN:_cN, c0:_c0, s0:_s0};
 
         if (c === 'Rojo') { _cR++; _s0++; }
@@ -467,8 +471,8 @@
         
         _CALC();
 
-        // DESTELLO VERDE AL EVADIR LA TRAMPA EXITOSAMENTE
-        if(_trampaAutomaticaActivada) {
+        // LETRERO VERDE: Solo se muestra si la trampa se evade en la jugada 4 o 5 en adelante.
+        if(_trampaAutomaticaActivada && per_anterior >= 2) {
             let toast = document.getElementById('toast-evasion');
             toast.style.display = 'block';
             setTimeout(() => { toast.style.display = 'none'; }, 4000);
@@ -481,6 +485,7 @@
             document.getElementById('alerta-meta').style.display='flex';
         }
 
+        // REGISTRO DE TRAMPAS: RECORTADO A 7 JUGADAS DE BASURA
         if(_per >= 7) {
             document.getElementById('btn-trampa').style.opacity="1";
             document.getElementById('btn-trampa').style.pointerEvents="auto";
