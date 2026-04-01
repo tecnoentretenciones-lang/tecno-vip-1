@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>TECNOENTRETE VIP v95 - OFFLINE Y TRAMPA REPARADOS</title>
+    <title>TECNOENTRETE VIP v96 - ESTADÍSTICAS Y OFFLINE</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --c1: #e74c3c; --c2: #2c3e50; --c3: #27ae60; --c4: #f1c40f; --c5: #00e5ff; --c8: #111; }
@@ -24,6 +25,9 @@
         .modal-content { background: rgba(20, 20, 20, 0.98); border: 2px solid var(--c5); border-radius: 25px; padding: 25px; width: 90%; text-align: center; max-width: 450px; }
         .manual-text { text-align: left; font-size: 13px; line-height: 1.5; color: #fff; background: rgba(0,0,0,0.5); border: 1px solid #333; padding: 15px; border-radius: 12px; max-height: 350px; overflow-y: auto; margin-bottom: 15px; }
         .bola { width: 22px; height: 22px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 9px; font-weight: bold; }
+        
+        /* ESTILO PARA LA NUEVA BARRA DE ESTADÍSTICAS */
+        #stats-bar { background:#0a0a0a; border:1px solid #333; border-radius:10px; padding:6px 10px; display:flex; justify-content:space-between; font-size:11px; font-weight:bold; color:#aaa; margin-top:-2px; }
     </style>
 </head>
 <body oncontextmenu="return false;">
@@ -74,6 +78,14 @@
                 <button class="b-i" id="btn-0" style="background:var(--c3); height:70px; border-radius:15px; border:none; font-size:32px; color:white; flex:1;">0</button>
             </div>
             <div id="c-h" style="background:#000; height:90px; border-radius:12px; border:1px solid #222; display:flex; flex-wrap:wrap; justify-content:center; gap:5px; overflow:hidden;"></div>
+            
+            <div id="stats-bar">
+                <div><span style="color:var(--c1)">R:</span> <span id="st-R">0</span></div>
+                <div><span style="color:#fff">N:</span> <span id="st-N">0</span></div>
+                <div><span style="color:var(--c3)">0:</span> <span id="st-0">0</span></div>
+                <div><span style="color:var(--c4)">SIN 0:</span> <span id="st-s0">0</span></div>
+            </div>
+
             <div style="display:flex; gap:6px;">
                 <button id="btn-undo" style="background:transparent; color:#555; border:1px solid #333; padding:10px; border-radius:10px; font-size:11px; flex:1;">CORREGIR</button>
                 <button id="btn-trampa" style="background:transparent; color:var(--c4); border:1px solid var(--c4); padding:10px; border-radius:10px; font-size:11px; flex:1.5; opacity:0.3; pointer-events:none;">⚠️ TRAMPA</button>
@@ -126,17 +138,19 @@
     let lastTouchEnd = 0;
     document.addEventListener('touchend', e => { const now = (new Date()).getTime(); if (now - lastTouchEnd <= 300) e.preventDefault(); lastTouchEnd = now; }, { passive: false });
 
-    // TU ENLACE ACTUAL INTACTO
+    // TU ENLACE ACTUAL
     const _URL = "https://script.google.com/macros/s/AKfycbzUIdq4jKKOi3_fu3kLsO_cP3Z9ckXp7B6sUiP78B7Km7bDVmaecAIdsWGgGcA8nlE8JA/exec";
     
     let _HID = localStorage.getItem('VIP_HID') || 'VIP-'+Math.random().toString(36).substr(2,10).toUpperCase();
     localStorage.setItem('VIP_HID', _HID);
     
-    // VARIABLES ORIGINALES
+    // VARIABLES DEL JUEGO + NUEVAS ESTADÍSTICAS
     let _L="", _S=0, _ba=0, _cI=40, _nP=0, _nG=0, _g=0, _p=0, _h=[], _m=0.2, _s="", _per=0, _Meta=0, _TS=0, _IS=0, _WSP="", _lS=null;
+    let _cR=0, _cN=0, _c0=0, _s0=0; // Contadores: Rojos, Negros, Ceros, Sin Cero
+    let _trampaAutomaticaActivada = false;
 
-    // PATRONES DE CASINO (DE TU RESPALDO)
-    const _TR = [
+    // PATRONES POR DEFECTO (Se actualizan al entrar si el Excel tiene más)
+    let _TR = [
         "Rojo-Rojo-Rojo-Negro-Negro-Negro-Rojo-Rojo-Rojo",
         "Negro-Negro-Negro-Rojo-Rojo-Rojo-Negro-Negro-Negro",
         "Rojo-Rojo-Negro-Negro-Negro-Rojo-Rojo-Negro-Negro-Negro",
@@ -156,6 +170,11 @@
                 _S = d.segundos; 
                 _nG = parseFloat(d.neto_global) || 0; 
                 
+                // CARGAR TRAMPAS DESDE LA BASE DE DATOS DEL EXCEL
+                if(d.trampas && d.trampas.length > 0) {
+                    _TR = d.trampas;
+                }
+                
                 let savedJSON = d.estado_nube || localStorage.getItem('ts_'+_L);
                 let restored = false;
                 if(savedJSON && savedJSON.includes("{")) {
@@ -168,8 +187,15 @@
                             _h = st.h || [];
                             _m = parseFloat(st.m) || 0.2;
                             _s = st.s || "";
-                            _per = parseFloat(st.per) || 0; // Recuperar las pérdidas
+                            _per = parseFloat(st.per) || 0;
                             _cI = parseFloat(st.cI) || _ba;
+                            
+                            // Restaurar estadísticas
+                            _cR = parseInt(st.cR) || 0;
+                            _cN = parseInt(st.cN) || 0;
+                            _c0 = parseInt(st.c0) || 0;
+                            _s0 = parseInt(st.s0) || 0;
+
                             _Meta = _cI * 1.20; 
                             restored = true;
                         } catch(e) {}
@@ -179,6 +205,7 @@
                     _cI = parseFloat(prompt("Capital disponible en mesa:", "40.00")) || 40;
                     _ba = _cI;
                     _Meta = _ba * 1.20;
+                    _cR=0; _cN=0; _c0=0; _s0=0;
                 }
                 iniciarApp(); 
             }
@@ -212,22 +239,18 @@
         update();
     }
 
-    // DISPARADORES OFFLINE (Asegura que el cliente aparezca OFFLINE al salir o minimizar)
-    window.addEventListener("beforeunload", () => {
-        if(_L !== "") {
-            let url = _URL + "?action=salir&serial=" + _L + "&wsp=" + encodeURIComponent(_WSP);
-            navigator.sendBeacon(url);
-        }
+    // DISPARADORES OFFLINE INMEDIATO AL CERRAR PESTAÑA O MINIMIZAR NAVEGADOR
+    window.addEventListener("pagehide", () => {
+        if(_L !== "") navigator.sendBeacon(_URL + "?action=salir&serial=" + _L + "&wsp=" + encodeURIComponent(_WSP));
     });
     document.addEventListener("visibilitychange", () => {
         if(document.visibilityState === "hidden" && _L !== "") {
-            let url = _URL + "?action=salir&serial=" + _L + "&wsp=" + encodeURIComponent(_WSP);
-            navigator.sendBeacon(url);
+            navigator.sendBeacon(_URL + "?action=salir&serial=" + _L + "&wsp=" + encodeURIComponent(_WSP));
         }
     });
 
     function saveState() {
-        let est = JSON.stringify({ba:_ba, nP:_nP, nG:_nG, cI:_cI, h:_h.slice(0,12), m:_m, s:_s, per:_per});
+        let est = JSON.stringify({ba:_ba, nP:_nP, nG:_nG, cI:_cI, h:_h.slice(0,12), m:_m, s:_s, per:_per, cR:_cR, cN:_cN, c0:_c0, s0:_s0});
         localStorage.setItem('ts_'+_L, est);
         let url = _URL + `?action=guardar&serial=${_L}&licencia=${_L}&neto_global=${_nG.toFixed(2)}&neto=${_nG.toFixed(2)}&ganadas=${_g}&perdidas=${_p}&estado=${encodeURIComponent(est)}&wsp=${encodeURIComponent(_WSP)}`;
         fetch(url).catch(e=>{});
@@ -238,15 +261,18 @@
         _Meta = _ba * 1.20; 
     };
 
-    // EL CEREBRO DEL JUEGO (TU MOTOR PRO INTACTO)
+    // MOTOR PRO INTACTO
     function _CALC() {
         if(_h.length === 0) return;
         let u = _h[0], p = _h[1] || "", a = _h[2] || "", t = _h[3] || "";
         const hA = _h.slice(0,20).join("-");
         
+        _trampaAutomaticaActivada = false;
+
         for(let tr of _TR) {
             if(hA.includes(tr)) { 
                 _s = (u === "Rojo") ? "NEGRO" : "ROJO"; 
+                _trampaAutomaticaActivada = true; 
                 return; 
             }
         }
@@ -263,7 +289,13 @@
     }
 
     function xfR(c) {
-        _lS = {ba:_ba, nP:_nP, nG:_nG, g:_g, p:_p, h:[..._h], m:_m, s:_s, per:_per};
+        // Guarda el estado para el botón "Corregir"
+        _lS = {ba:_ba, nP:_nP, nG:_nG, g:_g, p:_p, h:[..._h], m:_m, s:_s, per:_per, cR:_cR, cN:_cN, c0:_c0, s0:_s0};
+
+        // LÓGICA DE ESTADÍSTICAS
+        if (c === 'Rojo') { _cR++; _s0++; }
+        else if (c === 'Negro') { _cN++; _s0++; }
+        else if (c === 'Cero') { _c0++; _s0 = 0; }
 
         if(_s !== "") {
             if(c.toUpperCase() === _s){ 
@@ -275,6 +307,17 @@
         _h.unshift(c);
         
         _CALC();
+
+        if(_trampaAutomaticaActivada) {
+            let patronAuto = _h.slice(0,15).join("-");
+            let urlAuto = _URL + "?action=reportar_trampa&licencia=" + _L + "&serial=" + _L + "&patron=" + patronAuto + "_AUTO";
+            navigator.sendBeacon(urlAuto); 
+
+            setTimeout(() => {
+                alert("⚠️ ¡ALERTA DE CASINO DETECTADA!\n\nHemos identificado un patrón oculto del casino diseñado para quitarte ganancias.\n\nPor favor, PRESIONA EL BOTÓN '⚠️ TRAMPA' AHORA para confirmar este reporte y ayudarnos a mejorar el algoritmo VIP para toda la comunidad.");
+            }, 500);
+        }
+
         update();
         saveState();
 
@@ -282,19 +325,16 @@
             document.getElementById('alerta-meta').style.display='flex';
         }
 
-        // LÓGICA DE 7 ERRORES: MENSAJE Y ENVÍO AUTOMÁTICO
+        // LÓGICA DE 7 ERRORES (AVISO Y AUTO-REPORTE)
         if(_per >= 7) {
             document.getElementById('btn-trampa').style.opacity="1";
             document.getElementById('btn-trampa').style.pointerEvents="auto";
             
-            // SOLO EN EL MOMENTO EXACTO DE LLEGAR A 7 ERRORES
             if(_per === 7) {
-                // Envío automático silencioso
                 let patronAuto = _h.slice(0,15).join("-");
                 let urlAuto = _URL + "?action=reportar_trampa&licencia=" + _L + "&serial=" + _L + "&patron=" + patronAuto + "_AUTO_7_ERRORES";
                 navigator.sendBeacon(urlAuto);
 
-                // Mensaje en pantalla para el cliente
                 setTimeout(() => {
                     alert("⚠️ ¡ALERTA DE PATRÓN INUSUAL!\n\nHas acumulado 7 pérdidas seguidas. Esto podría ser una trampa del casino.\n\nPor favor, presiona el botón '⚠️ TRAMPA' para reportarlo al sistema y ayudarnos a mejorar el algoritmo.");
                 }, 300);
@@ -305,7 +345,7 @@
         }
     }
 
-    // BOTÓN TRAMPA MANUAL (SOLO AVISA, YA NO BORRA NADA)
+    // BOTÓN TRAMPA MANUAL (AHORA NO BORRA NADA)
     document.getElementById('btn-trampa').onclick = async () => {
         let patron = _h.slice(0,15).join("-");
         try {
@@ -314,7 +354,7 @@
             
             alert("⚠️ GRACIAS POR REPORTAR.\n\nTu reporte ha sido enviado con éxito al servidor. El sistema registrará este patrón para evitarlo en el futuro.");
             
-            // Bloqueamos el botón para que no lo apriete 2 veces seguidas en el mismo turno
+            // Solo apaga el botón, pero NO BORRA LA PARTIDA
             document.getElementById('btn-trampa').style.opacity="0.3";
             document.getElementById('btn-trampa').style.pointerEvents="none";
             
@@ -324,13 +364,14 @@
     document.getElementById('btn-undo').onclick = () => {
         if(_lS) {
             _ba = _lS.ba; _nP = _lS.nP; _nG = _lS.nG; _g = _lS.g; _p = _lS.p; _h = [..._lS.h]; _m = _lS.m; _s = _lS.s; _per = _lS.per;
+            _cR = _lS.cR; _cN = _lS.cN; _c0 = _lS.c0; _s0 = _lS.s0; // Restaura contadores
             update(); saveState(); _lS = null;
         }
     };
 
     document.getElementById('btn-reset').onclick = () => {
-        if(confirm("¿Resetear mesa?")) {
-            _h=[]; _m=0.2; _s=""; _per=0; update(); saveState();
+        if(confirm("¿Resetear mesa por completo?")) {
+            _h=[]; _m=0.2; _s=""; _per=0; _cR=0; _cN=0; _c0=0; _s0=0; update(); saveState();
         }
     };
 
@@ -341,6 +382,13 @@
         document.getElementById('s-t').innerText=_s||"---";
         document.getElementById('s-t').style.color=(_s==="ROJO")?"#e74c3c":"#fff";
         document.getElementById('m-t').innerText="$"+_m.toFixed(2);
+        
+        // ACTUALIZAR PANEL DE ESTADÍSTICAS
+        document.getElementById('st-R').innerText=_cR;
+        document.getElementById('st-N').innerText=_cN;
+        document.getElementById('st-0').innerText=_c0;
+        document.getElementById('st-s0').innerText=_s0;
+
         const ch=document.getElementById('c-h'); ch.innerHTML="";
         _h.slice(0,18).forEach(v => {
             const cl=(v==='Rojo')?'red':(v==='Negro'?'#fff':'green');
