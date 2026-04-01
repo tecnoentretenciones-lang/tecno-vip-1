@@ -11,7 +11,10 @@
         th, td { border: 1px solid #333; padding: 10px; text-align: left; }
         th { background: #00e5ff; color: black; }
         .btn-borrar { background: #e74c3c; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; }
+        .btn-borrar:hover { background: #c0392b; }
         .btn-refresh { background: #27ae60; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; width: 100%; font-weight: bold; }
+        .status-activo { color: #2ecc71; font-weight: bold; }
+        .status-pendiente { color: #f1c40f; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -24,18 +27,36 @@
     </table>
 </div>
 <script>
-    const API = "TU_URL_DE_GOOGLE_SCRIPT"; // REEMPLAZA ESTO
+    // TU ENLACE REAL YA ESTÁ AQUÍ
+    const API = "https://script.google.com/macros/s/AKfycbzUIdq4jKKOi3_fu3kLsO_cP3Z9ckXp7B6sUiP78B7Km7bDVmaecAIdsWGgGcA8nlE8JA/exec"; 
+    
     async function cargar() {
-        const r = await fetch(API + "?action=panel_datos"); const d = await r.json();
-        const b = document.querySelector("#t tbody"); b.innerHTML = "";
-        d.datos.forEach((f, i) => {
-            if (i === 0) return;
-            const tr = document.createElement("tr");
-            tr.innerHTML = `<td>${i+1}</td><td>${f[0]}</td><td>${f[11]||''}</td><td>${f[2]}</td><td>${f[12]||''}</td><td><button class="btn-borrar" onclick="borrar(${i+1})">BORRAR</button></td>`;
-            b.appendChild(tr);
-        });
+        const btn = document.querySelector('.btn-refresh'); btn.innerText = "CARGANDO DATOS...";
+        try {
+            const r = await fetch(API + "?action=panel_datos"); 
+            const d = await r.json();
+            const b = document.querySelector("#t tbody"); b.innerHTML = "";
+            d.datos.forEach((f, i) => {
+                if (i === 0) return;
+                const tr = document.createElement("tr");
+                const claseEstado = f[2] === "Activo" ? "status-activo" : "status-pendiente";
+                tr.innerHTML = `<td>${i+1}</td><td>${f[0] || '---'}</td><td>${f[11]||'---'}</td><td class="${claseEstado}">${f[2] || '---'}</td><td>${f[12]||'---'}</td><td><button class="btn-borrar" onclick="borrar(${i+1})">BORRAR FILA</button></td>`;
+                b.appendChild(tr);
+            });
+            btn.innerText = "🔄 ACTUALIZAR LISTA";
+        } catch(e) {
+            alert("Error al conectar con el servidor.");
+            btn.innerText = "🔄 ACTUALIZAR LISTA";
+        }
     }
-    async function borrar(n) { if(confirm("¿Borrar?")){ await fetch(API + "?action=borrar_fila&fila=" + n); cargar(); } }
+    
+    async function borrar(n) { 
+        if(confirm("¿Seguro que quieres borrar esta fila permanentemente?")){ 
+            await fetch(API + "?action=borrar_fila&fila=" + n); 
+            cargar(); 
+        } 
+    }
+    
     window.onload = cargar;
 </script>
 </body>
