@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>TECNOENTRETE VIP v109 - MOTOR ORIGINAL RESTAURADO</title>
+    <title>TECNOENTRETE VIP v110 - OLA Y MOTOR ORIGINAL</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --c1: #e74c3c; --c2: #2c3e50; --c3: #27ae60; --c4: #f1c40f; --c5: #00e5ff; --c8: #111; }
@@ -201,7 +201,6 @@
     let _trampaAutomaticaActivada = false;
     let demoInterval = null; 
 
-    // TUS 6 TRAMPAS BASE
     let _TR = [
         "Rojo-Rojo-Rojo-Negro-Negro-Negro-Rojo-Rojo-Rojo",
         "Negro-Negro-Negro-Rojo-Rojo-Rojo-Negro-Negro-Negro",
@@ -344,7 +343,6 @@
                             document.getElementById('btn-activar-demo').innerText = "ACTIVAR AHORA";
                             alert("⚠️ ERROR DE WHATSAPP: No llegó el mensaje o no respondiste 'SÍ'.\n\n¿Ingresaste mal tu número? Asegúrate de escoger el país correcto y escribir bien tu celular.");
                             
-                            // ORDEN PARA LIMPIAR DEMO FALLIDA (Requiere actualización en tu Google Apps Script)
                             fetch(_URL + "?action=eliminar_demo_fallida&wsp=" + encodeURIComponent(wsp)).catch(e=>{});
                             
                             return;
@@ -413,49 +411,64 @@
     };
 
     // ==========================================
-    // EL CEREBRO DEL JUEGO: MOTOR ORIGINAL RESTAURADO AL 100%
+    // EL CEREBRO DEL JUEGO: MOTOR ORIGINAL + CORTAFUEGOS + EVASIÓN PREDICTIVA
     // ==========================================
     function _CALC() {
         if(_h.length === 0) return;
         let u = _h[0], p = _h[1] || "", a = _h[2] || "", t = _h[3] || "";
         
-        const hA_limpio = _h.slice(0,10).map(v => v.charAt(0).toUpperCase()).join("-");
+        // Calculamos la racha actual (cuántos colores iguales van seguidos)
+        let racha_actual = 1;
+        for(let i=0; i<_h.length-1; i++){ if(_h[i] === _h[i+1]) racha_actual++; else break; }
 
-        _trampaAutomaticaActivada = false;
-
-        // LECTURA DE TRAMPAS: Lógica original que pediste
-        for(let tr of _TR) {
-            if(!tr) continue;
-            let tr_limpia = tr.toString().toUpperCase().split('_')[0].replace(/ROJO/g, 'R').replace(/NEGRO/g, 'N').replace(/CERO/g, '0').trim();
-
-            if(tr_limpia.length > 2 && hA_limpio.startsWith(tr_limpia)) {
-                _s = (u === "Rojo") ? "NEGRO" : "ROJO";
-                _trampaAutomaticaActivada = true;
-                return;
-            }
+        // 1. MOTOR ORIGINAL (INTACTO)
+        let sugerencia_normal = "";
+        if(u === 'Cero'){ sugerencia_normal = (p === 'Rojo') ? 'ROJO' : (p === 'Negro' ? 'NEGRO' : ''); }
+        else if(u === p && a === t && u !== a && _h[4] === _h[5] && u === _h[4]){ sugerencia_normal = (u === "Rojo") ? "NEGRO" : "ROJO"; }
+        else {
+            if(u === p && a === t && u !== a && a !== ""){ sugerencia_normal = u.toUpperCase(); }
+            else if(racha_actual >= 3){ sugerencia_normal = u.toUpperCase(); } // Sugiere seguir la racha de 3
+            else { sugerencia_normal = (u === "Rojo") ? "NEGRO" : "ROJO"; }
         }
 
-        // EL MOTOR MATEMÁTICO ORIGINAL INTACTO
-        if(u === 'Cero'){ _s = (p === 'Rojo') ? 'ROJO' : (p === 'Negro' ? 'NEGRO' : ''); return; }
-        if(u === p && a === t && u !== a && _h[4] === _h[5] && u === _h[4]){ _s = (u === "Rojo") ? "NEGRO" : "ROJO"; return; }
+        _s = sugerencia_normal; 
+        _trampaAutomaticaActivada = false;
 
-        let r = 1;
-        for(let i=0; i<_h.length-1; i++){ if(_h[i] === _h[i+1]) r++; else break; }
+        // 2. CORTAFUEGOS: SUBIRSE A LA OLA
+        // Si hay 4 o más colores iguales, priorizamos SURFEAR LA OLA y apagamos la evasión de trampas.
+        if(racha_actual >= 4 && u !== 'Cero') {
+            _s = u.toUpperCase();
+            return; // Sale de la función, se sube a la ola y no busca trampas.
+        }
 
-        if(u === p && a === t && u !== a && a !== ""){ _s = u.toUpperCase(); }
-        else if(r >= 3){ _s = u.toUpperCase(); } // TU REGLA DE RACHAS (3 iguales sugiere el mismo)
-        else { _s = (u === "Rojo") ? "NEGRO" : "ROJO"; }
+        // 3. EVASIÓN PREDICTIVA (SOLO ACTÚA SI NO HAY UNA OLA MASIVA)
+        let next_c = sugerencia_normal === "ROJO" ? "R" : (sugerencia_normal === "NEGRO" ? "N" : "");
+        if (next_c !== "") {
+            let h_hipotetico = [next_c, ..._h.map(v => v.charAt(0).toUpperCase())].join("-");
+            
+            for(let tr of _TR) {
+                if(!tr) continue;
+                let tr_limpia = tr.toString().toUpperCase().split('_')[0].replace(/ROJO/g, 'R').replace(/NEGRO/g, 'N').replace(/CERO/g, '0').trim();
+                
+                // Si la jugada normal nos hace caer en una trampa guardada, se invierte
+                if(tr_limpia.length > 2 && h_hipotetico.startsWith(tr_limpia)) { 
+                    _s = (sugerencia_normal === "ROJO") ? "NEGRO" : "ROJO"; 
+                    _trampaAutomaticaActivada = true; 
+                    return; 
+                }
+            }
+        }
     }
 
     function xfR(c) {
-        let per_anterior = _per; // Registramos cuántas pérdidas tenía el jugador ANTES del clic
+        let per_anterior = _per; 
+        let gano_ahora = false;
+        
         _lS = {ba:_ba, nP:_nP, nG:_nG, g:_g, p:_p, h:[..._h], m:_m, s:_s, per:_per, cR:_cR, cN:_cN, c0:_c0, s0:_s0};
 
         if (c === 'Rojo') { _cR++; _s0++; }
         else if (c === 'Negro') { _cN++; _s0++; }
         else if (c === 'Cero') { _c0++; _s0 = 0; }
-
-        let gano_ahora = false;
 
         if(_s !== "") {
             if(c.toUpperCase() === _s){ 
@@ -469,7 +482,7 @@
         
         _CALC();
 
-        // LÓGICA VERDE DE EVASIÓN: Solo sale si venía de 4 o más pérdidas seguidas y a esta jugada GANÓ.
+        // LETRERO VERDE: Solo aparece si venía perdiendo 4 o más veces Y acaba de ganar.
         if(gano_ahora && per_anterior >= 4) {
             let toast = document.getElementById('toast-evasion');
             toast.style.display = 'block';
@@ -483,7 +496,7 @@
             document.getElementById('alerta-meta').style.display='flex';
         }
 
-        // TRAMPAS A 7 JUGADAS EXACTAS
+        // TRAMPAS RESTRINGIDAS A 7 JUGADAS EXACTAS
         if(_per >= 7) {
             document.getElementById('btn-trampa').style.opacity="1";
             document.getElementById('btn-trampa').style.pointerEvents="auto";
