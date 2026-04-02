@@ -3,35 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <title>PANEL VIP - TECNOENTRETE</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { background: #0b0b0b; color: white; font-family: sans-serif; padding: 20px; margin: 0; }
-        .panel { max-width: 1200px; margin: auto; background: #1a1a1a; padding: 20px; border-radius: 15px; border: 2px solid #00e5ff; box-shadow: 0 0 20px rgba(0,229,255,0.2); }
-        h1 { color: #00e5ff; text-align: center; margin-top: 0; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 13px; background: #111; }
-        th, td { border: 1px solid #333; padding: 12px; text-align: left; vertical-align: middle; }
+        body { background: #0b0b0b; color: white; font-family: 'Segoe UI', sans-serif; padding: 20px; margin: 0; }
+        .panel { max-width: 1300px; margin: auto; background: #1a1a1a; padding: 20px; border-radius: 15px; border: 2px solid #00e5ff; box-shadow: 0 0 20px rgba(0,229,255,0.2); }
+        h1 { color: #00e5ff; text-align: center; margin-top: 0; text-transform: uppercase; font-weight: 900;}
+        
+        .caja-crear { background: #111; border: 1px solid #333; padding: 15px; border-radius: 10px; margin-bottom: 20px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap;}
+        .caja-crear input, .caja-crear select { background: #222; border: 1px solid #555; color: #fff; padding: 10px; border-radius: 5px; outline: none; }
+        .btn-crear { background: #00e5ff; color: #000; border: none; padding: 10px 20px; border-radius: 5px; font-weight: 900; cursor: pointer; flex-grow: 1; }
+        .btn-crear:hover { background: #00b8cc; }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 13px; background: #111; }
+        th, td { border: 1px solid #333; padding: 10px; text-align: center; vertical-align: middle; }
         th { background: #00e5ff; color: black; font-weight: 900; }
         
-        .btn-borrar { background: #e74c3c; color: white; border: none; padding: 6px 12px; border-radius: 5px; cursor: pointer; font-weight: bold; width: 100%; margin-bottom: 4px; }
-        .btn-borrar:hover { background: #c0392b; }
-        
-        .btn-sus { background: #f39c12; color: white; border: none; padding: 6px 12px; border-radius: 5px; cursor: pointer; font-weight: bold; width: 100%; }
-        .btn-sus:hover { background: #d68910; }
-        
-        .btn-act { background: #2ecc71; color: white; border: none; padding: 6px 12px; border-radius: 5px; cursor: pointer; font-weight: bold; width: 100%; }
-        .btn-act:hover { background: #27ae60; }
+        .btn-accion { padding: 6px 10px; border-radius: 5px; font-weight: bold; cursor: pointer; border: none; width: 100%; margin-bottom: 4px; font-size: 11px;}
+        .btn-borrar { background: #e74c3c; color: white; }
+        .btn-sus { background: #f39c12; color: white; }
+        .btn-act { background: #2ecc71; color: white; }
+        .btn-reset { background: #9b59b6; color: white; }
         
         .btn-refresh { background: #00e5ff; color: #000; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; width: 100%; font-weight: 900; font-size: 16px; margin-bottom: 10px; }
-        .btn-refresh:hover { background: #00b8cc; }
         
         .status-activo { color: #2ecc71; font-weight: bold; }
         .status-pendiente { color: #f1c40f; font-weight: bold; }
         .status-inactivo { color: #e74c3c; font-weight: bold; }
-        .conn-box { background: #222; padding: 5px 8px; border-radius: 5px; border: 1px solid #444; font-family: monospace; font-size: 11px; }
+        .conn-box { background: #222; padding: 5px 8px; border-radius: 5px; border: 1px solid #444; font-family: monospace; font-size: 11px; text-align: left; }
+        select.plan-select { background: #222; color: #fff; border: 1px solid #555; padding: 5px; border-radius: 3px; font-size: 11px; }
     </style>
 </head>
 <body>
 <div class="panel">
-    <h1><i class="fas fa-shield-alt"></i> CENTRO DE MANDO VIP</h1>
+    <h1><i class="fas fa-shield-alt"></i> PANEL DE CONTROL TECNOENTRETE</h1>
+    
+    <div class="caja-crear">
+        <strong style="color: #00e5ff;">NUEVA LICENCIA:</strong>
+        <input type="text" id="n-serial" placeholder="CÓDIGO (Ej: A1234)" style="width: 150px;">
+        <input type="text" id="n-nombre" placeholder="Nombre Cliente" style="width: 150px;">
+        <select id="n-tiempo">
+            <option value="00d-12h:00m:00s">12 Horas</option>
+            <option value="01d-00h:00m:00s">24 Horas</option>
+            <option value="07d-00h:00m:00s">7 Días</option>
+            <option value="30d-00h:00m:00s">30 Días</option>
+        </select>
+        <select id="n-plan">
+            <option value="BASICO">Plan Básico (1 Mesa)</option>
+            <option value="VIP">Plan VIP (4 Mesas)</option>
+        </select>
+        <button class="btn-crear" onclick="crearLicencia()"><i class="fas fa-plus"></i> GENERAR</button>
+    </div>
+
     <button class="btn-refresh" onclick="cargar()">🔄 ACTUALIZAR MONITOR EN TIEMPO REAL</button>
     <div style="overflow-x: auto;">
         <table id="t">
@@ -40,57 +62,123 @@
                     <th>#</th>
                     <th>LICENCIA</th>
                     <th>NOMBRE</th>
-                    <th>WHATSAPP</th>
+                    <th>PLAN</th>
                     <th>ESTADO</th>
-                    <th>⏱️ TIEMPO / CONEXIÓN</th>
-                    <th>ACCIONES</th>
+                    <th>TIEMPO / CONEXIÓN</th>
+                    <th>ANCLAJE (HID)</th>
+                    <th style="min-width: 140px;">ACCIONES RÁPIDAS</th>
                 </tr>
             </thead>
             <tbody></tbody>
         </table>
     </div>
 </div>
+
 <script>
-    // ====== TU ENLACE REAL YA ESTÁ PUESTO AQUÍ ======
     const API = "https://script.google.com/macros/s/AKfycbzUIdq4jKKOi3_fu3kLsO_cP3Z9ckXp7B6sUiP78B7Km7bDVmaecAIdsWGgGcA8nlE8JA/exec"; 
     
+    // Auto-cargar al iniciar
+    window.onload = cargar;
+
     async function cargar() {
-        const btn = document.querySelector('.btn-refresh'); btn.innerText = "⏳ CARGANDO DATOS DEL SERVIDOR...";
+        const btn = document.querySelector('.btn-refresh'); 
+        btn.innerText = "⏳ CARGANDO DATOS DEL SERVIDOR...";
         try {
             const r = await fetch(API + "?action=panel_datos"); 
             const d = await r.json();
             const b = document.querySelector("#t tbody"); b.innerHTML = "";
+            
+            // Buscar columna PLAN dinámicamente
+            let colPlan = -1;
+            for(let c=0; c < d.datos[0].length; c++) {
+                if(d.datos[0][c] && d.datos[0][c].toString().toUpperCase().trim() === "PLAN") { colPlan = c; break; }
+            }
+
             d.datos.forEach((f, i) => {
-                if (i === 0) return; 
+                if (i === 0) return; // Salta los títulos
+                if (!f[0]) return; // Salta filas vacías
                 
                 const tr = document.createElement("tr");
                 let claseEstado = "status-pendiente";
                 if(f[2] === "Activo") claseEstado = "status-activo";
                 if(f[2] === "Inactivo") claseEstado = "status-inactivo";
 
-                let btnAccion = f[2] === "Activo" 
-                    ? `<button class="btn-sus" onclick="cambiarEstado(${i+1}, 'Inactivo')">⏸️ SUSPENDER</button>` 
-                    : `<button class="btn-act" onclick="cambiarEstado(${i+1}, 'Activo')">▶️ ACTIVAR</button>`;
+                let btnEstado = f[2] === "Activo" 
+                    ? `<button class="btn-accion btn-sus" onclick="cambiarEstado(${i+1}, 'Inactivo')">⏸️ SUSPENDER</button>` 
+                    : `<button class="btn-accion btn-act" onclick="cambiarEstado(${i+1}, 'Activo')">▶️ ACTIVAR</button>`;
+                
+                let hidDisplay = f[6] ? '🔒 Anclado' : 'Libre';
+                let btnResetHID = f[6] ? `<button class="btn-accion btn-reset" onclick="resetearHID(${i+1})">🔓 DESANCLAR PC</button>` : '';
+                
+                let planActual = colPlan !== -1 ? (f[colPlan] || 'BASICO') : '---';
 
                 tr.innerHTML = `
                     <td>${i+1}</td>
-                    <td><strong>${f[0] || '---'}</strong></td>
+                    <td style="color:#00e5ff; font-weight:bold;">${f[0]}</td>
                     <td>${f[11] || '---'}</td>
-                    <td>${f[12] || '---'}</td>
-                    <td class="${claseEstado}">${f[2] || '---'}</td>
-                    <td><div class="conn-box">${f[3] || '---'}</div></td>
                     <td>
-                        <button class="btn-borrar" onclick="borrar(${i+1})">🗑️ BORRAR</button>
-                        ${btnAccion}
+                        <select class="plan-select" onchange="cambiarPlan(${i+1}, this.value)">
+                            <option value="BASICO" ${planActual==='BASICO'?'selected':''}>BÁSICO</option>
+                            <option value="VIP" ${planActual==='VIP' || planActual==='PRO'?'selected':''}>VIP / PRO</option>
+                        </select>
+                    </td>
+                    <td class="${claseEstado}">${f[2]}</td>
+                    <td><div class="conn-box">${f[3] || '---'}</div></td>
+                    <td style="color:${f[6]?'#2ecc71':'#888'}; font-size:11px;">${hidDisplay}<br>${btnResetHID}</td>
+                    <td>
+                        ${btnEstado}
+                        <button class="btn-accion btn-borrar" onclick="borrar(${i+1})">🗑️ ELIMINAR</button>
                     </td>
                 `;
                 b.appendChild(tr);
             });
-            btn.innerText = "🔄 ACTUALIZAR MONITOR EN TIEMPO REAL";
+            btn.innerHTML = "🔄 ACTUALIZAR MONITOR EN TIEMPO REAL";
         } catch(e) {
             alert("Error al conectar con el servidor.");
             btn.innerText = "🔄 ACTUALIZAR MONITOR EN TIEMPO REAL";
         }
     }
-    
-    async function borrar(n) {
+
+    async function cambiarEstado(fila, estado) {
+        if(!confirm(`¿Estás seguro de cambiar el estado a ${estado}?`)) return;
+        await fetch(API + `?action=cambiar_estado&fila=${fila}&estado=${estado}`);
+        cargar();
+    }
+
+    async function borrar(fila) {
+        if(!confirm("⚠️ ¿Estás seguro de ELIMINAR esta licencia para siempre?")) return;
+        await fetch(API + `?action=borrar_fila&fila=${fila}`);
+        cargar();
+    }
+
+    async function resetearHID(fila) {
+        if(!confirm("🔓 ¿Desanclar esta cuenta? El cliente podrá usarla en otro PC/Celular.")) return;
+        await fetch(API + `?action=resetear_hid&fila=${fila}`);
+        cargar();
+    }
+
+    async function cambiarPlan(fila, nuevoPlan) {
+        await fetch(API + `?action=cambiar_plan&fila=${fila}&plan=${nuevoPlan}`);
+        // No recargo la página completa para no molestar, asumo que guardó.
+    }
+
+    async function crearLicencia() {
+        const btn = document.querySelector('.btn-crear');
+        const serial = document.getElementById('n-serial').value.trim();
+        const nombre = document.getElementById('n-nombre').value.trim();
+        const tiempo = document.getElementById('n-tiempo').value;
+        const plan = document.getElementById('n-plan').value;
+
+        if(!serial) return alert("Debes ingresar un CÓDIGO (Ej: A1234)");
+
+        btn.innerText = "...";
+        await fetch(API + `?action=crear_usuario&serial=${encodeURIComponent(serial)}&nombre=${encodeURIComponent(nombre)}&tiempo=${encodeURIComponent(tiempo)}&plan=${encodeURIComponent(plan)}`);
+        
+        document.getElementById('n-serial').value = "";
+        document.getElementById('n-nombre').value = "";
+        btn.innerHTML = "<i class='fas fa-plus'></i> GENERAR";
+        cargar();
+    }
+</script>
+</body>
+</html>
