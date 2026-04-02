@@ -9,44 +9,32 @@
         :root { --c1: #e74c3c; --c2: #2c3e50; --c3: #27ae60; --c4: #f1c40f; --c5: #00e5ff; --c8: #111; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; touch-action: none !important; user-select: none !important; -webkit-user-drag: none; overscroll-behavior: none; }
         html, body { height: 100%; width: 100%; margin: 0; padding: 0; overflow: hidden !important; background-color: #000; position: fixed; font-family: 'Segoe UI', sans-serif; }
-        
         @keyframes rotar { 100% { transform: rotate(360deg); } }
-        
         #p-l { width: 100%; height: 100dvh; max-width: 450px; display: flex; flex-direction: column; padding: 20px; margin: auto; position: fixed; top: 0; left: 50%; transform: translateX(-50%); background: #000; z-index: 9999; justify-content: center; align-items: center; }
-        
         .c-l { background: #000; border: 2px solid #00e5ff; border-radius: 20px; padding: 25px 20px; width: 100%; text-align: center; box-shadow: 0 0 20px rgba(0,229,255,0.3); }
         .c-l img { width: 80px; margin-bottom: 10px; border-radius: 50%; border: 2px solid #fff; animation: rotar 5s linear infinite;}
         .c-l h1 { color: #fff; font-size: 22px; margin: 0 0 15px 0; font-weight: 900;}
-        
         .box-global { background: linear-gradient(180deg, #f39c12, #e67e22); color: #000; padding: 12px; border-radius: 10px; margin-bottom: 15px; font-weight: 900; font-size: 18px; display: flex; flex-direction: column; box-shadow: 0 4px 10px rgba(243,156,18,0.4); }
         .box-global-title { font-size: 11px; text-transform: uppercase; color: #111; margin-bottom: 2px; }
-        
         .legal-box { background: rgba(231, 76, 60, 0.1); border: 1px solid #e74c3c; padding: 15px; border-radius: 10px; margin-bottom: 15px; font-size: 11px; color: #e74c3c; text-align: left; line-height: 1.5; font-weight: 600;}
-        
         .i-s { width: 100%; background: #000; border: 1px solid #444; color: #f1c40f; padding: 15px; border-radius: 10px; font-size: 18px; text-align: center; margin-bottom: 15px; outline: none; font-weight: bold; }
-        
         .b-a { border: none; padding: 18px; border-radius: 10px; font-weight: 900; width: 100%; cursor: pointer; text-transform: uppercase; font-size: 14px; margin-bottom: 10px; transition: transform 0.1s;}
         .b-a:active { transform: scale(0.97); }
-        
         .btn-entrar { background: #00e5ff; color: #000; }
         .btn-demo { background: #0b2228; color: #00e5ff; border: 2px solid #00e5ff; }
         .btn-planes { background: #00e5ff; color: #000; }
         .btn-manual { background: #f1c40f; color: #000; }
-
         #app-principal { display: none; flex-direction: column; width: 100%; height: 100dvh; max-width: 500px; padding: calc(env(safe-area-inset-top) + 10px) 10px 10px 10px; margin: auto; }
         .tmr-big { background:#000; border:2px solid var(--c5); border-radius: 12px; padding:10px; text-align:center; font-size: 26px; color: var(--c5); font-weight: 900; margin-bottom: 5px;}
         #global-wallet { background:#000; border:1px solid #333; border-radius:15px; padding:12px; display:flex; justify-content:space-around; margin-bottom: 5px; }
         .gw-box { text-align:center; }
         .gw-title { font-size:11px; color:#888; }
         .gw-val { font-size:18px; font-weight:bold; }
-        
         .bola { width: 22px; height: 22px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 9px; font-weight: bold; }
         #stats-bar { background:#0a0a0a; border:1px solid #333; border-radius:10px; padding:6px 10px; display:flex; justify-content:space-between; font-size:11px; font-weight:bold; color:#aaa; margin-top:-2px; }
-
         .modal-base { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 10000; display: none; justify-content: center; align-items: center; padding: 20px; }
         .modal-content { background: rgba(20, 20, 20, 0.98); border: 2px solid var(--c5); border-radius: 25px; padding: 25px; width: 90%; text-align: center; max-width: 450px; }
         .manual-text { text-align: left; font-size: 13px; line-height: 1.5; color: #fff; background: rgba(0,0,0,0.5); border: 1px solid #333; padding: 15px; border-radius: 12px; max-height: 350px; overflow-y: auto; margin-bottom: 15px; }
-        
         #toast-evasion { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg, #27ae60, #2ecc71); color: #fff; padding: 15px 20px; border-radius: 10px; font-weight: 900; font-size: 14px; box-shadow: 0 5px 15px rgba(39, 174, 96, 0.6); z-index: 10007; display: none; text-align: center; border: 2px solid #fff; width: 90%; max-width: 400px; }
         @keyframes pulse-text { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
         .loading-st { animation: pulse-text 1s infinite; color: #888 !important; }
@@ -195,6 +183,7 @@
     <script>
     let lastTouchEnd = 0; document.addEventListener('touchend', e => { const now = (new Date()).getTime(); if (now - lastTouchEnd <= 300) e.preventDefault(); lastTouchEnd = now; }, { passive: false });
 
+    // TU ENLACE A GOOGLE APPS SCRIPT
     const _URL = "https://script.google.com/macros/s/AKfycbzUIdq4jKKOi3_fu3kLsO_cP3Z9ckXp7B6sUiP78B7Km7bDVmaecAIdsWGgGcA8nlE8JA/exec";
     let _HID = localStorage.getItem('VIP_HID') || 'VIP-'+Math.random().toString(36).substr(2,10).toUpperCase(); localStorage.setItem('VIP_HID', _HID);
     let _L="", _S=0, _ba=0, _cI=40, _nP=0, _nG=0, _g=0, _p=0, _h=[], _m=0.2, _s="", _per=0, _Meta=0, _TS=0, _IS=0, _WSP="", _lS=null, _cR=0, _cN=0, _c0=0, _s0=0, _isFetching=false;
@@ -205,11 +194,12 @@
     window.ejecutarReset = () => { _h=[]; _m=0.2; _s=""; _per=0; _cR=0; _cN=0; _c0=0; _s0=0; document.getElementById('btn-trampa').style.opacity="0.3"; document.getElementById('btn-trampa').style.pointerEvents="none"; update(); saveState(); document.getElementById('modal-reset-confirm').style.display='none'; };
 
     document.getElementById('btn-validar').onclick = async function() {
-        if(!document.getElementById('u-i').value.trim()) return alert("Ingrese el Usuario VIP");
+        let _U = document.getElementById('u-i').value.trim();
+        if(!_U) return alert("Ingrese el Usuario VIP");
         _L = document.getElementById('l-i').value.trim().toUpperCase(); if(!_L) return;
         this.innerText = "... CONECTANDO ...";
         try {
-            const r = await fetch(_URL + "?action=validar&app=mesa_segura&serial=" + _L + "&hid=" + _HID);
+            const r = await fetch(_URL + "?action=validar&app=mesa_segura&usuario=" + encodeURIComponent(_U) + "&serial=" + _L + "&hid=" + _HID);
             const d = await r.json();
             if(d.status === "success") { 
                 _S = d.segundos; _nG = parseFloat(d.neto_global) || 0; 
