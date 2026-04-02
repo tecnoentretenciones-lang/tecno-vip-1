@@ -31,22 +31,40 @@
         .tab-btn.active { background: var(--c5); color: #000; border-color: var(--c5); box-shadow: 0 0 10px rgba(0,229,255,0.4); }
 
         #grid-mesas { flex-grow: 1; display: grid; gap: 5px; padding: 0 5px 5px 5px; overflow-y: auto; }
-        
         .mesa-wrapper { display: none; flex-direction: column; height: 100%; gap: 10px; }
         .mesa-wrapper.active { display: flex; }
-
-        @media (min-width: 768px) {
-            #tabs-container { display: none !important; }
-            .grid-1 { grid-template-columns: 1fr; max-width: 500px; margin: 0 auto; }
-            .grid-2 { grid-template-columns: 1fr 1fr; }
-            .grid-4 { grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; }
-            .mesa-wrapper { display: flex !important; height: auto; }
-        }
 
         .tmr-big { background:#000; border:2px solid var(--c5); border-radius: 12px; padding:10px; text-align:center; font-size: 26px; color: var(--c5); font-weight: 900; margin: 0 5px 5px 5px;}
         .bola { width: 22px; height: 22px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 9px; font-weight: bold; }
         .stats-bar { background:#0a0a0a; border:1px solid #333; border-radius:10px; padding:6px 10px; display:flex; justify-content:space-between; font-size:11px; font-weight:bold; color:#aaa; margin-top:-2px; }
         .b-i { height:70px; border-radius:15px; border:none; font-size:32px; color:white; flex:1; font-weight: bold; cursor: pointer;}
+
+        /* ======================================================== */
+        /* MAGIA PARA ESCRITORIO (PC) - ENCAJE PERFECTO SIN SCROLL  */
+        /* ======================================================== */
+        @media (min-width: 768px) {
+            #tabs-container { display: none !important; }
+            .grid-1 { grid-template-columns: 1fr; max-width: 500px; margin: 0 auto; }
+            .grid-2 { grid-template-columns: 1fr 1fr; }
+            .grid-4 { grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; overflow: hidden; padding-bottom: 5px; }
+            
+            .mesa-wrapper { display: flex !important; height: 100%; min-height: 0; }
+            
+            /* COMPRESIÓN PROPORCIONAL PARA LAS 4 MESAS */
+            .grid-4 .tmr-big { padding: 5px; font-size: 2vh; margin-bottom: 4px; }
+            .grid-4 #global-wallet { padding: 8px; margin-bottom: 4px; }
+            .grid-4 .gw-val { font-size: 2.2vh; }
+            
+            .grid-4 .mesa-wrapper > div:nth-child(2) { padding: 1vh !important; gap: 0.8vh !important; justify-content: center; }
+            .grid-4 .mesa-wrapper > div:nth-child(2) > div:first-child { padding: 1vh !important; }
+            .grid-4 [id^="s-t-"] { font-size: 5vh !important; }
+            .grid-4 [id^="m-t-"] { font-size: 2.5vh !important; }
+            .grid-4 .b-i { height: 6.5vh !important; font-size: 3vh !important; border-radius: 10px; }
+            .grid-4 [id^="c-h-"] { height: 6vh !important; padding: 2px; }
+            .grid-4 .bola { width: 3vh; height: 3vh; font-size: 1.2vh; margin: 1px; }
+            .grid-4 .stats-bar { padding: 0.6vh 1vh !important; font-size: 1.4vh; border-radius: 8px; }
+            .grid-4 .mesa-wrapper button { padding: 1vh !important; font-size: 1.2vh !important; border-radius: 8px; }
+        }
     </style>
 </head>
 <body oncontextmenu="return false;">
@@ -92,13 +110,25 @@
     </div>
 
     <script>
-    // === SISTEMA ANTI HACKER TECNOENTRETE ===
+    // === SISTEMA ANTI HACKER & ANTI ZOOM TECNOENTRETE ===
     document.addEventListener('contextmenu', e => e.preventDefault());
+    
+    // Bloquear teclas de herramientas y zoom (Ctrl+ / Ctrl-)
     document.addEventListener('keydown', e => { 
         if(e.key === "F12" || (e.ctrlKey && e.shiftKey && e.keyCode === 73) || (e.ctrlKey && e.keyCode === 85) || (e.ctrlKey && e.keyCode === 83)) { 
             e.preventDefault(); mostrarAlertaHacker(); 
-        } 
+        }
+        if(e.ctrlKey && (e.key === '+' || e.key === '-' || e.key === '=' || e.keyCode === 107 || e.keyCode === 109)) {
+            e.preventDefault(); // Bloquea Zoom con teclado
+        }
     });
+
+    // Bloquear Zoom con rueda de ratón en PC
+    document.addEventListener('wheel', e => {
+        if(e.ctrlKey) e.preventDefault();
+    }, { passive: false });
+
+    // Bloquear Zoom en celulares
     let lastTouchEnd = 0;
     document.addEventListener('touchend', e => { const now = (new Date()).getTime(); if (now - lastTouchEnd <= 300) e.preventDefault(); lastTouchEnd = now; }, { passive: false });
 
