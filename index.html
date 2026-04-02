@@ -32,7 +32,7 @@
         .btn-planes { background: #00e5ff; color: #000; }
         .btn-manual { background: #f1c40f; color: #000; }
 
-        /* PANTALLA DE JUEGO (CON OLA VIP) */
+        /* PANTALLA DE JUEGO */
         #app-principal { display: none; flex-direction: column; width: 100%; height: 100dvh; max-width: 500px; padding: calc(env(safe-area-inset-top) + 10px) 10px 10px 10px; margin: auto; }
         .tmr-big { background:#000; border:2px solid var(--c5); border-radius: 12px; padding:10px; text-align:center; font-size: 26px; color: var(--c5); font-weight: 900; margin-bottom: 5px;}
         #global-wallet { background:#000; border:1px solid #333; border-radius:15px; padding:12px; display:flex; justify-content:space-around; margin-bottom: 5px; }
@@ -239,8 +239,27 @@
     };
 
     function iniciarDemo(segs, wsp) { _L = "DEMO"; _S = segs; _WSP = wsp; _cI = parseFloat(prompt("Capital:", "40.00")) || 40; _ba = _cI; _Meta = _ba * 1.20; _cR=0; _cN=0; _c0=0; _s0=0; iniciarApp(); }
-    function iniciarApp() { document.getElementById('p-l').style.display='none'; document.getElementById('app-principal').style.display='flex'; TM_TICK(); setInterval(TM_TICK, 1000); setInterval(saveState, 15000); update(); }
-    function TM_TICK() { if(_S<=0) return; let e = Math.floor((Date.now()-_TS)/1000); _S = Math.max(0, _IS - e); let d=Math.floor(_S/86400), h=Math.floor((_S%86400)/3600), m=Math.floor((_S%3600)/60), s=_S%60; document.getElementById('tmr').innerText = `${d}d-${h}h:${m}m:${s}s`; if(_S<=0) location.reload(); }
+    
+    // AQUÍ ESTÁ LA CORRECCIÓN QUE ENCIENDE EL RELOJ Y EVITA QUE TE BOTE
+    function iniciarApp() { 
+        document.getElementById('p-l').style.display='none'; 
+        document.getElementById('app-principal').style.display='flex'; 
+        _TS = Date.now(); 
+        _IS = _S; 
+        TM_TICK(); 
+        setInterval(TM_TICK, 1000); 
+        setInterval(saveState, 15000); 
+        update(); 
+    }
+    
+    function TM_TICK() { 
+        if(_S<=0) return; 
+        let e = Math.floor((Date.now()-_TS)/1000); 
+        _S = Math.max(0, _IS - e); 
+        let d=Math.floor(_S/86400), h=Math.floor((_S%86400)/3600), m=Math.floor((_S%3600)/60), s=_S%60; 
+        document.getElementById('tmr').innerText = `${d}d-${h}h:${m}m:${s}s`; 
+        if(_S<=0) location.reload(); 
+    }
     
     window.addEventListener("pagehide", () => { if(_L !== "") navigator.sendBeacon(_URL + "?action=salir&serial=" + _L + "&wsp=" + encodeURIComponent(_WSP)); });
     function saveState() { let est = JSON.stringify({ba:_ba, nP:_nP, nG:_nG, cI:_cI, h:_h.slice(0,12), m:_m, s:_s, per:_per, cR:_cR, cN:_cN, c0:_c0, s0:_s0}); localStorage.setItem('ts_'+_L, est); let url = _URL + `?action=guardar&serial=${_L}&neto_global=${_nG.toFixed(2)}&neto=${_nP.toFixed(2)}&estado=${encodeURIComponent(est)}&wsp=${encodeURIComponent(_WSP)}`; fetch(url).catch(e=>{}); }
