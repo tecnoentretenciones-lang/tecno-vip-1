@@ -10,23 +10,15 @@
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; touch-action: none !important; user-select: none !important; -webkit-user-drag: none; overscroll-behavior: none; }
         html, body { height: 100%; width: 100%; margin: 0; padding: 0; overflow: hidden !important; background-color: #000; position: fixed; font-family: 'Segoe UI', sans-serif; }
         
-        /* DISEÑO EXACTO A LA FOTO DE WHATSAPP PARA LA PANTALLA INICIAL */
+        /* DISEÑO DE INICIO: IDÉNTICO A LA FOTO VIP */
         #p-l { width: 100%; height: 100dvh; max-width: 450px; display: flex; flex-direction: column; padding: 20px; margin: auto; position: fixed; top: 0; left: 50%; transform: translateX(-50%); background: #000; z-index: 9999; justify-content: center; align-items: center; }
-        
         .c-l { background: #000; border: 2px solid #00e5ff; border-radius: 20px; padding: 25px 20px; width: 100%; text-align: center; box-shadow: 0 0 20px rgba(0,229,255,0.3); }
-        .c-l img { width: 80px; margin-bottom: 10px; border-radius: 50%; border: 2px solid #fff;}
         .c-l h1 { color: #fff; font-size: 22px; margin: 0 0 15px 0; font-weight: 900;}
-        
         .box-global { background: linear-gradient(180deg, #f39c12, #e67e22); color: #000; padding: 12px; border-radius: 10px; margin-bottom: 15px; font-weight: 900; font-size: 18px; display: flex; flex-direction: column; box-shadow: 0 4px 10px rgba(243,156,18,0.4); }
         .box-global-title { font-size: 11px; text-transform: uppercase; color: #111; margin-bottom: 2px; }
-        
         .legal-box { background: rgba(231, 76, 60, 0.1); border: 1px solid #e74c3c; padding: 15px; border-radius: 10px; margin-bottom: 15px; font-size: 11px; color: #e74c3c; text-align: left; line-height: 1.5; font-weight: 600;}
-        
-        .i-s { width: 100%; background: #000; border: 1px solid #444; color: #f1c40f; padding: 15px; border-radius: 10px; font-size: 18px; text-align: center; margin-bottom: 15px; outline: none; font-weight: bold; }
-        
+        .i-s { width: 100%; background: #000; border: 1px solid #444; color: #f1c40f; padding: 15px; border-radius: 10px; font-size: 16px; text-align: center; margin-bottom: 10px; outline: none; font-weight: bold; }
         .b-a { border: none; padding: 18px; border-radius: 10px; font-weight: 900; width: 100%; cursor: pointer; text-transform: uppercase; font-size: 14px; margin-bottom: 10px; transition: transform 0.1s;}
-        .b-a:active { transform: scale(0.97); }
-        
         .btn-entrar { background: #00e5ff; color: #000; }
         .btn-demo { background: #0b2228; color: #00e5ff; border: 2px solid #00e5ff; }
         .btn-planes { background: #00e5ff; color: #000; }
@@ -39,13 +31,12 @@
         .gw-box { text-align:center; }
         .gw-title { font-size:11px; color:#888; }
         .gw-val { font-size:18px; font-weight:bold; }
-        
         .bola { width: 22px; height: 22px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 9px; font-weight: bold; }
         #stats-bar { background:#0a0a0a; border:1px solid #333; border-radius:10px; padding:6px 10px; display:flex; justify-content:space-between; font-size:11px; font-weight:bold; color:#aaa; margin-top:-2px; }
 
+        /* MODALES */
         .modal-base { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 10000; display: none; justify-content: center; align-items: center; padding: 20px; }
         .modal-content { background: rgba(20, 20, 20, 0.98); border: 2px solid var(--c5); border-radius: 25px; padding: 25px; width: 90%; text-align: center; max-width: 450px; }
-        .manual-text { text-align: left; font-size: 13px; line-height: 1.5; color: #fff; background: rgba(0,0,0,0.5); border: 1px solid #333; padding: 15px; border-radius: 12px; max-height: 350px; overflow-y: auto; margin-bottom: 15px; }
         
         #toast-evasion { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg, #27ae60, #2ecc71); color: #fff; padding: 15px 20px; border-radius: 10px; font-weight: 900; font-size: 14px; box-shadow: 0 5px 15px rgba(39, 174, 96, 0.6); z-index: 10007; display: none; text-align: center; border: 2px solid #fff; width: 90%; max-width: 400px; }
         @keyframes pulse-text { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
@@ -60,31 +51,9 @@
 
     <div id="alerta-trampa-custom" class="modal-base" style="z-index: 10006; flex-direction: column;">
         <div style="background: rgba(20,20,20,0.98); border: 2px solid var(--c1); color: #fff; padding: 25px; border-radius: 20px; text-align: center; max-width: 400px; box-shadow: 0 0 20px rgba(231,76,60,0.5);">
-            <div style="font-size: 50px;">⚠️</div>
-            <h2 style="color: var(--c1); margin: 10px 0;">¡ALERTA DE CASINO!</h2>
+            <div style="font-size: 50px;">⚠️</div><h2 style="color: var(--c1); margin: 10px 0;">¡ALERTA DE CASINO!</h2>
             <p id="txt-alerta-trampa" style="font-size: 15px; line-height: 1.5; color: #ccc; margin-bottom: 20px;"></p>
             <button class="b-a btn-entrar" onclick="document.getElementById('alerta-trampa-custom').style.display='none'">ENTENDIDO</button>
-        </div>
-    </div>
-
-    <div id="modal-reset-confirm" class="modal-base" style="z-index: 10006; flex-direction: column;">
-        <div style="background: rgba(20,20,20,0.98); border: 2px solid var(--c1); color: #fff; padding: 25px; border-radius: 20px; text-align: center; max-width: 400px;">
-            <h2 style="color: var(--c1); margin: 10px 0;">¿RESETEAR MESA?</h2>
-            <p style="color: #ccc; font-size: 14px;">¿Estás seguro de que deseas borrar el historial y empezar de cero?</p>
-            <div style="display: flex; gap: 10px; margin-top: 20px;">
-                <button class="b-a" style="background: #555; color: #fff; flex: 1;" onclick="document.getElementById('modal-reset-confirm').style.display='none'">CANCELAR</button>
-                <button class="b-a" style="background: var(--c1); color: #fff; flex: 1;" onclick="ejecutarReset()">SÍ, RESETEAR</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="alerta-meta" class="modal-base" style="z-index: 10005; flex-direction: column;">
-        <div style="background: linear-gradient(135deg, #f1c40f, #f39c12); color: #000; padding: 25px; border-radius: 30px; text-align: center; max-width: 90%; border: 4px solid #fff; box-shadow: 0px 15px 35px rgba(241,196,15,0.5);">
-            <div style="font-size: 50px;">🛑💰✨</div>
-            <h2 style="margin: 10px 0; font-weight: 900; line-height: 1.1;">¡OBJETIVO LOGRADO!</h2>
-            <p style="margin: 10px 0; font-weight: bold; font-size: 16px;">Has ganado el 20% de tu capital.</p>
-            <p style="margin: 0; font-weight: 600; font-size: 14px; line-height: 1.4;">Para proteger tus ganancias, <b>¡ARRANCA AHORA!</b></p>
-            <button class="b-a" style="background: #000; color: #f1c40f; margin-top: 15px;" onclick="aceptarMeta()">OK, ENTIENDO (CONTINUAR)</button>
         </div>
     </div>
 
@@ -105,12 +74,11 @@
                 - Si la racha contraria llega a 7 veces seguidas, use el botón ⚠️ TRAMPA para reportar el patrón.
             </div>
             
-            <input type="text" id="l-i" class="i-s" placeholder="LICENCIA VIP" autocomplete="off">
+            <input type="text" id="l-i" class="i-s" placeholder="USUARIO VIP" autocomplete="off">
+            <input type="password" id="p-i" class="i-s" placeholder="CONTRASEÑA" autocomplete="off" style="margin-bottom: 20px;">
             
             <button class="b-a btn-entrar" id="btn-validar">ENTRAR AL SISTEMA</button>
-            <button class="b-a btn-demo" onclick="document.getElementById('modal-demo').style.display='flex'">PROBAR DEMO GRATIS</button>
-            <button class="b-a btn-planes" onclick="document.getElementById('modal-planes').style.display='flex'"><i class="fas fa-list"></i> VER PLANES Y PRECIOS</button>
-            <button class="b-a btn-manual" onclick="document.getElementById('modal-manual').style.display='flex'"><i class="fas fa-book-open"></i> MANUAL: CÓMO JUGAR</button>
+            <button class="b-a btn-demo" onclick="alert('Contacte al soporte para obtener una Demo.')">PROBAR DEMO GRATIS</button>
         </div>
     </div>
 
@@ -145,49 +113,8 @@
             <div style="display:flex; gap:6px;">
                 <button id="btn-undo" style="background:transparent; color:#555; border:1px solid #333; padding:10px; border-radius:10px; font-size:11px; flex:1;">CORREGIR</button>
                 <button id="btn-trampa" style="background:transparent; color:var(--c4); border:1px solid var(--c4); padding:10px; border-radius:10px; font-size:11px; flex:1.5; opacity:0.3; pointer-events:none;">⚠️ TRAMPA</button>
-                <button id="btn-reset" style="background:transparent; color:var(--c1); border:1px solid var(--c1); padding:10px; border-radius:10px; font-size:11px; flex:1;">RESET</button>
+                <button id="btn-reset" style="background:transparent; color:var(--c1); border:1px solid var(--c1); padding:10px; border-radius:10px; font-size:11px; flex:1;" onclick="ejecutarReset()">RESET</button>
             </div>
-        </div>
-    </div>
-
-    <div id="modal-demo" class="modal-base">
-        <div class="modal-content">
-            <h2 style="color:var(--c5); margin-top:0;">🎁 DEMO GRATIS</h2>
-            <input type="text" id="reg-nombre" class="i-s" placeholder="NOMBRE Y APELLIDO (Ej: Juan Perez)" style="border-radius:10px;">
-            <div style="display: flex; gap: 8px; margin-bottom: 8px;">
-                <select id="reg-pais" class="i-s" style="width: 38%; margin-bottom: 0; padding: 0 5px; font-size: 14px; border-radius:10px;">
-                    <option value="569" selected>🇨🇱 +569</option>
-                </select>
-                <input type="tel" id="reg-wsp" class="i-s" placeholder="Número (Ej: 87654321)" style="width: 62%; margin-bottom: 0; border-radius:10px;">
-            </div>
-            <button class="b-a btn-entrar" id="btn-activar-demo">ACTIVAR AHORA</button>
-            <button onclick="document.getElementById('modal-demo').style.display='none'" style="color:#888; background:none; border:none; text-decoration:underline; font-size: 14px; margin-top: 10px;">Volver</button>
-        </div>
-    </div>
-
-    <div id="modal-planes" class="modal-base">
-        <div class="modal-content">
-            <h2 style="color:var(--c4); margin-top:0;"><i class="fas fa-gem"></i> PLANES VIP</h2>
-            <div style="background:#111; border:1px solid #333; border-radius:12px; padding:15px; text-align:left; color:#fff; margin-bottom:15px;">
-                <p style="margin:8px 0; font-size:16px;">⏱️ <b>12 Horas:</b> <span style="color:var(--c3); float:right;">$8.000 CLP</span></p><hr style="border:0; border-top:1px solid #333;">
-                <p style="margin:8px 0; font-size:16px;">📅 <b>24 Horas:</b> <span style="color:var(--c3); float:right;">$15.000 CLP</span></p><hr style="border:0; border-top:1px solid #333;">
-                <p style="margin:8px 0; font-size:16px;">🔥 <b>1 Semana:</b> <span style="color:var(--c3); float:right;">$50.000 CLP</span></p>
-            </div>
-            <button class="b-a" style="background:#25d366; color:white;" onclick="window.open('https://wa.me/56995931641?text=Hola TECNOENTRETE, quiero un plan VIP.')"><i class="fab fa-whatsapp"></i> SOPORTE</button>
-            <button class="b-a" style="background:#555; color:white;" onclick="document.getElementById('modal-planes').style.display='none'">Cerrar</button>
-        </div>
-    </div>
-
-    <div id="modal-manual" class="modal-base">
-        <div class="modal-content">
-            <h2 style="color:var(--c4); margin-top:0;"><i class="fas fa-book-open"></i> MANUAL VIP</h2>
-            <div class="manual-text">
-                <p><strong>1. Capital:</strong> $40 USD recomendado. Base <strong>$0.20</strong>.</p>
-                <p><strong>2. Motor:</strong> Siga la sugerencia en grande (S.T.).</p>
-                <p><strong>3. Racha:</strong> Si pierde, el sistema dobla automáticamente.</p>
-                <p><strong>4. Trampa:</strong> Si pierde 7 veces seguidas, use el botón ⚠️ TRAMPA.</p>
-            </div>
-            <button class="b-a" style="background:#555; color:white;" onclick="document.getElementById('modal-manual').style.display='none'">Cerrar</button>
         </div>
     </div>
 
@@ -202,13 +129,16 @@
     window.onload = async () => { try { const r = await fetch(_URL + "?action=obtener_global"); const d = await r.json(); if(d.status === "success") { let monto = parseFloat(d.total_global); if(monto <= 0) monto = 1450.50; document.getElementById('lbl-global-neto').innerText = "$ " + monto.toFixed(2) + " USD"; } } catch(e) { document.getElementById('lbl-global-neto').innerText = "$ 1450.50 USD"; } };
 
     function mostrarAlerta(mensaje) { document.getElementById('txt-alerta-trampa').innerHTML = mensaje; document.getElementById('alerta-trampa-custom').style.display = 'flex'; }
-    window.ejecutarReset = () => { _h=[]; _m=0.2; _s=""; _per=0; _cR=0; _cN=0; _c0=0; _s0=0; document.getElementById('btn-trampa').style.opacity="0.3"; document.getElementById('btn-trampa').style.pointerEvents="none"; update(); saveState(); document.getElementById('modal-reset-confirm').style.display='none'; };
+    window.ejecutarReset = () => { _h=[]; _m=0.2; _s=""; _per=0; _cR=0; _cN=0; _c0=0; _s0=0; document.getElementById('btn-trampa').style.opacity="0.3"; document.getElementById('btn-trampa').style.pointerEvents="none"; update(); saveState(); };
 
+    // LOGIN CON USUARIO Y CONTRASEÑA AL SERVIDOR
     document.getElementById('btn-validar').onclick = async function() {
-        _L = document.getElementById('l-i').value.trim().toUpperCase(); if(!_L) return;
+        _L = document.getElementById('l-i').value.trim().toUpperCase();
+        const _P = document.getElementById('p-i').value.trim();
+        if(!_L || !_P) return alert("Por favor ingresa tu Usuario y Contraseña.");
         this.innerText = "... CONECTANDO ...";
         try {
-            const r = await fetch(_URL + "?action=validar&app=mesa_segura&serial=" + _L + "&hid=" + _HID);
+            const r = await fetch(_URL + "?action=validar&app=mesa_segura&serial=" + _L + "&pass=" + encodeURIComponent(_P) + "&hid=" + _HID);
             const d = await r.json();
             if(d.status === "success") { 
                 _S = d.segundos; _nG = parseFloat(d.neto_global) || 0; 
@@ -225,46 +155,23 @@
         } catch(e) { alert("Error de Conexión."); this.innerText = "ENTRAR AL SISTEMA"; }
     };
 
-    document.getElementById('btn-activar-demo').onclick = async function() {
-        const nom = document.getElementById('reg-nombre').value.trim(); const rawWsp = document.getElementById('reg-wsp').value.trim(); const codPais = document.getElementById('reg-pais').value;
-        if(!nom || !nom.includes(' ')) return alert("Ingresa tu NOMBRE y APELLIDO (separados por espacio)."); if(!rawWsp) return alert("Falta celular.");
-        const wsp = codPais + rawWsp.replace(/\D/g, '');
-        this.innerText = "...";
-        try {
-            const r = await fetch(_URL + "?action=validar_demo&nombre="+encodeURIComponent(nom)+"&wsp="+encodeURIComponent(wsp)+"&hid="+_HID);
-            const d = await r.json();
-            if(d.status === "success") { document.getElementById('modal-demo').style.display='none'; iniciarDemo(d.segundos, wsp); }
-            else { alert(d.mensaje); this.innerText = "ACTIVAR AHORA"; }
-        } catch(e) { alert("Error"); this.innerText = "ACTIVAR AHORA"; }
-    };
-
-    function iniciarDemo(segs, wsp) { _L = "DEMO"; _S = segs; _WSP = wsp; _cI = parseFloat(prompt("Capital:", "40.00")) || 40; _ba = _cI; _Meta = _ba * 1.20; _cR=0; _cN=0; _c0=0; _s0=0; iniciarApp(); }
-    
-    // AQUÍ ESTÁ LA CORRECCIÓN QUE ENCIENDE EL RELOJ Y EVITA QUE TE BOTE
     function iniciarApp() { 
         document.getElementById('p-l').style.display='none'; 
         document.getElementById('app-principal').style.display='flex'; 
-        _TS = Date.now(); 
-        _IS = _S; 
-        TM_TICK(); 
-        setInterval(TM_TICK, 1000); 
-        setInterval(saveState, 15000); 
-        update(); 
+        _TS = Date.now(); _IS = _S; TM_TICK(); setInterval(TM_TICK, 1000); setInterval(saveState, 15000); update(); 
     }
     
     function TM_TICK() { 
         if(_S<=0) return; 
-        let e = Math.floor((Date.now()-_TS)/1000); 
-        _S = Math.max(0, _IS - e); 
+        let e = Math.floor((Date.now()-_TS)/1000); _S = Math.max(0, _IS - e); 
         let d=Math.floor(_S/86400), h=Math.floor((_S%86400)/3600), m=Math.floor((_S%3600)/60), s=_S%60; 
         document.getElementById('tmr').innerText = `${d}d-${h}h:${m}m:${s}s`; 
         if(_S<=0) location.reload(); 
     }
     
-    window.addEventListener("pagehide", () => { if(_L !== "") navigator.sendBeacon(_URL + "?action=salir&serial=" + _L + "&wsp=" + encodeURIComponent(_WSP)); });
-    function saveState() { let est = JSON.stringify({ba:_ba, nP:_nP, nG:_nG, cI:_cI, h:_h.slice(0,12), m:_m, s:_s, per:_per, cR:_cR, cN:_cN, c0:_c0, s0:_s0}); localStorage.setItem('ts_'+_L, est); let url = _URL + `?action=guardar&serial=${_L}&neto_global=${_nG.toFixed(2)}&neto=${_nP.toFixed(2)}&estado=${encodeURIComponent(est)}&wsp=${encodeURIComponent(_WSP)}`; fetch(url).catch(e=>{}); }
-    window.aceptarMeta = () => { document.getElementById('alerta-meta').style.display = 'none'; _Meta = _ba * 1.20; };
-
+    window.addEventListener("pagehide", () => { if(_L !== "") navigator.sendBeacon(_URL + "?action=salir&serial=" + _L); });
+    function saveState() { let est = JSON.stringify({ba:_ba, nP:_nP, nG:_nG, cI:_cI, h:_h.slice(0,12), m:_m, s:_s, per:_per, cR:_cR, cN:_cN, c0:_c0, s0:_s0}); localStorage.setItem('ts_'+_L, est); let url = _URL + `?action=guardar&serial=${_L}&neto_global=${_nG.toFixed(2)}&neto=${_nP.toFixed(2)}&estado=${encodeURIComponent(est)}`; fetch(url).catch(e=>{}); }
+    
     // MOTOR BLINDADO CLOUD
     async function xfR(c) {
         if(_isFetching) return; _isFetching = true;
@@ -282,7 +189,6 @@
         _isFetching = false; stDiv.className = ""; update(); saveState();
 
         if(gano_ahora && per_anterior >= 4) { let toast = document.getElementById('toast-evasion'); toast.style.display = 'block'; setTimeout(() => { toast.style.display = 'none'; }, 4000); }
-        if(_ba >= _Meta) document.getElementById('alerta-meta').style.display='flex';
         if(_per >= 7) { document.getElementById('btn-trampa').style.opacity="1"; document.getElementById('btn-trampa').style.pointerEvents="auto"; if(_per === 7) { let patronAuto = _h.slice(0,7).map(v => v.charAt(0).toUpperCase()).join("-"); navigator.sendBeacon(_URL + "?action=reportar_trampa&serial=" + _L + "&patron=" + patronAuto + "_AUTO_7_ERRORES"); mostrarAlerta("Has acumulado <b>7 pérdidas seguidas</b>. Reporte enviado automáticamente al Cloud."); } } 
         else { document.getElementById('btn-trampa').style.opacity="0.3"; document.getElementById('btn-trampa').style.pointerEvents="none"; }
     }
@@ -300,8 +206,7 @@
     document.getElementById('btn-R').onclick=()=>xfR('Rojo'); document.getElementById('btn-N').onclick=()=>xfR('Negro'); document.getElementById('btn-0').onclick=()=>xfR('Cero');
 
     // ANTI HACKER Y ANTI ZOOM
-    document.addEventListener('contextmenu', e => e.preventDefault()); document.addEventListener('keydown', e => { if(e.key === "F12" || (e.ctrlKey && e.shiftKey && e.keyCode === 73) || (e.ctrlKey && e.keyCode === 85) || (e.ctrlKey && e.keyCode === 83)) { e.preventDefault(); mostrarAlertaHacker(); } if(e.ctrlKey && (e.key === '+' || e.key === '-' || e.key === '=' || e.keyCode === 107 || e.keyCode === 109)) e.preventDefault(); }); document.addEventListener('wheel', e => { if(e.ctrlKey) e.preventDefault(); }, { passive: false });
-    function mostrarAlertaHacker() { if(document.getElementById("pantalla-terror")) return; var pm = document.createElement("div"); pm.id = "pantalla-terror"; pm.style = "position:fixed;top:0;left:0;width:100vw;height:100vh;background:#a00;color:#fff;z-index:999999;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:20px;font-family:Arial;"; pm.innerHTML = `<h1 style="font-size:32px;text-transform:uppercase;font-weight:bold;">⚠️ ALERTA DE SEGURIDAD</h1><p style="font-size:20px;margin-top:15px;font-weight:bold;">Intento de alteración de código detectado.</p><button onclick="this.parentElement.remove()" style="margin-top:30px;padding:15px 30px;background:#000;color:#fff;border:2px solid #fff;border-radius:10px;cursor:pointer;font-weight:bold;">ENTENDIDO</button>`; document.body.appendChild(pm); }
+    document.addEventListener('contextmenu', e => e.preventDefault()); document.addEventListener('keydown', e => { if(e.key === "F12" || (e.ctrlKey && e.shiftKey && e.keyCode === 73) || (e.ctrlKey && e.keyCode === 85) || (e.ctrlKey && e.keyCode === 83)) { e.preventDefault(); } if(e.ctrlKey && (e.key === '+' || e.key === '-' || e.key === '=' || e.keyCode === 107 || e.keyCode === 109)) e.preventDefault(); }); document.addEventListener('wheel', e => { if(e.ctrlKey) e.preventDefault(); }, { passive: false });
     </script>
 </body>
 </html>
