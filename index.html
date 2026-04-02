@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -12,6 +13,7 @@
         body::before { content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: url('https://raw.githubusercontent.com/tecnoentretenciones-lang/tecno-vip-1/main/image_1209a3.jpg') no-repeat center center; background-size: cover; z-index: -2; }
         body::after { content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: -1; }
         @keyframes rotar { 100% { transform: rotate(360deg); } }
+        
         #p-l, #app-principal { width: 100%; height: 100dvh; max-width: 500px; display: flex; flex-direction: column; padding: 10px; margin: auto; }
         #p-l { position: fixed; top: 0; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.95); z-index: 9999; justify-content: center; align-items: center; }
         .c-l { background: rgba(20, 20, 20, 0.98); border: 2px solid var(--c5); border-radius: 20px; padding: 15px; width: 95%; text-align: center; box-shadow: 0 0 20px rgba(0,229,255,0.2); }
@@ -22,8 +24,16 @@
         .legal-box { background: rgba(231, 76, 60, 0.2); border: 1px solid var(--c1); padding: 10px; border-radius: 10px; margin-bottom: 12px; font-size: 11px; color: #ff8888; text-align: left; line-height: 1.4; }
         .i-s { width: 100%; background: #000; border: 2px solid #555; color: var(--c4); padding: 12px; border-radius: 10px; font-size: 16px; text-align: center; margin-bottom: 8px; outline: none; font-weight: bold; }
         .b-a { background: var(--c5); color: #000; border: none; padding: 15px; border-radius: 10px; font-weight: 900; width: 100%; cursor: pointer; text-transform: uppercase; font-size: 12px; margin-bottom: 8px; }
+        
         #app-principal { display: none; gap: 8px; padding-top: calc(env(safe-area-inset-top) + 10px); }
         .tmr-big { background:#000; border:2px solid var(--c5); border-radius: 12px; padding:10px; text-align:center; font-size: 26px; color: var(--c5); font-weight: 900; }
+        
+        /* DISEÑO PREMIUM TIPO MULTIMESA */
+        #global-wallet { background:#000; border:1px solid #333; border-radius:15px; padding:12px; display:flex; justify-content:space-around; margin-bottom: 5px; }
+        .gw-box { text-align:center; }
+        .gw-title { font-size:11px; color:#888; }
+        .gw-val { font-size:18px; font-weight:bold; }
+        
         .modal-base { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 10000; display: none; justify-content: center; align-items: center; padding: 20px; }
         .modal-content { background: rgba(20, 20, 20, 0.98); border: 2px solid var(--c5); border-radius: 25px; padding: 25px; width: 90%; text-align: center; max-width: 450px; }
         .manual-text { text-align: left; font-size: 13px; line-height: 1.5; color: #fff; background: rgba(0,0,0,0.5); border: 1px solid #333; padding: 15px; border-radius: 12px; max-height: 350px; overflow-y: auto; margin-bottom: 15px; }
@@ -100,20 +110,22 @@
 
     <div id="app-principal">
         <div id="tmr" class="tmr-big">00d-00h:00m:00s</div>
-        <div style="background:#000; border:1px solid #333; border-radius:15px; padding:12px; display:flex; justify-content:space-around;">
-            <div style="text-align:center;"><div style="font-size:11px; color:#888;">CAPITAL</div><div id="c-i" style="font-size:18px; color:#fff; font-weight:bold;">$0.00</div></div>
-            <div style="text-align:center;"><div style="font-size:11px; color:#888;">UTILIDAD</div><div id="u-s" style="font-size:18px; color:var(--c3); font-weight:bold;">$0.00</div></div>
-            <div style="text-align:center;"><div style="font-size:11px; color:#888;">GLOBAL</div><div id="n-g" style="font-size:18px; color:var(--c5); font-weight:bold;">$0.00</div></div>
+        
+        <div id="global-wallet">
+            <div class="gw-box"><div class="gw-title">CAPITAL TOTAL</div><div id="c-i" class="gw-val" style="color:#fff;">$0.00</div></div>
+            <div class="gw-box"><div class="gw-title">UTILIDAD</div><div id="u-s" class="gw-val" style="color:var(--c3);">$0.00</div></div>
+            <div class="gw-box"><div class="gw-title">GLOBAL</div><div id="n-g" class="gw-val" style="color:var(--c5);">$0.00</div></div>
         </div>
+
         <div style="background:var(--c8); padding:15px; border-radius:15px; display:flex; flex-direction:column; gap:10px; flex-grow:1; border:1px solid #333;">
             <div style="background:#1a1a1a; padding:15px; border-radius:15px; text-align:center; border:1px solid #333;">
                 <div id="s-t" style="font-size:75px; font-weight:900;">---</div>
                 <div id="m-t" style="color:var(--c4); font-size:26px;">$0.20</div>
             </div>
             <div style="display:flex; gap:8px;">
-                <button class="b-i" id="btn-R" style="background:var(--c1); height:70px; border-radius:15px; border:none; font-size:32px; color:white; flex:1;">R</button>
-                <button class="b-i" id="btn-N" style="background:var(--c2); height:70px; border-radius:15px; border:none; font-size:32px; color:white; flex:1;">N</button>
-                <button class="b-i" id="btn-0" style="background:var(--c3); height:70px; border-radius:15px; border:none; font-size:32px; color:white; flex:1;">0</button>
+                <button class="b-i" id="btn-R" style="background:var(--c1); height:70px; border-radius:15px; border:none; font-size:32px; color:white; flex:1; font-weight:bold;">R</button>
+                <button class="b-i" id="btn-N" style="background:var(--c2); height:70px; border-radius:15px; border:none; font-size:32px; color:white; flex:1; font-weight:bold;">N</button>
+                <button class="b-i" id="btn-0" style="background:var(--c3); height:70px; border-radius:15px; border:none; font-size:32px; color:white; flex:1; font-weight:bold;">0</button>
             </div>
             <div id="c-h" style="background:#000; height:90px; border-radius:12px; border:1px solid #222; display:flex; flex-wrap:wrap; justify-content:center; gap:5px; overflow:hidden;"></div>
             
@@ -166,7 +178,7 @@
                 <hr style="border:0; border-top:1px solid #333;">
                 <p style="margin:8px 0; font-size:16px;">🔥 <b>1 Semana:</b> <span style="color:var(--c3); float:right;">$50.000 CLP</span></p>
             </div>
-            <button class="b-a" style="background:#25d366; color:white;" onclick="window.open('https://wa.me/56995931641?text=Hola Felipe, quiero un plan.')"><i class="fab fa-whatsapp"></i> SOPORTE</button>
+            <button class="b-a" style="background:#25d366; color:white;" onclick="window.open('https://wa.me/56995931641?text=Hola TECNOENTRETE, quiero un plan VIP.')"><i class="fab fa-whatsapp"></i> SOPORTE</button>
             <button onclick="document.getElementById('modal-planes').style.display='none'" class="b-a" style="background:#555; color:white;">Cerrar</button>
         </div>
     </div>
@@ -186,11 +198,9 @@
 
     <script>
     document.addEventListener('contextmenu', e => e.preventDefault());
-    document.addEventListener('keydown', e => { if(e.key === "F12" || (e.ctrlKey && e.shiftKey && e.key === "I") || (e.ctrlKey && e.key === "u")) e.preventDefault(); });
     let lastTouchEnd = 0;
     document.addEventListener('touchend', e => { const now = (new Date()).getTime(); if (now - lastTouchEnd <= 300) e.preventDefault(); lastTouchEnd = now; }, { passive: false });
 
-    // TU ENLACE ACTUAL
     const _URL = "https://script.google.com/macros/s/AKfycbzUIdq4jKKOi3_fu3kLsO_cP3Z9ckXp7B6sUiP78B7Km7bDVmaecAIdsWGgGcA8nlE8JA/exec";
     
     let _HID = localStorage.getItem('VIP_HID') || 'VIP-'+Math.random().toString(36).substr(2,10).toUpperCase();
@@ -330,7 +340,7 @@
             }
             else { 
                 if(d.mensaje.includes("ESPERANDO") || d.mensaje.includes("TE ENVIAMOS")) {
-                    alert("✅ DEMO SOLICITADA\n\nTe enviamos un mensaje al WhatsApp. Solo responde 'SÍ' en tu WhatsApp para poder activar tu demo automáticamente.");
+                    alert("✅ DEMO SOLICITADA A TECNOENTRETE\n\nTe enviamos un mensaje al WhatsApp. Solo responde 'SÍ' en tu WhatsApp para poder activar tu demo automáticamente.");
                     
                     this.innerText = "ESPERANDO 'SÍ' EN WHATSAPP...";
                     let intentos = 0;
@@ -410,38 +420,30 @@
         _Meta = _ba * 1.20; 
     };
 
-    // ==========================================
-    // EL CEREBRO DEL JUEGO: MOTOR ORIGINAL + CORTAFUEGOS + EVASIÓN PREDICTIVA
-    // ==========================================
     function _CALC() {
         if(_h.length === 0) return;
         let u = _h[0], p = _h[1] || "", a = _h[2] || "", t = _h[3] || "";
         
-        // Calculamos la racha actual (cuántos colores iguales van seguidos)
         let racha_actual = 1;
         for(let i=0; i<_h.length-1; i++){ if(_h[i] === _h[i+1]) racha_actual++; else break; }
 
-        // 1. MOTOR ORIGINAL (INTACTO)
         let sugerencia_normal = "";
         if(u === 'Cero'){ sugerencia_normal = (p === 'Rojo') ? 'ROJO' : (p === 'Negro' ? 'NEGRO' : ''); }
         else if(u === p && a === t && u !== a && _h[4] === _h[5] && u === _h[4]){ sugerencia_normal = (u === "Rojo") ? "NEGRO" : "ROJO"; }
         else {
             if(u === p && a === t && u !== a && a !== ""){ sugerencia_normal = u.toUpperCase(); }
-            else if(racha_actual >= 3){ sugerencia_normal = u.toUpperCase(); } // Sugiere seguir la racha de 3
+            else if(racha_actual >= 3){ sugerencia_normal = u.toUpperCase(); }
             else { sugerencia_normal = (u === "Rojo") ? "NEGRO" : "ROJO"; }
         }
 
         _s = sugerencia_normal; 
         _trampaAutomaticaActivada = false;
 
-        // 2. CORTAFUEGOS: SUBIRSE A LA OLA
-        // Si hay 4 o más colores iguales, priorizamos SURFEAR LA OLA y apagamos la evasión de trampas.
         if(racha_actual >= 4 && u !== 'Cero') {
             _s = u.toUpperCase();
-            return; // Sale de la función, se sube a la ola y no busca trampas.
+            return;
         }
 
-        // 3. EVASIÓN PREDICTIVA (SOLO ACTÚA SI NO HAY UNA OLA MASIVA)
         let next_c = sugerencia_normal === "ROJO" ? "R" : (sugerencia_normal === "NEGRO" ? "N" : "");
         if (next_c !== "") {
             let h_hipotetico = [next_c, ..._h.map(v => v.charAt(0).toUpperCase())].join("-");
@@ -450,7 +452,6 @@
                 if(!tr) continue;
                 let tr_limpia = tr.toString().toUpperCase().split('_')[0].replace(/ROJO/g, 'R').replace(/NEGRO/g, 'N').replace(/CERO/g, '0').trim();
                 
-                // Si la jugada normal nos hace caer en una trampa guardada, se invierte
                 if(tr_limpia.length > 2 && h_hipotetico.startsWith(tr_limpia)) { 
                     _s = (sugerencia_normal === "ROJO") ? "NEGRO" : "ROJO"; 
                     _trampaAutomaticaActivada = true; 
@@ -482,7 +483,6 @@
         
         _CALC();
 
-        // LETRERO VERDE: Solo aparece si venía perdiendo 4 o más veces Y acaba de ganar.
         if(gano_ahora && per_anterior >= 4) {
             let toast = document.getElementById('toast-evasion');
             toast.style.display = 'block';
@@ -496,7 +496,6 @@
             document.getElementById('alerta-meta').style.display='flex';
         }
 
-        // TRAMPAS RESTRINGIDAS A 7 JUGADAS EXACTAS
         if(_per >= 7) {
             document.getElementById('btn-trampa').style.opacity="1";
             document.getElementById('btn-trampa').style.pointerEvents="auto";
@@ -559,60 +558,23 @@
     document.getElementById('btn-R').onclick=()=>xfR('Rojo');
     document.getElementById('btn-N').onclick=()=>xfR('Negro');
     document.getElementById('btn-0').onclick=()=>xfR('Cero');
+    
+    // ==========================================
+    // SISTEMA ANTI HACKER TECNOENTRETE
+    // ==========================================
+    document.addEventListener('keydown', e => { 
+        if(e.key === "F12" || (e.ctrlKey && e.shiftKey && e.keyCode === 73) || (e.ctrlKey && e.keyCode === 85) || (e.ctrlKey && e.keyCode === 83)) { 
+            e.preventDefault(); mostrarAlertaHacker(); 
+        } 
+    });
+
+    function mostrarAlertaHacker() {
+        if(document.getElementById("pantalla-terror")) return; 
+        var pm = document.createElement("div"); pm.id = "pantalla-terror";
+        pm.style = "position:fixed;top:0;left:0;width:100vw;height:100vh;background:#a00;color:#fff;z-index:999999;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:20px;font-family:Arial;";
+        pm.innerHTML = `<h1 style="font-size:32px;text-transform:uppercase;font-weight:bold;">⚠️ ALERTA DE SEGURIDAD TECNOENTRETE ⚠️</h1><p style="font-size:20px;margin-top:15px;font-weight:bold;">Intento de alteración de código detectado.</p><p style="font-size:16px;">Su IP ha sido registrada en los servidores de TECNOENTRETE. Un intento más y su licencia será eliminada sin derecho a reembolso.</p><button onclick="this.parentElement.remove()" style="margin-top:30px;padding:15px 30px;background:#000;color:#fff;border:2px solid #fff;border-radius:10px;cursor:pointer;font-weight:bold;">ENTENDIDO</button>`;
+        document.body.appendChild(pm);
+    }
     </script>
-    <script>
-  // Bloquear clic derecho
-  document.addEventListener('contextmenu', function(e) {
-      e.preventDefault();
-      mostrarAlertaHacker();
-  });
-
-  // Bloquear F12, Ctrl+U, Ctrl+Shift+I, Ctrl+S
-  document.onkeydown = function(e) {
-      if (
-          e.keyCode === 123 || // F12
-          (e.ctrlKey && e.shiftKey && e.keyCode === 73) || // Ctrl+Shift+I
-          (e.ctrlKey && e.shiftKey && e.keyCode === 74) || // Ctrl+Shift+J
-          (e.ctrlKey && e.keyCode === 85) || // Ctrl+U
-          (e.ctrlKey && e.keyCode === 83)    // Ctrl+S
-      ) {
-          e.preventDefault();
-          mostrarAlertaHacker();
-      }
-  };
-
-  // La pantalla roja del terror
-  function mostrarAlertaHacker() {
-      // Si ya existe la pantalla, no la crea de nuevo
-      if(document.getElementById("pantalla-terror")) return; 
-
-      var pantallaMuerte = document.createElement("div");
-      pantallaMuerte.id = "pantalla-terror";
-      pantallaMuerte.style.position = "fixed";
-      pantallaMuerte.style.top = "0";
-      pantallaMuerte.style.left = "0";
-      pantallaMuerte.style.width = "100vw";
-      pantallaMuerte.style.height = "100vh";
-      pantallaMuerte.style.backgroundColor = "#aa0000"; // Rojo oscuro sangre
-      pantallaMuerte.style.color = "white";
-      pantallaMuerte.style.zIndex = "999999"; // Para que tape todo el juego
-      pantallaMuerte.style.display = "flex";
-      pantallaMuerte.style.flexDirection = "column";
-      pantallaMuerte.style.justifyContent = "center";
-      pantallaMuerte.style.alignItems = "center";
-      pantallaMuerte.style.textAlign = "center";
-      pantallaMuerte.style.padding = "20px";
-      pantallaMuerte.style.fontFamily = "Arial, sans-serif";
-      
-      pantallaMuerte.innerHTML = `
-          <h1 style="font-size: 50px; font-weight: bold; margin-bottom: 20px; text-transform: uppercase;">⚠️ Alerta de Seguridad del Sistema ⚠️</h1>
-          <p style="font-size: 24px; max-width: 800px; font-weight: bold;">Se ha detectado un intento de acceso no autorizado al código fuente.</p>
-          <p style="font-size: 20px; max-width: 800px; margin-top: 15px;">Su ID de usuario y dirección IP acaban de ser registrados en nuestro servidor central.</p>
-          <p style="font-size: 20px; max-width: 800px; margin-top: 15px; color: #ffcccc;">Un intento más y su licencia será <b>ELIMINADA PERMANENTEMENTE</b> de la base de datos sin derecho a reembolso ni reclamos.</p>
-          <button onclick="this.parentElement.remove()" style="margin-top: 40px; padding: 15px 30px; font-size: 20px; background-color: black; color: white; border: 2px solid white; cursor: pointer; border-radius: 10px; font-weight: bold; box-shadow: 0px 0px 15px rgba(0,0,0,0.5);">ENTENDIDO. NO LO VOLVERÉ A HACER.</button>
-      `;
-      document.body.appendChild(pantallaMuerte);
-  }
-</script>
 </body>
 </html>
