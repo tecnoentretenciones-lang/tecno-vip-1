@@ -6,44 +6,54 @@
     <title>SISTEMA CENTRAL - TECNOENTRETE</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { background: #0b0b0b; color: white; font-family: 'Segoe UI', sans-serif; padding: 0; margin: 0; }
+        body { background: #0b0b0b; color: white; font-family: 'Segoe UI', sans-serif; padding: 20px; margin: 0; }
+        
         #login-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 99999; display: flex; justify-content: center; align-items: center; flex-direction: column; }
         .login-box { background: #1a1a1a; padding: 40px; border-radius: 20px; border: 2px solid #00e5ff; text-align: center; box-shadow: 0 0 30px rgba(0,229,255,0.2); width: 90%; max-width: 400px; box-sizing: border-box;}
         .login-box input { background: #000; color: #00e5ff; border: 1px solid #00e5ff; padding: 15px; font-size: 18px; text-align: center; border-radius: 10px; width: 100%; margin-bottom: 20px; outline: none; box-sizing: border-box;}
         .login-box button { background: #00e5ff; color: #000; border: none; padding: 15px; width: 100%; border-radius: 10px; font-weight: 900; font-size: 16px; cursor: pointer; }
         
-        .panel { max-width: 1400px; margin: 20px auto; background: #1a1a1a; padding: 20px; border-radius: 15px; border: 2px solid #333; display: none; box-sizing: border-box;}
+        .panel { max-width: 1400px; margin: auto; background: #1a1a1a; padding: 20px; border-radius: 15px; border: 2px solid #333; display: none;}
         h1 { color: #00e5ff; text-align: center; margin-top: 0; text-transform: uppercase; font-weight: 900;}
         
         .tabs { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;}
-        .tab-btn { flex: 1; background: #222; color: #888; border: 1px solid #444; padding: 15px; font-weight: bold; cursor: pointer; border-radius: 10px; font-size: 14px; min-width: 120px;}
+        .tab-btn { flex: 1; background: #222; color: #888; border: 1px solid #444; padding: 15px; font-weight: bold; cursor: pointer; border-radius: 10px; font-size: 14px; min-width: 150px;}
         .tab-btn.active { background: #00e5ff; color: #000; border-color: #00e5ff; }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
 
         .caja-crear { background: #111; border: 1px solid #333; padding: 15px; border-radius: 10px; margin-bottom: 20px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap;}
-        .caja-crear input, .caja-crear select { background: #222; border: 1px solid #555; color: #fff; padding: 10px; border-radius: 5px; outline: none; flex: 1; min-width: 120px;}
-        .btn-crear { background: #00e5ff; color: #000; border: none; padding: 10px 20px; border-radius: 5px; font-weight: 900; cursor: pointer; flex-grow: 1;}
+        .caja-crear input, .caja-crear select { background: #222; border: 1px solid #555; color: #fff; padding: 10px; border-radius: 5px; outline: none; flex: 1; min-width: 100px;}
+        .btn-crear { background: #00e5ff; color: #000; border: none; padding: 10px 20px; border-radius: 5px; font-weight: 900; cursor: pointer; flex-grow: 1; min-width: 100px;}
 
         .resumen-finanzas { display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap;}
         .total-box { flex: 1; background: linear-gradient(135deg, #27ae60, #2ecc71); padding: 20px; border-radius: 10px; text-align: center; color: #fff; font-size: 18px; font-weight: 900; border: 2px solid #fff; min-width: 250px;}
         .total-box.azul { background: linear-gradient(135deg, #2980b9, #3498db); }
 
+        .table-responsive { overflow-x: auto; width: 100%; }
         table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 12px; background: #111; }
-        th, td { border: 1px solid #333; padding: 8px; text-align: center; }
-        th { background: #00e5ff; color: black; font-weight: 900; }
+        th, td { border: 1px solid #333; padding: 8px 5px; text-align: center; vertical-align: middle; }
+        th { background: #00e5ff; color: black; font-weight: 900; white-space: nowrap; }
         
+        td.col-licencia { color: #00e5ff; font-weight: bold; font-size: 13px; white-space: nowrap; letter-spacing: 1px; }
+
+        #t-trampas td { white-space: nowrap; }
+        #t-trampas td:nth-child(3) { white-space: normal; min-width: 250px; word-break: break-word; color: #e74c3c; font-weight: bold; text-align: left; padding: 10px; background: rgba(231, 76, 60, 0.05); }
+
         .btn-accion { padding: 6px 10px; border-radius: 5px; font-weight: bold; cursor: pointer; border: none; width: 100%; margin-bottom: 4px; font-size: 11px;}
         .btn-borrar { background: #e74c3c; color: white; }
         .btn-sus { background: #f39c12; color: white; }
         .btn-act { background: #2ecc71; color: white; }
         .btn-tiempo { background: #3498db; color: white; }
-        .btn-refresh { background: #333; color: #fff; border: 1px solid #555; padding: 10px 20px; border-radius: 8px; cursor: pointer; width: 100%; font-weight: 900; }
+        
+        .btn-limpiar-trampas { background: #e74c3c; color: white; border: 2px solid #c0392b; padding: 15px; border-radius: 10px; cursor: pointer; font-weight: 900; width: 100%; margin-bottom: 15px; font-size: 16px; text-transform: uppercase; box-shadow: 0 4px 6px rgba(0,0,0,0.3);}
+        .btn-limpiar-trampas:hover { background: #c0392b; }
+        .btn-refresh { background: #333; color: #fff; border: 1px solid #555; padding: 10px 20px; border-radius: 8px; cursor: pointer; width: 100%; font-weight: 900; font-size: 14px; margin-bottom: 10px; }
         
         .status-activo { color: #2ecc71; font-weight: bold; }
         .status-inactivo { color: #e74c3c; font-weight: bold; }
-        .conn-box { background: #222; padding: 5px; border-radius: 5px; font-family: monospace; font-size: 10px;}
-
+        .conn-box { background: #222; padding: 5px; border-radius: 5px; font-family: monospace; font-size: 11px; text-align: center; white-space: nowrap;}
+        
         #modal-tiempo { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 999999; display: none; justify-content: center; align-items: center; }
     </style>
 </head>
@@ -65,19 +75,20 @@
 <div id="login-screen">
     <div class="login-box">
         <img src="https://cdn-icons-png.flaticon.com/512/1055/1055673.png" style="width:80px; margin-bottom: 15px;">
-        <h1>ACCESO MAESTRO</h1>
-        <input type="password" id="clave-admin" placeholder="Ingresa tu clave...">
-        <button onclick="verificarClave()">INGRESAR AL SISTEMA</button>
+        <h1>SISTEMA MAESTRO</h1>
+        <input type="text" id="user-admin" placeholder="Usuario">
+        <input type="password" id="clave-admin" placeholder="Clave de acceso">
+        <button onclick="verificarClave()">INGRESAR AL PANEL</button>
     </div>
 </div>
 
 <div class="panel" id="panel-principal">
-    <h1><i class="fas fa-shield-alt"></i> SISTEMA CENTRAL TECNOENTRETE</h1>
+    <h1><i class="fas fa-shield-alt"></i> PANEL DE CONTROL TECNOENTRETE</h1>
     
     <div class="tabs">
         <button class="tab-btn active" onclick="cambiarPestana('usuarios', this)">👤 GESTIÓN LICENCIAS</button>
         <button class="tab-btn" onclick="cambiarPestana('cajeros', this)">👥 GESTIÓN CAJEROS</button>
-        <button class="tab-btn" onclick="cambiarPestana('trampas', this)">⚠️ TRAMPAS</button>
+        <button class="tab-btn" onclick="cambiarPestana('trampas', this)">⚠️ BASE DE TRAMPAS</button>
     </div>
 
     <div id="tab-usuarios" class="tab-content active">
@@ -99,11 +110,11 @@
                 <option value="BASICO">Básico (1 Mesa)</option>
                 <option value="VIP">VIP / PRO (4 Mesas)</option>
             </select>
-            <input type="number" id="n-pago" placeholder="Cobro">
+            <input type="number" id="n-pago" placeholder="Cobro ($)">
             <button class="btn-crear" onclick="crearLicencia()">GENERAR</button>
         </div>
-        <button class="btn-refresh" onclick="cargarUsuarios()">🔄 REFRESCAR</button>
-        <div style="overflow-x: auto;">
+        <button class="btn-refresh" onclick="cargarUsuarios()">🔄 ACTUALIZAR DATOS</button>
+        <div class="table-responsive">
             <table id="t-usuarios">
                 <thead><tr><th>#</th><th>LICENCIA</th><th>NOMBRE</th><th>WSP</th><th>PLAN</th><th>ESTADO</th><th>TIEMPO</th><th>NETO J.</th><th>PAGÓ</th><th>VENDEDOR</th><th>ACCIONES</th></tr></thead>
                 <tbody></tbody>
@@ -120,7 +131,7 @@
             <button class="btn-crear" style="background:#2ecc71;" onclick="crearCajero()">+ REGISTRAR CAJERO</button>
         </div>
         <button class="btn-refresh" onclick="cargarCajeros()">🔄 REFRESCAR LISTA</button>
-        <div style="overflow-x: auto;">
+        <div class="table-responsive">
             <table id="t-cajeros">
                 <thead><tr><th>#</th><th>USUARIO</th><th>CLAVE</th><th>NOMBRE</th><th>WHATSAPP</th><th>ESTADO</th><th>ACCIONES</th></tr></thead>
                 <tbody></tbody>
@@ -129,20 +140,23 @@
     </div>
 
     <div id="tab-trampas" class="tab-content">
-        <button class="btn-borrar" style="padding:15px; border-radius:10px; margin-bottom:15px;" onclick="limpiarTrampas()">LIMPIAR DUPLICADOS</button>
-        <div style="overflow-x: auto;"><table id="t-trampas"><thead><tr><th>FECHA</th><th>QUIÉN</th><th>PATRÓN</th></tr></thead><tbody></tbody></table></div>
+        <button class="btn-limpiar-trampas" onclick="limpiarTrampas()"><i class="fas fa-trash-alt"></i> LIMPIAR PATRONES DUPLICADOS</button>
+        <div class="table-responsive"><table id="t-trampas"><thead><tr><th>FECHA</th><th>QUIÉN</th><th>PATRÓN</th></tr></thead><tbody></tbody></table></div>
     </div>
 </div>
 
 <script>
     const API = "https://script.google.com/macros/s/AKfycbzUIdq4jKKOi3_fu3kLsO_cP3Z9ckXp7B6sUiP78B7Km7bDVmaecAIdsWGgGcA8nlE8JA/exec"; 
     
+    // LOGIN PROFESIONAL
     function verificarClave() {
-        if(document.getElementById('clave-admin').value === 'TECNOENTRETE777') {
+        const u = document.getElementById('user-admin').value.trim();
+        const p = document.getElementById('clave-admin').value.trim();
+        if(u === 'tecnoentrete' && p === '777') {
             document.getElementById('login-screen').style.display = 'none';
             document.getElementById('panel-principal').style.display = 'block';
             cargarUsuarios();
-        } else { alert('❌ Incorrecta'); }
+        } else { alert('❌ Usuario o Clave Incorrecta'); }
     }
 
     function cambiarPestana(tab, btn) {
@@ -192,7 +206,7 @@
                 if(f[0] !== "DEMO") { sG += neto; sV += pago; }
                 const tr = document.createElement("tr");
                 let bE = f[2]==="Activo" ? `<button class="btn-accion btn-sus" onclick="cambiarEstado(${i+1},'Inactivo')">PAUSAR</button>` : `<button class="btn-accion btn-act" onclick="cambiarEstado(${i+1},'Activo')">ACTIVAR</button>`;
-                tr.innerHTML = `<td>${i+1}</td><td style="color:#00e5ff; font-weight:bold;">${f[0]}</td><td>${f[11]||'--'}</td><td>${f[12]||'--'}</td><td>${f[9]||'BASICO'}</td><td class="${f[2]==='Activo'?'status-activo':'status-inactivo'}">${f[2]}</td><td><div class="conn-box">${f[3]}</div></td><td>$${neto.toFixed(2)}</td><td>$${pago.toFixed(2)}</td><td style="font-size:10px; color:#888;">${f[14]||'ADMIN'}</td><td>${bE}<button class="btn-accion btn-tiempo" onclick="abrirModal(${i+1},'${f[0]}')">+ TIEMPO</button><button class="btn-accion btn-borrar" onclick="borrar(${i+1})">X</button></td>`;
+                tr.innerHTML = `<td>${i+1}</td><td class="col-licencia">${f[0]}</td><td>${f[11]||'--'}</td><td>${f[12]||'--'}</td><td>${f[9]||'BASICO'}</td><td class="${f[2]==='Activo'?'status-activo':'status-inactivo'}">${f[2]}</td><td><div class="conn-box">${f[3]}</div></td><td>$${neto.toFixed(2)}</td><td>$${pago.toFixed(2)}</td><td style="font-size:10px; color:#888;">${f[14]||'ADMIN'}</td><td>${bE}<button class="btn-accion btn-tiempo" onclick="abrirModal(${i+1},'${f[0]}')">+ TIEMPO</button><button class="btn-accion btn-borrar" onclick="borrar(${i+1})">X</button></td>`;
                 b.appendChild(tr);
             });
             document.getElementById('total-global').innerText = '$' + sG.toFixed(2);
@@ -206,6 +220,29 @@
         const p = document.getElementById('n-plan').value; const pago = document.getElementById('n-pago').value;
         await fetch(API + `?action=crear_usuario&serial=${s}&nombre=${n}&wsp=${w}&tiempo=${t}&plan=${p}&pago=${pago}&vendedor=ADMIN`);
         cargarUsuarios();
+    }
+
+    // GESTION TRAMPAS (Agregada la función que faltaba)
+    async function cargarTrampas() {
+        try {
+            const r = await fetch(API + "?action=panel_trampas"); const d = await r.json();
+            const b = document.querySelector("#t-trampas tbody"); b.innerHTML = "";
+            d.datos.forEach((f, i) => {
+                if (i === 0 || !f[2]) return; 
+                const tr = document.createElement("tr");
+                let fecha = f[0] ? new Date(f[0]).toLocaleString() : '---';
+                tr.innerHTML = `<td>${fecha}</td> <td>${f[1]}</td> <td>${f[2]}</td>`;
+                b.appendChild(tr);
+            });
+        } catch(e) {}
+    }
+
+    async function limpiarTrampas() {
+        if(!confirm("¿Limpiar patrones duplicados?")) return;
+        document.querySelector('.btn-limpiar-trampas').innerText = "LIMPIANDO...";
+        await fetch(API + "?action=limpiar_trampas");
+        document.querySelector('.btn-limpiar-trampas').innerHTML = "<i class='fas fa-trash-alt'></i> LIMPIAR PATRONES DUPLICADOS";
+        cargarTrampas();
     }
 
     // Funciones básicas
