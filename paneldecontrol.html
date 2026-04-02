@@ -1,70 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SISTEMA CENTRAL - TECNOENTRETE</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { background: #0b0b0b; color: white; font-family: 'Segoe UI', sans-serif; padding: 0; margin: 0; }
+        
+        #login-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 99999; display: flex; justify-content: center; align-items: center; flex-direction: column; }
+        .login-box { background: #1a1a1a; padding: 40px; border-radius: 20px; border: 2px solid #00e5ff; text-align: center; box-shadow: 0 0 30px rgba(0,229,255,0.2); width: 90%; max-width: 400px; box-sizing: border-box;}
+        .login-box h2 { color: #00e5ff; margin-top: 0; font-weight: 900; text-transform: uppercase; }
+        .login-box input { background: #000; color: #00e5ff; border: 1px solid #00e5ff; padding: 15px; font-size: 16px; text-align: center; border-radius: 10px; width: 100%; margin-bottom: 20px; outline: none; box-sizing: border-box;}
+        .login-box button { background: #00e5ff; color: #000; border: none; padding: 15px; width: 100%; border-radius: 10px; font-weight: 900; font-size: 16px; cursor: pointer; transition: 0.2s;}
+        .login-box button:hover { background: #00b8cc; }
+        
+        .panel { max-width: 1400px; margin: 20px auto; background: #1a1a1a; padding: 20px; border-radius: 15px; border: 2px solid #333; display: none; box-sizing: border-box;}
+        h1 { color: #00e5ff; text-align: center; margin-top: 0; text-transform: uppercase; font-weight: 900;}
+        
+        .tabs { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;}
+        .tab-btn { flex: 1; background: #222; color: #888; border: 1px solid #444; padding: 15px; font-weight: bold; cursor: pointer; border-radius: 10px; font-size: 14px; min-width: 150px; transition: 0.2s;}
+        .tab-btn.active { background: #00e5ff; color: #000; border-color: #00e5ff; box-shadow: 0 0 15px rgba(0,229,255,0.3);}
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
 
-<script>
-    const API = "https://script.google.com/macros/s/AKfycbzUIdq4jKKOi3_fu3kLsO_cP3Z9ckXp7B6sUiP78B7Km7bDVmaecAIdsWGgGcA8nlE8JA/exec";
-    let USUARIO_ACTUAL = ""; let ROL_ACTUAL = "";
+        .caja-crear { background: #111; border: 1px solid #333; padding: 20px; border-radius: 10px; margin-bottom: 20px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap;}
+        .caja-crear input, .caja-crear select { background: #222; border: 1px solid #555; color: #fff; padding: 12px; border-radius: 5px; outline: none; flex: 1; min-width: 120px;}
+        .btn-crear { background: #00e5ff; color: #000; border: none; padding: 12px 20px; border-radius: 5px; font-weight: 900; cursor: pointer; flex-grow: 1; min-width: 150px;}
 
-    async function verificarLogin() {
-        const u = document.getElementById('l-user').value; const p = document.getElementById('l-pass').value;
-        const r = await fetch(`${API}?action=login_panel&user=${u}&pass=${p}`); const d = await r.json();
-        if(d.status === "success") {
-            USUARIO_ACTUAL = u; ROL_ACTUAL = d.role;
-            document.getElementById('login-screen').style.display = 'none';
-            document.getElementById('main-panel').style.display = 'block';
-            if(ROL_ACTUAL === "CAJERO") { document.getElementById('btn-tab-cajeros').style.display = 'none'; document.getElementById('box-lucro-jugadores').style.display = 'none'; }
-            cargarUsuarios(); cargarTrampas();
-        } else { alert(d.mensaje); }
-    }
+        .resumen-finanzas { display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap;}
+        .total-box { flex: 1; background: linear-gradient(135deg, #27ae60, #2ecc71); padding: 20px; border-radius: 10px; text-align: center; color: #fff; font-size: 18px; font-weight: 900; border: 2px solid #fff; min-width: 250px;}
+        .total-box.azul { background: linear-gradient(135deg, #2980b9, #3498db); }
 
-    function cambiarTab(tab, btn) {
-        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        document.getElementById('tab-' + tab).classList.add('active'); btn.classList.add('active');
-        if(tab === 'cajeros') cargarCajeros();
-    }
-
-    async function cargarUsuarios() {
-        const r = await fetch(API + "?action=panel_datos"); const d = await r.json();
-        const b = document.querySelector("#t-u tbody"); b.innerHTML = "";
-        let sG = 0; let sV = 0;
-        d.datos.forEach((f, i) => {
-            if (i === 0 || !f[0]) return;
-            if (ROL_ACTUAL === "CAJERO" && f[14] !== USUARIO_ACTUAL) return; 
-            let neto = parseFloat(f[10]) || 0; let pago = parseFloat(f[13]) || 0;
-            let claveReal = f[15] || '--'; // AQUÍ CORREGIMOS EL ERROR (LEE DE LA COLUMNA P)
-            sG += neto; sV += pago;
-            let btnB = (ROL_ACTUAL === "ADMIN") ? `<button class="btn-accion" style="background:#e74c3c; color:white;" onclick="borrar(${i+1})">ELIMINAR</button>` : '';
-            b.innerHTML += `<tr><td>${f[0]}</td><td style="color:#f1c40f; font-weight:bold;">${claveReal}</td><td>${f[11]||'--'}</td><td>${f[9]||'BASICO'}</td><td>${f[2]}</td><td>${f[3]}</td><td>$${neto.toFixed(2)}</td><td>$${pago}</td><td>${f[14]}</td><td><button class="btn-accion" style="background:#f39c12; color:white;" onclick="cambiarEstado(${i+1},'${f[2]==='Activo'?'Inactivo':'Activo'}')">PAUSAR/ACT</button><button class="btn-accion" style="background:#3498db; color:white;" onclick="abrirModal(${i+1})">+ TIEMPO</button>${btnB}</td></tr>`;
-        });
-        document.getElementById('v-v').innerText = '$' + sV; document.getElementById('v-g').innerText = '$' + sG.toFixed(2);
-    }
-
-    async function cargarTrampas() {
-        const r = await fetch(API + "?action=panel_trampas"); const d = await r.json();
-        const b = document.querySelector("#t-trampas tbody"); b.innerHTML = "";
-        d.datos.forEach((f, i) => { if (i > 0 && f[2]) b.innerHTML += `<tr><td>${new Date(f[0]).toLocaleDateString()}</td><td>${f[1]}</td><td>${f[2]}</td></tr>`; });
-    }
-
-    async function crearLicencia() {
-        const u = document.getElementById('n-u').value; const p = document.getElementById('n-p').value;
-        const n = document.getElementById('n-n').value; const w = document.getElementById('n-w').value;
-        const t = document.getElementById('n-t').value; const pl = document.getElementById('n-pl').value;
-        const pa = document.getElementById('n-pa').value;
-        await fetch(`${API}?action=crear_usuario&serial=${u}&pass=${p}&nombre=${n}&wsp=${w}&tiempo=${t}&plan=${pl}&pago=${pa}&vendedor=${USUARIO_ACTUAL}`);
-        cargarUsuarios();
-    }
-
-    async function cargarCajeros() {
-        const r = await fetch(API + "?action=panel_cajeros"); const d = await r.json();
-        const b = document.querySelector("#t-c tbody"); b.innerHTML = "";
-        d.datos.forEach((f, i) => { if(i>0) b.innerHTML += `<tr><td>${f[0]}</td><td>${f[1]}</td><td>${f[2]}</td><td>${f[4]}</td><td><button class="btn-accion" style="background:#e74c3c; color:white;" onclick="borrarCajero(${i+1})">ELIMINAR</button></td></tr>`; });
-    }
-    async function crearCajero() {
-        const u = document.getElementById('c-u').value; const p = document.getElementById('c-p').value; const n = document.getElementById('c-n').value;
-        await fetch(`${API}?action=crear_cajero&user=${u}&pass=${p}&nombre=${n}`); cargarCajeros();
-    }
-    async function borrarCajero(f) { if(confirm("¿Eliminar?")) { await fetch(`${API}?action=borrar_cajero&fila=${f}`); cargarCajeros(); } }
-    async function borrar(f) { if(confirm("¿Eliminar Cliente?")) { await fetch(`${API}?action=borrar_fila&fila=${f}`); cargarUsuarios(); } }
-    async function cambiarEstado(f, e) { await fetch(`${API}?action=cambiar_estado&fila=${f}&estado=${e}`); cargarUsuarios(); }
-    function abrirModal(f) { document.getElementById('f-t').value = f; document.getElementById('modal-tiempo').style.display = 'flex'; }
-    async function enviarTiempo() { const f = document.getElementById('f-t').value; const d = document.getElementById('add-d').value; await fetch(`${API}?action=agregar_tiempo&fila=${f}&dias=${d}`); document.getElementById('modal-tiempo').style.display='none'; cargarUsuarios(); }
-</script>
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 12px; background: #111; }
+        th, td { border: 1px solid #333; padding: 10px; text-align: center; vertical-align: middle; }
+        th { background: #00e5ff; color: black; font-weight: 900; }
+        
+        .btn-accion { padding: 8px 10px; border-radius: 5px; font-weight: bold; cursor: pointer; border: none; width: 100%; margin-bottom: 4px; font-size: 11px;}
+        .btn-borrar { background: #e74c3c; color: white; }
+        .btn-sus { background: #f39c12; color: white; }
+        .btn-act { background: #2ecc71; color: white; }
+        .btn-reset { background: #9b59b6; color: white; }
+        .btn-tiempo { background: #3498db; color: white; }
+        
+        .btn-limpiar-trampas { background: #e74c3c; color: white; border: none; padding: 15px; border-radius: 10px; cursor: pointer; font-weight: bold; width: 100%; margin-bottom: 15px; font-size: 16px; transition: 0.2s;}
+        .btn-limpiar-trampas:hover { background: #c0392b; }
+        .btn-refresh { background: #333; color: #fff; border: 1px solid #555; padding: 12px 20px; border-radius: 8px;
