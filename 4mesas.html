@@ -1,55 +1,174 @@
-<script>
-  // Bloquear clic derecho
-  document.addEventListener('contextmenu', function(e) {
-      e.preventDefault();
-      mostrarAlertaHacker();
-  });
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>TECNOENTRETE VIP PRO - MULTIMESA</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root { --c1: #e74c3c; --c2: #2c3e50; --c3: #27ae60; --c4: #f1c40f; --c5: #00e5ff; --c8: #111; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; touch-action: none !important; user-select: none !important; overscroll-behavior: none; }
+        html, body { height: 100%; width: 100%; margin: 0; padding: 0; overflow: hidden !important; background-color: #000; position: fixed; font-family: 'Segoe UI', sans-serif; color: white; }
+        body::before { content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: url('https://raw.githubusercontent.com/tecnoentretenciones-lang/tecno-vip-1/main/image_1209a3.jpg') no-repeat center center; background-size: cover; z-index: -2; }
+        body::after { content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: -1; }
+        
+        #p-l, #p-select { width: 100%; height: 100dvh; max-width: 500px; display: flex; flex-direction: column; padding: 20px; margin: auto; justify-content: center; align-items: center; position: fixed; top:0; left:50%; transform: translateX(-50%); z-index: 9999; background: rgba(0,0,0,0.95); }
+        .c-l { background: rgba(20, 20, 20, 0.98); border: 2px solid var(--c5); border-radius: 20px; padding: 20px; width: 100%; text-align: center; }
+        .i-s { width: 100%; background: #000; border: 2px solid #555; color: var(--c4); padding: 12px; border-radius: 10px; font-size: 16px; text-align: center; margin-bottom: 10px; outline: none; font-weight: bold; }
+        .b-a { background: var(--c5); color: #000; border: none; padding: 15px; border-radius: 10px; font-weight: 900; width: 100%; cursor: pointer; text-transform: uppercase; margin-bottom: 10px; }
+        
+        #app-principal { display: none; flex-direction: column; height: 100dvh; width: 100%; }
+        #global-wallet { background: #111; border-bottom: 2px solid var(--c5); padding: 10px; display: flex; justify-content: space-around; }
+        .gw-val { font-size: 18px; font-weight: 900; color: var(--c5); }
+        
+        #tabs-container { display: flex; background: #222; padding: 5px; gap: 5px; }
+        .tab-btn { flex: 1; padding: 10px; background: #333; color: #fff; border: none; border-radius: 5px; font-weight: bold; }
+        .tab-btn.active { background: var(--c5); color: #000; }
 
-  // Bloquear F12, Ctrl+U, Ctrl+Shift+I, Ctrl+S
-  document.onkeydown = function(e) {
-      if (
-          e.keyCode === 123 || // F12
-          (e.ctrlKey && e.shiftKey && e.keyCode === 73) || // Ctrl+Shift+I
-          (e.ctrlKey && e.shiftKey && e.keyCode === 74) || // Ctrl+Shift+J
-          (e.ctrlKey && e.keyCode === 85) || // Ctrl+U
-          (e.ctrlKey && e.keyCode === 83)    // Ctrl+S
-      ) {
-          e.preventDefault();
-          mostrarAlertaHacker();
-      }
-  };
+        #grid-mesas { flex-grow: 1; display: grid; gap: 10px; padding: 10px; overflow-y: auto; }
+        .mesa-container { background: rgba(0,0,0,0.6); border: 1px solid #444; border-radius: 15px; padding: 10px; display: flex; flex-direction: column; gap: 10px; }
+        
+        /* Ajuste para móvil */
+        @media (max-width: 768px) {
+            .mesa-container { display: none; }
+            .mesa-container.active { display: flex; }
+        }
+        @media (min-width: 769px) {
+            #tabs-container { display: none; }
+            .grid-2 { grid-template-columns: 1fr 1fr; }
+            .grid-4 { grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; }
+        }
 
-  // La pantalla roja del terror
-  function mostrarAlertaHacker() {
-      // Si ya existe la pantalla, no la crea de nuevo
-      if(document.getElementById("pantalla-terror")) return; 
+        .m-sug { font-size: 50px; font-weight: 900; text-align: center; margin: 10px 0; }
+        .m-btn-group { display: flex; gap: 5px; }
+        .m-btn { flex: 1; height: 60px; border-radius: 10px; border: none; font-size: 24px; color: white; font-weight: bold; }
+        .bola { width: 20px; height: 20px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; margin: 2px; }
+    </style>
+</head>
+<body>
 
-      var pantallaMuerte = document.createElement("div");
-      pantallaMuerte.id = "pantalla-terror";
-      pantallaMuerte.style.position = "fixed";
-      pantallaMuerte.style.top = "0";
-      pantallaMuerte.style.left = "0";
-      pantallaMuerte.style.width = "100vw";
-      pantallaMuerte.style.height = "100vh";
-      pantallaMuerte.style.backgroundColor = "#aa0000"; // Rojo oscuro sangre
-      pantallaMuerte.style.color = "white";
-      pantallaMuerte.style.zIndex = "999999"; // Para que tape todo el juego
-      pantallaMuerte.style.display = "flex";
-      pantallaMuerte.style.flexDirection = "column";
-      pantallaMuerte.style.justifyContent = "center";
-      pantallaMuerte.style.alignItems = "center";
-      pantallaMuerte.style.textAlign = "center";
-      pantallaMuerte.style.padding = "20px";
-      pantallaMuerte.style.fontFamily = "Arial, sans-serif";
-      
-      pantallaMuerte.innerHTML = `
-          <h1 style="font-size: 50px; font-weight: bold; margin-bottom: 20px; text-transform: uppercase;">⚠️ Alerta de Seguridad del Sistema ⚠️</h1>
-          <p style="font-size: 24px; max-width: 800px; font-weight: bold;">Se ha detectado un intento de acceso no autorizado al código fuente.</p>
-          <p style="font-size: 20px; max-width: 800px; margin-top: 15px;">Su ID de usuario y dirección IP acaban de ser registrados en nuestro servidor central.</p>
-          <p style="font-size: 20px; max-width: 800px; margin-top: 15px; color: #ffcccc;">Un intento más y su licencia será <b>ELIMINADA PERMANENTEMENTE</b> de la base de datos sin derecho a reembolso ni reclamos.</p>
-          <button onclick="this.parentElement.remove()" style="margin-top: 40px; padding: 15px 30px; font-size: 20px; background-color: black; color: white; border: 2px solid white; cursor: pointer; border-radius: 10px; font-weight: bold; box-shadow: 0px 0px 15px rgba(0,0,0,0.5);">ENTENDIDO. NO LO VOLVERÉ A HACER.</button>
-      `;
-      document.body.appendChild(pantallaMuerte);
-  }
-</script>
+    <div id="p-l">
+        <div class="c-l">
+            <h1 style="color:white;">TECNOENTRETE VIP</h1>
+            <input type="text" id="l-i" class="i-s" placeholder="LICENCIA VIP">
+            <button class="b-a" id="btn-validar">ENTRAR MULTIMESA</button>
+        </div>
+    </div>
 
+    <div id="p-select" style="display:none;">
+        <div class="c-l">
+            <h2 style="color:var(--c4);">¿CUÁNTAS MESAS?</h2>
+            <button class="b-a" onclick="prepararMesas(1)">1 MESA</button>
+            <button class="b-a" onclick="prepararMesas(2)">2 MESAS</button>
+            <button class="b-a" onclick="prepararMesas(4)">4 MESAS</button>
+        </div>
+    </div>
+
+    <div id="app-principal">
+        <div id="global-wallet">
+            <div style="text-align:center;">CAPITAL<br><span id="gw-cap" class="gw-val">$0</span></div>
+            <div style="text-align:center;">UTILIDAD<br><span id="gw-util" class="gw-val" style="color:var(--c3);">$0</span></div>
+        </div>
+        <div id="tabs-container"></div>
+        <div id="grid-mesas"></div>
+    </div>
+
+    <script>
+        // MOTOR ENCAPSULADO PARA QUE NO HAYA CHOQUE
+        const _URL = "https://script.google.com/macros/s/AKfycbzUIdq4jKKOi3_fu3kLsO_cP3Z9ckXp7B6sUiP78B7Km7bDVmaecAIdsWGgGcA8nlE8JA/exec";
+        let _L = "", _HID = "VIP-" + Math.random().toString(36).substr(2, 9);
+        let mesasActivas = [];
+        let capitalInicialGlobal = 0;
+
+        document.getElementById('btn-validar').onclick = async () => {
+            _L = document.getElementById('l-i').value.trim().toUpperCase();
+            if(!_L) return;
+            document.getElementById('p-l').style.display = 'none';
+            document.getElementById('p-select').style.display = 'flex';
+        };
+
+        function prepararMesas(cant) {
+            capitalInicialGlobal = parseFloat(prompt("Capital Total:", "40")) || 40;
+            document.getElementById('p-select').style.display = 'none';
+            document.getElementById('app-principal').style.display = 'flex';
+            
+            const grid = document.getElementById('grid-mesas');
+            const tabs = document.getElementById('tabs-container');
+            grid.className = "grid-" + cant;
+
+            for(let i=1; i<=cant; i++) {
+                // Crear Tab
+                let t = document.createElement('button');
+                t.className = i===1 ? "tab-btn active" : "tab-btn";
+                t.innerText = "MESA " + i;
+                t.onclick = () => showMesa(i, cant);
+                tabs.appendChild(t);
+
+                // Crear Mesa
+                let m = document.createElement('div');
+                m.id = "mesa-" + i;
+                m.className = i===1 ? "mesa-container active" : "mesa-container";
+                m.innerHTML = `
+                    <div style="display:flex; justify-content:space-between;"><b>MESA ${i}</b> <span id="util-${i}">$0.00</span></div>
+                    <div class="m-sug" id="sug-${i}">---</div>
+                    <div style="text-align:center; color:var(--c4); font-weight:bold;" id="mon-${i}">$0.20</div>
+                    <div class="m-btn-group">
+                        <button class="m-btn" style="background:var(--c1);" onclick="mesasActivas[${i-1}].jugar('Rojo')">R</button>
+                        <button class="m-btn" style="background:var(--c2);" onclick="mesasActivas[${i-1}].jugar('Negro')">N</button>
+                        <button class="m-btn" style="background:var(--c3);" onclick="mesasActivas[${i-1}].jugar('Cero')">0</button>
+                    </div>
+                    <div id="hist-${i}" style="min-height:30px; background:#000; border-radius:5px; padding:5px;"></div>
+                `;
+                grid.appendChild(m);
+                mesasActivas.push(new MotorIndependiente(i));
+            }
+            actualizarGlobal();
+        }
+
+        function showMesa(id, total) {
+            for(let i=1; i<=total; i++) {
+                document.getElementById('mesa-'+i).classList.toggle('active', i===id);
+                document.querySelectorAll('.tab-btn')[i-1].classList.toggle('active', i===id);
+            }
+        }
+
+        function actualizarGlobal() {
+            let utilTotal = mesasActivas.reduce((acc, m) => acc + m.utilidad, 0);
+            document.getElementById('gw-cap').innerText = "$" + capitalInicialGlobal.toFixed(2);
+            document.getElementById('gw-util').innerText = "$" + utilTotal.toFixed(2);
+        }
+
+        class MotorIndependiente {
+            constructor(id) {
+                this.id = id;
+                this.hist = []; this.monto = 0.20; this.sug = ""; this.utilidad = 0;
+            }
+            jugar(color) {
+                // Lógica simplificada de tu motor (para no errar en el orden)
+                if(this.sug !== "") {
+                    if(color.toUpperCase() === this.sug) { this.utilidad += this.monto; this.monto = 0.20; }
+                    else if(color !== 'Cero') { this.utilidad -= this.monto; this.monto *= 2; }
+                }
+                this.hist.unshift(color);
+                this.calc(); this.update(); actualizarGlobal();
+            }
+            calc() {
+                let u = this.hist[0];
+                this.sug = (u === "Rojo") ? "NEGRO" : "ROJO";
+            }
+            update() {
+                document.getElementById('sug-'+this.id).innerText = this.sug;
+                document.getElementById('sug-'+this.id).style.color = (this.sug === "ROJO") ? "var(--c1)" : "white";
+                document.getElementById('mon-'+this.id).innerText = "$" + this.monto.toFixed(2);
+                document.getElementById('util-'+this.id).innerText = "$" + this.utilidad.toFixed(2);
+                let hDiv = document.getElementById('hist-'+this.id);
+                hDiv.innerHTML = "";
+                this.hist.slice(0,10).forEach(v => {
+                    let c = v==='Rojo'?'red':(v==='Negro'?'white':'green');
+                    hDiv.innerHTML += `<div class="bola" style="background:${c}; color:${v==='Negro'?'black':'white'}">${v==='Cero'?'0':''}</div>`;
+                });
+            }
+        }
+    </script>
+</body>
+</html>
