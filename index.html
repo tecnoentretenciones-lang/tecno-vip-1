@@ -32,7 +32,7 @@
         .btn-planes { background: #00e5ff; color: #000; }
         .btn-manual { background: #f1c40f; color: #000; }
 
-        /* PANTALLA DE JUEGO (REVERTIDA CON OLA VIP) */
+        /* PANTALLA DE JUEGO (CON OLA VIP) */
         #app-principal { display: none; flex-direction: column; width: 100%; height: 100dvh; max-width: 500px; padding: calc(env(safe-area-inset-top) + 10px) 10px 10px 10px; margin: auto; }
         .tmr-big { background:#000; border:2px solid var(--c5); border-radius: 12px; padding:10px; text-align:center; font-size: 26px; color: var(--c5); font-weight: 900; margin-bottom: 5px;}
         #global-wallet { background:#000; border:1px solid #333; border-radius:15px; padding:12px; display:flex; justify-content:space-around; margin-bottom: 5px; }
@@ -105,7 +105,7 @@
                 - Si la racha contraria llega a 7 veces seguidas, use el botón ⚠️ TRAMPA para reportar el patrón.
             </div>
             
-            <input type="text" id="l-i" class="i-s" placeholder="TAILER" autocomplete="off">
+            <input type="text" id="l-i" class="i-s" placeholder="LICENCIA VIP" autocomplete="off">
             
             <button class="b-a btn-entrar" id="btn-validar">ENTRAR AL SISTEMA</button>
             <button class="b-a btn-demo" onclick="document.getElementById('modal-demo').style.display='flex'">PROBAR DEMO GRATIS</button>
@@ -194,6 +194,7 @@
     <script>
     let lastTouchEnd = 0; document.addEventListener('touchend', e => { const now = (new Date()).getTime(); if (now - lastTouchEnd <= 300) e.preventDefault(); lastTouchEnd = now; }, { passive: false });
 
+    // TU ENLACE A GOOGLE APPS SCRIPT
     const _URL = "https://script.google.com/macros/s/AKfycbzUIdq4jKKOi3_fu3kLsO_cP3Z9ckXp7B6sUiP78B7Km7bDVmaecAIdsWGgGcA8nlE8JA/exec";
     let _HID = localStorage.getItem('VIP_HID') || 'VIP-'+Math.random().toString(36).substr(2,10).toUpperCase(); localStorage.setItem('VIP_HID', _HID);
     let _L="", _S=0, _ba=0, _cI=40, _nP=0, _nG=0, _g=0, _p=0, _h=[], _m=0.2, _s="", _per=0, _Meta=0, _TS=0, _IS=0, _WSP="", _lS=null, _cR=0, _cN=0, _c0=0, _s0=0, _isFetching=false;
@@ -205,7 +206,7 @@
 
     document.getElementById('btn-validar').onclick = async function() {
         _L = document.getElementById('l-i').value.trim().toUpperCase(); if(!_L) return;
-        this.innerText = "...";
+        this.innerText = "... CONECTANDO ...";
         try {
             const r = await fetch(_URL + "?action=validar&app=mesa_segura&serial=" + _L + "&hid=" + _HID);
             const d = await r.json();
@@ -245,7 +246,7 @@
     function saveState() { let est = JSON.stringify({ba:_ba, nP:_nP, nG:_nG, cI:_cI, h:_h.slice(0,12), m:_m, s:_s, per:_per, cR:_cR, cN:_cN, c0:_c0, s0:_s0}); localStorage.setItem('ts_'+_L, est); let url = _URL + `?action=guardar&serial=${_L}&neto_global=${_nG.toFixed(2)}&neto=${_nP.toFixed(2)}&estado=${encodeURIComponent(est)}&wsp=${encodeURIComponent(_WSP)}`; fetch(url).catch(e=>{}); }
     window.aceptarMeta = () => { document.getElementById('alerta-meta').style.display = 'none'; _Meta = _ba * 1.20; };
 
-    // MOTOR CLOUD
+    // MOTOR BLINDADO CLOUD
     async function xfR(c) {
         if(_isFetching) return; _isFetching = true;
         let per_anterior = _per; let gano_ahora = false;
