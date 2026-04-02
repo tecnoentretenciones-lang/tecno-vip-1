@@ -2,35 +2,36 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SISTEMA CENTRAL - TECNOENTRETE</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         body { background: #0b0b0b; color: white; font-family: 'Segoe UI', sans-serif; padding: 0; margin: 0; }
         
-        /* PANTALLA DE LOGIN */
         #login-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 99999; display: flex; justify-content: center; align-items: center; flex-direction: column; }
-        .login-box { background: #1a1a1a; padding: 40px; border-radius: 20px; border: 2px solid #00e5ff; text-align: center; box-shadow: 0 0 30px rgba(0,229,255,0.2); }
-        .login-box input { background: #000; color: #00e5ff; border: 1px solid #00e5ff; padding: 15px; font-size: 18px; text-align: center; border-radius: 10px; width: 100%; margin-bottom: 20px; outline: none;}
+        .login-box { background: #1a1a1a; padding: 40px; border-radius: 20px; border: 2px solid #00e5ff; text-align: center; box-shadow: 0 0 30px rgba(0,229,255,0.2); width: 90%; max-width: 400px; box-sizing: border-box;}
+        .login-box input { background: #000; color: #00e5ff; border: 1px solid #00e5ff; padding: 15px; font-size: 18px; text-align: center; border-radius: 10px; width: 100%; margin-bottom: 20px; outline: none; box-sizing: border-box;}
         .login-box button { background: #00e5ff; color: #000; border: none; padding: 15px; width: 100%; border-radius: 10px; font-weight: 900; font-size: 16px; cursor: pointer; }
         
-        .panel { max-width: 1400px; margin: 20px auto; background: #1a1a1a; padding: 20px; border-radius: 15px; border: 2px solid #333; display: none;}
+        .panel { max-width: 1400px; margin: 20px auto; background: #1a1a1a; padding: 20px; border-radius: 15px; border: 2px solid #333; display: none; box-sizing: border-box;}
         h1 { color: #00e5ff; text-align: center; margin-top: 0; text-transform: uppercase; font-weight: 900;}
         
-        /* PESTAÑAS */
-        .tabs { display: flex; gap: 10px; margin-bottom: 20px; }
-        .tab-btn { flex: 1; background: #222; color: #888; border: 1px solid #444; padding: 15px; font-weight: bold; cursor: pointer; border-radius: 10px; font-size: 16px;}
+        .tabs { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;}
+        .tab-btn { flex: 1; background: #222; color: #888; border: 1px solid #444; padding: 15px; font-weight: bold; cursor: pointer; border-radius: 10px; font-size: 14px; min-width: 150px;}
         .tab-btn.active { background: #00e5ff; color: #000; border-color: #00e5ff; }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
 
         .caja-crear { background: #111; border: 1px solid #333; padding: 15px; border-radius: 10px; margin-bottom: 20px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap;}
-        .caja-crear input, .caja-crear select { background: #222; border: 1px solid #555; color: #fff; padding: 10px; border-radius: 5px; outline: none; }
-        .btn-crear { background: #00e5ff; color: #000; border: none; padding: 10px 20px; border-radius: 5px; font-weight: 900; cursor: pointer; flex-grow: 1; }
+        .caja-crear input, .caja-crear select { background: #222; border: 1px solid #555; color: #fff; padding: 10px; border-radius: 5px; outline: none; flex: 1; min-width: 100px;}
+        .btn-crear { background: #00e5ff; color: #000; border: none; padding: 10px 20px; border-radius: 5px; font-weight: 900; cursor: pointer; flex-grow: 1; min-width: 100px;}
 
-        .total-box { background: linear-gradient(135deg, #27ae60, #2ecc71); padding: 15px; border-radius: 10px; text-align: center; color: #fff; margin-bottom: 20px; font-size: 24px; font-weight: 900; border: 2px solid #fff; }
+        .resumen-finanzas { display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap;}
+        .total-box { flex: 1; background: linear-gradient(135deg, #27ae60, #2ecc71); padding: 20px; border-radius: 10px; text-align: center; color: #fff; font-size: 18px; font-weight: 900; border: 2px solid #fff; min-width: 250px;}
+        .total-box.azul { background: linear-gradient(135deg, #2980b9, #3498db); }
 
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 13px; background: #111; }
-        th, td { border: 1px solid #333; padding: 10px; text-align: center; vertical-align: middle; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 12px; background: #111; }
+        th, td { border: 1px solid #333; padding: 8px; text-align: center; vertical-align: middle; }
         th { background: #00e5ff; color: black; font-weight: 900; }
         
         .btn-accion { padding: 6px 10px; border-radius: 5px; font-weight: bold; cursor: pointer; border: none; width: 100%; margin-bottom: 4px; font-size: 11px;}
@@ -45,9 +46,12 @@
         
         .status-activo { color: #2ecc71; font-weight: bold; }
         .status-inactivo { color: #e74c3c; font-weight: bold; }
-        .conn-box { background: #222; padding: 5px; border-radius: 5px; font-family: monospace; font-size: 11px; text-align: left;}
+        .conn-box { background: #222; padding: 5px; border-radius: 5px; font-family: monospace; font-size: 10px; text-align: left;}
 
-        /* MODAL RENOVACIÓN */
+        /* FIX PARA TRAMPAS EN CELULAR */
+        #t-trampas th, #t-trampas td { white-space: nowrap; }
+        #t-trampas td:nth-child(3) { white-space: normal; min-width: 300px; word-break: break-all; }
+
         #modal-tiempo { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 999999; display: none; justify-content: center; align-items: center; }
     </style>
 </head>
@@ -57,13 +61,10 @@
     <div class="login-box" style="padding:30px; text-align: left;">
         <h2 style="color:#00e5ff; margin-top:0; text-align: center;">⏱️ AÑADIR TIEMPO</h2>
         <p style="color:#ccc; text-align: center;">Licencia: <strong id="lbl-lic-tiempo" style="color:#fff;"></strong></p>
-        
         <label style="color:#888; font-size:12px;">DÍAS A SUMAR</label>
         <input type="number" id="add-dias" placeholder="0" min="0" value="1">
-        
         <label style="color:#888; font-size:12px;">HORAS A SUMAR</label>
         <input type="number" id="add-horas" placeholder="0" min="0" value="0">
-        
         <button style="background:#2ecc71; color:#fff;" onclick="enviarTiempo()">RENOVAR Y ACTIVAR</button>
         <button style="background:#555; color:#fff; margin-top:10px;" onclick="document.getElementById('modal-tiempo').style.display='none'">CANCELAR</button>
         <input type="hidden" id="fila-tiempo">
@@ -88,13 +89,17 @@
     </div>
 
     <div id="tab-usuarios" class="tab-content active">
-        <div class="total-box">💰 TU LUCRO GLOBAL DEL CASINO: <span id="total-global">$0.00</span></div>
+        
+        <div class="resumen-finanzas">
+            <div class="total-box azul">💼 INGRESOS POR VENTA DE PLANES<br><span id="total-ventas">$0.00</span></div>
+            <div class="total-box">💰 LUCRO GLOBAL JUGADORES<br><span id="total-global">$0.00</span></div>
+        </div>
 
         <div class="caja-crear">
-            <strong style="color: #00e5ff;">NUEVA LICENCIA:</strong>
-            <input type="text" id="n-serial" placeholder="CÓDIGO (A1234)" style="width: 120px;">
-            <input type="text" id="n-nombre" placeholder="Nombre" style="width: 120px;">
-            <input type="text" id="n-wsp" placeholder="WhatsApp" style="width: 120px;">
+            <strong style="color: #00e5ff; width: 100%;">NUEVA LICENCIA / VENTA:</strong>
+            <input type="text" id="n-serial" placeholder="CÓDIGO (A123)">
+            <input type="text" id="n-nombre" placeholder="Nombre">
+            <input type="text" id="n-wsp" placeholder="WhatsApp">
             <select id="n-tiempo">
                 <option value="00d-12h:00m:00s">12 Horas</option>
                 <option value="01d-00h:00m:00s">24 Horas</option>
@@ -105,6 +110,7 @@
                 <option value="BASICO">Básico (1 Mesa)</option>
                 <option value="VIP">VIP / PRO (4 Mesas)</option>
             </select>
+            <input type="number" id="n-pago" placeholder="Cobro Ej: 15000">
             <button class="btn-crear" onclick="crearLicencia()"><i class="fas fa-plus"></i> GENERAR</button>
         </div>
 
@@ -115,14 +121,15 @@
                     <tr>
                         <th>#</th>
                         <th>LICENCIA</th>
-                        <th>NOMBRE Cliente</th>
-                        <th>WHATSAPP Cliente</th>
+                        <th>NOMBRE</th>
+                        <th>WHATSAPP</th>
                         <th>PLAN</th>
-                        <th>ESTADO Licencia</th>
-                        <th>TIEMPO CONTRATADO</th>
-                        <th style="color:#2ecc71;">NETO CLIENTE (image_0.png K=11)</th>
+                        <th>ESTADO</th>
+                        <th>TIEMPO / CONEXIÓN</th>
+                        <th style="color:#2ecc71;">NETO JUGADOR</th>
+                        <th style="color:#3498db;">PAGÓ</th>
                         <th>ANCLAJE HID</th>
-                        <th style="min-width: 120px;">ACCIONES RÁPIDAS</th>
+                        <th style="min-width: 100px;">ACCIONES</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -131,18 +138,16 @@
     </div>
 
     <div id="tab-trampas" class="tab-content">
-        <p style="color:#ccc;">Aquí se guardan todos los patrones de robo reportados. Borra los duplicados periódicamente para que el algoritmo sea más rápido.</p>
         <button class="btn-limpiar-trampas" onclick="limpiarTrampas()"><i class="fas fa-magic"></i> ELIMINAR PATRONES DUPLICADOS</button>
         <button class="btn-refresh" onclick="cargarTrampas()">🔄 REFRESCAR BASE DE TRAMPAS</button>
-        
-        <div style="overflow-x: auto; max-height: 500px;">
+        <div style="overflow-x: auto;">
             <table id="t-trampas">
                 <thead>
                     <tr>
                         <th>FECHA REPORTADA</th>
-                        <th>QUIÉN REPORTÓ (Col A=1)</th>
-                        <th style="color:#e74c3c;">PATRÓN DE ROBO (Col C=3)</th>
-                        <th>ESTADO (Col D=4)</th>
+                        <th>QUIÉN REPORTÓ</th>
+                        <th style="color:#e74c3c;">PATRÓN DE ROBO</th>
+                        <th>ESTADO</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -159,9 +164,7 @@
             document.getElementById('login-screen').style.display = 'none';
             document.getElementById('panel-principal').style.display = 'block';
             cargarUsuarios();
-        } else {
-            alert('❌ Contraseña Incorrecta');
-        }
+        } else { alert('❌ Contraseña Incorrecta'); }
     }
 
     function cambiarPestana(tab, btn) {
@@ -172,120 +175,98 @@
         if(tab === 'trampas') cargarTrampas();
     }
 
-    // CARGAR USUARIOS (Corregido indices image_0.png: Nombre=L12, Wsp=M13, Neto=K11 - Plan J=10)
     async function cargarUsuarios() {
-        const btn = document.querySelector('.btn-refresh'); 
-        btn.innerText = "⏳ CARGANDO DATOS REALES...";
+        const btn = document.querySelector('.btn-refresh'); btn.innerText = "⏳ CARGANDO DATOS REALES...";
         try {
-            const r = await fetch(API + "?action=panel_datos"); 
-            const d = await r.json();
+            const r = await fetch(API + "?action=panel_datos"); const d = await r.json();
             const b = document.querySelector("#t-usuarios tbody"); b.innerHTML = "";
-            
-            let sumaGlobalCasino = 0; // Suma de columna K=11 de todos menos demos
+            let sumaGlobalCasino = 0; let sumaVentasPlanes = 0;
 
             d.datos.forEach((f, i) => {
                 if (i === 0 || !f[0]) return; 
-                
-                let neto = parseFloat(f[10]) || 0; // K=11 de image_0.png Neto/Lucro del cliente
-                if(f[0] !== "DEMO") sumaGlobalCasino += neto; 
+                let neto = parseFloat(f[10]) || 0; 
+                let pago = parseFloat(f[13]) || 0; // Columna N (14)
+
+                if(f[0] !== "DEMO") { sumaGlobalCasino += neto; sumaVentasPlanes += pago; }
 
                 const tr = document.createElement("tr");
                 let btnEstado = f[2] === "Activo" ? `<button class="btn-accion btn-sus" onclick="cambiarEstado(${i+1}, 'Inactivo')">⏸️ SUSPENDER</button>` : `<button class="btn-accion btn-act" onclick="cambiarEstado(${i+1}, 'Activo')">▶️ ACTIVAR</button>`;
-                let btnResetHID = f[6] ? `<button class="btn-accion btn-reset" onclick="resetearHID(${i+1})">🔓 DESANCLAR HID</button>` : '';
-                
-                // BOTÓN DE RENOVAR
+                let btnResetHID = f[6] ? `<button class="btn-accion btn-reset" onclick="resetearHID(${i+1})">🔓 DESANCLAR</button>` : '';
                 let btnRenovar = `<button class="btn-accion btn-tiempo" onclick="abrirModalTiempo(${i+1}, '${f[0]}')">⏱️ + TIEMPO</button>`;
-                
-                // PLAN (Usamos Columna J=10)
                 let planActual = (f[9]) ? (f[9].toString().toUpperCase().trim()) : 'BASICO';
 
                 tr.innerHTML = `
                     <td>${i+1}</td>
                     <td style="color:#00e5ff; font-weight:bold;">${f[0]}</td>
-                    <td>${f[11] || '---'}</td> <td>${f[12] || '---'}</td> <td>
-                        <select class="plan-select" style="background:#222; color:#fff;" onchange="cambiarPlan(${i+1}, this.value)">
-                            <option value="BASICO" ${planActual==='BASICO'?'selected':''}>BÁSICO</option>
-                            <option value="VIP" ${planActual==='VIP'||planActual==='PRO'?'selected':''}>VIP / PRO</option>
-                        </select>
-                    </td>
-                    <td class="${f[2]==='Activo'?'status-activo':'status-inactivo'}">${f[2]}</td> <td><div class="conn-box">${f[3] || '🔴 OFFLINE'}</div></td> <td style="color:#2ecc71; font-weight:bold;">$${neto.toFixed(2)}</td> <td style="color:${f[6]?'#2ecc71':'#888'}; font-size:11px;">${f[6]?'🔒🔒🔒🔒':'Libre'}<br>${btnResetHID}</td> <td>${btnEstado}${btnRenovar}<button class="btn-accion btn-borrar" onclick="borrar(${i+1})">🗑️ ELIMINAR</button></td>
+                    <td>${f[11] || '---'}</td> 
+                    <td>${f[12] || '---'}</td> 
+                    <td><select class="plan-select" style="background:#222; color:#fff; width:100%;" onchange="cambiarPlan(${i+1}, this.value)"><option value="BASICO" ${planActual==='BASICO'?'selected':''}>BÁSICO</option><option value="VIP" ${planActual==='VIP'||planActual==='PRO'?'selected':''}>VIP / PRO</option></select></td>
+                    <td class="${f[2]==='Activo'?'status-activo':'status-inactivo'}">${f[2]}</td>
+                    <td><div class="conn-box">${f[3] || '🔴 OFFLINE'}</div></td>
+                    <td style="color:#2ecc71; font-weight:bold;">$${neto.toFixed(2)}</td>
+                    <td style="color:#3498db; font-weight:bold;">$${pago.toFixed(2)}</td>
+                    <td style="color:${f[6]?'#2ecc71':'#888'}; font-size:11px;">${f[6]?'🔒🔒':'Libre'}<br>${btnResetHID}</td>
+                    <td>${btnEstado}${btnRenovar}<button class="btn-accion btn-borrar" onclick="borrar(${i+1})">🗑️ ELIMINAR</button></td>
                 `;
                 b.appendChild(tr);
             });
-            // ACTUALIZAMOS EL LUCRO GLOBAL
             document.getElementById('total-global').innerText = '$' + sumaGlobalCasino.toFixed(2);
+            document.getElementById('total-ventas').innerText = '$' + sumaVentasPlanes.toFixed(2);
             btn.innerHTML = "🔄 REFRESCAR DATOS REALES";
-        } catch(e) { btn.innerText = "Error de Conexión"; alert("No se pudo conectar al Excel.");}
+        } catch(e) { btn.innerText = "Error"; }
     }
 
-    // Modal Renovación
     function abrirModalTiempo(fila, serial) {
-        document.getElementById('lbl-lic-tiempo').innerText = serial;
-        document.getElementById('fila-tiempo').value = fila;
-        document.getElementById('add-dias').value = "1";
-        document.getElementById('add-horas').value = "0";
+        document.getElementById('lbl-lic-tiempo').innerText = serial; document.getElementById('fila-tiempo').value = fila;
+        document.getElementById('add-dias').value = "1"; document.getElementById('add-horas').value = "0";
         document.getElementById('modal-tiempo').style.display = 'flex';
     }
 
     async function enviarTiempo() {
-        let fila = document.getElementById('fila-tiempo').value;
-        let dias = document.getElementById('add-dias').value || 0;
-        let horas = document.getElementById('add-horas').value || 0;
-        
+        let fila = document.getElementById('fila-tiempo').value; let dias = document.getElementById('add-dias').value || 0; let horas = document.getElementById('add-horas').value || 0;
         document.getElementById('modal-tiempo').style.display = 'none';
-        
         await fetch(API + `?action=agregar_tiempo&fila=${fila}&dias=${dias}&horas=${horas}`);
-        alert("✅ Tiempo añadido y Licencia Reactivada exitosamente.");
-        cargarUsuarios();
+        alert("✅ Tiempo añadido y Licencia Reactivada exitosamente."); cargarUsuarios();
     }
 
-    // TRAMPAS: Corrección indices image_0.png para mostrar Patrón en C=3
     async function cargarTrampas() {
         try {
-            const r = await fetch(API + "?action=panel_trampas"); 
-            const d = await r.json();
+            const r = await fetch(API + "?action=panel_trampas"); const d = await r.json();
             const b = document.querySelector("#t-trampas tbody"); b.innerHTML = "";
-            if(d.status === "error") return b.innerHTML = "<tr><td colspan='4'>No hay trampas registradas.</td></tr>";
+            if(d.status === "error") return b.innerHTML = "<tr><td colspan='4'>No hay trampas.</td></tr>";
 
             d.datos.forEach((f, i) => {
-                if (i === 0 || !f[2]) return; // Col C=3 es el patrón
+                if (i === 0 || !f[2]) return; 
                 const tr = document.createElement("tr");
-                let fecha = f[0] ? new Date(f[0]).toLocaleString() : '---'; // A=1 Fecha
-                tr.innerHTML = `<td>${fecha}</td> <td>${f[1]}</td> <td style="color:#e74c3c; font-weight:bold;">${f[2]}</td> <td>${f[3]}</td>`;
+                let fecha = f[0] ? new Date(f[0]).toLocaleString() : '---';
+                tr.innerHTML = `<td>${fecha}</td> <td>${f[1]}</td> <td style="color:#e74c3c; font-weight:bold; font-size:14px;">${f[2]}</td> <td>${f[3]||'REPORTADA'}</td>`;
                 b.appendChild(tr);
             });
-        } catch(e) { alert("Error cargando trampas"); }
+        } catch(e) {}
     }
 
     async function limpiarTrampas() {
-        if(!confirm("⚠️ ¿Eliminar todos los patrones duplicados para optimizar el sistema?")) return;
-        const btn = document.querySelector('.btn-limpiar-trampas');
-        btn.innerText = "⏳ LIMPIANDO...";
+        if(!confirm("⚠️ ¿Eliminar duplicados para optimizar?")) return;
+        const btn = document.querySelector('.btn-limpiar-trampas'); btn.innerText = "⏳ LIMPIANDO...";
         await fetch(API + "?action=limpiar_trampas");
-        btn.innerHTML = "<i class='fas fa-magic'></i> ELIMINAR PATRONES DUPLICADOS";
-        cargarTrampas();
-        alert("✅ Base de datos optimizada.");
+        btn.innerHTML = "<i class='fas fa-magic'></i> ELIMINAR PATRONES DUPLICADOS"; cargarTrampas(); alert("✅ Base de datos optimizada.");
     }
 
-    // Acciones de Usuarios
-    async function cambiarEstado(fila, estado) { if(confirm(`¿Cambiar estado de Licencia a ${estado}?`)) { await fetch(API + `?action=cambiar_estado&fila=${fila}&estado=${estado}`); cargarUsuarios(); } }
-    async function borrar(fila) { if(confirm("⚠️ ¿ELIMINAR esta licencia definitivamente? No hay vuelta atrás.")) { await fetch(API + `?action=borrar_fila&fila=${fila}`); cargarUsuarios(); } }
-    async function resetearHID(fila) { if(confirm("🔓 ¿Desanclar esta cuenta? El cliente podrá usarla en otro PC/Celular.")) { await fetch(API + `?action=resetear_hid&fila=${fila}`); cargarUsuarios(); } }
-    async function cambiarPlan(fila, plan) { await fetch(API + `?action=cambiar_plan&fila=${fila}&plan=${plan}`); cargarUsuarios(); alert("✅ Plan actualizado exitosamente."); }
+    async function cambiarEstado(fila, estado) { if(confirm(`¿Cambiar a ${estado}?`)) { await fetch(API + `?action=cambiar_estado&fila=${fila}&estado=${estado}`); cargarUsuarios(); } }
+    async function borrar(fila) { if(confirm("⚠️ ¿ELIMINAR licencia?")) { await fetch(API + `?action=borrar_fila&fila=${fila}`); cargarUsuarios(); } }
+    async function resetearHID(fila) { if(confirm("🔓 ¿Desanclar esta cuenta?")) { await fetch(API + `?action=resetear_hid&fila=${fila}`); cargarUsuarios(); } }
+    async function cambiarPlan(fila, plan) { await fetch(API + `?action=cambiar_plan&fila=${fila}&plan=${plan}`); cargarUsuarios();}
 
     async function crearLicencia() {
         const btn = document.querySelector('.btn-crear');
-        const s = document.getElementById('n-serial').value.trim();
-        const n = document.getElementById('n-nombre').value.trim();
-        const wsp = document.getElementById('n-wsp').value.trim();
-        const t = document.getElementById('n-tiempo').value;
-        const p = document.getElementById('n-plan').value;
-        if(!s) return alert("Debes ingresar un CÓDIGO (A1234)");
+        const s = document.getElementById('n-serial').value.trim(); const n = document.getElementById('n-nombre').value.trim();
+        const wsp = document.getElementById('n-wsp').value.trim(); const t = document.getElementById('n-tiempo').value;
+        const p = document.getElementById('n-plan').value; const pago = document.getElementById('n-pago').value || 0;
+        if(!s) return alert("Ingresa un CÓDIGO");
         btn.innerText = "...";
-        await fetch(API + `?action=crear_usuario&serial=${encodeURIComponent(s)}&nombre=${encodeURIComponent(n)}&wsp=${encodeURIComponent(wsp)}&tiempo=${encodeURIComponent(t)}&plan=${encodeURIComponent(p)}`);
-        document.getElementById('n-serial').value = ""; document.getElementById('n-nombre').value = ""; document.getElementById('n-wsp').value = "";
-        btn.innerHTML = "<i class='fas fa-plus'></i> GENERAR";
-        cargarUsuarios();
+        await fetch(API + `?action=crear_usuario&serial=${encodeURIComponent(s)}&nombre=${encodeURIComponent(n)}&wsp=${encodeURIComponent(wsp)}&tiempo=${encodeURIComponent(t)}&plan=${encodeURIComponent(p)}&pago=${encodeURIComponent(pago)}`);
+        document.getElementById('n-serial').value = ""; document.getElementById('n-nombre').value = ""; document.getElementById('n-wsp').value = ""; document.getElementById('n-pago').value = "";
+        btn.innerHTML = "<i class='fas fa-plus'></i> GENERAR"; cargarUsuarios();
     }
 </script>
 </body>
