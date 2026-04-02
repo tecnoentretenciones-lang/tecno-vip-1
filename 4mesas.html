@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>TECNOENTRETE VIP PRO - MULTIMESA</title>
+    <title>TECNOENTRETE VIP PRO - MULTIMESA CLOUD</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --c1: #e74c3c; --c2: #2c3e50; --c3: #27ae60; --c4: #f1c40f; --c5: #00e5ff; --c8: #111; }
@@ -39,22 +39,20 @@
         .stats-bar { background:#0a0a0a; border:1px solid #333; border-radius:10px; padding:6px 10px; display:flex; justify-content:space-between; font-size:11px; font-weight:bold; color:#aaa; margin-top:-2px; }
         .b-i { height:70px; border-radius:15px; border:none; font-size:32px; color:white; flex:1; font-weight: bold; cursor: pointer;}
 
-        /* ======================================================== */
-        /* MAGIA PARA ESCRITORIO (PC) - ENCAJE PERFECTO SIN SCROLL  */
-        /* ======================================================== */
+        /* LOADING ANIMATION PARA EL S.T. EN MULTIMESA */
+        @keyframes pulse-text { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
+        .loading-st { animation: pulse-text 1s infinite; color: #888 !important; }
+
+        /* MAGIA PARA ESCRITORIO (PC) - ENCAJE PERFECTO SIN SCROLL */
         @media (min-width: 768px) {
             #tabs-container { display: none !important; }
             .grid-1 { grid-template-columns: 1fr; max-width: 500px; margin: 0 auto; }
             .grid-2 { grid-template-columns: 1fr 1fr; }
             .grid-4 { grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; overflow: hidden; padding-bottom: 5px; }
-            
             .mesa-wrapper { display: flex !important; height: 100%; min-height: 0; }
-            
-            /* COMPRESIÓN PROPORCIONAL PARA LAS 4 MESAS */
             .grid-4 .tmr-big { padding: 5px; font-size: 2vh; margin-bottom: 4px; }
             .grid-4 #global-wallet { padding: 8px; margin-bottom: 4px; }
             .grid-4 .gw-val { font-size: 2.2vh; }
-            
             .grid-4 .mesa-wrapper > div:nth-child(2) { padding: 1vh !important; gap: 0.8vh !important; justify-content: center; }
             .grid-4 .mesa-wrapper > div:nth-child(2) > div:first-child { padding: 1vh !important; }
             .grid-4 [id^="s-t-"] { font-size: 5vh !important; }
@@ -82,6 +80,7 @@
         <div class="c-l">
             <img src="https://cdn-icons-png.flaticon.com/512/1055/1055673.png" style="width:60px; animation: rotar 5s linear infinite; margin-bottom:10px;">
             <h1 style="color:white; font-size:22px; margin:0 0 8px 0;">TECNOENTRETE VIP PRO</h1>
+            <p style="color:#888; font-size:11px; margin-top:-5px; margin-bottom:15px;">MÓDULO DE SEGURIDAD CLOUD ACTIVADO</p>
             <input type="text" id="l-i" class="i-s" placeholder="LICENCIA VIP PRO" autocomplete="off">
             <button class="b-a" id="btn-validar">ENTRAR AL SISTEMA MULTIMESA</button>
         </div>
@@ -119,16 +118,11 @@
             e.preventDefault(); mostrarAlertaHacker(); 
         }
         if(e.ctrlKey && (e.key === '+' || e.key === '-' || e.key === '=' || e.keyCode === 107 || e.keyCode === 109)) {
-            e.preventDefault(); // Bloquea Zoom con teclado
+            e.preventDefault();
         }
     });
 
-    // Bloquear Zoom con rueda de ratón en PC
-    document.addEventListener('wheel', e => {
-        if(e.ctrlKey) e.preventDefault();
-    }, { passive: false });
-
-    // Bloquear Zoom en celulares
+    document.addEventListener('wheel', e => { if(e.ctrlKey) e.preventDefault(); }, { passive: false });
     let lastTouchEnd = 0;
     document.addEventListener('touchend', e => { const now = (new Date()).getTime(); if (now - lastTouchEnd <= 300) e.preventDefault(); lastTouchEnd = now; }, { passive: false });
 
@@ -146,24 +140,19 @@
     }
 
     const _URL = "https://script.google.com/macros/s/AKfycbzUIdq4jKKOi3_fu3kLsO_cP3Z9ckXp7B6sUiP78B7Km7bDVmaecAIdsWGgGcA8nlE8JA/exec";
-    let _L="", _HID = 'VIP-'+Math.random().toString(36).substr(2,10).toUpperCase();
+    let _L="", _HID = localStorage.getItem('VIP_HID') || 'VIP-'+Math.random().toString(36).substr(2,10).toUpperCase();
+    localStorage.setItem('VIP_HID', _HID);
     let _S = 0, _TS = 0, _IS = 0;
-    let _TR = [
-        "Rojo-Rojo-Rojo-Negro-Negro-Negro-Rojo-Rojo-Rojo",
-        "Negro-Negro-Negro-Rojo-Rojo-Rojo-Negro-Negro-Negro",
-        "Rojo-Rojo-Negro-Negro-Negro-Rojo-Rojo-Negro-Negro-Negro",
-        "Negro-Negro-Negro-Rojo-Rojo-Negro-Negro-Negro-Rojo-Rojo",
-        "Negro-Rojo-Negro-Rojo-Negro-Rojo-Negro-Rojo-Negro",
-        "Rojo-Negro-Rojo-Negro-Rojo-Negro-Rojo-Negro-Rojo"
-    ];
 
     let capitalGlobal = 0;
     let mesasInstancias = [];
 
+    // ELIMINADAS LAS TRAMPAS DEL CODIGO (YA VIVEN EN EL SERVIDOR)
+
     document.getElementById('btn-validar').onclick = async function() {
         _L = document.getElementById('l-i').value.trim().toUpperCase();
         if(!_L) return;
-        this.innerText = "VERIFICANDO...";
+        this.innerText = "... CONECTANDO AL CLOUD ...";
         
         try {
             const r = await fetch(_URL + "?action=validar&app=multimesa&serial=" + _L + "&hid=" + _HID);
@@ -171,22 +160,6 @@
             
             if(d.status === "success") { 
                 _S = d.segundos; 
-                
-                if(d.trampas && d.trampas.length > 0) {
-                    let trampas_unicas = [];
-                    let firmas = new Set();
-                    _TR.forEach(t => firmas.add(t.toString().toUpperCase().split('_')[0].replace(/ROJO/g, 'R').replace(/NEGRO/g, 'N').replace(/CERO/g, '0').trim()));
-                    
-                    d.trampas.forEach(t => {
-                        if(!t) return;
-                        let firma = t.toString().toUpperCase().split('_')[0].replace(/ROJO/g, 'R').replace(/NEGRO/g, 'N').replace(/CERO/g, '0').trim();
-                        if(firma.length > 2 && !firmas.has(firma)) {
-                            firmas.add(firma); trampas_unicas.push(firma); 
-                        }
-                    });
-                    if(trampas_unicas.length > 0) _TR = [..._TR, ...trampas_unicas];
-                }
-                
                 document.getElementById('p-l').style.display='none';
                 document.getElementById('p-select').style.display='flex';
             } else { 
@@ -194,7 +167,7 @@
                 this.innerText = "ENTRAR AL SISTEMA MULTIMESA"; 
             }
         } catch(e) { 
-            alert("Error de Conexión."); 
+            alert("Error de Conexión. El Cloud está saturado."); 
             this.innerText = "ENTRAR AL SISTEMA MULTIMESA"; 
         }
     };
@@ -277,60 +250,34 @@
         
         setInterval(() => {
             let utilTotal = mesasInstancias.reduce((a, b) => a + b._nP, 0);
-            let url = _URL + `?action=guardar&serial=${_L}&licencia=${_L}&neto_global=${utilTotal.toFixed(2)}&neto=${utilTotal.toFixed(2)}`;
+            let url = _URL + `?action=guardar&serial=${_L}&neto_global=${utilTotal.toFixed(2)}`;
             fetch(url).catch(e=>{});
         }, 15000);
     }
 
+    // ==========================================
+    // CLASE MOTOR BLINDADO CONECTADA AL CLOUD
+    // ==========================================
     class MotorFelipe {
         constructor(id) {
             this.id = id;
             this._h = []; this._m = 0.2; this._s = ""; this._per = 0;
-            this._nP = 0; 
-            this._cR = 0; this._cN = 0; this._c0 = 0; this._s0 = 0;
+            this._nP = 0; this._cR = 0; this._cN = 0; this._c0 = 0; this._s0 = 0;
             this._lS = null;
+            this._isFetching = false;
         }
 
-        _CALC() {
-            if(this._h.length === 0) return;
-            let u = this._h[0], p = this._h[1] || "", a = this._h[2] || "", t = this._h[3] || "";
-            let racha_actual = 1;
-            for(let i=0; i<this._h.length-1; i++){ if(this._h[i] === this._h[i+1]) racha_actual++; else break; }
+        async xfR(c) {
+            if(this._isFetching) return;
+            this._isFetching = true;
 
-            let sugerencia_normal = "";
-            if(u === 'Cero'){ sugerencia_normal = (p === 'Rojo') ? 'ROJO' : (p === 'Negro' ? 'NEGRO' : ''); }
-            else if(u === p && a === t && u !== a && this._h[4] === this._h[5] && u === this._h[4]){ sugerencia_normal = (u === "Rojo") ? "NEGRO" : "ROJO"; }
-            else {
-                if(u === p && a === t && u !== a && a !== ""){ sugerencia_normal = u.toUpperCase(); }
-                else if(racha_actual >= 3){ sugerencia_normal = u.toUpperCase(); }
-                else { sugerencia_normal = (u === "Rojo") ? "NEGRO" : "ROJO"; }
-            }
-
-            this._s = sugerencia_normal; 
-            if(racha_actual >= 4 && u !== 'Cero') { this._s = u.toUpperCase(); return; }
-
-            let next_c = sugerencia_normal === "ROJO" ? "R" : (sugerencia_normal === "NEGRO" ? "N" : "");
-            if (next_c !== "") {
-                let h_hipotetico = [next_c, ...this._h.map(v => v.charAt(0).toUpperCase())].join("-");
-                for(let tr of _TR) {
-                    if(!tr) continue;
-                    let tr_limpia = tr.toString().toUpperCase().split('_')[0].replace(/ROJO/g, 'R').replace(/NEGRO/g, 'N').replace(/CERO/g, '0').trim();
-                    if(tr_limpia.length > 2 && h_hipotetico.startsWith(tr_limpia)) { 
-                        this._s = (sugerencia_normal === "ROJO") ? "NEGRO" : "ROJO"; 
-                        return; 
-                    }
-                }
-            }
-        }
-
-        xfR(c) {
             this._lS = {nP:this._nP, h:[...this._h], m:this._m, s:this._s, per:this._per, cR:this._cR, cN:this._cN, c0:this._c0, s0:this._s0};
 
             if (c === 'Rojo') { this._cR++; this._s0++; }
             else if (c === 'Negro') { this._cN++; this._s0++; }
             else if (c === 'Cero') { this._c0++; this._s0 = 0; }
 
-            if(this._s !== "") {
+            if(this._s !== "" && this._s !== "⏳") {
                 if(c.toUpperCase() === this._s){ 
                     this._nP += this._m; this._m = 0.2; this._per = 0; 
                 } else if(c !== 'Cero'){ 
@@ -338,7 +285,25 @@
                 }
             }
             this._h.unshift(c);
-            this._CALC();
+            
+            // Pone la pantalla de esta mesa en "Pensando" (⏳)
+            let stDiv = document.getElementById(`s-t-${this.id}`);
+            stDiv.innerText = "⏳";
+            stDiv.classList.add("loading-st");
+            this.update(true);
+            actualizarBilletera();
+
+            // Pide la respuesta al Servidor de Google (CEREBRO)
+            try {
+                let limitHist = this._h.slice(0, 15);
+                let res = await fetch(_URL + "?action=calcular&historial=" + encodeURIComponent(JSON.stringify(limitHist)));
+                let data = await res.json();
+                if(data.status === "success") { this._s = data.sugerencia; } else { this._s = "ERROR CLOUD"; }
+            } catch(e) { this._s = "RED LENTA"; }
+
+            // Ya calculó
+            this._isFetching = false;
+            stDiv.classList.remove("loading-st");
             this.update();
             actualizarBilletera();
 
@@ -347,9 +312,12 @@
                 document.getElementById('btn-trampa-'+this.id).style.pointerEvents="auto";
                 if(this._per === 7) {
                     let patronAuto = this._h.slice(0,7).map(v => v.charAt(0).toUpperCase()).join("-");
-                    navigator.sendBeacon(_URL + "?action=reportar_trampa&licencia=" + _L + "&patron=" + patronAuto + "_AUTO_7_ERRORES_MESA_" + this.id);
-                    mostrarAlerta("Mesa " + this.id + " acumuló <b>7 pérdidas seguidas</b>.<br><br>Presiona el botón <b>⚠️ TRAMPA</b> para reportarlo.");
+                    navigator.sendBeacon(_URL + "?action=reportar_trampa&serial=" + _L + "&patron=" + patronAuto + "_AUTO_7_ERRORES_MESA_" + this.id);
+                    mostrarAlerta("Mesa " + this.id + " acumuló <b>7 pérdidas seguidas</b>. Reporte enviado al Cloud.");
                 }
+            } else {
+                document.getElementById('btn-trampa-'+this.id).style.opacity="0.3";
+                document.getElementById('btn-trampa-'+this.id).style.pointerEvents="none";
             }
         }
 
@@ -370,17 +338,19 @@
 
         reportarTrampa() {
             let patron = this._h.slice(0,7).map(v => v.charAt(0).toUpperCase()).join("-");
-            navigator.sendBeacon(_URL + "?action=reportar_trampa&licencia=" + _L + "&patron=" + patron + "_MANUAL_MESA_" + this.id);
-            mostrarAlerta("<b>✅ GRACIAS POR REPORTAR.</b><br><br>Patrón de la Mesa " + this.id + " enviado con éxito.");
+            navigator.sendBeacon(_URL + "?action=reportar_trampa&serial=" + _L + "&patron=" + patron + "_MANUAL_MESA_" + this.id);
+            mostrarAlerta("<b>✅ REPORTE MANUAL ENVIADO AL CLOUD.</b><br>Patrón de la Mesa " + this.id + " enviado con éxito.");
             document.getElementById('btn-trampa-'+this.id).style.opacity="0.3";
             document.getElementById('btn-trampa-'+this.id).style.pointerEvents="none";
         }
 
-        update() {
+        update(isCalculating = false) {
             document.getElementById(`u-s-${this.id}`).innerText = "$" + this._nP.toFixed(2);
             document.getElementById(`m-t-${this.id}`).innerText = "$" + this._m.toFixed(2);
-            document.getElementById(`s-t-${this.id}`).innerText = this._s || "---";
-            document.getElementById(`s-t-${this.id}`).style.color = (this._s === "ROJO") ? "#e74c3c" : "#fff";
+            if(!isCalculating) {
+                document.getElementById(`s-t-${this.id}`).innerText = this._s || "---";
+                document.getElementById(`s-t-${this.id}`).style.color = (this._s === "ROJO") ? "#e74c3c" : (this._s === "NEGRO" ? "#fff" : "#888");
+            }
             
             document.getElementById(`st-R-${this.id}`).innerText = this._cR;
             document.getElementById(`st-N-${this.id}`).innerText = this._cN;
