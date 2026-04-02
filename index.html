@@ -560,5 +560,59 @@
     document.getElementById('btn-N').onclick=()=>xfR('Negro');
     document.getElementById('btn-0').onclick=()=>xfR('Cero');
     </script>
+    <script>
+  // Bloquear clic derecho
+  document.addEventListener('contextmenu', function(e) {
+      e.preventDefault();
+      mostrarAlertaHacker();
+  });
+
+  // Bloquear F12, Ctrl+U, Ctrl+Shift+I, Ctrl+S
+  document.onkeydown = function(e) {
+      if (
+          e.keyCode === 123 || // F12
+          (e.ctrlKey && e.shiftKey && e.keyCode === 73) || // Ctrl+Shift+I
+          (e.ctrlKey && e.shiftKey && e.keyCode === 74) || // Ctrl+Shift+J
+          (e.ctrlKey && e.keyCode === 85) || // Ctrl+U
+          (e.ctrlKey && e.keyCode === 83)    // Ctrl+S
+      ) {
+          e.preventDefault();
+          mostrarAlertaHacker();
+      }
+  };
+
+  // La pantalla roja del terror
+  function mostrarAlertaHacker() {
+      // Si ya existe la pantalla, no la crea de nuevo
+      if(document.getElementById("pantalla-terror")) return; 
+
+      var pantallaMuerte = document.createElement("div");
+      pantallaMuerte.id = "pantalla-terror";
+      pantallaMuerte.style.position = "fixed";
+      pantallaMuerte.style.top = "0";
+      pantallaMuerte.style.left = "0";
+      pantallaMuerte.style.width = "100vw";
+      pantallaMuerte.style.height = "100vh";
+      pantallaMuerte.style.backgroundColor = "#aa0000"; // Rojo oscuro sangre
+      pantallaMuerte.style.color = "white";
+      pantallaMuerte.style.zIndex = "999999"; // Para que tape todo el juego
+      pantallaMuerte.style.display = "flex";
+      pantallaMuerte.style.flexDirection = "column";
+      pantallaMuerte.style.justifyContent = "center";
+      pantallaMuerte.style.alignItems = "center";
+      pantallaMuerte.style.textAlign = "center";
+      pantallaMuerte.style.padding = "20px";
+      pantallaMuerte.style.fontFamily = "Arial, sans-serif";
+      
+      pantallaMuerte.innerHTML = `
+          <h1 style="font-size: 50px; font-weight: bold; margin-bottom: 20px; text-transform: uppercase;">⚠️ Alerta de Seguridad del Sistema ⚠️</h1>
+          <p style="font-size: 24px; max-width: 800px; font-weight: bold;">Se ha detectado un intento de acceso no autorizado al código fuente.</p>
+          <p style="font-size: 20px; max-width: 800px; margin-top: 15px;">Su ID de usuario y dirección IP acaban de ser registrados en nuestro servidor central.</p>
+          <p style="font-size: 20px; max-width: 800px; margin-top: 15px; color: #ffcccc;">Un intento más y su licencia será <b>ELIMINADA PERMANENTEMENTE</b> de la base de datos sin derecho a reembolso ni reclamos.</p>
+          <button onclick="this.parentElement.remove()" style="margin-top: 40px; padding: 15px 30px; font-size: 20px; background-color: black; color: white; border: 2px solid white; cursor: pointer; border-radius: 10px; font-weight: bold; box-shadow: 0px 0px 15px rgba(0,0,0,0.5);">ENTENDIDO. NO LO VOLVERÉ A HACER.</button>
+      `;
+      document.body.appendChild(pantallaMuerte);
+  }
+</script>
 </body>
 </html>
