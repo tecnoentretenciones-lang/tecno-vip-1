@@ -7,7 +7,6 @@
     <style>
         body { background: #0b0b0b; color: white; font-family: 'Segoe UI', sans-serif; padding: 0; margin: 0; }
         
-        /* PANTALLA DE LOGIN */
         #login-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 99999; display: flex; justify-content: center; align-items: center; flex-direction: column; }
         .login-box { background: #1a1a1a; padding: 40px; border-radius: 20px; border: 2px solid #00e5ff; text-align: center; box-shadow: 0 0 30px rgba(0,229,255,0.2); }
         .login-box input { background: #000; color: #00e5ff; border: 1px solid #00e5ff; padding: 15px; font-size: 18px; text-align: center; border-radius: 10px; width: 100%; margin-bottom: 20px; outline: none;}
@@ -16,7 +15,6 @@
         .panel { max-width: 1400px; margin: 20px auto; background: #1a1a1a; padding: 20px; border-radius: 15px; border: 2px solid #333; display: none;}
         h1 { color: #00e5ff; text-align: center; margin-top: 0; text-transform: uppercase; font-weight: 900;}
         
-        /* PESTAÑAS */
         .tabs { display: flex; gap: 10px; margin-bottom: 20px; }
         .tab-btn { flex: 1; background: #222; color: #888; border: 1px solid #444; padding: 15px; font-weight: bold; cursor: pointer; border-radius: 10px; font-size: 16px;}
         .tab-btn.active { background: #00e5ff; color: #000; border-color: #00e5ff; }
@@ -38,6 +36,7 @@
         .btn-sus { background: #f39c12; color: white; }
         .btn-act { background: #2ecc71; color: white; }
         .btn-reset { background: #9b59b6; color: white; }
+        .btn-tiempo { background: #3498db; color: white; }
         .btn-limpiar-trampas { background: #e74c3c; color: white; border: none; padding: 15px; border-radius: 10px; cursor: pointer; font-weight: bold; width: 100%; margin-bottom: 15px; font-size: 16px;}
         
         .btn-refresh { background: #333; color: #fff; border: 1px solid #555; padding: 10px 20px; border-radius: 8px; cursor: pointer; width: 100%; font-weight: 900; font-size: 14px; margin-bottom: 10px; }
@@ -45,9 +44,29 @@
         .status-activo { color: #2ecc71; font-weight: bold; }
         .status-inactivo { color: #e74c3c; font-weight: bold; }
         .conn-box { background: #222; padding: 5px; border-radius: 5px; font-family: monospace; font-size: 11px; }
+
+        /* MODAL DE AÑADIR TIEMPO */
+        #modal-tiempo { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 999999; display: none; justify-content: center; align-items: center; }
     </style>
 </head>
 <body>
+
+<div id="modal-tiempo">
+    <div class="login-box" style="padding:30px; text-align: left;">
+        <h2 style="color:#00e5ff; margin-top:0; text-align: center;">⏱️ AÑADIR TIEMPO</h2>
+        <p style="color:#ccc; text-align: center;">Licencia: <strong id="lbl-lic-tiempo" style="color:#fff;"></strong></p>
+        
+        <label style="color:#888; font-size:12px;">DÍAS (Ej: 1, 7, 30)</label>
+        <input type="number" id="add-dias" placeholder="0" min="0" value="1">
+        
+        <label style="color:#888; font-size:12px;">HORAS (Ej: 12)</label>
+        <input type="number" id="add-horas" placeholder="0" min="0" value="0">
+        
+        <button style="background:#2ecc71; color:#fff;" onclick="enviarTiempo()">RENOVAR Y ACTIVAR</button>
+        <button style="background:#555; color:#fff; margin-top:10px;" onclick="document.getElementById('modal-tiempo').style.display='none'">CANCELAR</button>
+        <input type="hidden" id="fila-tiempo">
+    </div>
+</div>
 
 <div id="login-screen">
     <div class="login-box">
@@ -168,11 +187,15 @@
                 if (i === 0 || !f[0]) return; 
                 
                 let neto = parseFloat(f[9]) || 0;
-                if(f[0] !== "DEMO") sumaGlobal += neto; // Sumamos todo menos las demos
+                if(f[0] !== "DEMO") sumaGlobal += neto; 
 
                 const tr = document.createElement("tr");
                 let btnEstado = f[2] === "Activo" ? `<button class="btn-accion btn-sus" onclick="cambiarEstado(${i+1}, 'Inactivo')">⏸️ SUSPENDER</button>` : `<button class="btn-accion btn-act" onclick="cambiarEstado(${i+1}, 'Activo')">▶️ ACTIVAR</button>`;
                 let btnResetHID = f[6] ? `<button class="btn-accion btn-reset" onclick="resetearHID(${i+1})">🔓 DESANCLAR</button>` : '';
+                
+                // EL NUEVO BOTÓN DE RENOVAR
+                let btnRenovar = `<button class="btn-accion btn-tiempo" onclick="abrirModalTiempo(${i+1}, '${f[0]}')">⏱️ + TIEMPO</button>`;
+                
                 let planActual = colPlan !== -1 ? (f[colPlan] || 'BASICO') : '---';
 
                 tr.innerHTML = `
@@ -185,13 +208,34 @@
                     <td><div class="conn-box">${f[3] || '🔴 OFFLINE'}</div></td>
                     <td style="color:#2ecc71; font-weight:bold;">$${neto.toFixed(2)}</td>
                     <td style="color:${f[6]?'#2ecc71':'#888'}; font-size:11px;">${f[6]?'🔒':'Libre'}<br>${btnResetHID}</td>
-                    <td>${btnEstado}<button class="btn-accion btn-borrar" onclick="borrar(${i+1})">🗑️ ELIMINAR</button></td>
+                    <td>${btnEstado}${btnRenovar}<button class="btn-accion btn-borrar" onclick="borrar(${i+1})">🗑️ ELIMINAR</button></td>
                 `;
                 b.appendChild(tr);
             });
             document.getElementById('total-global').innerText = '$' + sumaGlobal.toFixed(2);
             btn.innerHTML = "🔄 REFRESCAR DATOS";
         } catch(e) { btn.innerText = "Error"; }
+    }
+
+    // Funciones del Nuevo Modal de Tiempo
+    function abrirModalTiempo(fila, serial) {
+        document.getElementById('lbl-lic-tiempo').innerText = serial;
+        document.getElementById('fila-tiempo').value = fila;
+        document.getElementById('add-dias').value = "1";
+        document.getElementById('add-horas').value = "0";
+        document.getElementById('modal-tiempo').style.display = 'flex';
+    }
+
+    async function enviarTiempo() {
+        let fila = document.getElementById('fila-tiempo').value;
+        let dias = document.getElementById('add-dias').value || 0;
+        let horas = document.getElementById('add-horas').value || 0;
+        
+        document.getElementById('modal-tiempo').style.display = 'none';
+        
+        await fetch(API + `?action=agregar_tiempo&fila=${fila}&dias=${dias}&horas=${horas}`);
+        alert("✅ Tiempo añadido con éxito. La licencia ha sido reactivada.");
+        cargarUsuarios();
     }
 
     async function cargarTrampas() {
@@ -221,7 +265,6 @@
         alert("✅ Base de datos optimizada.");
     }
 
-    // Funciones de Usuarios (Las mismas de antes)
     async function cambiarEstado(fila, estado) { if(confirm(`¿Cambiar a ${estado}?`)) { await fetch(API + `?action=cambiar_estado&fila=${fila}&estado=${estado}`); cargarUsuarios(); } }
     async function borrar(fila) { if(confirm("⚠️ ¿ELIMINAR licencia?")) { await fetch(API + `?action=borrar_fila&fila=${fila}`); cargarUsuarios(); } }
     async function resetearHID(fila) { if(confirm("🔓 ¿Desanclar esta cuenta?")) { await fetch(API + `?action=resetear_hid&fila=${fila}`); cargarUsuarios(); } }
