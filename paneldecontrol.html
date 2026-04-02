@@ -2,11 +2,12 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>PANEL VIP - TECNOENTRETE</title>
+    <title>SISTEMA CENTRAL - TECNOENTRETE</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         body { background: #0b0b0b; color: white; font-family: 'Segoe UI', sans-serif; padding: 0; margin: 0; }
         
+        /* PANTALLA DE LOGIN */
         #login-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 99999; display: flex; justify-content: center; align-items: center; flex-direction: column; }
         .login-box { background: #1a1a1a; padding: 40px; border-radius: 20px; border: 2px solid #00e5ff; text-align: center; box-shadow: 0 0 30px rgba(0,229,255,0.2); }
         .login-box input { background: #000; color: #00e5ff; border: 1px solid #00e5ff; padding: 15px; font-size: 18px; text-align: center; border-radius: 10px; width: 100%; margin-bottom: 20px; outline: none;}
@@ -15,6 +16,7 @@
         .panel { max-width: 1400px; margin: 20px auto; background: #1a1a1a; padding: 20px; border-radius: 15px; border: 2px solid #333; display: none;}
         h1 { color: #00e5ff; text-align: center; margin-top: 0; text-transform: uppercase; font-weight: 900;}
         
+        /* PESTAÑAS */
         .tabs { display: flex; gap: 10px; margin-bottom: 20px; }
         .tab-btn { flex: 1; background: #222; color: #888; border: 1px solid #444; padding: 15px; font-weight: bold; cursor: pointer; border-radius: 10px; font-size: 16px;}
         .tab-btn.active { background: #00e5ff; color: #000; border-color: #00e5ff; }
@@ -43,9 +45,9 @@
         
         .status-activo { color: #2ecc71; font-weight: bold; }
         .status-inactivo { color: #e74c3c; font-weight: bold; }
-        .conn-box { background: #222; padding: 5px; border-radius: 5px; font-family: monospace; font-size: 11px; }
+        .conn-box { background: #222; padding: 5px; border-radius: 5px; font-family: monospace; font-size: 11px; text-align: left;}
 
-        /* MODAL DE AÑADIR TIEMPO */
+        /* MODAL RENOVACIÓN */
         #modal-tiempo { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 999999; display: none; justify-content: center; align-items: center; }
     </style>
 </head>
@@ -56,10 +58,10 @@
         <h2 style="color:#00e5ff; margin-top:0; text-align: center;">⏱️ AÑADIR TIEMPO</h2>
         <p style="color:#ccc; text-align: center;">Licencia: <strong id="lbl-lic-tiempo" style="color:#fff;"></strong></p>
         
-        <label style="color:#888; font-size:12px;">DÍAS (Ej: 1, 7, 30)</label>
+        <label style="color:#888; font-size:12px;">DÍAS A SUMAR</label>
         <input type="number" id="add-dias" placeholder="0" min="0" value="1">
         
-        <label style="color:#888; font-size:12px;">HORAS (Ej: 12)</label>
+        <label style="color:#888; font-size:12px;">HORAS A SUMAR</label>
         <input type="number" id="add-horas" placeholder="0" min="0" value="0">
         
         <button style="background:#2ecc71; color:#fff;" onclick="enviarTiempo()">RENOVAR Y ACTIVAR</button>
@@ -73,7 +75,7 @@
         <img src="https://cdn-icons-png.flaticon.com/512/1055/1055673.png" style="width:80px; margin-bottom: 15px;">
         <h1 style="margin-bottom: 20px;">ACCESO RESTRINGIDO</h1>
         <input type="password" id="clave-admin" placeholder="Ingresa tu clave...">
-        <button onclick="verificarClave()">INGRESAR AL SISTEMA</button>
+        <button onclick="verificarClave()">INGRESAR AL SISTEMA MAESTRO</button>
     </div>
 </div>
 
@@ -86,7 +88,7 @@
     </div>
 
     <div id="tab-usuarios" class="tab-content active">
-        <div class="total-box">💰 TOTAL GLOBAL DEL CASINO: <span id="total-global">$0.00</span></div>
+        <div class="total-box">💰 TU LUCRO GLOBAL DEL CASINO: <span id="total-global">$0.00</span></div>
 
         <div class="caja-crear">
             <strong style="color: #00e5ff;">NUEVA LICENCIA:</strong>
@@ -106,21 +108,21 @@
             <button class="btn-crear" onclick="crearLicencia()"><i class="fas fa-plus"></i> GENERAR</button>
         </div>
 
-        <button class="btn-refresh" onclick="cargarUsuarios()">🔄 REFRESCAR DATOS</button>
+        <button class="btn-refresh" onclick="cargarUsuarios()">🔄 REFRESCAR DATOS REALES</button>
         <div style="overflow-x: auto;">
             <table id="t-usuarios">
                 <thead>
                     <tr>
                         <th>#</th>
                         <th>LICENCIA</th>
-                        <th>NOMBRE</th>
-                        <th>WHATSAPP</th>
+                        <th>NOMBRE Cliente</th>
+                        <th>WHATSAPP Cliente</th>
                         <th>PLAN</th>
-                        <th>ESTADO</th>
-                        <th>TIEMPO / CONEXIÓN</th>
-                        <th style="color:#2ecc71;">NETO GLOBAL</th>
-                        <th>ANCLAJE</th>
-                        <th style="min-width: 120px;">ACCIONES</th>
+                        <th>ESTADO Licencia</th>
+                        <th>TIEMPO CONTRATADO</th>
+                        <th style="color:#2ecc71;">NETO CLIENTE (image_0.png K=11)</th>
+                        <th>ANCLAJE HID</th>
+                        <th style="min-width: 120px;">ACCIONES RÁPIDAS</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -131,16 +133,16 @@
     <div id="tab-trampas" class="tab-content">
         <p style="color:#ccc;">Aquí se guardan todos los patrones de robo reportados. Borra los duplicados periódicamente para que el algoritmo sea más rápido.</p>
         <button class="btn-limpiar-trampas" onclick="limpiarTrampas()"><i class="fas fa-magic"></i> ELIMINAR PATRONES DUPLICADOS</button>
-        <button class="btn-refresh" onclick="cargarTrampas()">🔄 REFRESCAR TRAMPAS</button>
+        <button class="btn-refresh" onclick="cargarTrampas()">🔄 REFRESCAR BASE DE TRAMPAS</button>
         
         <div style="overflow-x: auto; max-height: 500px;">
             <table id="t-trampas">
                 <thead>
                     <tr>
                         <th>FECHA REPORTADA</th>
-                        <th>QUIÉN REPORTÓ</th>
-                        <th style="color:#e74c3c;">PATRÓN DE ROBO</th>
-                        <th>ESTADO</th>
+                        <th>QUIÉN REPORTÓ (Col A=1)</th>
+                        <th style="color:#e74c3c;">PATRÓN DE ROBO (Col C=3)</th>
+                        <th>ESTADO (Col D=4)</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -170,54 +172,53 @@
         if(tab === 'trampas') cargarTrampas();
     }
 
+    // CARGAR USUARIOS (Corregido indices image_0.png: Nombre=L12, Wsp=M13, Neto=K11 - Plan J=10)
     async function cargarUsuarios() {
         const btn = document.querySelector('.btn-refresh'); 
-        btn.innerText = "⏳ CARGANDO...";
+        btn.innerText = "⏳ CARGANDO DATOS REALES...";
         try {
             const r = await fetch(API + "?action=panel_datos"); 
             const d = await r.json();
             const b = document.querySelector("#t-usuarios tbody"); b.innerHTML = "";
             
-            let colPlan = -1;
-            for(let c=0; c < d.datos[0].length; c++) { if(d.datos[0][c] && d.datos[0][c].toString().toUpperCase().trim() === "PLAN") colPlan = c; }
-
-            let sumaGlobal = 0;
+            let sumaGlobalCasino = 0; // Suma de columna K=11 de todos menos demos
 
             d.datos.forEach((f, i) => {
                 if (i === 0 || !f[0]) return; 
                 
-                let neto = parseFloat(f[9]) || 0;
-                if(f[0] !== "DEMO") sumaGlobal += neto; 
+                let neto = parseFloat(f[10]) || 0; // K=11 de image_0.png Neto/Lucro del cliente
+                if(f[0] !== "DEMO") sumaGlobalCasino += neto; 
 
                 const tr = document.createElement("tr");
                 let btnEstado = f[2] === "Activo" ? `<button class="btn-accion btn-sus" onclick="cambiarEstado(${i+1}, 'Inactivo')">⏸️ SUSPENDER</button>` : `<button class="btn-accion btn-act" onclick="cambiarEstado(${i+1}, 'Activo')">▶️ ACTIVAR</button>`;
-                let btnResetHID = f[6] ? `<button class="btn-accion btn-reset" onclick="resetearHID(${i+1})">🔓 DESANCLAR</button>` : '';
+                let btnResetHID = f[6] ? `<button class="btn-accion btn-reset" onclick="resetearHID(${i+1})">🔓 DESANCLAR HID</button>` : '';
                 
-                // EL NUEVO BOTÓN DE RENOVAR
+                // BOTÓN DE RENOVAR
                 let btnRenovar = `<button class="btn-accion btn-tiempo" onclick="abrirModalTiempo(${i+1}, '${f[0]}')">⏱️ + TIEMPO</button>`;
                 
-                let planActual = colPlan !== -1 ? (f[colPlan] || 'BASICO') : '---';
+                // PLAN (Usamos Columna J=10)
+                let planActual = (f[9]) ? (f[9].toString().toUpperCase().trim()) : 'BASICO';
 
                 tr.innerHTML = `
                     <td>${i+1}</td>
                     <td style="color:#00e5ff; font-weight:bold;">${f[0]}</td>
-                    <td>${f[11] || '---'}</td>
-                    <td>${f[12] || '---'}</td>
-                    <td><select style="background:#222; color:#fff;" onchange="cambiarPlan(${i+1}, this.value)"><option value="BASICO" ${planActual==='BASICO'?'selected':''}>BÁSICO</option><option value="VIP" ${planActual==='VIP'||planActual==='PRO'?'selected':''}>VIP / PRO</option></select></td>
-                    <td class="${f[2]==='Activo'?'status-activo':'status-inactivo'}">${f[2]}</td>
-                    <td><div class="conn-box">${f[3] || '🔴 OFFLINE'}</div></td>
-                    <td style="color:#2ecc71; font-weight:bold;">$${neto.toFixed(2)}</td>
-                    <td style="color:${f[6]?'#2ecc71':'#888'}; font-size:11px;">${f[6]?'🔒':'Libre'}<br>${btnResetHID}</td>
-                    <td>${btnEstado}${btnRenovar}<button class="btn-accion btn-borrar" onclick="borrar(${i+1})">🗑️ ELIMINAR</button></td>
+                    <td>${f[11] || '---'}</td> <td>${f[12] || '---'}</td> <td>
+                        <select class="plan-select" style="background:#222; color:#fff;" onchange="cambiarPlan(${i+1}, this.value)">
+                            <option value="BASICO" ${planActual==='BASICO'?'selected':''}>BÁSICO</option>
+                            <option value="VIP" ${planActual==='VIP'||planActual==='PRO'?'selected':''}>VIP / PRO</option>
+                        </select>
+                    </td>
+                    <td class="${f[2]==='Activo'?'status-activo':'status-inactivo'}">${f[2]}</td> <td><div class="conn-box">${f[3] || '🔴 OFFLINE'}</div></td> <td style="color:#2ecc71; font-weight:bold;">$${neto.toFixed(2)}</td> <td style="color:${f[6]?'#2ecc71':'#888'}; font-size:11px;">${f[6]?'🔒🔒🔒🔒':'Libre'}<br>${btnResetHID}</td> <td>${btnEstado}${btnRenovar}<button class="btn-accion btn-borrar" onclick="borrar(${i+1})">🗑️ ELIMINAR</button></td>
                 `;
                 b.appendChild(tr);
             });
-            document.getElementById('total-global').innerText = '$' + sumaGlobal.toFixed(2);
-            btn.innerHTML = "🔄 REFRESCAR DATOS";
-        } catch(e) { btn.innerText = "Error"; }
+            // ACTUALIZAMOS EL LUCRO GLOBAL
+            document.getElementById('total-global').innerText = '$' + sumaGlobalCasino.toFixed(2);
+            btn.innerHTML = "🔄 REFRESCAR DATOS REALES";
+        } catch(e) { btn.innerText = "Error de Conexión"; alert("No se pudo conectar al Excel.");}
     }
 
-    // Funciones del Nuevo Modal de Tiempo
+    // Modal Renovación
     function abrirModalTiempo(fila, serial) {
         document.getElementById('lbl-lic-tiempo').innerText = serial;
         document.getElementById('fila-tiempo').value = fila;
@@ -234,10 +235,11 @@
         document.getElementById('modal-tiempo').style.display = 'none';
         
         await fetch(API + `?action=agregar_tiempo&fila=${fila}&dias=${dias}&horas=${horas}`);
-        alert("✅ Tiempo añadido con éxito. La licencia ha sido reactivada.");
+        alert("✅ Tiempo añadido y Licencia Reactivada exitosamente.");
         cargarUsuarios();
     }
 
+    // TRAMPAS: Corrección indices image_0.png para mostrar Patrón en C=3
     async function cargarTrampas() {
         try {
             const r = await fetch(API + "?action=panel_trampas"); 
@@ -246,9 +248,9 @@
             if(d.status === "error") return b.innerHTML = "<tr><td colspan='4'>No hay trampas registradas.</td></tr>";
 
             d.datos.forEach((f, i) => {
-                if (i === 0 || !f[2]) return; 
+                if (i === 0 || !f[2]) return; // Col C=3 es el patrón
                 const tr = document.createElement("tr");
-                let fecha = f[0] ? new Date(f[0]).toLocaleString() : '---';
+                let fecha = f[0] ? new Date(f[0]).toLocaleString() : '---'; // A=1 Fecha
                 tr.innerHTML = `<td>${fecha}</td> <td>${f[1]}</td> <td style="color:#e74c3c; font-weight:bold;">${f[2]}</td> <td>${f[3]}</td>`;
                 b.appendChild(tr);
             });
@@ -265,21 +267,22 @@
         alert("✅ Base de datos optimizada.");
     }
 
-    async function cambiarEstado(fila, estado) { if(confirm(`¿Cambiar a ${estado}?`)) { await fetch(API + `?action=cambiar_estado&fila=${fila}&estado=${estado}`); cargarUsuarios(); } }
-    async function borrar(fila) { if(confirm("⚠️ ¿ELIMINAR licencia?")) { await fetch(API + `?action=borrar_fila&fila=${fila}`); cargarUsuarios(); } }
-    async function resetearHID(fila) { if(confirm("🔓 ¿Desanclar esta cuenta?")) { await fetch(API + `?action=resetear_hid&fila=${fila}`); cargarUsuarios(); } }
-    async function cambiarPlan(fila, plan) { await fetch(API + `?action=cambiar_plan&fila=${fila}&plan=${plan}`); }
+    // Acciones de Usuarios
+    async function cambiarEstado(fila, estado) { if(confirm(`¿Cambiar estado de Licencia a ${estado}?`)) { await fetch(API + `?action=cambiar_estado&fila=${fila}&estado=${estado}`); cargarUsuarios(); } }
+    async function borrar(fila) { if(confirm("⚠️ ¿ELIMINAR esta licencia definitivamente? No hay vuelta atrás.")) { await fetch(API + `?action=borrar_fila&fila=${fila}`); cargarUsuarios(); } }
+    async function resetearHID(fila) { if(confirm("🔓 ¿Desanclar esta cuenta? El cliente podrá usarla en otro PC/Celular.")) { await fetch(API + `?action=resetear_hid&fila=${fila}`); cargarUsuarios(); } }
+    async function cambiarPlan(fila, plan) { await fetch(API + `?action=cambiar_plan&fila=${fila}&plan=${plan}`); cargarUsuarios(); alert("✅ Plan actualizado exitosamente."); }
 
     async function crearLicencia() {
         const btn = document.querySelector('.btn-crear');
         const s = document.getElementById('n-serial').value.trim();
         const n = document.getElementById('n-nombre').value.trim();
-        const w = document.getElementById('n-wsp').value.trim();
+        const wsp = document.getElementById('n-wsp').value.trim();
         const t = document.getElementById('n-tiempo').value;
         const p = document.getElementById('n-plan').value;
-        if(!s) return alert("Ingresa un código");
+        if(!s) return alert("Debes ingresar un CÓDIGO (A1234)");
         btn.innerText = "...";
-        await fetch(API + `?action=crear_usuario&serial=${encodeURIComponent(s)}&nombre=${encodeURIComponent(n)}&wsp=${encodeURIComponent(w)}&tiempo=${encodeURIComponent(t)}&plan=${encodeURIComponent(p)}`);
+        await fetch(API + `?action=crear_usuario&serial=${encodeURIComponent(s)}&nombre=${encodeURIComponent(n)}&wsp=${encodeURIComponent(wsp)}&tiempo=${encodeURIComponent(t)}&plan=${encodeURIComponent(p)}`);
         document.getElementById('n-serial').value = ""; document.getElementById('n-nombre').value = ""; document.getElementById('n-wsp').value = "";
         btn.innerHTML = "<i class='fas fa-plus'></i> GENERAR";
         cargarUsuarios();
