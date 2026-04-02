@@ -79,6 +79,7 @@
     <div class="modal-body">
         <h2 style="color:#f1c40f; text-align: center; margin-top:0;">✏️ EDITAR CLIENTE</h2>
         <label>Usuario Login</label> <input type="text" id="ed-u-user">
+        <label>Clave / Licencia</label> <input type="text" id="ed-u-serial">
         <label>Nombre del Cliente</label> <input type="text" id="ed-u-nombre">
         <label>WhatsApp</label> <input type="text" id="ed-u-wsp">
         <label>Plan Asignado</label>
@@ -223,7 +224,7 @@
     async function cargarUsuarios() {
         document.querySelector('.btn-refresh').innerText = "⏳ CARGANDO...";
         try {
-            const r = await fetch(API + `?action=panel_datos&vendedor=${USUARIO_ACTUAL}`); 
+            const r = await fetch(API + `?action=panel_datos&vendedor=${encodeURIComponent(USUARIO_ACTUAL)}`); 
             const d = await r.json();
             const b = document.querySelector("#t-usuarios tbody"); b.innerHTML = "";
             let sG = 0; let sV = 0;
@@ -253,7 +254,7 @@
                                 <td style="color:${f[6]?'#2ecc71':'#888'}; font-size:11px;">${f[6]?'🔒':'Libre'}<br>${bResetHID}</td>
                                 <td>
                                     ${bE}
-                                    <button class="btn-accion btn-editar" onclick="abrirEditUser(${realFila}, '${f[14]||''}', '${f[11]||''}', '${f[12]||''}', '${planActual}', '${pago}')">✏️ EDITAR</button>
+                                    <button class="btn-accion btn-editar" onclick="abrirEditUser(${realFila}, '${f[14]||''}', '${f[0]||''}', '${f[11]||''}', '${f[12]||''}', '${planActual}', '${pago}')">✏️ EDITAR</button>
                                     <button class="btn-accion btn-tiempo" onclick="abrirModal(${realFila})">+ TIEMPO</button>
                                     <button class="btn-accion btn-borrar" onclick="borrar(${realFila})">🗑️ ELIMINAR</button>
                                 </td>`;
@@ -271,13 +272,14 @@
         const t = document.getElementById('n-tiempo').value; const p = document.getElementById('n-plan').value; 
         const pago = document.getElementById('n-pago').value;
         if(!s) return alert("Ingresa una Clave");
-        await fetch(API + `?action=crear_usuario&usuario=${u}&serial=${s}&nombre=${n}&wsp=${w}&tiempo=${t}&plan=${p}&pago=${pago}&vendedor=${USUARIO_ACTUAL}`);
+        await fetch(API + `?action=crear_usuario&usuario=${encodeURIComponent(u)}&serial=${encodeURIComponent(s)}&nombre=${encodeURIComponent(n)}&wsp=${encodeURIComponent(w)}&tiempo=${encodeURIComponent(t)}&plan=${encodeURIComponent(p)}&pago=${encodeURIComponent(pago)}&vendedor=${encodeURIComponent(USUARIO_ACTUAL)}`);
         cargarUsuarios();
     }
 
-    function abrirEditUser(fila, user, nom, wsp, plan, pago) {
+    function abrirEditUser(fila, user, serial, nom, wsp, plan, pago) {
         document.getElementById('ed-u-fila').value = fila; 
         document.getElementById('ed-u-user').value = user !== 'undefined' ? user : '';
+        document.getElementById('ed-u-serial').value = serial !== 'undefined' ? serial : ''; // LEE LA CLAVE
         document.getElementById('ed-u-nombre').value = nom !== 'undefined' ? nom : '';
         document.getElementById('ed-u-wsp').value = wsp !== 'undefined' ? wsp : ''; 
         document.getElementById('ed-u-plan').value = plan || 'BASICO';
@@ -286,10 +288,17 @@
     }
     
     async function guardarEdicionUsuario() {
-        let f = document.getElementById('ed-u-fila').value; let u = document.getElementById('ed-u-user').value; let n = document.getElementById('ed-u-nombre').value;
-        let w = document.getElementById('ed-u-wsp').value; let p = document.getElementById('ed-u-plan').value; let pag = document.getElementById('ed-u-pago').value;
+        let f = document.getElementById('ed-u-fila').value; 
+        let u = document.getElementById('ed-u-user').value; 
+        let s = document.getElementById('ed-u-serial').value; // GUARDA LA CLAVE
+        let n = document.getElementById('ed-u-nombre').value;
+        let w = document.getElementById('ed-u-wsp').value; 
+        let p = document.getElementById('ed-u-plan').value; 
+        let pag = document.getElementById('ed-u-pago').value;
+        
         document.getElementById('modal-editar-usuario').style.display = 'none';
-        await fetch(API + `?action=editar_usuario&fila=${f}&usuario=${u}&nombre=${n}&wsp=${w}&plan=${p}&pago=${pag}`); cargarUsuarios();
+        await fetch(API + `?action=editar_usuario&fila=${f}&usuario=${encodeURIComponent(u)}&serial=${encodeURIComponent(s)}&nombre=${encodeURIComponent(n)}&wsp=${encodeURIComponent(w)}&plan=${encodeURIComponent(p)}&pago=${encodeURIComponent(pag)}`); 
+        cargarUsuarios();
     }
 
     async function cargarCajeros() {
@@ -316,7 +325,8 @@
         const u = document.getElementById('c-user').value; const p = document.getElementById('c-pass').value;
         const n = document.getElementById('c-nombre').value; const w = document.getElementById('c-wsp').value;
         if(!u || !p) return alert("Usuario y Clave obligatorios");
-        await fetch(API + `?action=crear_cajero&user=${u}&pass=${p}&nombre=${n}&wsp=${w}`); cargarCajeros();
+        await fetch(API + `?action=crear_cajero&user=${encodeURIComponent(u)}&pass=${encodeURIComponent(p)}&nombre=${encodeURIComponent(n)}&wsp=${encodeURIComponent(w)}`); 
+        cargarCajeros();
     }
 
     function abrirEditCajero(fila, u, p, n, w) {
@@ -329,7 +339,8 @@
         let f = document.getElementById('ed-c-fila').value; let u = document.getElementById('ed-c-user').value;
         let p = document.getElementById('ed-c-pass').value; let n = document.getElementById('ed-c-nombre').value; let w = document.getElementById('ed-c-wsp').value;
         document.getElementById('modal-editar-cajero').style.display = 'none';
-        await fetch(API + `?action=editar_cajero&fila=${f}&user=${u}&pass=${p}&nombre=${n}&wsp=${w}`); cargarCajeros();
+        await fetch(API + `?action=editar_cajero&fila=${f}&user=${encodeURIComponent(u)}&pass=${encodeURIComponent(p)}&nombre=${encodeURIComponent(n)}&wsp=${encodeURIComponent(w)}`); 
+        cargarCajeros();
     }
 
     async function cargarTrampas() {
@@ -350,7 +361,7 @@
     async function estadoCajero(f, est) { await fetch(API + `?action=cambiar_estado_cajero&fila=${f}&estado=${est}`); cargarCajeros(); }
     async function borrarCajero(f) { if(confirm("¿Eliminar cajero?")) { await fetch(API + `?action=borrar_cajero&fila=${f}`); cargarCajeros(); } }
     async function cambiarEstado(f, est) { await fetch(API + `?action=cambiar_estado&fila=${f}&estado=${est}`); cargarUsuarios(); }
-    async function cambiarPlan(f, plan) { await fetch(API + `?action=cambiar_plan&fila=${f}&plan=${plan}`); }
+    async function cambiarPlan(f, plan) { await fetch(API + `?action=cambiar_plan&fila=${f}&plan=${encodeURIComponent(plan)}`); }
     async function borrar(f) { if(confirm("¿Borrar Licencia?")) { await fetch(API + `?action=borrar_fila&fila=${f}`); cargarUsuarios(); } }
     async function resetearHID(f) { if(confirm("¿Desanclar dispositivo?")) { await fetch(API + `?action=resetear_hid&fila=${f}`); cargarUsuarios(); } }
     function abrirModal(f) { document.getElementById('fila-tiempo').value = f; document.getElementById('modal-tiempo').style.display = 'flex'; }
