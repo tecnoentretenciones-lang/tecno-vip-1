@@ -21,18 +21,15 @@
 
         #app-principal { display: none; flex-direction: column; height: 100dvh; padding-top: calc(env(safe-area-inset-top) + 5px); }
         
-        /* BILLETERA GLOBAL FIJA ARRIBA */
         #global-wallet { background:#000; border:1px solid #333; border-radius:15px; padding:12px; display:flex; justify-content:space-around; margin: 0 5px 5px 5px; }
         .gw-box { text-align:center; }
         .gw-title { font-size:11px; color:#888; }
         .gw-val { font-size:18px; font-weight:bold; }
         
-        /* PESTAÑAS CELULAR */
         #tabs-container { display: flex; padding: 0 5px 5px 5px; gap: 5px; }
         .tab-btn { flex: 1; background: #222; color: #888; border: 1px solid #444; border-radius: 10px; padding: 12px 0; font-weight: bold; font-size: 12px; text-align: center; cursor: pointer; }
         .tab-btn.active { background: var(--c5); color: #000; border-color: var(--c5); box-shadow: 0 0 10px rgba(0,229,255,0.4); }
 
-        /* GRILLA MESAS */
         #grid-mesas { flex-grow: 1; display: grid; gap: 5px; padding: 0 5px 5px 5px; overflow-y: auto; }
         
         .mesa-wrapper { display: none; flex-direction: column; height: 100%; gap: 10px; }
@@ -46,7 +43,6 @@
             .mesa-wrapper { display: flex !important; height: auto; }
         }
 
-        /* CLASES ORIGINALES DE TU DISEÑO */
         .tmr-big { background:#000; border:2px solid var(--c5); border-radius: 12px; padding:10px; text-align:center; font-size: 26px; color: var(--c5); font-weight: 900; margin: 0 5px 5px 5px;}
         .bola { width: 22px; height: 22px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 9px; font-weight: bold; }
         .stats-bar { background:#0a0a0a; border:1px solid #333; border-radius:10px; padding:6px 10px; display:flex; justify-content:space-between; font-size:11px; font-weight:bold; color:#aaa; margin-top:-2px; }
@@ -96,7 +92,7 @@
     </div>
 
     <script>
-    // === SISTEMA ANTI HACKER ===
+    // === SISTEMA ANTI HACKER TECNOENTRETE ===
     document.addEventListener('contextmenu', e => e.preventDefault());
     document.addEventListener('keydown', e => { 
         if(e.key === "F12" || (e.ctrlKey && e.shiftKey && e.keyCode === 73) || (e.ctrlKey && e.keyCode === 85) || (e.ctrlKey && e.keyCode === 83)) { 
@@ -110,7 +106,7 @@
         if(document.getElementById("pantalla-terror")) return; 
         var pm = document.createElement("div"); pm.id = "pantalla-terror";
         pm.style = "position:fixed;top:0;left:0;width:100vw;height:100vh;background:#a00;color:#fff;z-index:999999;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:20px;font-family:Arial;";
-        pm.innerHTML = `<h1 style="font-size:40px;text-transform:uppercase;font-weight:bold;">⚠️ Alerta de Seguridad</h1><p style="font-size:20px;margin-top:15px;font-weight:bold;">Intento de hackeo detectado.</p><p style="font-size:18px;">Su IP ha sido registrada. Un intento más y su licencia será eliminada.</p><button onclick="this.parentElement.remove()" style="margin-top:30px;padding:15px 30px;background:#000;color:#fff;border:2px solid #fff;border-radius:10px;cursor:pointer;font-weight:bold;">ENTENDIDO</button>`;
+        pm.innerHTML = `<h1 style="font-size:32px;text-transform:uppercase;font-weight:bold;">⚠️ ALERTA DE SEGURIDAD TECNOENTRETE ⚠️</h1><p style="font-size:20px;margin-top:15px;font-weight:bold;">Intento de alteración de código detectado.</p><p style="font-size:16px;">Su IP ha sido registrada en los servidores de TECNOENTRETE. Un intento más y su licencia será eliminada sin derecho a reembolso.</p><button onclick="this.parentElement.remove()" style="margin-top:30px;padding:15px 30px;background:#000;color:#fff;border:2px solid #fff;border-radius:10px;cursor:pointer;font-weight:bold;">ENTENDIDO</button>`;
         document.body.appendChild(pm);
     }
 
@@ -134,14 +130,12 @@
     let capitalGlobal = 0;
     let mesasInstancias = [];
 
-    // === CONEXIÓN A LA NUBE ===
     document.getElementById('btn-validar').onclick = async function() {
         _L = document.getElementById('l-i').value.trim().toUpperCase();
         if(!_L) return;
         this.innerText = "VERIFICANDO...";
         
         try {
-            // Nota: Aquí se envía el parámetro app=multimesa si quieres filtrarlo luego en Excel
             const r = await fetch(_URL + "?action=validar&app=multimesa&serial=" + _L + "&hid=" + _HID);
             const d = await r.json();
             
@@ -185,14 +179,12 @@
         grid.className = "grid-" + cant;
 
         for(let i=1; i<=cant; i++) {
-            // Pestañas
             let t = document.createElement('button');
             t.className = i===1 ? "tab-btn active" : "tab-btn";
             t.innerText = "MESA " + i;
             t.onclick = () => cambiarTab(i, cant);
             tabs.appendChild(t);
 
-            // TU HTML ORIGINAL INTACTO POR MESA
             let mHTML = `
             <div class="mesa-wrapper ${i===1?'active':''}" id="mesa-${i}">
                 <div style="text-align:center; margin-bottom:-5px; font-weight:bold; color:#888; font-size:12px;">MESA ${i} - UTILIDAD: <span id="u-s-${i}" style="color:var(--c3);">$0.00</span></div>
@@ -253,7 +245,6 @@
             if(_S<=0) location.reload();
         }, 1000);
         
-        // Guardar progreso global en la nube cada 15 segundos
         setInterval(() => {
             let utilTotal = mesasInstancias.reduce((a, b) => a + b._nP, 0);
             let url = _URL + `?action=guardar&serial=${_L}&licencia=${_L}&neto_global=${utilTotal.toFixed(2)}&neto=${utilTotal.toFixed(2)}`;
@@ -261,7 +252,6 @@
         }, 15000);
     }
 
-    // EL CEREBRO ORIGINAL INTACTO
     class MotorFelipe {
         constructor(id) {
             this.id = id;
