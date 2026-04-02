@@ -9,243 +9,268 @@
         :root { --c1: #e74c3c; --c2: #2c3e50; --c3: #27ae60; --c4: #f1c40f; --c5: #00e5ff; --c8: #111; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; touch-action: none !important; user-select: none !important; -webkit-user-drag: none; overscroll-behavior: none; }
         html, body { height: 100%; width: 100%; margin: 0; padding: 0; overflow: hidden !important; background-color: #000; position: fixed; font-family: 'Segoe UI', sans-serif; }
-        body::before { content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: url('https://raw.githubusercontent.com/tecnoentretenciones-2025/Imagenes-para-el-sistema/refs/heads/main/fondo%20ruleta2.jpeg') no-repeat center center; background-size: cover; filter: brightness(0.2); z-index: -1; }
+        body::before { content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: url('https://raw.githubusercontent.com/tecnoentretenciones-lang/tecno-vip-1/main/image_1209a3.jpg') no-repeat center center; background-size: cover; z-index: -2; }
+        body::after { content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: -1; }
+        @keyframes rotar { 100% { transform: rotate(360deg); } }
         
-        #p-l { width: 100%; height: 100dvh; max-width: 450px; display: flex; flex-direction: column; padding: 20px; margin: auto; position: fixed; top: 0; left: 50%; transform: translateX(-50%); z-index: 9999; justify-content: center; align-items: center; }
-        
-        .c-l { background: rgba(0,0,0,0.85); border: 2px solid #00e5ff; border-radius: 20px; padding: 25px 20px; width: 100%; text-align: center; box-shadow: 0 0 20px rgba(0,229,255,0.3); backdrop-filter: blur(5px); }
-        .c-l h1 { color: #fff; font-size: 24px; margin: 0 0 15px 0; font-weight: 900;}
-        .i-s { width: 100%; background: rgba(0,0,0,0.5); border: 1px solid #444; color: #f1c40f; padding: 15px; border-radius: 10px; font-size: 18px; text-align: center; margin-bottom: 15px; outline: none; font-weight: bold; }
-        .b-a { border: none; padding: 18px; border-radius: 10px; font-weight: 900; width: 100%; cursor: pointer; text-transform: uppercase; font-size: 14px; margin-bottom: 10px; transition: transform 0.1s; background: linear-gradient(135deg, #00e5ff, #008c9e); color: #000; box-shadow: 0 4px 15px rgba(0,229,255,0.4); }
-        .b-a:active { transform: scale(0.97); }
+        #p-l, #p-select { width: 100%; height: 100dvh; max-width: 500px; display: flex; flex-direction: column; padding: 10px; margin: auto; }
+        #p-l, #p-select { position: fixed; top: 0; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.95); z-index: 9999; justify-content: center; align-items: center; }
+        .c-l { background: rgba(20, 20, 20, 0.98); border: 2px solid var(--c5); border-radius: 20px; padding: 15px; width: 95%; text-align: center; box-shadow: 0 0 20px rgba(0,229,255,0.2); }
+        .i-s { width: 100%; background: #000; border: 2px solid #555; color: var(--c4); padding: 12px; border-radius: 10px; font-size: 16px; text-align: center; margin-bottom: 8px; outline: none; font-weight: bold; }
+        .b-a { background: var(--c5); color: #000; border: none; padding: 15px; border-radius: 10px; font-weight: 900; width: 100%; cursor: pointer; text-transform: uppercase; font-size: 12px; margin-bottom: 8px; }
 
-        #app-principal { display: none; flex-direction: column; width: 100%; height: 100dvh; max-width: 800px; padding: calc(env(safe-area-inset-top) + 5px) 5px 5px 5px; margin: auto; }
+        #app-principal { display: none; flex-direction: column; height: 100dvh; padding-top: calc(env(safe-area-inset-top) + 5px); }
         
-        #header-multimesa { background: rgba(0,0,0,0.8); border: 1px solid #00e5ff; border-radius: 10px; padding: 8px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; backdrop-filter: blur(5px); }
-        .head-box { text-align: center; color: #fff; font-weight: bold; }
-        .head-box-tit { font-size: 10px; color: #00e5ff; text-transform: uppercase; }
-        .head-box-val { font-size: 16px; }
-        .btn-header { background: transparent; border: 1px solid #f1c40f; color: #f1c40f; padding: 5px 10px; border-radius: 5px; font-size: 11px; font-weight: bold; cursor: pointer; }
+        #global-wallet { background:#000; border:1px solid #333; border-radius:15px; padding:12px; display:flex; justify-content:space-around; margin: 0 5px 5px 5px; }
+        .gw-box { text-align:center; }
+        .gw-title { font-size:11px; color:#888; }
+        .gw-val { font-size:18px; font-weight:bold; }
+        
+        #tabs-container { display: flex; padding: 0 5px 5px 5px; gap: 5px; }
+        .tab-btn { flex: 1; background: #222; color: #888; border: 1px solid #444; border-radius: 10px; padding: 12px 0; font-weight: bold; font-size: 12px; text-align: center; cursor: pointer; }
+        .tab-btn.active { background: var(--c5); color: #000; border-color: var(--c5); box-shadow: 0 0 10px rgba(0,229,255,0.4); }
 
-        .grid-mesas { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 5px; flex-grow: 1; overflow: hidden; }
-        
-        .mesa-container { background: rgba(10,10,10,0.9); border: 1px solid #333; border-radius: 10px; display: flex; flex-direction: column; padding: 5px; position: relative; overflow: hidden; }
-        .mesa-container.activa { border-color: #00e5ff; box-shadow: 0 0 10px rgba(0,229,255,0.2); }
-        
-        .mesa-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 3px; border-bottom: 1px solid #333; padding-bottom: 3px; }
-        .mesa-tit { font-size: 12px; font-weight: bold; color: #00e5ff; }
-        .mesa-stats { font-size: 10px; color: #aaa; display: flex; gap: 5px; }
-        
-        .mesa-main { display: flex; flex-direction: column; flex-grow: 1; justify-content: center; align-items: center; }
-        .mesa-sugerencia { font-size: 35px; font-weight: 900; line-height: 1; text-shadow: 2px 2px 4px rgba(0,0,0,0.8); }
-        .mesa-monto { font-size: 14px; color: var(--c4); font-weight: bold; }
-        
-        .mesa-botones { display: flex; gap: 3px; width: 100%; margin-top: 3px; }
-        .btn-m { height: 40px; border-radius: 8px; border: none; font-size: 18px; color: white; flex: 1; font-weight: bold; box-shadow: inset 0 -3px 0 rgba(0,0,0,0.3); }
-        
-        .mesa-historial { background: #000; height: 30px; border-radius: 6px; border: 1px solid #222; display: flex; flex-wrap: nowrap; overflow-x: auto; align-items: center; padding: 0 2px; gap: 2px; margin-top: 3px; scrollbar-width: none; }
-        .mesa-historial::-webkit-scrollbar { display: none; }
-        .bola { min-width: 16px; height: 16px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 8px; font-weight: bold; }
+        #grid-mesas { flex-grow: 1; display: grid; gap: 5px; padding: 0 5px 5px 5px; overflow-y: auto; }
+        .mesa-wrapper { display: none; flex-direction: column; height: 100%; gap: 10px; }
+        .mesa-wrapper.active { display: flex; }
 
-        .mesa-footer { display: flex; justify-content: space-between; margin-top: 3px; }
-        .btn-f { background: transparent; padding: 4px; border-radius: 5px; font-size: 9px; font-weight: bold; flex: 1; margin: 0 1px; }
+        .tmr-big { background:#000; border:2px solid var(--c5); border-radius: 12px; padding:10px; text-align:center; font-size: 26px; color: var(--c5); font-weight: 900; margin: 0 5px 5px 5px;}
+        .bola { width: 22px; height: 22px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 9px; font-weight: bold; }
+        .stats-bar { background:#0a0a0a; border:1px solid #333; border-radius:10px; padding:6px 10px; display:flex; justify-content:space-between; font-size:11px; font-weight:bold; color:#aaa; margin-top:-2px; }
+        .b-i { height:70px; border-radius:15px; border:none; font-size:32px; color:white; flex:1; font-weight: bold; cursor: pointer;}
 
         @keyframes pulse-text { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
         .loading-st { animation: pulse-text 1s infinite; color: #888 !important; }
 
-        #alerta-meta { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 10005; display: none; justify-content: center; align-items: center; padding: 20px; }
+        @media (min-width: 768px) {
+            #tabs-container { display: none !important; }
+            .grid-1 { grid-template-columns: 1fr; max-width: 500px; margin: 0 auto; }
+            .grid-2 { grid-template-columns: 1fr 1fr; }
+            .grid-4 { grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; overflow: hidden; padding-bottom: 5px; }
+            .mesa-wrapper { display: flex !important; height: 100%; min-height: 0; }
+            .grid-4 .tmr-big { padding: 5px; font-size: 2vh; margin-bottom: 4px; }
+            .grid-4 #global-wallet { padding: 8px; margin-bottom: 4px; }
+            .grid-4 .gw-val { font-size: 2.2vh; }
+            .grid-4 .mesa-wrapper > div:nth-child(2) { padding: 1vh !important; gap: 0.8vh !important; justify-content: center; }
+            .grid-4 .mesa-wrapper > div:nth-child(2) > div:first-child { padding: 1vh !important; }
+            .grid-4 [id^="s-t-"] { font-size: 5vh !important; }
+            .grid-4 [id^="m-t-"] { font-size: 2.5vh !important; }
+            .grid-4 .b-i { height: 6.5vh !important; font-size: 3vh !important; border-radius: 10px; }
+            .grid-4 [id^="c-h-"] { height: 6vh !important; padding: 2px; }
+            .grid-4 .bola { width: 3vh; height: 3vh; font-size: 1.2vh; margin: 1px; }
+            .grid-4 .stats-bar { padding: 0.6vh 1vh !important; font-size: 1.4vh; border-radius: 8px; }
+            .grid-4 .mesa-wrapper button { padding: 1vh !important; font-size: 1.2vh !important; border-radius: 8px; }
+        }
     </style>
 </head>
 <body oncontextmenu="return false;">
 
-    <div id="alerta-meta" style="flex-direction: column;">
-        <div style="background: linear-gradient(135deg, #f1c40f, #f39c12); color: #000; padding: 25px; border-radius: 30px; text-align: center; max-width: 90%; border: 4px solid #fff; box-shadow: 0px 15px 35px rgba(241,196,15,0.5);">
-            <div style="font-size: 50px;">🛑💰✨</div>
-            <h2 style="margin: 10px 0; font-weight: 900; line-height: 1.1;">¡OBJETIVO LOGRADO!</h2>
-            <p style="margin: 10px 0; font-weight: bold; font-size: 16px;">Has ganado el 20% de tu capital.</p>
-            <button class="b-a" style="background: #000; color: #f1c40f; margin-top: 15px;" onclick="document.getElementById('alerta-meta').style.display='none'; _Meta = _ba * 1.20;">CONTINUAR</button>
+    <div id="alerta-trampa-custom" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.92); z-index: 10006; display: none; justify-content: center; align-items: center; flex-direction: column; padding:20px;">
+        <div style="background: rgba(20,20,20,0.98); border: 2px solid var(--c1); color: #fff; padding: 25px; border-radius: 20px; text-align: center; max-width: 400px; box-shadow: 0 0 20px rgba(231,76,60,0.5);">
+            <div style="font-size: 50px;">⚠️</div>
+            <h2 style="color: var(--c1); margin: 10px 0;">¡ALERTA DE CASINO!</h2>
+            <p id="txt-alerta-trampa" style="font-size: 15px; line-height: 1.5; color: #ccc; margin-bottom: 20px;"></p>
+            <button style="background: var(--c1); color: #fff; border: none; padding: 15px; border-radius: 10px; font-weight: bold; width: 100%; cursor: pointer;" onclick="document.getElementById('alerta-trampa-custom').style.display='none'">ENTENDIDO</button>
         </div>
     </div>
 
     <div id="p-l">
         <div class="c-l">
-            <h1 style="color:#00e5ff; font-size: 28px;">VIP <span style="color:#fff;">PRO</span></h1>
+            <img src="https://cdn-icons-png.flaticon.com/512/1055/1055673.png" style="width:60px; animation: rotar 5s linear infinite; margin-bottom:10px;">
+            <h1 style="color:white; font-size:22px; margin:0 0 8px 0;">TECNOENTRETE VIP PRO</h1>
             <p style="color:#888; font-size:11px; margin-top:-5px; margin-bottom:15px;">MÓDULO DE SEGURIDAD CLOUD ACTIVADO</p>
-            
             <input type="text" id="u-i" class="i-s" placeholder="USUARIO VIP PRO" autocomplete="off">
             <input type="password" id="l-i" class="i-s" placeholder="CLAVE / LICENCIA" autocomplete="off">
-            
             <button class="b-a" id="btn-validar">ENTRAR AL SISTEMA MULTIMESA</button>
         </div>
     </div>
 
+    <div id="p-select" style="display:none;">
+        <div class="c-l" style="border-color: var(--c4);">
+            <h2 style="color:var(--c4); margin-top:0;">¿CUÁNTAS MESAS ABRIRÁ?</h2>
+            <button class="b-a" style="background:#222; color:white; border:1px solid #555;" onclick="iniciarMesas(1)">1 MESA (Clásico)</button>
+            <button class="b-a" style="background:#333; color:white; border:1px solid #666;" onclick="iniciarMesas(2)">2 MESAS (Doble Ganancia)</button>
+            <button class="b-a" style="background:var(--c4); color:black;" onclick="iniciarMesas(4)">4 MESAS (Modo Dios)</button>
+        </div>
+    </div>
+
     <div id="app-principal">
-        <div id="header-multimesa">
-            <div class="head-box"><div class="head-box-tit">TIEMPO</div><div id="tmr" class="head-box-val" style="color:#f1c40f;">00:00:00</div></div>
-            <div class="head-box"><div class="head-box-tit">CAPITAL GLOBAL</div><div id="c-i" class="head-box-val" style="color:#fff;">$0.00</div></div>
-            <div class="head-box"><div class="head-box-tit">NETO NUBE</div><div id="n-g" class="head-box-val" style="color:#00e5ff;">$0.00</div></div>
-            <button class="btn-header" onclick="ejecutarResetGlobal()">RESET <br> GLOBAL</button>
+        <div id="tmr" class="tmr-big">00d-00h:00m:00s</div>
+        
+        <div id="global-wallet">
+            <div class="gw-box"><div class="gw-title">CAPITAL TOTAL</div><div id="gw-cap" class="gw-val" style="color:#fff;">$0.00</div></div>
+            <div class="gw-box"><div class="gw-title">UTILIDAD GLOBAL</div><div id="gw-util" class="gw-val" style="color:var(--c3);">$0.00</div></div>
+            <div class="gw-box"><div class="gw-title">NETO (OBJETIVO)</div><div id="gw-neto" class="gw-val" style="color:var(--c5);">$0.00</div></div>
         </div>
 
-        <div class="grid-mesas" id="grid-container">
-            </div>
+        <div id="tabs-container"></div>
+        <div id="grid-mesas"></div>
     </div>
 
     <script>
+    document.addEventListener('contextmenu', e => e.preventDefault());
+    document.addEventListener('keydown', e => { 
+        if(e.key === "F12" || (e.ctrlKey && e.shiftKey && e.keyCode === 73) || (e.ctrlKey && e.keyCode === 85) || (e.ctrlKey && e.keyCode === 83)) { e.preventDefault(); mostrarAlertaHacker(); }
+        if(e.ctrlKey && (e.key === '+' || e.key === '-' || e.key === '=' || e.keyCode === 107 || e.keyCode === 109)) { e.preventDefault(); }
+    });
+    document.addEventListener('wheel', e => { if(e.ctrlKey) e.preventDefault(); }, { passive: false });
     let lastTouchEnd = 0; document.addEventListener('touchend', e => { const now = (new Date()).getTime(); if (now - lastTouchEnd <= 300) e.preventDefault(); lastTouchEnd = now; }, { passive: false });
 
+    function mostrarAlertaHacker() {
+        if(document.getElementById("pantalla-terror")) return; 
+        var pm = document.createElement("div"); pm.id = "pantalla-terror";
+        pm.style = "position:fixed;top:0;left:0;width:100vw;height:100vh;background:#a00;color:#fff;z-index:999999;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:20px;font-family:Arial;";
+        pm.innerHTML = `<h1 style="font-size:32px;text-transform:uppercase;font-weight:bold;">⚠️ ALERTA DE SEGURIDAD TECNOENTRETE ⚠️</h1><p style="font-size:20px;margin-top:15px;font-weight:bold;">Intento de alteración de código detectado.</p><p style="font-size:16px;">Su IP ha sido registrada en los servidores de TECNOENTRETE.</p><button onclick="this.parentElement.remove()" style="margin-top:30px;padding:15px 30px;background:#000;color:#fff;border:2px solid #fff;border-radius:10px;cursor:pointer;font-weight:bold;">ENTENDIDO</button>`;
+        document.body.appendChild(pm);
+    }
+
+    function mostrarAlerta(mensaje) { document.getElementById('txt-alerta-trampa').innerHTML = mensaje; document.getElementById('alerta-trampa-custom').style.display = 'flex'; }
+
     const _URL = "https://script.google.com/macros/s/AKfycbzUIdq4jKKOi3_fu3kLsO_cP3Z9ckXp7B6sUiP78B7Km7bDVmaecAIdsWGgGcA8nlE8JA/exec";
-    let _HID = localStorage.getItem('VIP_HID_PRO') || 'PRO-'+Math.random().toString(36).substr(2,10).toUpperCase(); localStorage.setItem('VIP_HID_PRO', _HID);
-    let _L="", _S=0, _ba=0, _cI=40, _nG=0, _Meta=0, _TS=0, _IS=0;
+    let _L="", _HID = localStorage.getItem('VIP_HID_PRO') || 'PRO-'+Math.random().toString(36).substr(2,10).toUpperCase(); localStorage.setItem('VIP_HID_PRO', _HID);
+    let _S = 0, _TS = 0, _IS = 0;
+    let capitalGlobal = 0;
+    let mesasInstancias = [];
 
-    class Mesa {
-        constructor(id, nombre) {
-            this.id = id; this.nombre = nombre; this._nP = 0; this._g = 0; this._p = 0; this._h = [];
-            this._m = 0.2; this._s = ""; this._per = 0; this._lS = null; this._cR = 0; this._cN = 0; this._c0 = 0; this._s0 = 0; this._isFetching = false;
+    document.getElementById('btn-validar').onclick = async function() {
+        let _U = document.getElementById('u-i').value.trim();
+        if(!_U) return alert("Ingrese el Usuario VIP PRO");
+        _L = document.getElementById('l-i').value.trim().toUpperCase();
+        if(!_L) return;
+        this.innerText = "... CONECTANDO AL CLOUD ...";
+        try {
+            const r = await fetch(_URL + "?action=validar&app=multimesa&usuario=" + encodeURIComponent(_U) + "&serial=" + _L + "&hid=" + _HID);
+            const d = await r.json();
+            if(d.status === "success") { 
+                _S = d.segundos; 
+                document.getElementById('p-l').style.display='none';
+                document.getElementById('p-select').style.display='flex';
+            } else { alert(d.mensaje); this.innerText = "ENTRAR AL SISTEMA MULTIMESA"; }
+        } catch(e) { alert("Error de Conexión."); this.innerText = "ENTRAR AL SISTEMA MULTIMESA"; }
+    };
+
+    window.iniciarMesas = (cant) => {
+        capitalGlobal = parseFloat(prompt("Capital inicial a repartir entre mesas ($ USD):", "40.00")) || 40;
+        document.getElementById('p-select').style.display = 'none';
+        document.getElementById('app-principal').style.display = 'flex';
+        const grid = document.getElementById('grid-mesas');
+        const tabs = document.getElementById('tabs-container');
+        grid.className = "grid-" + cant;
+
+        for(let i=1; i<=cant; i++) {
+            let t = document.createElement('button');
+            t.className = i===1 ? "tab-btn active" : "tab-btn";
+            t.innerText = "MESA " + i;
+            t.onclick = () => cambiarTab(i, cant);
+            tabs.appendChild(t);
+
+            let mHTML = `
+            <div class="mesa-wrapper ${i===1?'active':''}" id="mesa-${i}">
+                <div style="text-align:center; margin-bottom:-5px; font-weight:bold; color:#888; font-size:12px;">MESA ${i} - UTILIDAD: <span id="u-s-${i}" style="color:var(--c3);">$0.00</span></div>
+                <div style="background:var(--c8); padding:15px; border-radius:15px; display:flex; flex-direction:column; gap:10px; flex-grow:1; border:1px solid #333;">
+                    <div style="background:#1a1a1a; padding:15px; border-radius:15px; text-align:center; border:1px solid #333;">
+                        <div id="s-t-${i}" style="font-size:75px; font-weight:900;">---</div>
+                        <div id="m-t-${i}" style="color:var(--c4); font-size:26px;">$0.20</div>
+                    </div>
+                    <div style="display:flex; gap:8px;">
+                        <button class="b-i" style="background:var(--c1);" onclick="mesasInstancias[${i-1}].xfR('Rojo')">R</button>
+                        <button class="b-i" style="background:var(--c2);" onclick="mesasInstancias[${i-1}].xfR('Negro')">N</button>
+                        <button class="b-i" style="background:var(--c3);" onclick="mesasInstancias[${i-1}].xfR('Cero')">0</button>
+                    </div>
+                    <div id="c-h-${i}" style="background:#000; height:90px; border-radius:12px; border:1px solid #222; display:flex; flex-wrap:wrap; justify-content:center; gap:5px; overflow:hidden;"></div>
+                    
+                    <div class="stats-bar">
+                        <div><span style="color:var(--c1)">R:</span> <span id="st-R-${i}">0</span></div>
+                        <div><span style="color:#fff">N:</span> <span id="st-N-${i}">0</span></div>
+                        <div><span style="color:var(--c3)">0:</span> <span id="st-0-${i}">0</span></div>
+                        <div><span style="color:var(--c4)">SIN 0:</span> <span id="st-s0-${i}">0</span></div>
+                    </div>
+
+                    <div style="display:flex; gap:6px;">
+                        <button style="background:transparent; color:#555; border:1px solid #333; padding:10px; border-radius:10px; font-size:11px; flex:1;" onclick="mesasInstancias[${i-1}].deshacer()">CORREGIR</button>
+                        <button id="btn-trampa-${i}" style="background:transparent; color:var(--c4); border:1px solid var(--c4); padding:10px; border-radius:10px; font-size:11px; flex:1.5; opacity:0.3; pointer-events:none;" onclick="mesasInstancias[${i-1}].reportarTrampa()">⚠️ TRAMPA</button>
+                        <button style="background:transparent; color:var(--c1); border:1px solid var(--c1); padding:10px; border-radius:10px; font-size:11px; flex:1;" onclick="mesasInstancias[${i-1}].resetear()">RESET</button>
+                    </div>
+                </div>
+            </div>`;
+            grid.insertAdjacentHTML('beforeend', mHTML);
+            mesasInstancias.push(new MotorFelipe(i));
         }
+        actualizarBilletera(); iniciarReloj();
+    };
 
+    window.cambiarTab = (idActivo, total) => {
+        for(let i=1; i<=total; i++) {
+            document.getElementById('mesa-'+i).classList.toggle('active', i===idActivo);
+            document.querySelectorAll('.tab-btn')[i-1].classList.toggle('active', i===idActivo);
+        }
+    };
+
+    function actualizarBilletera() {
+        let utilTotal = mesasInstancias.reduce((a, b) => a + b._nP, 0);
+        let netoTotal = capitalGlobal + utilTotal;
+        document.getElementById('gw-cap').innerText = "$" + capitalGlobal.toFixed(2);
+        document.getElementById('gw-util').innerText = "$" + utilTotal.toFixed(2);
+        document.getElementById('gw-neto').innerText = "$" + netoTotal.toFixed(2);
+    }
+
+    function iniciarReloj() {
+        _TS = Date.now(); _IS = _S;
+        setInterval(() => {
+            let e = Math.floor((Date.now()-_TS)/1000); _S = Math.max(0, _IS - e);
+            let d=Math.floor(_S/86400), h=Math.floor((_S%86400)/3600), m=Math.floor((_S%3600)/60), s=_S%60;
+            document.getElementById('tmr').innerText = `${d}d-${h}h:${m}m:${s}s`;
+            if(_S<=0) location.reload();
+        }, 1000);
+        
+        setInterval(() => { 
+            let utilTotal = mesasInstancias.reduce((a, b) => a + b._nP, 0);
+            let url = _URL + `?action=guardar&serial=${_L}&neto_global=${utilTotal.toFixed(2)}`;
+            fetch(url).catch(e=>{});
+        }, 15000);
+    }
+
+    class MotorFelipe {
+        constructor(id) {
+            this.id = id; this._h = []; this._m = 0.2; this._s = ""; this._per = 0; this._nP = 0; this._cR = 0; this._cN = 0; this._c0 = 0; this._s0 = 0; this._lS = null; this._isFetching = false;
+        }
         async xfR(c) {
             if(this._isFetching) return; this._isFetching = true;
-            let gano_ahora = false;
-            this._lS = {ba:_ba, nP:this._nP, nG:_nG, g:this._g, p:this._p, h:[...this._h], m:this._m, s:this._s, per:this._per, cR:this._cR, cN:this._cN, c0:this._c0, s0:this._s0};
-            
+            this._lS = {nP:this._nP, h:[...this._h], m:this._m, s:this._s, per:this._per, cR:this._cR, cN:this._cN, c0:this._c0, s0:this._s0};
             if (c === 'Rojo') { this._cR++; this._s0++; } else if (c === 'Negro') { this._cN++; this._s0++; } else if (c === 'Cero') { this._c0++; this._s0 = 0; }
-            
             if(this._s !== "" && this._s !== "⏳") {
-                if(c.toUpperCase() === this._s){ _ba += this._m; this._nP += this._m; _nG += this._m; this._m = 0.2; this._g++; this._per = 0; gano_ahora = true; } 
-                else if(c !== 'Cero'){ _ba -= this._m; this._nP -= this._m; _nG -= this._m; this._m *= 2; this._p++; this._per++; } 
+                if(c.toUpperCase() === this._s){ this._nP += this._m; this._m = 0.2; this._per = 0; } else if(c !== 'Cero'){ this._nP -= this._m; this._m *= 2; this._per++; }
             }
             this._h.unshift(c);
-            
-            let stDiv = document.getElementById(`s-t-${this.id}`); stDiv.innerText = "⏳"; stDiv.className = "loading-st mesa-sugerencia"; 
-            this.update(true); actualizarGlobal();
-            
+            let stDiv = document.getElementById(`s-t-${this.id}`); stDiv.innerText = "⏳"; stDiv.classList.add("loading-st");
+            this.update(true); actualizarBilletera();
             try {
-                let res = await fetch(_URL + "?action=calcular&historial=" + encodeURIComponent(JSON.stringify(this._h.slice(0, 15))));
-                let data = await res.json(); this._s = (data.status === "success") ? data.sugerencia : "ERR";
+                let limitHist = this._h.slice(0, 15);
+                let res = await fetch(_URL + "?action=calcular&historial=" + encodeURIComponent(JSON.stringify(limitHist)));
+                let data = await res.json(); if(data.status === "success") { this._s = data.sugerencia; } else { this._s = "ERR"; }
             } catch(e) { this._s = "RED"; }
-            
-            this._isFetching = false; stDiv.className = "mesa-sugerencia"; this.update(); actualizarGlobal(); saveState();
-
-            if(_ba >= _Meta) document.getElementById('alerta-meta').style.display='flex';
+            this._isFetching = false; stDiv.classList.remove("loading-st"); this.update(); actualizarBilletera();
             if(this._per >= 7) {
-                document.getElementById('btn-trampa-'+this.id).style.opacity="1"; document.getElementById('btn-trampa-'+this.id).style.pointerEvents="auto"; document.getElementById('btn-trampa-'+this.id).style.color="#e74c3c"; document.getElementById('btn-trampa-'+this.id).style.borderColor="#e74c3c";
-                if(this._per === 7) { let patronAuto = this._h.slice(0,7).map(v => v.charAt(0).toUpperCase()).join("-"); navigator.sendBeacon(_URL + "?action=reportar_trampa&serial=" + _L + "&patron=" + patronAuto + "_AUTO_4M"); }
-            } else {
-                document.getElementById('btn-trampa-'+this.id).style.opacity="0.3"; document.getElementById('btn-trampa-'+this.id).style.pointerEvents="none"; document.getElementById('btn-trampa-'+this.id).style.color="#f1c40f"; document.getElementById('btn-trampa-'+this.id).style.borderColor="#f1c40f";
-            }
+                document.getElementById('btn-trampa-'+this.id).style.opacity="1"; document.getElementById('btn-trampa-'+this.id).style.pointerEvents="auto";
+                if(this._per === 7) {
+                    let patronAuto = this._h.slice(0,7).map(v => v.charAt(0).toUpperCase()).join("-");
+                    navigator.sendBeacon(_URL + "?action=reportar_trampa&serial=" + _L + "&patron=" + patronAuto + "_AUTO_4M");
+                }
+            } else { document.getElementById('btn-trampa-'+this.id).style.opacity="0.3"; document.getElementById('btn-trampa-'+this.id).style.pointerEvents="none"; }
         }
 
-        reportarTrampa() {
-            let patron = this._h.slice(0,7).map(v => v.charAt(0).toUpperCase()).join("-");
-            navigator.sendBeacon(_URL + "?action=reportar_trampa&serial=" + _L + "&patron=" + patron + "_MANUAL_4M");
-            alert("✅ REPORTE MANUAL ENVIADO AL CLOUD.\nPatrón de la Mesa " + this.id + " enviado con éxito.");
-            document.getElementById('btn-trampa-'+this.id).style.opacity="0.3";
-            document.getElementById('btn-trampa-'+this.id).style.pointerEvents="none";
-        }
-
+        deshacer() { if(this._lS) { this._nP=this._lS.nP; this._h=[...this._lS.h]; this._m=this._lS.m; this._s=this._lS.s; this._per=this._lS.per; this._cR=this._lS.cR; this._cN=this._lS.cN; this._c0=this._lS.c0; this._s0=this._lS.s0; this._lS = null; this.update(); actualizarBilletera(); } }
+        resetear() { this._h=[]; this._m=0.2; this._s=""; this._per=0; this._cR=0; this._cN=0; this._c0=0; this._s0=0; document.getElementById('btn-trampa-'+this.id).style.opacity="0.3"; document.getElementById('btn-trampa-'+this.id).style.pointerEvents="none"; this.update(); actualizarBilletera(); }
+        reportarTrampa() { let patron = this._h.slice(0,7).map(v => v.charAt(0).toUpperCase()).join("-"); navigator.sendBeacon(_URL + "?action=reportar_trampa&serial=" + _L + "&patron=" + patron + "_MANUAL_4M"); mostrarAlerta("<b>✅ REPORTE MANUAL ENVIADO.</b><br>Mesa " + this.id); document.getElementById('btn-trampa-'+this.id).style.opacity="0.3"; document.getElementById('btn-trampa-'+this.id).style.pointerEvents="none"; }
+        
         update(isCalculating = false) {
             document.getElementById(`u-s-${this.id}`).innerText = "$" + this._nP.toFixed(2);
             document.getElementById(`m-t-${this.id}`).innerText = "$" + this._m.toFixed(2);
-            if(!isCalculating) {
-                document.getElementById(`s-t-${this.id}`).innerText = this._s || "---";
-                document.getElementById(`s-t-${this.id}`).style.color = (this._s === "ROJO") ? "#e74c3c" : (this._s === "NEGRO" ? "#fff" : "#888");
-            }
-            
-            document.getElementById(`st-R-${this.id}`).innerText = this._cR;
-            document.getElementById(`st-N-${this.id}`).innerText = this._cN;
-            document.getElementById(`st-0-${this.id}`).innerText = this._c0;
-            document.getElementById(`st-s0-${this.id}`).innerText = this._s0;
-
-            const ch = document.getElementById(`c-h-${this.id}`); ch.innerHTML="";
-            this._h.slice(0,18).forEach(v => {
-                const cl=(v==='Rojo')?'red':(v==='Negro'?'#fff':'green');
-                ch.innerHTML+=`<div class="bola" style="background:${cl}; color:${v==='Negro'?'#000':'#fff'}">${v==='Cero'?'0':''}</div>`;
-            });
-        }
-
-        undo() {
-            if(this._lS) {
-                _ba = this._lS.ba; this._nP = this._lS.nP; _nG = this._lS.nG; this._g = this._lS.g; this._p = this._lS.p;
-                this._h = [...this._lS.h]; this._m = this._lS.m; this._s = this._lS.s; this._per = this._lS.per;
-                this._cR = this._lS.cR; this._cN = this._lS.cN; this._c0 = this._lS.c0; this._s0 = this._lS.s0;
-                this.update(); actualizarGlobal(); saveState(); this._lS = null;
-            }
-        }
-
-        reset() {
-            this._h=[]; this._m=0.2; this._s=""; this._per=0; this._cR=0; this._cN=0; this._c0=0; this._s0=0; this._nP=0;
-            document.getElementById('btn-trampa-'+this.id).style.opacity="0.3"; document.getElementById('btn-trampa-'+this.id).style.pointerEvents="none";
-            this.update(); saveState();
-        }
-
-        render() {
-            return `
-            <div class="mesa-container" id="mesa-container-${this.id}">
-                <div class="mesa-header">
-                    <span class="mesa-tit">${this.nombre}</span>
-                    <span style="color:var(--c3); font-weight:bold; font-size:12px;" id="u-s-${this.id}">$0.00</span>
-                    <div class="mesa-stats"><span>R:<span id="st-R-${this.id}">0</span></span> <span>N:<span id="st-N-${this.id}">0</span></span> <span>0:<span id="st-0-${this.id}">0</span></span></div>
-                </div>
-                <div class="mesa-main">
-                    <div id="s-t-${this.id}" class="mesa-sugerencia">---</div>
-                    <div id="m-t-${this.id}" class="mesa-monto">$0.20</div>
-                </div>
-                <div class="mesa-botones">
-                    <button class="btn-m" style="background:var(--c1);" onclick="mesas[${this.id-1}].xfR('Rojo')">R</button>
-                    <button class="btn-m" style="background:var(--c2);" onclick="mesas[${this.id-1}].xfR('Negro')">N</button>
-                    <button class="btn-m" style="background:var(--c3);" onclick="mesas[${this.id-1}].xfR('Cero')">0</button>
-                </div>
-                <div id="c-h-${this.id}" class="mesa-historial"></div>
-                <div class="mesa-footer">
-                    <button class="btn-f" style="color:#888; border:1px solid #444;" onclick="mesas[${this.id-1}].undo()">DESHACER</button>
-                    <button id="btn-trampa-${this.id}" class="btn-f" style="color:var(--c4); border:1px solid var(--c4); opacity:0.3; pointer-events:none;" onclick="mesas[${this.id-1}].reportarTrampa()">⚠️ TRAMPA</button>
-                    <button class="btn-f" style="color:var(--c1); border:1px solid var(--c1);" onclick="mesas[${this.id-1}].reset()">RESET</button>
-                </div>
-            </div>`;
+            if(!isCalculating) { document.getElementById(`s-t-${this.id}`).innerText = this._s || "---"; document.getElementById(`s-t-${this.id}`).style.color = (this._s === "ROJO") ? "#e74c3c" : (this._s === "NEGRO" ? "#fff" : "#888"); }
+            document.getElementById(`st-R-${this.id}`).innerText = this._cR; document.getElementById(`st-N-${this.id}`).innerText = this._cN; document.getElementById(`st-0-${this.id}`).innerText = this._c0; document.getElementById(`st-s0-${this.id}`).innerText = this._s0;
+            const ch = document.getElementById(`c-h-${this.id}`); ch.innerHTML=""; this._h.slice(0,18).forEach(v => { const cl=(v==='Rojo')?'red':(v==='Negro'?'#fff':'green'); ch.innerHTML+=`<div class="bola" style="background:${cl}; color:${v==='Negro'?'#000':'#fff'}">${v==='Cero'?'0':''}</div>`; });
         }
     }
-
-    const mesas = [new Mesa(1, 'MESA A'), new Mesa(2, 'MESA B'), new Mesa(3, 'MESA C'), new Mesa(4, 'MESA D')];
-
-    document.getElementById('btn-validar').onclick = async function() {
-        if(!document.getElementById('u-i').value.trim()) return alert("Ingrese el Usuario VIP PRO");
-        _L = document.getElementById('l-i').value.trim().toUpperCase(); if(!_L) return;
-        this.innerText = "... CONECTANDO A LA NUBE ...";
-        try {
-            const r = await fetch(_URL + "?action=validar&app=multimesa&serial=" + _L + "&hid=" + _HID);
-            const d = await r.json();
-            if(d.status === "success") { 
-                _S = d.segundos; _nG = parseFloat(d.neto_global) || 0; 
-                _cI = parseFloat(prompt("Ingrese su Capital Global para jugar:", "100.00")) || 100;
-                _ba = _cI; _Meta = _ba * 1.20;
-                iniciarApp(); 
-            } else { alert(d.mensaje); this.innerText = "ENTRAR AL SISTEMA MULTIMESA"; }
-        } catch(e) { alert("Error de Conexión. Intente nuevamente."); this.innerText = "ENTRAR AL SISTEMA MULTIMESA"; }
-    };
-
-    function iniciarApp() { 
-        document.getElementById('p-l').style.display='none'; document.getElementById('app-principal').style.display='flex'; 
-        const grid = document.getElementById('grid-container'); grid.innerHTML = "";
-        mesas.forEach(m => grid.innerHTML += m.render());
-        _TS = Date.now(); _IS = _S; TM_TICK(); setInterval(TM_TICK, 1000); setInterval(saveState, 15000); actualizarGlobal();
-    }
-    
-    function actualizarGlobal() { document.getElementById('c-i').innerText="$"+_ba.toFixed(2); document.getElementById('n-g').innerText="$"+_nG.toFixed(2); }
-    function ejecutarResetGlobal() { if(confirm("¿Resetear todas las mesas y volver a empezar?")) { mesas.forEach(m => m.reset()); actualizarGlobal(); } }
-
-    function TM_TICK() { 
-        if(_S<=0) return; let e = Math.floor((Date.now()-_TS)/1000); _S = Math.max(0, _IS - e); 
-        let d=Math.floor(_S/86400), h=Math.floor((_S%86400)/3600), m=Math.floor((_S%3600)/60), s=_S%60; 
-        document.getElementById('tmr').innerText = `${d}d-${h}h:${m}m:${s}s`; 
-        if(_S<=0) location.reload(); 
-    }
-    
-    window.addEventListener("pagehide", () => { if(_L !== "") navigator.sendBeacon(_URL + "?action=salir&serial=" + _L); });
-    function saveState() { let url = _URL + `?action=guardar&serial=${_L}&neto_global=${_nG.toFixed(2)}`; fetch(url).catch(e=>{}); }
-
-    document.addEventListener('contextmenu', e => e.preventDefault()); document.addEventListener('keydown', e => { if(e.key === "F12" || (e.ctrlKey && e.shiftKey && e.keyCode === 73) || (e.ctrlKey && e.keyCode === 85) || (e.ctrlKey && e.keyCode === 83)) { e.preventDefault(); mostrarAlertaHacker(); } }); 
-    function mostrarAlertaHacker() { if(document.getElementById("pantalla-terror")) return; var pm = document.createElement("div"); pm.id = "pantalla-terror"; pm.style = "position:fixed;top:0;left:0;width:100vw;height:100vh;background:#a00;color:#fff;z-index:999999;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:20px;font-family:Arial;"; pm.innerHTML = `<h1 style="font-size:32px;text-transform:uppercase;font-weight:bold;">⚠️ ALERTA DE SEGURIDAD</h1><p style="font-size:20px;margin-top:15px;font-weight:bold;">Intento de alteración de código detectado.</p><button onclick="this.parentElement.remove()" style="margin-top:30px;padding:15px 30px;background:#000;color:#fff;border:2px solid #fff;border-radius:10px;cursor:pointer;font-weight:bold;">ENTENDIDO</button>`; document.body.appendChild(pm); }
     </script>
 </body>
 </html>
