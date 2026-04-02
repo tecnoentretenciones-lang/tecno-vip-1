@@ -1,408 +1,70 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SISTEMA CENTRAL - TECNOENTRETE</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        body { background: #0b0b0b; color: white; font-family: 'Segoe UI', sans-serif; padding: 0; margin: 0; }
-        
-        /* PANTALLA DE LOGIN */
-        #login-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 99999; display: flex; justify-content: center; align-items: center; flex-direction: column; }
-        .login-box { background: #1a1a1a; padding: 40px; border-radius: 20px; border: 2px solid #00e5ff; text-align: center; box-shadow: 0 0 30px rgba(0,229,255,0.2); width: 90%; max-width: 400px; box-sizing: border-box;}
-        .login-box h2 { color: #00e5ff; margin-top: 0; font-weight: 900; text-transform: uppercase; }
-        .login-box input { background: #000; color: #00e5ff; border: 1px solid #00e5ff; padding: 15px; font-size: 16px; text-align: center; border-radius: 10px; width: 100%; margin-bottom: 20px; outline: none; box-sizing: border-box;}
-        .login-box button { background: #00e5ff; color: #000; border: none; padding: 15px; width: 100%; border-radius: 10px; font-weight: 900; font-size: 16px; cursor: pointer; transition: 0.2s;}
-        .login-box button:hover { background: #00b8cc; }
-        
-        /* PANEL PRINCIPAL */
-        .panel { max-width: 1400px; margin: 20px auto; background: #1a1a1a; padding: 20px; border-radius: 15px; border: 2px solid #333; display: none; box-sizing: border-box;}
-        h1 { color: #00e5ff; text-align: center; margin-top: 0; text-transform: uppercase; font-weight: 900;}
-        
-        /* PESTAÑAS */
-        .tabs { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;}
-        .tab-btn { flex: 1; background: #222; color: #888; border: 1px solid #444; padding: 15px; font-weight: bold; cursor: pointer; border-radius: 10px; font-size: 14px; min-width: 150px; transition: 0.2s;}
-        .tab-btn.active { background: #00e5ff; color: #000; border-color: #00e5ff; box-shadow: 0 0 15px rgba(0,229,255,0.3);}
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
-
-        /* CAJAS DE CREACIÓN */
-        .caja-crear { background: #111; border: 1px solid #333; padding: 20px; border-radius: 10px; margin-bottom: 20px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap;}
-        .caja-crear input, .caja-crear select { background: #222; border: 1px solid #555; color: #fff; padding: 12px; border-radius: 5px; outline: none; flex: 1; min-width: 120px;}
-        .btn-crear { background: #00e5ff; color: #000; border: none; padding: 12px 20px; border-radius: 5px; font-weight: 900; cursor: pointer; flex-grow: 1; min-width: 150px;}
-
-        /* RESUMEN FINANCIERO */
-        .resumen-finanzas { display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap;}
-        .total-box { flex: 1; background: linear-gradient(135deg, #27ae60, #2ecc71); padding: 20px; border-radius: 10px; text-align: center; color: #fff; font-size: 18px; font-weight: 900; border: 2px solid #fff; min-width: 250px;}
-        .total-box.azul { background: linear-gradient(135deg, #2980b9, #3498db); }
-
-        /* TABLAS */
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 12px; background: #111; }
-        th, td { border: 1px solid #333; padding: 10px; text-align: center; vertical-align: middle; }
-        th { background: #00e5ff; color: black; font-weight: 900; }
-        
-        /* BOTONES DE ACCIÓN */
-        .btn-accion { padding: 8px 10px; border-radius: 5px; font-weight: bold; cursor: pointer; border: none; width: 100%; margin-bottom: 4px; font-size: 11px;}
-        .btn-borrar { background: #e74c3c; color: white; }
-        .btn-sus { background: #f39c12; color: white; }
-        .btn-act { background: #2ecc71; color: white; }
-        .btn-reset { background: #9b59b6; color: white; }
-        .btn-tiempo { background: #3498db; color: white; }
-        
-        .btn-limpiar-trampas { background: #e74c3c; color: white; border: none; padding: 15px; border-radius: 10px; cursor: pointer; font-weight: bold; width: 100%; margin-bottom: 15px; font-size: 16px; transition: 0.2s;}
-        .btn-limpiar-trampas:hover { background: #c0392b; }
-        
-        .btn-refresh { background: #333; color: #fff; border: 1px solid #555; padding: 12px 20px; border-radius: 8px; cursor: pointer; width: 100%; font-weight: 900; font-size: 14px; margin-bottom: 10px; }
-        
-        /* ESTADOS */
-        .status-activo { color: #2ecc71; font-weight: bold; }
-        .status-inactivo { color: #e74c3c; font-weight: bold; }
-        .conn-box { background: #222; padding: 6px; border-radius: 5px; font-family: monospace; font-size: 11px; text-align: left; border: 1px solid #444;}
-
-        /* FIX PARA TRAMPAS EN CELULAR */
-        .tabla-trampas-container { overflow-x: auto; width: 100%; max-height: 500px;}
-        #t-trampas th, #t-trampas td { white-space: nowrap; }
-        #t-trampas td:nth-child(3) { white-space: normal; min-width: 300px; word-break: break-all; text-align: left; color: #e74c3c; font-weight: bold;}
-
-        /* MODAL DE TIEMPO */
-        #modal-tiempo { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 999999; display: none; justify-content: center; align-items: center; }
-    </style>
-</head>
-<body>
-
-<div id="modal-tiempo">
-    <div class="login-box" style="padding:30px; text-align: left;">
-        <h2 style="color:#00e5ff; margin-top:0; text-align: center;">⏱️ AÑADIR TIEMPO</h2>
-        <p style="color:#ccc; text-align: center; margin-bottom: 20px;">Licencia: <strong id="lbl-lic-tiempo" style="color:#fff;"></strong></p>
-        
-        <label style="color:#888; font-size:12px; font-weight:bold;">DÍAS A SUMAR</label>
-        <input type="number" id="add-dias" placeholder="0" min="0" value="1">
-        
-        <label style="color:#888; font-size:12px; font-weight:bold;">HORAS A SUMAR</label>
-        <input type="number" id="add-horas" placeholder="0" min="0" value="0">
-        
-        <button style="background:#2ecc71; color:#fff;" onclick="enviarTiempo()">RENOVAR Y ACTIVAR</button>
-        <button style="background:#444; color:#fff; margin-top:10px;" onclick="document.getElementById('modal-tiempo').style.display='none'">CANCELAR</button>
-        <input type="hidden" id="fila-tiempo">
-    </div>
-</div>
-
-<div id="login-screen">
-    <div class="login-box">
-        <img src="https://cdn-icons-png.flaticon.com/512/1055/1055673.png" style="width:80px; margin-bottom: 15px;">
-        <h2>ACCESO AL SISTEMA</h2>
-        <input type="text" id="l-user" placeholder="Usuario">
-        <input type="password" id="l-pass" placeholder="Contraseña">
-        <button onclick="verificarLogin()">INGRESAR AL PANEL</button>
-    </div>
-</div>
-
-<div class="panel" id="main-panel">
-    <h1><i class="fas fa-shield-alt"></i> SISTEMA CENTRAL TECNOENTRETE</h1>
-    
-    <div class="tabs" id="panel-tabs">
-        <button class="tab-btn active" onclick="cambiarPestana('usuarios', this)"><i class="fas fa-users"></i> GESTIÓN DE CLIENTES</button>
-        <button class="tab-btn" id="btn-tab-cajeros" onclick="cambiarPestana('cajeros', this)"><i class="fas fa-user-tie"></i> GESTIÓN CAJEROS</button>
-        <button class="tab-btn" onclick="cambiarPestana('trampas', this)"><i class="fas fa-exclamation-triangle"></i> BASE DE TRAMPAS</button>
-    </div>
-
-    <div id="tab-usuarios" class="tab-content active">
-        
-        <div class="resumen-finanzas">
-            <div class="total-box azul">💼 INGRESOS POR VENTAS<br><span id="total-ventas">$0.00</span></div>
-            <div class="total-box" id="box-lucro-jugadores">💰 LUCRO GLOBAL DE CLIENTES<br><span id="total-global">$0.00</span></div>
-        </div>
-
-        <div class="caja-crear">
-            <strong style="color: #00e5ff; width: 100%; font-size: 16px;">CREAR NUEVA LICENCIA / VENTA:</strong>
-            <input type="text" id="n-u" placeholder="Usuario (Ej: A123)">
-            <input type="text" id="n-p" placeholder="Contraseña">
-            <input type="text" id="n-n" placeholder="Nombre Cliente">
-            <input type="text" id="n-w" placeholder="WhatsApp">
-            <select id="n-t">
-                <option value="00d-12h:00m:00s">12 Horas</option>
-                <option value="01d-00h:00m:00s">24 Horas</option>
-                <option value="07d-00h:00m:00s">7 Días</option>
-                <option value="30d-00h:00m:00s">30 Días</option>
-            </select>
-            <select id="n-pl">
-                <option value="BASICO">Básico (1 Mesa)</option>
-                <option value="VIP">VIP / PRO (4 Mesas)</option>
-            </select>
-            <input type="number" id="n-pa" placeholder="Cobro Ej: 15000">
-            <button class="btn-crear" onclick="crearLicencia()"><i class="fas fa-plus"></i> GENERAR LICENCIA</button>
-        </div>
-
-        <button class="btn-refresh" onclick="cargarUsuarios()">🔄 REFRESCAR DATOS REALES</button>
-        <div style="overflow-x: auto;">
-            <table id="t-u">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>USUARIO</th>
-                        <th>CLAVE</th>
-                        <th>NOMBRE</th>
-                        <th>WSP</th>
-                        <th>PLAN</th>
-                        <th>ESTADO</th>
-                        <th>TIEMPO / CONEXIÓN</th>
-                        <th style="color:#2ecc71;">NETO J.</th>
-                        <th style="color:#3498db;">PAGÓ</th>
-                        <th>VENDEDOR</th>
-                        <th>ANCLAJE</th>
-                        <th style="min-width: 100px;">ACCIONES</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
-        </div>
-    </div>
-
-    <div id="tab-cajeros" class="tab-content">
-        <div class="caja-crear">
-            <strong style="color: #00e5ff; width: 100%; font-size: 16px;">CREAR NUEVO CAJERO:</strong>
-            <input type="text" id="c-u" placeholder="Usuario Login">
-            <input type="text" id="c-p" placeholder="Clave Cajero">
-            <input type="text" id="c-n" placeholder="Nombre Completo">
-            <input type="text" id="c-w" placeholder="WhatsApp">
-            <button class="btn-crear" style="background:#2ecc71;" onclick="crearCajero()">+ REGISTRAR CAJERO</button>
-        </div>
-        <button class="btn-refresh" onclick="cargarCajeros()">🔄 REFRESCAR LISTA</button>
-        <div style="overflow-x: auto;">
-            <table id="t-cajeros">
-                <thead>
-                    <tr><th>#</th><th>USUARIO</th><th>CLAVE</th><th>NOMBRE</th><th>WHATSAPP</th><th>ESTADO</th><th>ACCIONES</th></tr>
-                </thead>
-                <tbody></tbody>
-            </table>
-        </div>
-    </div>
-
-    <div id="tab-trampas" class="tab-content">
-        <p style="color:#ccc; font-size:14px; margin-top:0;">Aquí se guardan todos los patrones de robo reportados. Borra los duplicados periódicamente para que el algoritmo sea más rápido en el servidor.</p>
-        
-        <button class="btn-limpiar-trampas" onclick="limpiarTrampas()"><i class="fas fa-magic"></i> ELIMINAR PATRONES DUPLICADOS</button>
-        <button class="btn-refresh" onclick="cargarTrampas()">🔄 REFRESCAR BASE DE TRAMPAS</button>
-        
-        <div class="tabla-trampas-container">
-            <table id="t-trampas">
-                <thead>
-                    <tr>
-                        <th>FECHA REPORTADA</th>
-                        <th>QUIÉN REPORTÓ</th>
-                        <th>PATRÓN DE ROBO</th>
-                        <th>ESTADO</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
-        </div>
-    </div>
-</div>
 
 <script>
-    const API = "https://script.google.com/macros/s/AKfycbzUIdq4jKKOi3_fu3kLsO_cP3Z9ckXp7B6sUiP78B7Km7bDVmaecAIdsWGgGcA8nlE8JA/exec"; 
-    let USUARIO_ACTUAL = ""; 
-    let ROL_ACTUAL = "";
-    
-    async function verificarLogin() {
-        const u = document.getElementById('l-user').value; 
-        const p = document.getElementById('l-pass').value;
-        const btn = document.querySelector('#login-screen button');
-        btn.innerText = "VERIFICANDO...";
+    const API = "https://script.google.com/macros/s/AKfycbzUIdq4jKKOi3_fu3kLsO_cP3Z9ckXp7B6sUiP78B7Km7bDVmaecAIdsWGgGcA8nlE8JA/exec";
+    let USUARIO_ACTUAL = ""; let ROL_ACTUAL = "";
 
-        try {
-            const r = await fetch(`${API}?action=login_panel&user=${encodeURIComponent(u)}&pass=${encodeURIComponent(p)}`); 
-            const d = await r.json();
-            
-            if(d.status === "success") {
-                USUARIO_ACTUAL = u; 
-                ROL_ACTUAL = d.role;
-                document.getElementById('login-screen').style.display = 'none';
-                document.getElementById('main-panel').style.display = 'block';
-                
-                // MODO CAJERO (Oculta funciones de Súper Admin)
-                if(ROL_ACTUAL === "CAJERO") {
-                    document.getElementById('btn-tab-cajeros').style.display = 'none';
-                    document.getElementById('box-lucro-jugadores').style.display = 'none';
-                }
-                
-                cargarUsuarios(); 
-                cargarTrampas();
-            } else { 
-                alert(d.mensaje); 
-                btn.innerText = "INGRESAR AL PANEL"; 
-            }
-        } catch(e) {
-            alert("Error de conexión con el servidor.");
-            btn.innerText = "INGRESAR AL PANEL"; 
-        }
+    async function verificarLogin() {
+        const u = document.getElementById('l-user').value; const p = document.getElementById('l-pass').value;
+        const r = await fetch(`${API}?action=login_panel&user=${u}&pass=${p}`); const d = await r.json();
+        if(d.status === "success") {
+            USUARIO_ACTUAL = u; ROL_ACTUAL = d.role;
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('main-panel').style.display = 'block';
+            if(ROL_ACTUAL === "CAJERO") { document.getElementById('btn-tab-cajeros').style.display = 'none'; document.getElementById('box-lucro-jugadores').style.display = 'none'; }
+            cargarUsuarios(); cargarTrampas();
+        } else { alert(d.mensaje); }
     }
 
-    function cambiarPestana(tab, btn) {
+    function cambiarTab(tab, btn) {
         document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        document.getElementById('tab-' + tab).classList.add('active'); 
-        btn.classList.add('active');
+        document.getElementById('tab-' + tab).classList.add('active'); btn.classList.add('active');
         if(tab === 'cajeros') cargarCajeros();
-        if(tab === 'trampas') cargarTrampas();
     }
 
     async function cargarUsuarios() {
-        const btn = document.querySelector('.btn-refresh'); btn.innerText = "⏳ CARGANDO...";
-        try {
-            const r = await fetch(API + "?action=panel_datos"); const d = await r.json();
-            const b = document.querySelector("#t-u tbody"); b.innerHTML = "";
-            let sG = 0; let sV = 0;
-            
-            d.datos.forEach((f, i) => {
-                if (i === 0 || !f[0]) return;
-                
-                // Si es cajero, solo ve a sus propios clientes
-                if (ROL_ACTUAL === "CAJERO" && f[14] !== USUARIO_ACTUAL) return; 
-                
-                let neto = parseFloat(f[10]) || 0; 
-                let pago = parseFloat(f[13]) || 0;
-                
-                if(f[0] !== "DEMO") { sG += neto; sV += pago; }
+        const r = await fetch(API + "?action=panel_datos"); const d = await r.json();
+        const b = document.querySelector("#t-u tbody"); b.innerHTML = "";
+        let sG = 0; let sV = 0;
+        d.datos.forEach((f, i) => {
+            if (i === 0 || !f[0]) return;
+            if (ROL_ACTUAL === "CAJERO" && f[14] !== USUARIO_ACTUAL) return; 
+            let neto = parseFloat(f[10]) || 0; let pago = parseFloat(f[13]) || 0;
+            let claveReal = f[15] || '--'; // AQUÍ CORREGIMOS EL ERROR (LEE DE LA COLUMNA P)
+            sG += neto; sV += pago;
+            let btnB = (ROL_ACTUAL === "ADMIN") ? `<button class="btn-accion" style="background:#e74c3c; color:white;" onclick="borrar(${i+1})">ELIMINAR</button>` : '';
+            b.innerHTML += `<tr><td>${f[0]}</td><td style="color:#f1c40f; font-weight:bold;">${claveReal}</td><td>${f[11]||'--'}</td><td>${f[9]||'BASICO'}</td><td>${f[2]}</td><td>${f[3]}</td><td>$${neto.toFixed(2)}</td><td>$${pago}</td><td>${f[14]}</td><td><button class="btn-accion" style="background:#f39c12; color:white;" onclick="cambiarEstado(${i+1},'${f[2]==='Activo'?'Inactivo':'Activo'}')">PAUSAR/ACT</button><button class="btn-accion" style="background:#3498db; color:white;" onclick="abrirModal(${i+1})">+ TIEMPO</button>${btnB}</td></tr>`;
+        });
+        document.getElementById('v-v').innerText = '$' + sV; document.getElementById('v-g').innerText = '$' + sG.toFixed(2);
+    }
 
-                const tr = document.createElement("tr");
-                let btnEstado = f[2] === "Activo" ? `<button class="btn-accion btn-sus" onclick="cambiarEstado(${i+1}, 'Inactivo')">⏸️ SUSPENDER</button>` : `<button class="btn-accion btn-act" onclick="cambiarEstado(${i+1}, 'Activo')">▶️ ACTIVAR</button>`;
-                let btnResetHID = f[6] ? `<button class="btn-accion btn-reset" onclick="resetearHID(${i+1})">🔓 DESANCLAR</button>` : '';
-                let btnRenovar = `<button class="btn-accion btn-tiempo" onclick="abrirModal(${i+1}, '${f[0]}')">⏱️ + TIEMPO</button>`;
-                
-                // Si es cajero, no puede borrar. Si es ADMIN, sí.
-                let btnBorrar = (ROL_ACTUAL === "ADMIN") ? `<button class="btn-accion btn-borrar" onclick="borrar(${i+1})">🗑️ ELIMINAR</button>` : '';
-                
-                let planActual = (f[9]) ? (f[9].toString().toUpperCase().trim()) : 'BASICO';
-
-                tr.innerHTML = `
-                    <td>${i+1}</td>
-                    <td style="color:#00e5ff; font-weight:bold; font-size:14px;">${f[0]}</td>
-                    <td style="color:#f1c40f; font-weight:bold;">${f[5]||'--'}</td>
-                    <td>${f[11] || '---'}</td>
-                    <td>${f[12] || '---'}</td>
-                    <td>
-                        <select class="plan-select" style="background:#222; color:#fff; width:100%; border:1px solid #555; padding:5px;" onchange="cambiarPlan(${i+1}, this.value)">
-                            <option value="BASICO" ${planActual==='BASICO'?'selected':''}>BÁSICO</option>
-                            <option value="VIP" ${planActual==='VIP'||planActual==='PRO'?'selected':''}>VIP / PRO</option>
-                        </select>
-                    </td>
-                    <td class="${f[2]==='Activo'?'status-activo':'status-inactivo'}">${f[2]}</td>
-                    <td><div class="conn-box">${f[3] || '🔴 OFFLINE'}</div></td>
-                    <td style="color:#2ecc71; font-weight:bold;">$${neto.toFixed(2)}</td>
-                    <td style="color:#3498db; font-weight:bold;">$${pago.toFixed(2)}</td>
-                    <td style="color:#888; font-size:11px;">${f[14]||'ADMIN'}</td>
-                    <td style="color:${f[6]?'#2ecc71':'#888'}; font-size:11px;">${f[6]?'🔒🔒':'Libre'}<br>${btnResetHID}</td>
-                    <td>${btnEstado}${btnRenovar}${btnBorrar}</td>
-                `;
-                b.appendChild(tr);
-            });
-            document.getElementById('total-global').innerText = '$' + sG.toFixed(2);
-            document.getElementById('total-ventas').innerText = '$' + sV.toFixed(2);
-            btn.innerHTML = "🔄 REFRESCAR DATOS REALES";
-        } catch(e) { btn.innerText = "Error"; }
+    async function cargarTrampas() {
+        const r = await fetch(API + "?action=panel_trampas"); const d = await r.json();
+        const b = document.querySelector("#t-trampas tbody"); b.innerHTML = "";
+        d.datos.forEach((f, i) => { if (i > 0 && f[2]) b.innerHTML += `<tr><td>${new Date(f[0]).toLocaleDateString()}</td><td>${f[1]}</td><td>${f[2]}</td></tr>`; });
     }
 
     async function crearLicencia() {
-        const btn = document.querySelector('.btn-crear');
-        const u = document.getElementById('n-u').value.trim(); 
-        const p = document.getElementById('n-p').value.trim();
-        const n = document.getElementById('n-n').value.trim(); 
-        const w = document.getElementById('n-w').value.trim();
-        const t = document.getElementById('n-t').value; 
-        const pl = document.getElementById('n-pl').value;
-        const pa = document.getElementById('n-pa').value || 0;
-
-        if(!u || !p) return alert("Debes ingresar un Usuario y una Contraseña.");
-        
-        btn.innerText = "...";
-        await fetch(`${API}?action=crear_usuario&serial=${encodeURIComponent(u)}&pass=${encodeURIComponent(p)}&nombre=${encodeURIComponent(n)}&wsp=${encodeURIComponent(w)}&tiempo=${encodeURIComponent(t)}&plan=${encodeURIComponent(pl)}&pago=${encodeURIComponent(pa)}&vendedor=${encodeURIComponent(USUARIO_ACTUAL)}`);
-        
-        document.getElementById('n-u').value = ""; document.getElementById('n-p').value = "";
-        document.getElementById('n-n').value = ""; document.getElementById('n-w').value = ""; 
-        document.getElementById('n-pa').value = "";
-        
-        btn.innerHTML = "<i class='fas fa-plus'></i> GENERAR LICENCIA"; 
+        const u = document.getElementById('n-u').value; const p = document.getElementById('n-p').value;
+        const n = document.getElementById('n-n').value; const w = document.getElementById('n-w').value;
+        const t = document.getElementById('n-t').value; const pl = document.getElementById('n-pl').value;
+        const pa = document.getElementById('n-pa').value;
+        await fetch(`${API}?action=crear_usuario&serial=${u}&pass=${p}&nombre=${n}&wsp=${w}&tiempo=${t}&plan=${pl}&pago=${pa}&vendedor=${USUARIO_ACTUAL}`);
         cargarUsuarios();
     }
 
-    // TRAMPAS
-    async function cargarTrampas() {
-        try {
-            const r = await fetch(API + "?action=panel_trampas"); const d = await r.json();
-            const b = document.querySelector("#t-trampas tbody"); b.innerHTML = "";
-            if(d.status === "error") return b.innerHTML = "<tr><td colspan='4'>No hay trampas registradas.</td></tr>";
-
-            d.datos.forEach((f, i) => {
-                if (i === 0 || !f[2]) return; 
-                const tr = document.createElement("tr");
-                let fecha = f[0] ? new Date(f[0]).toLocaleString() : '---';
-                tr.innerHTML = `<td>${fecha}</td> <td>${f[1]}</td> <td>${f[2]}</td> <td>${f[3]||'REPORTADA'}</td>`;
-                b.appendChild(tr);
-            });
-        } catch(e) {}
-    }
-
-    async function limpiarTrampas() {
-        if(!confirm("⚠️ ¿Eliminar todos los patrones duplicados para optimizar la Nube?")) return;
-        const btn = document.querySelector('.btn-limpiar-trampas'); btn.innerHTML = "⏳ LIMPIANDO LA NUBE...";
-        await fetch(API + "?action=limpiar_trampas");
-        btn.innerHTML = "<i class='fas fa-magic'></i> ELIMINAR PATRONES DUPLICADOS"; 
-        cargarTrampas(); 
-        alert("✅ Base de datos de trampas optimizada.");
-    }
-
-    // CAJEROS
     async function cargarCajeros() {
-        try {
-            const r = await fetch(API + "?action=panel_cajeros"); const d = await r.json();
-            const b = document.querySelector("#t-cajeros tbody"); b.innerHTML = "";
-            d.datos.forEach((f, i) => {
-                if (i === 0 || !f[0]) return;
-                const tr = document.createElement("tr");
-                let btnEst = f[4]==="Activo" ? `<button class="btn-accion btn-sus" onclick="estadoCajero(${i+1},'Inactivo')">⏸️ SUSPENDER</button>` : `<button class="btn-accion btn-act" onclick="estadoCajero(${i+1},'Activo')">▶️ ACTIVAR</button>`;
-                tr.innerHTML = `<td>${i+1}</td><td>${f[0]}</td><td style="color:#f1c40f; font-weight:bold;">${f[1]}</td><td>${f[2]}</td><td>${f[3]}</td><td class="${f[4]==='Activo'?'status-activo':'status-inactivo'}">${f[4]}</td><td>${btnEst}<button class="btn-accion btn-borrar" onclick="borrarCajero(${i+1})">🗑️ ELIMINAR</button></td>`;
-                b.appendChild(tr);
-            });
-        } catch(e) {}
+        const r = await fetch(API + "?action=panel_cajeros"); const d = await r.json();
+        const b = document.querySelector("#t-c tbody"); b.innerHTML = "";
+        d.datos.forEach((f, i) => { if(i>0) b.innerHTML += `<tr><td>${f[0]}</td><td>${f[1]}</td><td>${f[2]}</td><td>${f[4]}</td><td><button class="btn-accion" style="background:#e74c3c; color:white;" onclick="borrarCajero(${i+1})">ELIMINAR</button></td></tr>`; });
     }
-
     async function crearCajero() {
-        const u = document.getElementById('c-u').value; const p = document.getElementById('c-p').value;
-        const n = document.getElementById('c-n').value; const w = document.getElementById('c-w').value;
-        if(!u || !p) return alert("Usuario y Clave son obligatorios");
-        await fetch(API + `?action=crear_cajero&user=${encodeURIComponent(u)}&pass=${encodeURIComponent(p)}&nombre=${encodeURIComponent(n)}&wsp=${encodeURIComponent(w)}`);
-        document.getElementById('c-u').value = ""; document.getElementById('c-p').value = "";
-        document.getElementById('c-n').value = ""; document.getElementById('c-w').value = "";
-        cargarCajeros();
+        const u = document.getElementById('c-u').value; const p = document.getElementById('c-p').value; const n = document.getElementById('c-n').value;
+        await fetch(`${API}?action=crear_cajero&user=${u}&pass=${p}&nombre=${n}`); cargarCajeros();
     }
-    
-    async function estadoCajero(f, est) { await fetch(API + `?action=cambiar_estado_cajero&fila=${f}&estado=${est}`); cargarCajeros(); }
-    async function borrarCajero(f) { if(confirm("⚠️ ¿Eliminar este cajero permanentemente?")) { await fetch(API + `?action=borrar_cajero&fila=${f}`); cargarCajeros(); } }
-
-    // ACCIONES GENERALES
-    async function borrar(f) { if(confirm("⚠️ ¿ELIMINAR licencia definitivamente?")) { await fetch(`${API}?action=borrar_fila&fila=${f}`); cargarUsuarios(); } }
+    async function borrarCajero(f) { if(confirm("¿Eliminar?")) { await fetch(`${API}?action=borrar_cajero&fila=${f}`); cargarCajeros(); } }
+    async function borrar(f) { if(confirm("¿Eliminar Cliente?")) { await fetch(`${API}?action=borrar_fila&fila=${f}`); cargarUsuarios(); } }
     async function cambiarEstado(f, e) { await fetch(`${API}?action=cambiar_estado&fila=${f}&estado=${e}`); cargarUsuarios(); }
-    async function resetearHID(f) { if(confirm("🔓 ¿Desanclar esta cuenta?")) { await fetch(`${API}?action=resetear_hid&fila=${f}`); cargarUsuarios(); } }
-    async function cambiarPlan(f, plan) { await fetch(`${API}?action=cambiar_plan&fila=${f}&plan=${plan}`); }
-    
-    function abrirModal(f, lic) { 
-        document.getElementById('lbl-lic-tiempo').innerText = lic;
-        document.getElementById('f-t').value = f; 
-        document.getElementById('modal-tiempo').style.display = 'flex'; 
-    }
-    
-    async function enviarTiempo() { 
-        const f = document.getElementById('f-t').value; 
-        const d = document.getElementById('add-dias').value || 0; 
-        const h = document.getElementById('add-horas').value || 0;
-        await fetch(`${API}?action=agregar_tiempo&fila=${f}&dias=${d}&horas=${h}`); 
-        document.getElementById('modal-tiempo').style.display='none'; 
-        alert("✅ Tiempo renovado exitosamente.");
-        cargarUsuarios(); 
-    }
+    function abrirModal(f) { document.getElementById('f-t').value = f; document.getElementById('modal-tiempo').style.display = 'flex'; }
+    async function enviarTiempo() { const f = document.getElementById('f-t').value; const d = document.getElementById('add-d').value; await fetch(`${API}?action=agregar_tiempo&fila=${f}&dias=${d}`); document.getElementById('modal-tiempo').style.display='none'; cargarUsuarios(); }
 </script>
-</body>
-</html>
