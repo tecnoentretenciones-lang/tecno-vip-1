@@ -127,13 +127,15 @@
     function mostrarAlerta(mensaje) { document.getElementById('txt-alerta-trampa').innerHTML = mensaje; document.getElementById('alerta-trampa-custom').style.display = 'flex'; }
 
     const _URL = "https://script.google.com/macros/s/AKfycbzUIdq4jKKOi3_fu3kLsO_cP3Z9ckXp7B6sUiP78B7Km7bDVmaecAIdsWGgGcA8nlE8JA/exec";
-    let _L="", _HID = localStorage.getItem('VIP_HID_PRO') || 'PRO-'+Math.random().toString(36).substr(2,10).toUpperCase(); localStorage.setItem('VIP_HID_PRO', _HID);
+    
+    // AQUI AGREGAMOS _U COMO VARIABLE GLOBAL
+    let _L="", _U="", _HID = localStorage.getItem('VIP_HID_PRO') || 'PRO-'+Math.random().toString(36).substr(2,10).toUpperCase(); localStorage.setItem('VIP_HID_PRO', _HID);
     let _S = 0, _TS = 0, _IS = 0;
     let capitalGlobal = 0;
     let mesasInstancias = [];
 
     document.getElementById('btn-validar').onclick = async function() {
-        let _U = document.getElementById('u-i').value.trim();
+        _U = document.getElementById('u-i').value.trim();
         if(!_U) return alert("Ingrese el Usuario VIP PRO");
         _L = document.getElementById('l-i').value.trim().toUpperCase();
         if(!_L) return;
@@ -225,10 +227,12 @@
         
         setInterval(() => { 
             let utilTotal = mesasInstancias.reduce((a, b) => a + b._nP, 0);
-            let url = _URL + `?action=guardar&serial=${encodeURIComponent(_L)}&neto_global=${utilTotal.toFixed(2)}`;
+            let url = _URL + `?action=guardar&usuario=${encodeURIComponent(_U)}&serial=${encodeURIComponent(_L)}&neto_global=${utilTotal.toFixed(2)}`;
             fetch(url).catch(e=>{});
         }, 15000);
     }
+
+    window.addEventListener("pagehide", () => { if(_L !== "") navigator.sendBeacon(_URL + "?action=salir&usuario=" + encodeURIComponent(_U) + "&serial=" + encodeURIComponent(_L)); });
 
     class MotorFelipe {
         constructor(id) {
@@ -254,14 +258,14 @@
                 document.getElementById('btn-trampa-'+this.id).style.opacity="1"; document.getElementById('btn-trampa-'+this.id).style.pointerEvents="auto";
                 if(this._per === 7) {
                     let patronAuto = this._h.slice(0,7).map(v => v.charAt(0).toUpperCase()).join("-");
-                    navigator.sendBeacon(_URL + "?action=reportar_trampa&serial=" + encodeURIComponent(_L) + "&patron=" + patronAuto + "_AUTO_4M");
+                    navigator.sendBeacon(_URL + "?action=reportar_trampa&usuario=" + encodeURIComponent(_U) + "&serial=" + encodeURIComponent(_L) + "&patron=" + patronAuto + "_AUTO_4M");
                 }
             } else { document.getElementById('btn-trampa-'+this.id).style.opacity="0.3"; document.getElementById('btn-trampa-'+this.id).style.pointerEvents="none"; }
         }
 
         deshacer() { if(this._lS) { this._nP=this._lS.nP; this._h=[...this._lS.h]; this._m=this._lS.m; this._s=this._lS.s; this._per=this._lS.per; this._cR=this._lS.cR; this._cN=this._lS.cN; this._c0=this._lS.c0; this._s0=this._lS.s0; this._lS = null; this.update(); actualizarBilletera(); } }
         resetear() { this._h=[]; this._m=0.2; this._s=""; this._per=0; this._cR=0; this._cN=0; this._c0=0; this._s0=0; document.getElementById('btn-trampa-'+this.id).style.opacity="0.3"; document.getElementById('btn-trampa-'+this.id).style.pointerEvents="none"; this.update(); actualizarBilletera(); }
-        reportarTrampa() { let patron = this._h.slice(0,7).map(v => v.charAt(0).toUpperCase()).join("-"); navigator.sendBeacon(_URL + "?action=reportar_trampa&serial=" + encodeURIComponent(_L) + "&patron=" + patron + "_MANUAL_4M"); mostrarAlerta("<b>✅ REPORTE MANUAL ENVIADO.</b><br>Mesa " + this.id); document.getElementById('btn-trampa-'+this.id).style.opacity="0.3"; document.getElementById('btn-trampa-'+this.id).style.pointerEvents="none"; }
+        reportarTrampa() { let patron = this._h.slice(0,7).map(v => v.charAt(0).toUpperCase()).join("-"); navigator.sendBeacon(_URL + "?action=reportar_trampa&usuario=" + encodeURIComponent(_U) + "&serial=" + encodeURIComponent(_L) + "&patron=" + patron + "_MANUAL_4M"); mostrarAlerta("<b>✅ REPORTE MANUAL ENVIADO.</b><br>Mesa " + this.id); document.getElementById('btn-trampa-'+this.id).style.opacity="0.3"; document.getElementById('btn-trampa-'+this.id).style.pointerEvents="none"; }
         
         update(isCalculating = false) {
             document.getElementById(`u-s-${this.id}`).innerText = "$" + this._nP.toFixed(2);
