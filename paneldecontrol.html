@@ -231,13 +231,14 @@
             
             d.datos.forEach((f, i) => {
                 let realFila = f[17]; 
-                let neto = parseFloat(f[10]) || 0; let pago = parseFloat(f[13]) || 0;
+                let neto = parseFloat(f[10]) || 0; 
+                let pago = parseFloat(f[9]) || 0; // COL J = PAGO
                 if(f[0] !== "DEMO") { sG += neto; sV += pago; }
                 
                 let bE = f[2]==="Activo" ? `<button class="btn-accion btn-sus" onclick="cambiarEstado(${realFila},'Inactivo')">PAUSAR</button>` : `<button class="btn-accion btn-act" onclick="cambiarEstado(${realFila},'Activo')">ACTIVAR</button>`;
                 let bResetHID = f[6] ? `<button class="btn-accion btn-reset" onclick="resetearHID(${realFila})">DESANCLAR</button>` : '';
                 let colVend = ROL_ACTUAL === "ADMIN" ? `<td style="font-size:10px; color:#888;">${f[15]||'ADMIN'}</td>` : '';
-                let planActual = (f[9]) ? (f[9].toString().toUpperCase().trim()) : 'BASICO';
+                let planActual = (f[13]) ? (f[13].toString().toUpperCase().trim()) : 'BASICO'; // COL N = PLAN
                 
                 const tr = document.createElement("tr");
                 tr.innerHTML = `<td>${i+1}</td>
@@ -279,7 +280,7 @@
     function abrirEditUser(fila, user, serial, nom, wsp, plan, pago) {
         document.getElementById('ed-u-fila').value = fila; 
         document.getElementById('ed-u-user').value = user !== 'undefined' ? user : '';
-        document.getElementById('ed-u-serial').value = serial !== 'undefined' ? serial : ''; // LEE LA CLAVE
+        document.getElementById('ed-u-serial').value = serial !== 'undefined' ? serial : ''; 
         document.getElementById('ed-u-nombre').value = nom !== 'undefined' ? nom : '';
         document.getElementById('ed-u-wsp').value = wsp !== 'undefined' ? wsp : ''; 
         document.getElementById('ed-u-plan').value = plan || 'BASICO';
@@ -290,7 +291,7 @@
     async function guardarEdicionUsuario() {
         let f = document.getElementById('ed-u-fila').value; 
         let u = document.getElementById('ed-u-user').value; 
-        let s = document.getElementById('ed-u-serial').value; // GUARDA LA CLAVE
+        let s = document.getElementById('ed-u-serial').value; 
         let n = document.getElementById('ed-u-nombre').value;
         let w = document.getElementById('ed-u-wsp').value; 
         let p = document.getElementById('ed-u-plan').value; 
