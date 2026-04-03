@@ -230,12 +230,10 @@
             let sG = 0; let sV = 0;
             
             d.datos.forEach((f, i) => {
-                if (i === 0 || !f[0]) return; // EVITA QUE SE DIBUJE LA CABECERA COMO SI FUERA CLIENTE
-                
                 let realFila = f[17]; 
                 let neto = parseFloat(f[10]) || 0; 
-                let planActual = (f[9]) ? (f[9].toString().toUpperCase().trim()) : 'BASICO'; // COL J = PLAN
-                let pago = parseFloat(f[13]) || 0; // COL N = PAGO
+                let pago = parseFloat(f[9]) || 0; // COL J = PAGO
+                let planActual = (f[13]) ? (f[13].toString().toUpperCase().trim()) : 'BASICO'; // COL N = PLAN
                 
                 if(f[0] !== "DEMO") { sG += neto; sV += pago; }
                 
@@ -244,7 +242,7 @@
                 let colVend = ROL_ACTUAL === "ADMIN" ? `<td style="font-size:10px; color:#888;">${f[15]||'ADMIN'}</td>` : '';
                 
                 const tr = document.createElement("tr");
-                tr.innerHTML = `<td>${i}</td>
+                tr.innerHTML = `<td>${i+1}</td>
                                 <td style="color:#f1c40f; font-weight:bold;">${f[14]||'--'}</td>
                                 <td class="col-licencia">${f[0]}</td>
                                 <td>${f[11]||'--'}</td>
@@ -265,7 +263,7 @@
                 b.appendChild(tr);
             });
             document.getElementById('total-global').innerText = '$' + sG.toFixed(2);
-            document.getElementById('total-ventas').innerText = '$' + sV.toFixed(2);
+            document.getElementById('total-ventas').innerText = '$' + sV.toFixed(2); // AHORA SUMA EL TOTAL CORRECTO
             document.querySelector('.btn-refresh').innerText = "🔄 ACTUALIZAR DATOS";
         } catch(e) { document.querySelector('.btn-refresh').innerText = "Error de Red"; }
     }
