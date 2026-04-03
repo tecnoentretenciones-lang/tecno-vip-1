@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>CAJA CENTRAL - TECNOENTRETE</title>
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+    <style>
+        :root { --main: #00e5ff; --bg: #0b0b0b; --box: #1a1a1a; --rojo: #e74c3c; --verde: #2ecc71; }
+        body { background: var(--bg); color: white; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 20px; text-align: center; }
+        
+        /* LOGIN */
+        #login-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 999; display: flex; justify-content: center; align-items: center; flex-direction: column; }
+        .login-box { background: var(--box); padding: 30px; border-radius: 20px; border: 2px solid var(--main); box-shadow: 0 0 30px rgba(0,229,255,0.2); width: 90%; max-width: 350px; }
+        .input-css { width: 100%; background: #000; color: var(--main); border: 1px solid var(--main); padding: 15px; border-radius: 10px; font-size: 16px; margin-bottom: 15px; text-align: center; box-sizing: border-box; outline: none;}
+        .btn-main { background: var(--main); color: #000; border: none; padding: 15px; width: 100%; border-radius: 10px; font-weight: 900; font-size: 16px; cursor: pointer; text-transform: uppercase; }
+        
+        /* DASHBOARD CAJERO */
+        #dashboard { display: none; max-width: 500px; margin: auto; }
+        .header { background: var(--box); border: 1px solid #333; border-radius: 15px; padding: 15px; margin-bottom: 20px; }
+        .btn-scan { background: var(--box); border: 2px solid var(--verde); color: var(--verde); padding: 25px; border-radius: 15px; width: 100%; font-size: 18px; font-weight: bold; cursor: pointer; margin-bottom: 15px; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+        .btn-scan.cierre { border-color: var(--main); color: var(--main); }
+        .btn-scan i { font-size: 30px; }
+        
+        /* PANTALLA CARGA IA */
+        #loader { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; justify-content: center; align-items: center; flex-direction: column; }
+        .spinner { border: 5px solid #333; border-top: 5px solid var(--main); border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin-bottom: 15px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* FORMULARIO POST-ESCANEO */
+        #modal-confirmacion { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 999; justify-content: center; align-items: center; }
+        .modal-box { background: var(--box); padding: 25px; border-radius: 20px; border: 2px solid var(--verde); width: 90%; max-width: 350px; }
+        .label-text { font-size: 12px; color: #888; margin-top: 10px; display: block; text-align: left;}
+        .highlight-monto { font-size: 35px; color: var(--verde); font-weight: 900; margin: 10px 0; }
+    </style>
+</head>
+<body>
+
+    <div id="login-screen">
+        <div class="login-box">
+            <h2 style="color:var(--main); margin-top:0;">SISTEMA DE CAJA</h2>
+            <input type="text" id="l-user" class="input-css" placeholder="Usuario Cajero">
+            <input type="password" id="l-pass" class="input-css" placeholder="Clave">
+            <button class="btn-main" id="btn-login" onclick="iniciarSesion()">ABRIR TURNO</button>
+        </div>
+    </div>
+
+    <div id="loader">
+        <div class="spinner"></div>
+        <h3 id="txt-loader" style="color:var(--main);">ANALIZANDO FOTO CON I.A...</h3>
+        <p style="color:#888; font-size:12px;">Esto toma unos segundos</p>
+    </div>
+
+    <div id="dashboard">
+        <div class="header">
+            <h3 style="margin:0; color:#fff;">CAJERO ACTIVO: <span id="nombre-cajero" style="color:var(--main);"></span></h3>
+            <p style="margin:5px 0 0 0; color:#888; font-size:12px;">Esperando escaneo de cámara...</p>
+        </div>
+
+        <input type="file" accept="image/*" capture="environment" id="camara-voucher" style="display:none;" onchange="procesarFoto(this, 'voucher')">
+        
+        <button class="btn-scan" onclick="document.getElementById('camara-voucher').click()">
+            📸 ESCANEAR PAGO POR MANO
+            <span style="font-size:12px; font-weight:normal; color:#888;">Lee el voucher automáticamente</span>
+        </button>
+
+        <button class="btn-scan cierre" onclick="alert('Función de Cierre Automático en desarrollo para la Fase 2. Por ahora usa los Pagos por Mano.')">
+            🎰 ESCANEAR MÁQUINA (CIERRE)
+        </button>
+    </div>
+
+    <div id="modal-confirmacion">
+        <div class="modal-box">
+            <h2 style="color:var(--verde); margin-top:0;">APROBAR PAGO</h2>
+            
+            <label class="label-text">CÓDIGO DE VOUCHER DETECTADO:</label>
+            <input type="text" id="val-codigo" class="input-css" style="color:#fff; border-color:#555;">
+            
+            <label class="label-text">MONTO ORIGINAL (MÁQUINA):</label>
+            <input type="number" id="val-maquina" class="input-css" style="color:#fff; border-color:#555;" oninput="calcularRedondeo()">
+
+            <div style="background:#111; padding:15px; border-radius:10px; margin:15px 0; border:1px solid #333;">
+                <span style="color:#888; font-size:12px;">ENTREGAR AL CLIENTE:</span>
+                <div class="highlight-monto">$<span id="val-pagar">0</span></div>
+            </div>
+
+            <button class="btn-main" style="background:var(--verde);" onclick="enviarPagoGAS()">✅ CONFIRMAR Y GUARDAR</button>
+            <button class="btn-main" style="background:#333; color:#fff; margin-top:10px;" onclick="document.getElementById('modal-confirmacion').style.display='none'">CANCELAR</button>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = "TU_LINK_DE_APPS_SCRIPT_AQUI"; 
+        let usuarioActual = "";
+
+        async function iniciarSesion() {
+            const u = document.getElementById('l-user').value.trim();
+            const p = document.getElementById('l-pass').value.trim();
+            if(!u || !p) return alert("Ingrese credenciales");
+            
+            document.getElementById('btn-login').innerText = "VERIFICANDO...";
+            try {
+                const r = await fetch(API_URL + `?action=login_panel&u=${encodeURIComponent(u)}&p=${encodeURIComponent(p)}`);
+                const d = await r.json();
+                if(d.status === "success") {
+                    usuarioActual = d.usuario;
+                    document.getElementById('nombre-cajero').innerText = usuarioActual.toUpperCase();
+                    document.getElementById('login-screen').style.display = 'none';
+                    document.getElementById('dashboard').style.display = 'block';
+                } else {
+                    alert(d.mensaje);
+                    document.getElementById('btn-login').innerText = "ABRIR TURNO";
+                }
+            } catch(e) { alert("Error de conexión"); document.getElementById('btn-login').innerText = "ABRIR TURNO"; }
+        }
+
+        async function procesarFoto(inputElement, tipo) {
+            if (!inputElement.files || !inputElement.files[0]) return;
+            const archivo = inputElement.files[0];
+            
+            document.getElementById('loader').style.display = 'flex';
+            
+            try {
+                // AQUÍ OCURRE LA MAGIA DEL OCR EN EL CELULAR (SIN INTERNET EXTERNO)
+                const resultado = await Tesseract.recognize(archivo, 'spa', {
+                    logger: m => console.log(m) // Opcional para ver el progreso
+                });
+                
+                const textoLeido = resultado.data.text;
+                console.log("TEXTO DETECTADO:\n", textoLeido);
+                
+                document.getElementById('loader').style.display = 'none';
+                
+                // Extraer Monto (Busca números con o sin signo $)
+                let montoMatch = textoLeido.match(/\$?\s*(\d{1,3}(?:\.\d{3})*|\d+)/);
+                let montoExtraido = montoMatch ? parseInt(montoMatch[1].replace(/\./g, '')) : 0;
+                
+                // Extraer Código (Busca la serie larga)
+                let codigoMatch = textoLeido.match(/(\d{5,}\s*\d{5,})/);
+                let codigoExtraido = codigoMatch ? codigoMatch[1].trim() : "NO DETECTADO";
+
+                // Mostrar el modal con los datos para que el cajero los valide
+                abrirModalPago(codigoExtraido, montoExtraido);
+                
+            } catch(error) {
+                document.getElementById('loader').style.display = 'none';
+                alert("No se pudo leer bien la imagen. Escribe los datos a mano.");
+                abrirModalPago("", 0); // Abre vacío si falla la cámara
+            }
+            inputElement.value = ""; // Limpia el input
+        }
+
+        function abrirModalPago(codigo, montoMaq) {
+            document.getElementById('val-codigo').value = codigo;
+            document.getElementById('val-maquina').value = montoMaq || "";
+            calcularRedondeo();
+            document.getElementById('modal-confirmacion').style.display = 'flex';
+        }
+
+        function calcularRedondeo() {
+            let monto = parseFloat(document.getElementById('val-maquina').value) || 0;
+            // REDONDEO AUTOMÁTICO (Corta los últimos dos dígitos, Ej: 1020 -> 1000)
+            let montoPagar = Math.floor(monto / 100) * 100; 
+            document.getElementById('val-pagar').innerText = montoPagar;
+        }
+
+        async function enviarPagoGAS() {
+            let cod = document.getElementById('val-codigo').value.trim();
+            let maquina = document.getElementById('val-maquina').value;
+            let aPagar = document.getElementById('val-pagar').innerText;
+            
+            if(!cod || !maquina) return alert("Faltan datos");
+
+            document.querySelector('#modal-confirmacion .btn-main').innerText = "GUARDANDO...";
+            
+            try {
+                let url = `${API_URL}?action=registrar_vale&cajero=${usuarioActual}&codigo=${encodeURIComponent(cod)}&monto_maquina=${maquina}&monto_pagado=${aPagar}`;
+                let res = await fetch(url);
+                let data = await res.json();
+                
+                if(data.status === "success") {
+                    alert(data.mensaje); // "Pago registrado con éxito"
+                    document.getElementById('modal-confirmacion').style.display = 'none';
+                } else {
+                    alert(data.mensaje); // Avisa si ya fue cobrado (Anti-Robo)
+                }
+            } catch(e) {
+                alert("Error al guardar en el servidor");
+            }
+            document.querySelector('#modal-confirmacion .btn-main').innerText = "✅ CONFIRMAR Y GUARDAR";
+        }
+    </script>
+</body>
+</html>
