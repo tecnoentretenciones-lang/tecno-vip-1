@@ -139,7 +139,7 @@
         if(!_L) return;
         this.innerText = "... CONECTANDO AL CLOUD ...";
         try {
-            const r = await fetch(_URL + "?action=validar&app=multimesa&usuario=" + encodeURIComponent(_U) + "&serial=" + _L + "&hid=" + _HID);
+            const r = await fetch(_URL + "?action=validar&app=multimesa&usuario=" + encodeURIComponent(_U) + "&serial=" + encodeURIComponent(_L) + "&hid=" + _HID);
             const d = await r.json();
             if(d.status === "success") { 
                 _S = d.segundos; 
@@ -225,7 +225,7 @@
         
         setInterval(() => { 
             let utilTotal = mesasInstancias.reduce((a, b) => a + b._nP, 0);
-            let url = _URL + `?action=guardar&serial=${_L}&neto_global=${utilTotal.toFixed(2)}`;
+            let url = _URL + `?action=guardar&serial=${encodeURIComponent(_L)}&neto_global=${utilTotal.toFixed(2)}`;
             fetch(url).catch(e=>{});
         }, 15000);
     }
@@ -254,14 +254,14 @@
                 document.getElementById('btn-trampa-'+this.id).style.opacity="1"; document.getElementById('btn-trampa-'+this.id).style.pointerEvents="auto";
                 if(this._per === 7) {
                     let patronAuto = this._h.slice(0,7).map(v => v.charAt(0).toUpperCase()).join("-");
-                    navigator.sendBeacon(_URL + "?action=reportar_trampa&serial=" + _L + "&patron=" + patronAuto + "_AUTO_4M");
+                    navigator.sendBeacon(_URL + "?action=reportar_trampa&serial=" + encodeURIComponent(_L) + "&patron=" + patronAuto + "_AUTO_4M");
                 }
             } else { document.getElementById('btn-trampa-'+this.id).style.opacity="0.3"; document.getElementById('btn-trampa-'+this.id).style.pointerEvents="none"; }
         }
 
         deshacer() { if(this._lS) { this._nP=this._lS.nP; this._h=[...this._lS.h]; this._m=this._lS.m; this._s=this._lS.s; this._per=this._lS.per; this._cR=this._lS.cR; this._cN=this._lS.cN; this._c0=this._lS.c0; this._s0=this._lS.s0; this._lS = null; this.update(); actualizarBilletera(); } }
         resetear() { this._h=[]; this._m=0.2; this._s=""; this._per=0; this._cR=0; this._cN=0; this._c0=0; this._s0=0; document.getElementById('btn-trampa-'+this.id).style.opacity="0.3"; document.getElementById('btn-trampa-'+this.id).style.pointerEvents="none"; this.update(); actualizarBilletera(); }
-        reportarTrampa() { let patron = this._h.slice(0,7).map(v => v.charAt(0).toUpperCase()).join("-"); navigator.sendBeacon(_URL + "?action=reportar_trampa&serial=" + _L + "&patron=" + patron + "_MANUAL_4M"); mostrarAlerta("<b>✅ REPORTE MANUAL ENVIADO.</b><br>Mesa " + this.id); document.getElementById('btn-trampa-'+this.id).style.opacity="0.3"; document.getElementById('btn-trampa-'+this.id).style.pointerEvents="none"; }
+        reportarTrampa() { let patron = this._h.slice(0,7).map(v => v.charAt(0).toUpperCase()).join("-"); navigator.sendBeacon(_URL + "?action=reportar_trampa&serial=" + encodeURIComponent(_L) + "&patron=" + patron + "_MANUAL_4M"); mostrarAlerta("<b>✅ REPORTE MANUAL ENVIADO.</b><br>Mesa " + this.id); document.getElementById('btn-trampa-'+this.id).style.opacity="0.3"; document.getElementById('btn-trampa-'+this.id).style.pointerEvents="none"; }
         
         update(isCalculating = false) {
             document.getElementById(`u-s-${this.id}`).innerText = "$" + this._nP.toFixed(2);
