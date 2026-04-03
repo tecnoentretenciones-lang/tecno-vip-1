@@ -230,18 +230,21 @@
             let sG = 0; let sV = 0;
             
             d.datos.forEach((f, i) => {
+                if (i === 0 || !f[0]) return; // EVITA QUE SE DIBUJE LA CABECERA COMO SI FUERA CLIENTE
+                
                 let realFila = f[17]; 
                 let neto = parseFloat(f[10]) || 0; 
-                let pago = parseFloat(f[9]) || 0; // COL J = PAGO
+                let planActual = (f[9]) ? (f[9].toString().toUpperCase().trim()) : 'BASICO'; // COL J = PLAN
+                let pago = parseFloat(f[13]) || 0; // COL N = PAGO
+                
                 if(f[0] !== "DEMO") { sG += neto; sV += pago; }
                 
                 let bE = f[2]==="Activo" ? `<button class="btn-accion btn-sus" onclick="cambiarEstado(${realFila},'Inactivo')">PAUSAR</button>` : `<button class="btn-accion btn-act" onclick="cambiarEstado(${realFila},'Activo')">ACTIVAR</button>`;
                 let bResetHID = f[6] ? `<button class="btn-accion btn-reset" onclick="resetearHID(${realFila})">DESANCLAR</button>` : '';
                 let colVend = ROL_ACTUAL === "ADMIN" ? `<td style="font-size:10px; color:#888;">${f[15]||'ADMIN'}</td>` : '';
-                let planActual = (f[13]) ? (f[13].toString().toUpperCase().trim()) : 'BASICO'; // COL N = PLAN
                 
                 const tr = document.createElement("tr");
-                tr.innerHTML = `<td>${i+1}</td>
+                tr.innerHTML = `<td>${i}</td>
                                 <td style="color:#f1c40f; font-weight:bold;">${f[14]||'--'}</td>
                                 <td class="col-licencia">${f[0]}</td>
                                 <td>${f[11]||'--'}</td>
@@ -268,9 +271,12 @@
     }
 
     async function crearLicencia() {
-        const u = document.getElementById('n-usuario').value; const s = document.getElementById('n-serial').value; 
-        const n = document.getElementById('n-nombre').value; const w = document.getElementById('n-wsp').value; 
-        const t = document.getElementById('n-tiempo').value; const p = document.getElementById('n-plan').value; 
+        const u = document.getElementById('n-usuario').value.trim(); 
+        const s = document.getElementById('n-serial').value.trim(); 
+        const n = document.getElementById('n-nombre').value.trim(); 
+        const w = document.getElementById('n-wsp').value.trim(); 
+        const t = document.getElementById('n-tiempo').value; 
+        const p = document.getElementById('n-plan').value; 
         const pago = document.getElementById('n-pago').value;
         if(!s) return alert("Ingresa una Clave");
         await fetch(API + `?action=crear_usuario&usuario=${encodeURIComponent(u)}&serial=${encodeURIComponent(s)}&nombre=${encodeURIComponent(n)}&wsp=${encodeURIComponent(w)}&tiempo=${encodeURIComponent(t)}&plan=${encodeURIComponent(p)}&pago=${encodeURIComponent(pago)}&vendedor=${encodeURIComponent(USUARIO_ACTUAL)}`);
@@ -290,10 +296,10 @@
     
     async function guardarEdicionUsuario() {
         let f = document.getElementById('ed-u-fila').value; 
-        let u = document.getElementById('ed-u-user').value; 
-        let s = document.getElementById('ed-u-serial').value; 
-        let n = document.getElementById('ed-u-nombre').value;
-        let w = document.getElementById('ed-u-wsp').value; 
+        let u = document.getElementById('ed-u-user').value.trim(); 
+        let s = document.getElementById('ed-u-serial').value.trim(); 
+        let n = document.getElementById('ed-u-nombre').value.trim();
+        let w = document.getElementById('ed-u-wsp').value.trim(); 
         let p = document.getElementById('ed-u-plan').value; 
         let pag = document.getElementById('ed-u-pago').value;
         
@@ -323,8 +329,8 @@
     }
 
     async function crearCajero() {
-        const u = document.getElementById('c-user').value; const p = document.getElementById('c-pass').value;
-        const n = document.getElementById('c-nombre').value; const w = document.getElementById('c-wsp').value;
+        const u = document.getElementById('c-user').value.trim(); const p = document.getElementById('c-pass').value.trim();
+        const n = document.getElementById('c-nombre').value.trim(); const w = document.getElementById('c-wsp').value.trim();
         if(!u || !p) return alert("Usuario y Clave obligatorios");
         await fetch(API + `?action=crear_cajero&user=${encodeURIComponent(u)}&pass=${encodeURIComponent(p)}&nombre=${encodeURIComponent(n)}&wsp=${encodeURIComponent(w)}`); 
         cargarCajeros();
@@ -337,8 +343,8 @@
     }
     
     async function guardarEdicionCajero() {
-        let f = document.getElementById('ed-c-fila').value; let u = document.getElementById('ed-c-user').value;
-        let p = document.getElementById('ed-c-pass').value; let n = document.getElementById('ed-c-nombre').value; let w = document.getElementById('ed-c-wsp').value;
+        let f = document.getElementById('ed-c-fila').value; let u = document.getElementById('ed-c-user').value.trim();
+        let p = document.getElementById('ed-c-pass').value.trim(); let n = document.getElementById('ed-c-nombre').value.trim(); let w = document.getElementById('ed-c-wsp').value.trim();
         document.getElementById('modal-editar-cajero').style.display = 'none';
         await fetch(API + `?action=editar_cajero&fila=${f}&user=${encodeURIComponent(u)}&pass=${encodeURIComponent(p)}&nombre=${encodeURIComponent(n)}&wsp=${encodeURIComponent(w)}`); 
         cargarCajeros();
