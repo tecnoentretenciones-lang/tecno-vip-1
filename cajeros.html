@@ -27,9 +27,6 @@
         .modal-box { background: var(--box); padding: 25px; border-radius: 20px; border: 2px solid var(--verde); width: 90%; max-width: 350px; }
         .label-text { font-size: 12px; color: #888; margin-top: 10px; display: block; text-align: left;}
         .highlight-monto { font-size: 35px; color: var(--verde); font-weight: 900; margin: 10px 0; }
-        
-        /* Canvas oculto para procesar la imagen */
-        #canvas-oculto { display: none; }
     </style>
 </head>
 <body>
@@ -45,8 +42,8 @@
 
     <div id="loader">
         <div class="spinner"></div>
-        <h3 id="txt-loader" style="color:var(--main);">APLICANDO FILTROS E I.A...</h3>
-        <p style="color:#888; font-size:12px;">Optimizando foto de pantalla</p>
+        <h3 id="txt-loader" style="color:var(--main);">ANALIZANDO FOTO CON I.A...</h3>
+        <p style="color:#888; font-size:12px;">Esto toma unos segundos</p>
     </div>
 
     <div id="dashboard">
@@ -76,8 +73,6 @@
         </div>
     </div>
 
-    <canvas id="canvas-oculto"></canvas>
-
     <script>
         const API_URL = "https://script.google.com/macros/s/AKfycbzUIdq4jKKOi3_fu3kLsO_cP3Z9ckXp7B6sUiP78B7Km7bDVmaecAIdsWGgGcA8nlE8JA/exec"; 
         let usuarioActual = "";
@@ -101,70 +96,61 @@
             } catch(e) { alert("Error de conexión"); document.getElementById('btn-login').innerText = "ABRIR TURNO"; }
         }
 
-        // --- FILTRO MÁGICO PARA PANTALLAS OSCURAS ---
-        function optimizarImagenParaOCR(file) {
-            return new Promise((resolve) => {
-                const img = new Image();
-                img.src = URL.createObjectURL(file);
-                img.onload = () => {
-                    const canvas = document.getElementById('canvas-oculto');
-                    const ctx = canvas.getContext('2d');
-                    canvas.width = img.width; 
-                    canvas.height = img.height;
-                    ctx.drawImage(img, 0, 0);
-                    
-                    let imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-                    let data = imgData.data;
-                    
-                    // Convertir a blanco y negro de alto contraste invertido
-                    for (let i = 0; i < data.length; i += 4) {
-                        let brillo = 0.34 * data[i] + 0.5 * data[i + 1] + 0.16 * data[i + 2];
-                        let invertido = 255 - brillo; // Invertimos para que fondo oscuro sea blanco
-                        let contraste = invertido > 100 ? 255 : 0; // Blanco puro o negro puro
-                        
-                        data[i] = contraste;     // R
-                        data[i + 1] = contraste; // G
-                        data[i + 2] = contraste; // B
-                    }
-                    ctx.putImageData(imgData, 0, 0);
-                    canvas.toBlob((blob) => resolve(blob), 'image/jpeg');
-                };
-            });
-        }
-
         async function procesarFoto(inputElement) {
             if (!inputElement.files || !inputElement.files[0]) return;
             const archivoOriginal = inputElement.files[0];
             document.getElementById('loader').style.display = 'flex';
             
             try {
-                // 1. Aplicamos el filtro a la imagen antes de leerla
-                const imagenFiltrada = await optimizarImagenParaOCR(archivoOriginal);
-
-                // 2. Tesseract lee la imagen ya filtrada (blanco sobre negro puro)
-                const resultado = await Tesseract.recognize(imagenFiltrada, 'spa');
-                let texto = resultado.data.text.toUpperCase();
+                // Mandamos la foto original directo a Tesseract
+                const resultado = await Tesseract.recognize(archivoOriginal, 'spa');
+                let textoBruto = resultado.data.text;
+                console.log("TEXTO BRUTO LEÍDO:\n", textoBruto); 
                 
-                // Arreglamos confusiones típicas de la IA con los números
-                texto = texto.replace(/O/g, '0').replace(/I/g, '1').replace(/L/g, '1');
-                console.log("TEXTO DETECTADO:\n", texto);
+                // Limpieza de letras que se parecen a números
+                let texto = textoBruto.toUpperCase().replace(/O/g, '0').replace(/I/g, '1').replace(/L/g, '1');
                 
-                document.getElementById('loader').style.display = 'none';
-                
-                // 3. Extraer Monto: Busca el signo $ y captura los números siguientes
-                let montoMatch = texto.match(/\$\s*(\d{1,3}(?:\.\d{3})*|\d+)/);
-                let montoExtraido = montoMatch ? parseInt(montoMatch[1].replace(/\./g, '')) : 0;
-                
-                // 4. Extraer Código: Busca series de 5 o más números juntos (ej: 66157 1610979)
-                let codigoMatch = texto.match(/(\d{5,}[\s\-]*\d{5,})/);
+                // 1. Extraer el CÓDIGO (Busca secuencias largas de al menos 4 números juntos)
+                let codigoMatch = texto.match(/(\d{4,}[\s\-]*\d{4,})/);
                 let codigoExtraido = codigoMatch ? codigoMatch[1].replace(/\n/g, ' ').trim() : "";
 
+                // 2. Extraer el MONTO (Más inteligente)
+                let montoExtraido = 0;
+                let lineas = textoBruto.toUpperCase().split('\n');
+                
+                // Intento A: Buscar en la línea que tenga un $ o una S (por si lo lee mal)
+                for(let l of lineas) {
+                    if(l.includes('$') || l.includes('S ')) {
+                        let m = l.match(/\d{1,3}(?:[.,]\d{3})*/);
+                        if(m) {
+                            montoExtraido = parseInt(m[0].replace(/[.,]/g, ''));
+                            break;
+                        }
+                    }
+                }
+                
+                // Intento B: Si falló, agarramos el primer número de toda la pantalla que sea mayor a 100 y que NO sea el código
+                if(montoExtraido === 0) {
+                    let todosLosNumeros = texto.match(/\d{1,3}(?:[.,]\d{3})+|\d{3,}/g);
+                    if(todosLosNumeros) {
+                        for(let numStr of todosLosNumeros) {
+                            let num = parseInt(numStr.replace(/[.,]/g, ''));
+                            let codLimpio = codigoExtraido.replace(/\s/g,'');
+                            if(num >= 100 && num < 2000000 && !codLimpio.includes(num.toString())) {
+                                montoExtraido = num;
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                document.getElementById('loader').style.display = 'none';
                 abrirModalPago(codigoExtraido, montoExtraido);
                 
             } catch(error) {
                 console.error(error);
                 document.getElementById('loader').style.display = 'none';
-                alert("La IA no pudo procesar la foto con claridad. Ingrésalo manual.");
+                alert("La pantalla tenía mucho reflejo. Ingrésalo a mano.");
                 abrirModalPago("", 0); 
             }
             inputElement.value = ""; 
