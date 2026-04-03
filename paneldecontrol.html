@@ -152,7 +152,7 @@
         <button class="btn-refresh" onclick="cargarUsuarios()">🔄 ACTUALIZAR DATOS</button>
         <div class="table-responsive">
             <table id="t-usuarios">
-                <thead><tr><th>#</th><th>USUARIO</th><th>CLAVE</th><th>NOMBRE</th><th>WSP</th><th>PLAN</th><th>ESTADO</th><th>TIEMPO / ESTADO</th><th>NETO J.</th><th>PAGÓ</th><th id="th-vendedor">VENDEDOR</th><th>ANCLAJE</th><th>ACCIONES</th></tr></thead>
+                <thead><tr><th>#</th><th>USUARIO</th><th>CLAVE</th><th>TOKEN</th><th>NOMBRE</th><th>WSP</th><th>PLAN</th><th>ESTADO</th><th>TIEMPO / ESTADO</th><th>NETO J.</th><th>PAGÓ</th><th id="th-vendedor">VENDEDOR</th><th>ANCLAJE</th><th>ACCIONES</th></tr></thead>
                 <tbody></tbody>
             </table>
         </div>
@@ -230,22 +230,24 @@
             let sG = 0; let sV = 0;
             
             d.datos.forEach((f, i) => {
+                if (i === 0 || !f[0]) return; // EVITA QUE SE DIBUJE LA CABECERA
+                
                 let realFila = f[17]; 
-                let neto = parseFloat(f[10]) || 0; 
-                let pago = parseFloat(f[9]) || 0; // COL J = PAGO
+                let neto = parseFloat(f[10]) || 0; // COL K = NETO
+                let pago = parseFloat(f[9]) || 0; // COL J = PAGO/UTILIDAD
                 let planActual = (f[13]) ? (f[13].toString().toUpperCase().trim()) : 'BASICO'; // COL N = PLAN
                 
                 if(f[0] !== "DEMO") { sG += neto; sV += pago; }
                 
                 let bE = f[2]==="Activo" ? `<button class="btn-accion btn-sus" onclick="cambiarEstado(${realFila},'Inactivo')">PAUSAR</button>` : `<button class="btn-accion btn-act" onclick="cambiarEstado(${realFila},'Activo')">ACTIVAR</button>`;
                 let bResetHID = f[6] ? `<button class="btn-accion btn-reset" onclick="resetearHID(${realFila})">DESANCLAR</button>` : '';
-                let colVend = ROL_ACTUAL === "ADMIN" ? `<td style="font-size:10px; color:#888;">${f[15]||'ADMIN'}</td>` : '';
+                let colVend = ROL_ACTUAL === "ADMIN" ? `<td style="font-size:10px; color:#888;">${f[15]||'ADMIN'}</td>` : ''; // COL P = VENDEDOR
                 
                 const tr = document.createElement("tr");
-                tr.innerHTML = `<td>${i+1}</td>
+                tr.innerHTML = `<td>${i}</td>
                                 <td style="color:#f1c40f; font-weight:bold;">${f[14]||'--'}</td>
                                 <td class="col-licencia">${f[0]}</td>
-                                <td>${f[11]||'--'}</td>
+                                <td style="color:#2ecc71; font-weight:bold; font-family:monospace;">${f[4]||'--'}</td> <td>${f[11]||'--'}</td>
                                 <td>${f[12]||'--'}</td>
                                 <td><select style="background:#222; color:#fff; border:1px solid #444; padding:4px; font-size:11px; border-radius:4px;" onchange="cambiarPlan(${realFila}, this.value)"><option value="BASICO" ${planActual==='BASICO'?'selected':''}>BÁSICO</option><option value="VIP" ${planActual==='VIP'||planActual==='PRO'?'selected':''}>VIP / PRO</option></select></td>
                                 <td class="${f[2]==='Activo'?'status-activo':'status-inactivo'}">${f[2]}</td>
@@ -263,7 +265,7 @@
                 b.appendChild(tr);
             });
             document.getElementById('total-global').innerText = '$' + sG.toFixed(2);
-            document.getElementById('total-ventas').innerText = '$' + sV.toFixed(2); // AHORA SUMA EL TOTAL CORRECTO
+            document.getElementById('total-ventas').innerText = '$' + sV.toFixed(2); 
             document.querySelector('.btn-refresh').innerText = "🔄 ACTUALIZAR DATOS";
         } catch(e) { document.querySelector('.btn-refresh').innerText = "Error de Red"; }
     }
