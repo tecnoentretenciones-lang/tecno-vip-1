@@ -90,7 +90,8 @@
     </div>
 
     <script>
-        const API_URL = "TU_LINK_DE_APPS_SCRIPT_AQUI"; 
+        const API_URL = "https://script.google.com/macros/s/AKfycbzUIdq4jKKOi3_fu3kLsO_cP3Z9ckXp7B6sUiP78B7Km7bDVmaecAIdsWGgGcA8nlE8JA/exec"; 
+        
         let usuarioActual = "";
 
         async function iniciarSesion() {
@@ -121,9 +122,9 @@
             document.getElementById('loader').style.display = 'flex';
             
             try {
-                // AQUÍ OCURRE LA MAGIA DEL OCR EN EL CELULAR (SIN INTERNET EXTERNO)
+                // OCR EN EL CELULAR
                 const resultado = await Tesseract.recognize(archivo, 'spa', {
-                    logger: m => console.log(m) // Opcional para ver el progreso
+                    logger: m => console.log(m) 
                 });
                 
                 const textoLeido = resultado.data.text;
@@ -131,23 +132,20 @@
                 
                 document.getElementById('loader').style.display = 'none';
                 
-                // Extraer Monto (Busca números con o sin signo $)
                 let montoMatch = textoLeido.match(/\$?\s*(\d{1,3}(?:\.\d{3})*|\d+)/);
                 let montoExtraido = montoMatch ? parseInt(montoMatch[1].replace(/\./g, '')) : 0;
                 
-                // Extraer Código (Busca la serie larga)
                 let codigoMatch = textoLeido.match(/(\d{5,}\s*\d{5,})/);
                 let codigoExtraido = codigoMatch ? codigoMatch[1].trim() : "NO DETECTADO";
 
-                // Mostrar el modal con los datos para que el cajero los valide
                 abrirModalPago(codigoExtraido, montoExtraido);
                 
             } catch(error) {
                 document.getElementById('loader').style.display = 'none';
                 alert("No se pudo leer bien la imagen. Escribe los datos a mano.");
-                abrirModalPago("", 0); // Abre vacío si falla la cámara
+                abrirModalPago("", 0); 
             }
-            inputElement.value = ""; // Limpia el input
+            inputElement.value = ""; 
         }
 
         function abrirModalPago(codigo, montoMaq) {
@@ -159,7 +157,7 @@
 
         function calcularRedondeo() {
             let monto = parseFloat(document.getElementById('val-maquina').value) || 0;
-            // REDONDEO AUTOMÁTICO (Corta los últimos dos dígitos, Ej: 1020 -> 1000)
+            // Redondeo automático hacia abajo (cortando la cola)
             let montoPagar = Math.floor(monto / 100) * 100; 
             document.getElementById('val-pagar').innerText = montoPagar;
         }
@@ -179,10 +177,10 @@
                 let data = await res.json();
                 
                 if(data.status === "success") {
-                    alert(data.mensaje); // "Pago registrado con éxito"
+                    alert(data.mensaje); 
                     document.getElementById('modal-confirmacion').style.display = 'none';
                 } else {
-                    alert(data.mensaje); // Avisa si ya fue cobrado (Anti-Robo)
+                    alert(data.mensaje); 
                 }
             } catch(e) {
                 alert("Error al guardar en el servidor");
