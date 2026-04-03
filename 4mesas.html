@@ -128,11 +128,26 @@
 
     const _URL = "https://script.google.com/macros/s/AKfycbzUIdq4jKKOi3_fu3kLsO_cP3Z9ckXp7B6sUiP78B7Km7bDVmaecAIdsWGgGcA8nlE8JA/exec";
     
-    // AQUI AGREGAMOS _U COMO VARIABLE GLOBAL
     let _L="", _U="", _HID = localStorage.getItem('VIP_HID_PRO') || 'PRO-'+Math.random().toString(36).substr(2,10).toUpperCase(); localStorage.setItem('VIP_HID_PRO', _HID);
     let _S = 0, _TS = 0, _IS = 0;
     let capitalGlobal = 0;
     let mesasInstancias = [];
+
+    // ==========================================
+    // FUNCION DE GUARDADO TOTAL PARA COLUMNA F
+    // ==========================================
+    window.saveState = function() { 
+        if(!_L) return;
+        let utilTotal = mesasInstancias.reduce((a, b) => a + b._nP, 0);
+        let estadoMesas = mesasInstancias.map(m => ({ 
+            nP: m._nP, h: m._h.slice(0,10), m: m._m, s: m._s, per: m._per, 
+            cR: m._cR, cN: m._cN, c0: m._c0, s0: m._s0 
+        }));
+        let est = JSON.stringify({ cap: capitalGlobal, mesas: estadoMesas });
+        localStorage.setItem('ts_pro_'+_L, est);
+        let url = _URL + `?action=guardar&usuario=${encodeURIComponent(_U)}&serial=${encodeURIComponent(_L)}&neto_global=${utilTotal.toFixed(2)}&estado=${encodeURIComponent(est)}`;
+        fetch(url).catch(e=>{});
+    };
 
     document.getElementById('btn-validar').onclick = async function() {
         _U = document.getElementById('u-i').value.trim();
@@ -145,14 +160,33 @@
             const d = await r.json();
             if(d.status === "success") { 
                 _S = d.segundos; 
+                
+                // PREGUNTAR SI QUIERE RESTAURAR LA SESIÓN
+                let savedJSON = d.estado_nube || localStorage.getItem('ts_pro_'+_L);
+                if(savedJSON && savedJSON.includes("{")) {
+                    if(confirm("☁️ Tienes una sesión guardada en la Nube.\n\n¿Deseas CONTINUAR la partida anterior?")) {
+                        try { 
+                            let st = JSON.parse(savedJSON); 
+                            capitalGlobal = parseFloat(st.cap) || 40;
+                            let numMesas = st.mesas ? st.mesas.length : 4;
+                            document.getElementById('p-l').style.display='none';
+                            iniciarMesas(numMesas, st.mesas); // Inicia con los datos guardados
+                            return;
+                        } catch(e) {}
+                    }
+                }
+
                 document.getElementById('p-l').style.display='none';
                 document.getElementById('p-select').style.display='flex';
             } else { alert(d.mensaje); this.innerText = "ENTRAR AL SISTEMA MULTIMESA"; }
         } catch(e) { alert("Error de Conexión."); this.innerText = "ENTRAR AL SISTEMA MULTIMESA"; }
     };
 
-    window.iniciarMesas = (cant) => {
-        capitalGlobal = parseFloat(prompt("Capital inicial a repartir entre mesas ($ USD):", "40.00")) || 40;
+    // EL SISTEMA AHORA ACEPTA DATOS GUARDADOS
+    window.iniciarMesas = (cant, savedData = null) => {
+        if (!savedData) {
+            capitalGlobal = parseFloat(prompt("Capital inicial a repartir entre mesas ($ USD):", "40.00")) || 40;
+        }
         document.getElementById('p-select').style.display = 'none';
         document.getElementById('app-principal').style.display = 'flex';
         const grid = document.getElementById('grid-mesas');
@@ -196,9 +230,28 @@
                 </div>
             </div>`;
             grid.insertAdjacentHTML('beforeend', mHTML);
-            mesasInstancias.push(new MotorFelipe(i));
+            
+            let motor = new MotorFelipe(i);
+            
+            // SI HAY DATOS GUARDADOS, LOS INYECTA EN EL MOTOR
+            if (savedData && savedData[i-1]) {
+                let sd = savedData[i-1];
+                motor._nP = sd.nP || 0;
+                motor._h = sd.h || [];
+                motor._m = sd.m || 0.2;
+                motor._s = sd.s || "";
+                motor._per = sd.per || 0;
+                motor._cR = sd.cR || 0;
+                motor._cN = sd.cN || 0;
+                motor._c0 = sd.c0 || 0;
+                motor._s0 = sd.s0 || 0;
+            }
+            mesasInstancias.push(motor);
         }
-        actualizarBilletera(); iniciarReloj();
+        
+        actualizarBilletera(); 
+        mesasInstancias.forEach(m => m.update()); // Dibuja el historial recuperado
+        iniciarReloj();
     };
 
     window.cambiarTab = (idActivo, total) => {
@@ -207,6 +260,14 @@
             document.querySelectorAll('.tab-btn')[i-1].classList.toggle('active', i===idActivo);
         }
     };
+
+    function ejecutarResetGlobal() { 
+        if(confirm("¿Resetear todas las mesas y volver a empezar?")) { 
+            mesasInstancias.forEach(m => m.resetear()); 
+            actualizarBilletera(); 
+            saveState(); // LO GUARDA EN BLANCO
+        } 
+    }
 
     function actualizarBilletera() {
         let utilTotal = mesasInstancias.reduce((a, b) => a + b._nP, 0);
@@ -225,14 +286,15 @@
             if(_S<=0) location.reload();
         }, 1000);
         
-        setInterval(() => { 
-            let utilTotal = mesasInstancias.reduce((a, b) => a + b._nP, 0);
-            let url = _URL + `?action=guardar&usuario=${encodeURIComponent(_U)}&serial=${encodeURIComponent(_L)}&neto_global=${utilTotal.toFixed(2)}`;
-            fetch(url).catch(e=>{});
-        }, 15000);
+        setInterval(saveState, 15000); // AHORA EL PING LLAMA A SAVESTATE
     }
 
-    window.addEventListener("pagehide", () => { if(_L !== "") navigator.sendBeacon(_URL + "?action=salir&usuario=" + encodeURIComponent(_U) + "&serial=" + encodeURIComponent(_L)); });
+    window.addEventListener("pagehide", () => { 
+        if(_L !== "") {
+            saveState();
+            navigator.sendBeacon(_URL + "?action=salir&usuario=" + encodeURIComponent(_U) + "&serial=" + encodeURIComponent(_L)); 
+        }
+    });
 
     class MotorFelipe {
         constructor(id) {
@@ -253,7 +315,7 @@
                 let res = await fetch(_URL + "?action=calcular&historial=" + encodeURIComponent(JSON.stringify(limitHist)));
                 let data = await res.json(); if(data.status === "success") { this._s = data.sugerencia; } else { this._s = "ERR"; }
             } catch(e) { this._s = "RED"; }
-            this._isFetching = false; stDiv.classList.remove("loading-st"); this.update(); actualizarBilletera();
+            this._isFetching = false; stDiv.classList.remove("loading-st"); this.update(); actualizarBilletera(); saveState(); // AQUI SE GUARDA CADA VEZ QUE APRIETAN UN COLOR
             if(this._per >= 7) {
                 document.getElementById('btn-trampa-'+this.id).style.opacity="1"; document.getElementById('btn-trampa-'+this.id).style.pointerEvents="auto";
                 if(this._per === 7) {
@@ -263,8 +325,8 @@
             } else { document.getElementById('btn-trampa-'+this.id).style.opacity="0.3"; document.getElementById('btn-trampa-'+this.id).style.pointerEvents="none"; }
         }
 
-        deshacer() { if(this._lS) { this._nP=this._lS.nP; this._h=[...this._lS.h]; this._m=this._lS.m; this._s=this._lS.s; this._per=this._lS.per; this._cR=this._lS.cR; this._cN=this._lS.cN; this._c0=this._lS.c0; this._s0=this._lS.s0; this._lS = null; this.update(); actualizarBilletera(); } }
-        resetear() { this._h=[]; this._m=0.2; this._s=""; this._per=0; this._cR=0; this._cN=0; this._c0=0; this._s0=0; document.getElementById('btn-trampa-'+this.id).style.opacity="0.3"; document.getElementById('btn-trampa-'+this.id).style.pointerEvents="none"; this.update(); actualizarBilletera(); }
+        deshacer() { if(this._lS) { this._nP=this._lS.nP; this._h=[...this._lS.h]; this._m=this._lS.m; this._s=this._lS.s; this._per=this._lS.per; this._cR=this._lS.cR; this._cN=this._lS.cN; this._c0=this._lS.c0; this._s0=this._lS.s0; this._lS = null; this.update(); actualizarBilletera(); saveState(); } }
+        resetear() { this._h=[]; this._m=0.2; this._s=""; this._per=0; this._cR=0; this._cN=0; this._c0=0; this._s0=0; this._nP=0; document.getElementById('btn-trampa-'+this.id).style.opacity="0.3"; document.getElementById('btn-trampa-'+this.id).style.pointerEvents="none"; this.update(); actualizarBilletera(); saveState(); }
         reportarTrampa() { let patron = this._h.slice(0,7).map(v => v.charAt(0).toUpperCase()).join("-"); navigator.sendBeacon(_URL + "?action=reportar_trampa&usuario=" + encodeURIComponent(_U) + "&serial=" + encodeURIComponent(_L) + "&patron=" + patron + "_MANUAL_4M"); mostrarAlerta("<b>✅ REPORTE MANUAL ENVIADO.</b><br>Mesa " + this.id); document.getElementById('btn-trampa-'+this.id).style.opacity="0.3"; document.getElementById('btn-trampa-'+this.id).style.pointerEvents="none"; }
         
         update(isCalculating = false) {
