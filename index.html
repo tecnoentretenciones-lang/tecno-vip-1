@@ -218,7 +218,6 @@
         } catch(e) { alert("Error de Conexión."); this.innerText = "ENTRAR AL SISTEMA"; }
     };
 
-    // 🔥 AQUI SE APLICÓ LA CORRECCIÓN DEL WHATSAPP DEMO 🔥
     document.getElementById('btn-activar-demo').onclick = async function() {
         const nom = document.getElementById('reg-nombre').value.trim(); const rawWsp = document.getElementById('reg-wsp').value.trim(); const codPais = document.getElementById('reg-pais').value;
         if(!nom || !nom.includes(' ')) return alert("Ingresa tu NOMBRE y APELLIDO (separados por espacio)."); if(!rawWsp) return alert("Falta celular.");
@@ -229,11 +228,9 @@
             const d = await r.json();
             if(d.status === "success") { 
                 document.getElementById('modal-demo').style.display='none'; 
+                let msg = "Hola TECNOENTRETE, soy " + nom + ". Acabo de activar mi DEMO. Mi ID de equipo es: " + _HID; 
+                window.open("https://wa.me/56995931641?text=" + encodeURIComponent(msg), "_blank"); 
                 iniciarDemo(d.segundos, wsp); 
-                
-                // LINEA MAGICA QUE ABRE WHATSAPP
-                let mensaje = `Hola TECNOENTRETE, soy ${nom}. Acabo de activar mi DEMO. Mi ID de equipo es: ${_HID}`;
-                window.open(`https://wa.me/56995931641?text=${encodeURIComponent(mensaje)}`, '_blank');
             }
             else { alert(d.mensaje); this.innerText = "ACTIVAR AHORA"; }
         } catch(e) { alert("Error"); this.innerText = "ACTIVAR AHORA"; }
