@@ -226,7 +226,12 @@
         try {
             const r = await fetch(_URL + "?action=validar_demo&nombre="+encodeURIComponent(nom)+"&wsp="+encodeURIComponent(wsp)+"&hid="+_HID);
             const d = await r.json();
-            if(d.status === "success") { document.getElementById('modal-demo').style.display='none'; iniciarDemo(d.segundos, wsp); }
+            if(d.status === "success") { 
+                document.getElementById('modal-demo').style.display='none'; 
+                let msg = "Hola TECNOENTRETE, soy " + nom + ". Acabo de activar mi DEMO. Mi ID de equipo es: " + _HID; 
+                window.open("https://wa.me/56995931641?text=" + encodeURIComponent(msg), "_blank"); 
+                iniciarDemo(d.segundos, wsp); 
+            }
             else { alert(d.mensaje); this.innerText = "ACTIVAR AHORA"; }
         } catch(e) { alert("Error"); this.innerText = "ACTIVAR AHORA"; }
     };
