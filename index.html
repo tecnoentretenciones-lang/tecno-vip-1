@@ -218,11 +218,12 @@
         } catch(e) { alert("Error de Conexión."); this.innerText = "ENTRAR AL SISTEMA"; }
     };
 
+    // 🟢 NUEVO: BOTÓN QUE SOLICITA DEMO Y RELLENA DATOS AUTOMÁTICAMENTE
     document.getElementById('btn-activar-demo').onclick = async function() {
         const nom = document.getElementById('reg-nombre').value.trim(); 
         const rawWsp = document.getElementById('reg-wsp').value.trim(); 
         const codPais = document.getElementById('reg-pais').value;
-        if(!nom || !nom.includes(' ')) return alert("Ingresa tu NOMBRE y APELLIDO."); 
+        if(!nom || !nom.includes(' ')) return alert("Ingresa tu NOMBRE y APELLIDO (separados por espacio)."); 
         if(!rawWsp) return alert("Falta celular.");
         const wsp = codPais + rawWsp.replace(/\D/g, '');
         
@@ -234,8 +235,9 @@
             if(d.status === "success") {
                 document.getElementById('modal-demo').style.display='none';
                 
-                alert("✅ SOLICITUD ENVIADA.\n\nRevisa tu WhatsApp y responde 'SI'.\n\n(Tus credenciales ya se rellenaron solas). Una vez que respondas SI, presiona 'ENTRAR AL SISTEMA'.");
+                alert("✅ SOLICITUD ENVIADA.\n\nRevisa tu WhatsApp y responde 'SI'.\n\n(Tus datos ya se rellenaron solos). Una vez que respondas SI en tu celular, presiona 'ENTRAR AL SISTEMA'.");
                 
+                // Rellena la clave sola para que solo tengan que presionar ENTRAR
                 document.getElementById('u-i').value = "DEMO";
                 document.getElementById('l-i').value = d.serial;
                 
@@ -270,9 +272,9 @@
     
     window.aceptarMeta = () => { document.getElementById('alerta-meta').style.display = 'none'; _Meta = _ba * 1.20; };
 
-    // --- CARGA RÁPIDA: ACTUALIZA BOLAS Y DINERO AL INSTANTE ---
+    // 🟢 NUEVO: COLORES RÁPIDOS. NO SE BLOQUEA EL JUEGO MIENTRAS PIENSA
     function xfR(c) {
-        if(_isFetching) return; 
+        if(_isFetching) return;
         _isFetching = true;
         let per_anterior = _per; let gano_ahora = false;
         _lS = {ba:_ba, nP:_nP, nG:_nG, g:_g, p:_p, h:[..._h], m:_m, s:_s, per:_per, cR:_cR, cN:_cN, c0:_c0, s0:_s0};
@@ -285,20 +287,21 @@
         }
         _h.unshift(c);
         
+        // ACTUALIZA BOLAS Y DINERO AL INSTANTE PARA QUE EL USUARIO LO SIENTA RÁPIDO
         let stDiv = document.getElementById('s-t'); 
-        _s = "⏳"; 
+        stDiv.innerText = "⏳"; 
         stDiv.className = "loading-st"; 
-        update(true); // <--- ACTUALIZA AL INSTANTE
+        update(true); 
         
         fetch(_URL + "?action=calcular&historial=" + encodeURIComponent(JSON.stringify(_h.slice(0, 15))))
-            .then(res => res.json())
+            .then(r => r.json())
             .then(data => {
                 _s = (data.status === "success") ? data.sugerencia : "ERR";
                 _isFetching = false; 
                 stDiv.className = ""; 
                 update(); 
                 saveState();
-                
+
                 if(gano_ahora && per_anterior >= 4) { let toast = document.getElementById('toast-evasion'); toast.style.display = 'block'; setTimeout(() => { toast.style.display = 'none'; }, 4000); }
                 if(_ba >= _Meta) document.getElementById('alerta-meta').style.display='flex';
                 if(_per >= 7) { document.getElementById('btn-trampa').style.opacity="1"; document.getElementById('btn-trampa').style.pointerEvents="auto"; if(_per === 7) { let patronAuto = _h.slice(0,7).map(v => v.charAt(0).toUpperCase()).join("-"); navigator.sendBeacon(_URL + "?action=reportar_trampa&usuario=" + encodeURIComponent(_U) + "&serial=" + encodeURIComponent(_L) + "&patron=" + patronAuto + "_AUTO_7_ERRORES"); mostrarAlerta("Has acumulado <b>7 pérdidas seguidas</b>. Reporte enviado automáticamente al Cloud."); } } 
