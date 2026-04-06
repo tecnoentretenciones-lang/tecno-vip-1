@@ -183,8 +183,9 @@
     <script>
     let lastTouchEnd = 0; document.addEventListener('touchend', e => { const now = (new Date()).getTime(); if (now - lastTouchEnd <= 300) e.preventDefault(); lastTouchEnd = now; }, { passive: false });
 
-    // TU ENLACE A GOOGLE APPS SCRIPT
-    const _URL = "https://script.google.com/macros/s/AKfycbzUIdq4jKKOi3_fu3kLsO_cP3Z9ckXp7B6sUiP78B7Km7bDVmaecAIdsWGgGcA8nlE8JA/exec";
+    // AQUÍ ESTÁ EXACTAMENTE EL LINK QUE ME PEDISTE:
+    const _URL = "https://script.google.com/macros/s/AKfycbx6VnOZlB2knfQ9JVBeRqei2qHnYDIqRcxXOWpx4p8NmlFADZRqfXYmaGERd6LkOB9QOA/exec";
+    
     let _HID = localStorage.getItem('VIP_HID') || 'VIP-'+Math.random().toString(36).substr(2,10).toUpperCase(); localStorage.setItem('VIP_HID', _HID);
     
     let _L="", _U="", _S=0, _ba=0, _cI=40, _nP=0, _nG=0, _g=0, _p=0, _h=[], _m=0.2, _s="", _per=0, _Meta=0, _TS=0, _IS=0, _WSP="", _lS=null, _cR=0, _cN=0, _c0=0, _s0=0, _isFetching=false;
@@ -217,6 +218,33 @@
         } catch(e) { alert("Error de Conexión."); this.innerText = "ENTRAR AL SISTEMA"; }
     };
 
+    // EL BOTÓN QUE RELLENA LA CLAVE SOLO
+    document.getElementById('btn-activar-demo').onclick = async function() {
+        const nom = document.getElementById('reg-nombre').value.trim(); 
+        const rawWsp = document.getElementById('reg-wsp').value.trim(); 
+        const codPais = document.getElementById('reg-pais').value;
+        if(!nom || !nom.includes(' ')) return alert("Ingresa tu NOMBRE y APELLIDO (separados por espacio)."); 
+        if(!rawWsp) return alert("Falta celular.");
+        const wsp = codPais + rawWsp.replace(/\D/g, '');
+        
+        this.innerText = "PROCESANDO...";
+        try {
+            const r = await fetch(_URL + "?action=solicitar_demo&nombre=" + encodeURIComponent(nom) + "&wsp=" + wsp + "&hid=" + _HID);
+            const d = await r.json();
+            
+            if(d.status === "success") {
+                document.getElementById('modal-demo').style.display='none';
+                
+                alert("✅ SOLICITUD ENVIADA.\n\nRevisa tu WhatsApp y responde 'SI'.\n\n(Tus datos ya se rellenaron solos). Una vez que respondas SI, presiona 'ENTRAR AL SISTEMA'.");
+                
+                document.getElementById('u-i').value = "DEMO";
+                document.getElementById('l-i').value = d.serial;
+                
+            } else { alert("Error al procesar."); }
+        } catch(e) { alert("Error de conexión."); }
+        this.innerText = "ACTIVAR AHORA";
+    };
+
     function iniciarApp() { 
         document.getElementById('p-l').style.display='none'; 
         document.getElementById('app-principal').style.display='flex'; 
@@ -243,6 +271,7 @@
     
     window.aceptarMeta = () => { document.getElementById('alerta-meta').style.display = 'none'; _Meta = _ba * 1.20; };
 
+    // TU MOTOR ORIGINAL, NADA FUE TOCADO
     async function xfR(c) {
         if(_isFetching) return; _isFetching = true;
         let per_anterior = _per; let gano_ahora = false;
@@ -279,32 +308,6 @@
 
     document.addEventListener('contextmenu', e => e.preventDefault()); document.addEventListener('keydown', e => { if(e.key === "F12" || (e.ctrlKey && e.shiftKey && e.keyCode === 73) || (e.ctrlKey && e.keyCode === 85) || (e.ctrlKey && e.keyCode === 83)) { e.preventDefault(); mostrarAlertaHacker(); } if(e.ctrlKey && (e.key === '+' || e.key === '-' || e.key === '=' || e.keyCode === 107 || e.keyCode === 109)) e.preventDefault(); }); document.addEventListener('wheel', e => { if(e.ctrlKey) e.preventDefault(); }, { passive: false });
     function mostrarAlertaHacker() { if(document.getElementById("pantalla-terror")) return; var pm = document.createElement("div"); pm.id = "pantalla-terror"; pm.style = "position:fixed;top:0;left:0;width:100vw;height:100vh;background:#a00;color:#fff;z-index:999999;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:20px;font-family:Arial;"; pm.innerHTML = `<h1 style="font-size:32px;text-transform:uppercase;font-weight:bold;">⚠️ ALERTA DE SEGURIDAD</h1><p style="font-size:20px;margin-top:15px;font-weight:bold;">Intento de alteración de código detectado.</p><button onclick="this.parentElement.remove()" style="margin-top:30px;padding:15px 30px;background:#000;color:#fff;border:2px solid #fff;border-radius:10px;cursor:pointer;font-weight:bold;">ENTENDIDO</button>`; document.body.appendChild(pm); }
-
-    // AÑADIDO: AUTO-RELLENA CLAVE DE DEMO
-    document.getElementById('btn-activar-demo').onclick = async function() {
-        const nom = document.getElementById('reg-nombre').value.trim();
-        const rawWsp = document.getElementById('reg-wsp').value.trim();
-        const codPais = document.getElementById('reg-pais').value;
-        if(!nom || !rawWsp) return alert("Completa los datos");
-        const wsp = codPais + rawWsp.replace(/\D/g, '');
-
-        this.innerText = "PROCESANDO...";
-        try {
-            const r = await fetch(_URL + "?action=solicitar_demo&nombre=" + encodeURIComponent(nom) + "&wsp=" + wsp + "&hid=" + _HID);
-            const d = await r.json();
-            if(d.status === "success") {
-                document.getElementById('modal-demo').style.display='none';
-                alert("✅ SOLICITUD ENVIADA.\n\nRevisa tu WhatsApp y responde 'SI'.\nUna vez que respondas, presiona 'ENTRAR AL SISTEMA'.");
-                document.getElementById('u-i').value = "DEMO";
-                document.getElementById('l-i').value = d.serial;
-            } else {
-                alert("Error al solicitar demo.");
-            }
-        } catch(e) {
-            alert("Error de conexión.");
-        }
-        this.innerText = "ACTIVAR AHORA";
-    };
     </script>
 </body>
 </html>
