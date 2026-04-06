@@ -183,11 +183,10 @@
     <script>
     let lastTouchEnd = 0; document.addEventListener('touchend', e => { const now = (new Date()).getTime(); if (now - lastTouchEnd <= 300) e.preventDefault(); lastTouchEnd = now; }, { passive: false });
 
-    // AQUÍ ESTÁ EXACTAMENTE EL LINK QUE ME PASASTE:
+    // RECUERDA CAMBIAR ESTE ENLACE POR TU NUEVA IMPLEMENTACIÓN DE GOOGLE SCRIPT !!!
     const _URL = "https://script.google.com/macros/s/AKfycbyWfM9LhU6ZZJXM9i71K30SiwJdI6AiCjfwwxi7XFTaQApfYTXyjSliNI13pJ2KQKRBbg/exec";
     
     let _HID = localStorage.getItem('VIP_HID') || 'VIP-'+Math.random().toString(36).substr(2,10).toUpperCase(); localStorage.setItem('VIP_HID', _HID);
-    
     let _L="", _U="", _S=0, _ba=0, _cI=40, _nP=0, _nG=0, _g=0, _p=0, _h=[], _m=0.2, _s="", _per=0, _Meta=0, _TS=0, _IS=0, _WSP="", _lS=null, _cR=0, _cN=0, _c0=0, _s0=0, _isFetching=false;
 
     window.onload = async () => { try { const r = await fetch(_URL + "?action=obtener_global"); const d = await r.json(); if(d.status === "success") { let monto = parseFloat(d.total_global); if(monto <= 0) monto = 1450.50; document.getElementById('lbl-global-neto').innerText = "$ " + monto.toFixed(2) + " USD"; } } catch(e) { document.getElementById('lbl-global-neto').innerText = "$ 1450.50 USD"; } };
@@ -218,7 +217,7 @@
         } catch(e) { alert("Error de Conexión."); this.innerText = "ENTRAR AL SISTEMA"; }
     };
 
-    // EL BOTÓN QUE RELLENA LA CLAVE SOLO
+    // 🟢 AQUÍ ESTÁ EL AUTO-ENTRAR QUE EXTRAÑABAS 🟢
     document.getElementById('btn-activar-demo').onclick = async function() {
         const nom = document.getElementById('reg-nombre').value.trim(); 
         const rawWsp = document.getElementById('reg-wsp').value.trim(); 
@@ -234,12 +233,33 @@
             
             if(d.status === "success") {
                 document.getElementById('modal-demo').style.display='none';
-                
-                alert("✅ SOLICITUD ENVIADA.\n\nRevisa tu WhatsApp y responde 'SI'.\n\n(Tus datos ya se rellenaron solos). Una vez que respondas SI, presiona 'ENTRAR AL SISTEMA'.");
-                
                 document.getElementById('u-i').value = "DEMO";
                 document.getElementById('l-i').value = d.serial;
                 
+                alert("✅ DEMO SOLICITADA.\n\nVe a tu celular y responde 'SI' por WhatsApp.\n¡La pantalla entrará automáticamente apenas contestes!");
+                
+                let btnEntrar = document.getElementById('btn-validar');
+                btnEntrar.innerText = "⏳ ESPERANDO WSP...";
+                btnEntrar.style.background = "#f1c40f";
+                
+                // Hace un ciclo esperando a que contestes SI en wsp
+                let intentos = 0;
+                let intervalo = setInterval(async () => {
+                    intentos++;
+                    try {
+                        let rx = await fetch(_URL + "?action=validar&app=mesa_segura&usuario=DEMO&serial=" + d.serial + "&hid=" + _HID);
+                        let dx = await rx.json();
+                        if(dx.status === "success") {
+                            clearInterval(intervalo);
+                            btnEntrar.click(); // SE APRIETA SOLO Y ENTRA AL JUEGO
+                        } else if (intentos >= 60) {
+                            clearInterval(intervalo);
+                            btnEntrar.innerText = "ENTRAR AL SISTEMA";
+                            btnEntrar.style.background = "#00e5ff";
+                        }
+                    } catch(e){}
+                }, 3000);
+
             } else { alert("Error al procesar."); }
         } catch(e) { alert("Error de conexión."); }
         this.innerText = "ACTIVAR AHORA";
@@ -271,7 +291,6 @@
     
     window.aceptarMeta = () => { document.getElementById('alerta-meta').style.display = 'none'; _Meta = _ba * 1.20; };
 
-    // TU MOTOR ORIGINAL
     async function xfR(c) {
         if(_isFetching) return; _isFetching = true;
         let per_anterior = _per; let gano_ahora = false;
