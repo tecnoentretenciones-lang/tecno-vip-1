@@ -134,7 +134,7 @@
             <div style="display:flex; gap:6px;">
                 <button id="btn-undo" style="background:transparent; color:#555; border:1px solid #333; padding:10px; border-radius:10px; font-size:11px; flex:1;">CORREGIR</button>
                 <button id="btn-trampa" style="background:transparent; color:var(--c4); border:1px solid var(--c4); padding:10px; border-radius:10px; font-size:11px; flex:1.5; opacity:0.3; pointer-events:none;">⚠️ TRAMPA</button>
-                <button id="btn-reset" onclick="document.getElementById('modal-reset-confirm').style.display='flex'" style="background:transparent; color:var(--c1); border:1px solid var(--c1); padding:10px; border-radius:10px; font-size:11px; flex:1;">RESET</button>
+                <button id="btn-reset" style="background:transparent; color:var(--c1); border:1px solid var(--c1); padding:10px; border-radius:10px; font-size:11px; flex:1;">RESET</button>
             </div>
         </div>
     </div>
@@ -183,10 +183,11 @@
     <script>
     let lastTouchEnd = 0; document.addEventListener('touchend', e => { const now = (new Date()).getTime(); if (now - lastTouchEnd <= 300) e.preventDefault(); lastTouchEnd = now; }, { passive: false });
 
-    // TU ENLACE A GOOGLE APPS SCRIPT EXACTO
+    // TU ENLACE A GOOGLE APPS SCRIPT
     const _URL = "https://script.google.com/macros/s/AKfycbzVAoiVPr4M2x3qZjW2jEL9yn633Rc7FqcXZaSMzIf6uant1VbLPV7ScwSudHslJYOuzw/exec";
     let _HID = localStorage.getItem('VIP_HID') || 'VIP-'+Math.random().toString(36).substr(2,10).toUpperCase(); localStorage.setItem('VIP_HID', _HID);
     
+    // AQUI AGREGAMOS LA VARIABLE _U (Usuario)
     let _L="", _U="", _S=0, _ba=0, _cI=40, _nP=0, _nG=0, _g=0, _p=0, _h=[], _m=0.2, _s="", _per=0, _Meta=0, _TS=0, _IS=0, _WSP="", _lS=null, _cR=0, _cN=0, _c0=0, _s0=0, _isFetching=false;
 
     window.onload = async () => { try { const r = await fetch(_URL + "?action=obtener_global"); const d = await r.json(); if(d.status === "success") { let monto = parseFloat(d.total_global); if(monto <= 0) monto = 1450.50; document.getElementById('lbl-global-neto').innerText = "$ " + monto.toFixed(2) + " USD"; } } catch(e) { document.getElementById('lbl-global-neto').innerText = "$ 1450.50 USD"; } };
@@ -221,7 +222,7 @@
         const nom = document.getElementById('reg-nombre').value.trim(); const rawWsp = document.getElementById('reg-wsp').value.trim(); const codPais = document.getElementById('reg-pais').value;
         if(!nom || !nom.includes(' ')) return alert("Ingresa tu NOMBRE y APELLIDO (separados por espacio)."); if(!rawWsp) return alert("Falta celular.");
         const wsp = codPais + rawWsp.replace(/\D/g, '');
-        this.innerText = "PROCESANDO...";
+        this.innerText = "...";
         try {
             const r = await fetch(_URL + "?action=validar_demo&nombre="+encodeURIComponent(nom)+"&wsp="+encodeURIComponent(wsp)+"&hid="+_HID);
             const d = await r.json();
@@ -282,6 +283,9 @@
     document.getElementById('btn-trampa').onclick = async () => { let patron = _h.slice(0,7).map(v => v.charAt(0).toUpperCase()).join("-"); try { navigator.sendBeacon(_URL + "?action=reportar_trampa&usuario=" + encodeURIComponent(_U) + "&serial=" + encodeURIComponent(_L) + "&patron=" + patron + "_MANUAL"); mostrarAlerta("<b>✅ REPORTE MANUAL ENVIADO AL CLOUD.</b>"); document.getElementById('btn-trampa').style.opacity="0.3"; document.getElementById('btn-trampa').style.pointerEvents="none"; } catch(e) {} };
     
     document.getElementById('btn-undo').onclick = () => { if(_lS) { _ba = _lS.ba; _nP = _lS.nP; _nG = _lS.nG; _g = _lS.g; _p = _lS.p; _h = [..._lS.h]; _m = _lS.m; _s = _lS.s; _per = _lS.per; _cR = _lS.cR; _cN = _lS.cN; _c0 = _lS.c0; _s0 = _lS.s0; update(); saveState(); _lS = null; } };
+
+    // AQUI ARREGLAMOS EL BOTÓN RESET PARA QUE MUESTRE LA VENTANITA
+    document.getElementById('btn-reset').onclick = () => { document.getElementById('modal-reset-confirm').style.display='flex'; };
 
     function update(isCalc = false) {
         document.getElementById('c-i').innerText="$"+_ba.toFixed(2); document.getElementById('u-s').innerText="$"+_nP.toFixed(2); document.getElementById('n-g').innerText="$"+_nG.toFixed(2);
