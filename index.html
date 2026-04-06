@@ -218,7 +218,7 @@
         } catch(e) { alert("Error de Conexión."); this.innerText = "ENTRAR AL SISTEMA"; }
     };
 
-    // 🟢 NUEVO: BOTÓN QUE SOLICITA DEMO Y RELLENA DATOS AUTOMÁTICAMENTE
+    // EL BOTÓN QUE RELLENA LA CLAVE SOLO
     document.getElementById('btn-activar-demo').onclick = async function() {
         const nom = document.getElementById('reg-nombre').value.trim(); 
         const rawWsp = document.getElementById('reg-wsp').value.trim(); 
@@ -235,9 +235,8 @@
             if(d.status === "success") {
                 document.getElementById('modal-demo').style.display='none';
                 
-                alert("✅ SOLICITUD ENVIADA.\n\nRevisa tu WhatsApp y responde 'SI'.\n\n(Tus datos ya se rellenaron solos). Una vez que respondas SI en tu celular, presiona 'ENTRAR AL SISTEMA'.");
+                alert("✅ SOLICITUD ENVIADA.\n\nRevisa tu WhatsApp y responde 'SI'.\n\n(Tus datos ya se rellenaron solos). Una vez que respondas SI, presiona 'ENTRAR AL SISTEMA'.");
                 
-                // Rellena la clave sola para que solo tengan que presionar ENTRAR
                 document.getElementById('u-i').value = "DEMO";
                 document.getElementById('l-i').value = d.serial;
                 
@@ -246,6 +245,8 @@
         this.innerText = "ACTIVAR AHORA";
     };
 
+    function iniciarDemo(segs, wsp) { _L = "DEMO"; _U="DEMO"; _S = segs; _WSP = wsp; _cI = parseFloat(prompt("Capital:", "40.00")) || 40; _ba = _cI; _Meta = _ba * 1.20; _cR=0; _cN=0; _c0=0; _s0=0; iniciarApp(); }
+    
     function iniciarApp() { 
         document.getElementById('p-l').style.display='none'; 
         document.getElementById('app-principal').style.display='flex'; 
@@ -272,47 +273,26 @@
     
     window.aceptarMeta = () => { document.getElementById('alerta-meta').style.display = 'none'; _Meta = _ba * 1.20; };
 
-    // 🟢 NUEVO: COLORES RÁPIDOS. NO SE BLOQUEA EL JUEGO MIENTRAS PIENSA
-    function xfR(c) {
-        if(_isFetching) return;
-        _isFetching = true;
+    // ESTA ES TU FUNCIÓN ORIGINAL EXACTA, CON EL RELOJITO DE "⏳"
+    async function xfR(c) {
+        if(_isFetching) return; _isFetching = true;
         let per_anterior = _per; let gano_ahora = false;
         _lS = {ba:_ba, nP:_nP, nG:_nG, g:_g, p:_p, h:[..._h], m:_m, s:_s, per:_per, cR:_cR, cN:_cN, c0:_c0, s0:_s0};
-        
         if (c === 'Rojo') { _cR++; _s0++; } else if (c === 'Negro') { _cN++; _s0++; } else if (c === 'Cero') { _c0++; _s0 = 0; }
-        
-        if(_s !== "" && _s !== "⏳") { 
-            if(c.toUpperCase() === _s){ _ba += _m; _nP += _m; _nG += _m; _m = 0.2; _g++; _per = 0; gano_ahora = true; } 
-            else if(c !== 'Cero'){ _ba -= _m; _nP -= _m; _nG -= _m; _m *= 2; _p++; _per++; } 
-        }
+        if(_s !== "" && _s !== "⏳") { if(c.toUpperCase() === _s){ _ba += _m; _nP += _m; _nG += _m; _m = 0.2; _g++; _per = 0; gano_ahora = true; } else if(c !== 'Cero'){ _ba -= _m; _nP -= _m; _nG -= _m; _m *= 2; _p++; _per++; } }
         _h.unshift(c);
         
-        // ACTUALIZA BOLAS Y DINERO AL INSTANTE PARA QUE EL USUARIO LO SIENTA RÁPIDO
-        let stDiv = document.getElementById('s-t'); 
-        stDiv.innerText = "⏳"; 
-        stDiv.className = "loading-st"; 
-        update(true); 
-        
-        fetch(_URL + "?action=calcular&historial=" + encodeURIComponent(JSON.stringify(_h.slice(0, 15))))
-            .then(r => r.json())
-            .then(data => {
-                _s = (data.status === "success") ? data.sugerencia : "ERR";
-                _isFetching = false; 
-                stDiv.className = ""; 
-                update(); 
-                saveState();
+        let stDiv = document.getElementById('s-t'); stDiv.innerText = "⏳"; stDiv.className = "loading-st"; update(true);
+        try {
+            let res = await fetch(_URL + "?action=calcular&historial=" + encodeURIComponent(JSON.stringify(_h.slice(0, 15))));
+            let data = await res.json(); _s = (data.status === "success") ? data.sugerencia : "ERR";
+        } catch(e) { _s = "RED"; }
+        _isFetching = false; stDiv.className = ""; update(); saveState();
 
-                if(gano_ahora && per_anterior >= 4) { let toast = document.getElementById('toast-evasion'); toast.style.display = 'block'; setTimeout(() => { toast.style.display = 'none'; }, 4000); }
-                if(_ba >= _Meta) document.getElementById('alerta-meta').style.display='flex';
-                if(_per >= 7) { document.getElementById('btn-trampa').style.opacity="1"; document.getElementById('btn-trampa').style.pointerEvents="auto"; if(_per === 7) { let patronAuto = _h.slice(0,7).map(v => v.charAt(0).toUpperCase()).join("-"); navigator.sendBeacon(_URL + "?action=reportar_trampa&usuario=" + encodeURIComponent(_U) + "&serial=" + encodeURIComponent(_L) + "&patron=" + patronAuto + "_AUTO_7_ERRORES"); mostrarAlerta("Has acumulado <b>7 pérdidas seguidas</b>. Reporte enviado automáticamente al Cloud."); } } 
-                else { document.getElementById('btn-trampa').style.opacity="0.3"; document.getElementById('btn-trampa').style.pointerEvents="none"; }
-            })
-            .catch(e => {
-                _s = "RED";
-                _isFetching = false; 
-                stDiv.className = ""; 
-                update();
-            });
+        if(gano_ahora && per_anterior >= 4) { let toast = document.getElementById('toast-evasion'); toast.style.display = 'block'; setTimeout(() => { toast.style.display = 'none'; }, 4000); }
+        if(_ba >= _Meta) document.getElementById('alerta-meta').style.display='flex';
+        if(_per >= 7) { document.getElementById('btn-trampa').style.opacity="1"; document.getElementById('btn-trampa').style.pointerEvents="auto"; if(_per === 7) { let patronAuto = _h.slice(0,7).map(v => v.charAt(0).toUpperCase()).join("-"); navigator.sendBeacon(_URL + "?action=reportar_trampa&usuario=" + encodeURIComponent(_U) + "&serial=" + encodeURIComponent(_L) + "&patron=" + patronAuto + "_AUTO_7_ERRORES"); mostrarAlerta("Has acumulado <b>7 pérdidas seguidas</b>. Reporte enviado automáticamente al Cloud."); } } 
+        else { document.getElementById('btn-trampa').style.opacity="0.3"; document.getElementById('btn-trampa').style.pointerEvents="none"; }
     }
 
     document.getElementById('btn-trampa').onclick = async () => { let patron = _h.slice(0,7).map(v => v.charAt(0).toUpperCase()).join("-"); try { navigator.sendBeacon(_URL + "?action=reportar_trampa&usuario=" + encodeURIComponent(_U) + "&serial=" + encodeURIComponent(_L) + "&patron=" + patron + "_MANUAL"); mostrarAlerta("<b>✅ REPORTE MANUAL ENVIADO AL CLOUD.</b>"); document.getElementById('btn-trampa').style.opacity="0.3"; document.getElementById('btn-trampa').style.pointerEvents="none"; } catch(e) {} };
