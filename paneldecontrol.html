@@ -35,10 +35,9 @@
         th, td { border: 1px solid #333; padding: 8px 5px; text-align: center; vertical-align: middle; }
         th { background: #00e5ff; color: black; font-weight: 900; white-space: nowrap; }
         
-        td.col-licencia { color: #00e5ff; font-weight: bold; font-size: 13px; white-space: nowrap; letter-spacing: 1px; }
-
-        #t-trampas td { white-space: nowrap; }
-        #t-trampas td:nth-child(3) { white-space: normal; min-width: 250px; word-break: break-word; color: #e74c3c; font-weight: bold; text-align: left; padding: 10px; background: rgba(231, 76, 60, 0.05); }
+        .status-activo { color: #2ecc71; font-weight: bold; }
+        .status-inactivo { color: #e74c3c; font-weight: bold; }
+        .conn-box { background: #222; padding: 5px; border-radius: 5px; font-family: monospace; font-size: 11px; text-align: center; }
 
         .btn-accion { padding: 6px 10px; border-radius: 5px; font-weight: bold; cursor: pointer; border: none; width: 100%; margin-bottom: 4px; font-size: 11px;}
         .btn-borrar { background: #e74c3c; color: white; }
@@ -48,17 +47,9 @@
         .btn-editar { background: #f1c40f; color: black; }
         .btn-reset { background: #9b59b6; color: white; }
         
-        .btn-limpiar-trampas { background: #e74c3c; color: white; border: 2px solid #c0392b; padding: 15px; border-radius: 10px; cursor: pointer; font-weight: 900; width: 100%; margin-bottom: 15px; font-size: 16px; text-transform: uppercase; box-shadow: 0 4px 6px rgba(0,0,0,0.3);}
-        .btn-limpiar-trampas:hover { background: #c0392b; }
-        .btn-refresh { background: #333; color: #fff; border: 1px solid #555; padding: 10px 20px; border-radius: 8px; cursor: pointer; width: 100%; font-weight: 900; font-size: 14px; margin-bottom: 10px; }
-        
-        .status-activo { color: #2ecc71; font-weight: bold; }
-        .status-inactivo { color: #e74c3c; font-weight: bold; }
-        .conn-box { background: #222; padding: 5px; border-radius: 5px; font-family: monospace; font-size: 11px; text-align: center; white-space: nowrap;}
-        
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 999999; display: none; justify-content: center; align-items: center; }
         .modal-body { background: #1a1a1a; padding: 30px; border-radius: 20px; border: 2px solid #00e5ff; width: 90%; max-width: 400px; }
-        .modal-body label { color: #888; font-size: 12px; font-weight: bold; display: block; margin-top: 10px; text-align: left;}
+        .modal-body label { color: #888; font-size: 12px; font-weight: bold; display: block; margin-top: 10px; }
         .modal-body input, .modal-body select { width: 100%; background: #000; color: #00e5ff; border: 1px solid #00e5ff; padding: 12px; border-radius: 8px; margin-top: 5px; font-size: 14px; box-sizing: border-box; outline: none;}
     </style>
 </head>
@@ -91,19 +82,6 @@
         <button style="background:#2ecc71; color:#fff; width:100%; padding:15px; border:none; border-radius:8px; font-weight:bold; margin-top:15px; cursor:pointer;" onclick="guardarEdicionUsuario()">GUARDAR CAMBIOS</button>
         <button style="background:#555; color:#fff; width:100%; padding:15px; border:none; border-radius:8px; font-weight:bold; margin-top:10px; cursor:pointer;" onclick="document.getElementById('modal-editar-usuario').style.display='none'">CANCELAR</button>
         <input type="hidden" id="ed-u-fila">
-    </div>
-</div>
-
-<div id="modal-editar-cajero" class="modal-overlay">
-    <div class="modal-body">
-        <h2 style="color:#f1c40f; text-align: center; margin-top:0;">✏️ EDITAR CAJERO</h2>
-        <label>Usuario Login</label> <input type="text" id="ed-c-user">
-        <label>Clave</label> <input type="text" id="ed-c-pass">
-        <label>Nombre Real</label> <input type="text" id="ed-c-nombre">
-        <label>WhatsApp</label> <input type="text" id="ed-c-wsp">
-        <button style="background:#2ecc71; color:#fff; width:100%; padding:15px; border:none; border-radius:8px; font-weight:bold; margin-top:15px; cursor:pointer;" onclick="guardarEdicionCajero()">GUARDAR CAMBIOS</button>
-        <button style="background:#555; color:#fff; width:100%; padding:15px; border:none; border-radius:8px; font-weight:bold; margin-top:10px; cursor:pointer;" onclick="document.getElementById('modal-editar-cajero').style.display='none'">CANCELAR</button>
-        <input type="hidden" id="ed-c-fila">
     </div>
 </div>
 
@@ -152,37 +130,33 @@
         <button class="btn-refresh" onclick="cargarUsuarios()">🔄 ACTUALIZAR DATOS</button>
         <div class="table-responsive">
             <table id="t-usuarios">
-                <thead><tr><th>#</th><th>USUARIO</th><th>CLAVE</th><th>TOKEN</th><th>NOMBRE</th><th>WSP</th><th>PLAN</th><th>ESTADO</th><th>TIEMPO / ESTADO</th><th>NETO J.</th><th>PAGÓ</th><th id="th-vendedor">VENDEDOR</th><th>ANCLAJE</th><th>ACCIONES</th></tr></thead>
+                <thead><tr><th>#</th><th>USUARIO</th><th>CLAVE</th><th>TOKEN</th><th>NOMBRE</th><th>WSP</th><th>PLAN</th><th>ESTADO</th><th>TIEMPO / ESTADO</th><th>UTILIDAD</th><th>PAGÓ</th><th id="th-vendedor">VENDEDOR</th><th>ACCIONES</th></tr></thead>
                 <tbody></tbody>
             </table>
         </div>
     </div>
 
     <div id="tab-cajeros" class="tab-content">
-        <div class="caja-crear">
-            <input type="text" id="c-user" placeholder="Usuario Login">
-            <input type="text" id="c-pass" placeholder="Clave Cajero">
-            <input type="text" id="c-nombre" placeholder="Nombre Completo">
-            <input type="text" id="c-wsp" placeholder="WhatsApp">
-            <button class="btn-crear" style="background:#2ecc71;" onclick="crearCajero()">+ REGISTRAR CAJERO</button>
-        </div>
-        <button class="btn-refresh" onclick="cargarCajeros()">🔄 REFRESCAR LISTA</button>
         <div class="table-responsive">
             <table id="t-cajeros">
-                <thead><tr><th>#</th><th>USUARIO</th><th>CLAVE</th><th>NOMBRE</th><th>WHATSAPP</th><th>ESTADO</th><th>ACCIONES</th></tr></thead>
+                <thead><tr><th>#</th><th>USUARIO</th><th>NOMBRE</th><th>WHATSAPP</th><th>ESTADO</th></tr></thead>
                 <tbody></tbody>
             </table>
         </div>
     </div>
 
     <div id="tab-trampas" class="tab-content">
-        <button class="btn-limpiar-trampas" onclick="limpiarTrampas()"><i class="fas fa-trash-alt"></i> LIMPIAR PATRONES DUPLICADOS</button>
-        <div class="table-responsive"><table id="t-trampas"><thead><tr><th>FECHA</th><th>QUIÉN</th><th>PATRÓN</th></tr></thead><tbody></tbody></table></div>
+        <div class="table-responsive">
+            <table id="t-trampas">
+                <thead><tr><th>FECHA</th><th>QUIÉN</th><th>PATRÓN</th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </div>
     </div>
 </div>
 
 <script>
-    const API = "https://script.google.com/macros/s/AKfycbzUIdq4jKKOi3_fu3kLsO_cP3Z9ckXp7B6sUiP78B7Km7bDVmaecAIdsWGgGcA8nlE8JA/exec"; 
+    const API = "https://script.google.com/macros/s/AKfycbzVAoiVPr4M2x3qZjW2jEL9yn633Rc7FqcXZaSMzIf6uant1VbLPV7ScwSudHslJYOuzw/exec";
     let ROL_ACTUAL = ""; let USUARIO_ACTUAL = "";
     
     async function verificarClave() {
@@ -224,41 +198,39 @@
     async function cargarUsuarios() {
         document.querySelector('.btn-refresh').innerText = "⏳ CARGANDO...";
         try {
-            const r = await fetch(API + `?action=panel_datos&vendedor=${encodeURIComponent(USUARIO_ACTUAL)}`); 
+            const r = await fetch(API + `?action=panel_datos&vendedor=${encodeURIComponent(USUARIO_ACTUAL)}`);
             const d = await r.json();
             const b = document.querySelector("#t-usuarios tbody"); b.innerHTML = "";
             let sG = 0; let sV = 0;
             
             d.datos.forEach((f, i) => {
-                if (i === 0 || !f[0]) return; // EVITA QUE SE DIBUJE LA CABECERA
+                if (i === 0 || !f[0]) return;
                 
                 let realFila = f[17]; 
-                let neto = parseFloat(f[10]) || 0; // COL K = NETO
-                let pago = parseFloat(f[9]) || 0; // COL J = PAGO/UTILIDAD
-                let planActual = (f[13]) ? (f[13].toString().toUpperCase().trim()) : 'BASICO'; // COL N = PLAN
-                
-                if(f[0] !== "DEMO") { sG += neto; sV += pago; }
+                let utilidad = parseFloat(f[9]) || 0; // Columna J
+                let pago = parseFloat(f[10]) || 0;    // Columna K
+                let planActual = f[13] || 'BASICO';
+
+                if(f[0] !== "DEMO") { sG += utilidad; sV += pago; }
                 
                 let bE = f[2]==="Activo" ? `<button class="btn-accion btn-sus" onclick="cambiarEstado(${realFila},'Inactivo')">PAUSAR</button>` : `<button class="btn-accion btn-act" onclick="cambiarEstado(${realFila},'Activo')">ACTIVAR</button>`;
-                let bResetHID = f[6] ? `<button class="btn-accion btn-reset" onclick="resetearHID(${realFila})">DESANCLAR</button>` : '';
-                let colVend = ROL_ACTUAL === "ADMIN" ? `<td style="font-size:10px; color:#888;">${f[15]||'ADMIN'}</td>` : ''; // COL P = VENDEDOR
                 
                 const tr = document.createElement("tr");
                 tr.innerHTML = `<td>${i}</td>
                                 <td style="color:#f1c40f; font-weight:bold;">${f[14]||'--'}</td>
-                                <td class="col-licencia">${f[0]}</td>
-                                <td style="color:#2ecc71; font-weight:bold; font-family:monospace;">${f[4]||'--'}</td> <td>${f[11]||'--'}</td>
+                                <td style="color:#00e5ff;">${f[0]}</td>
+                                <td style="color:#2ecc71; font-family:monospace;">${f[4]||'--'}</td>
+                                <td>${f[11]||'--'}</td>
                                 <td>${f[12]||'--'}</td>
-                                <td><select style="background:#222; color:#fff; border:1px solid #444; padding:4px; font-size:11px; border-radius:4px;" onchange="cambiarPlan(${realFila}, this.value)"><option value="BASICO" ${planActual==='BASICO'?'selected':''}>BÁSICO</option><option value="VIP" ${planActual==='VIP'||planActual==='PRO'?'selected':''}>VIP / PRO</option></select></td>
+                                <td>${planActual}</td>
                                 <td class="${f[2]==='Activo'?'status-activo':'status-inactivo'}">${f[2]}</td>
                                 <td><div class="conn-box">${f[3]}</div></td>
-                                <td style="color:#2ecc71;">$${neto.toFixed(2)}</td>
+                                <td style="color:#2ecc71;">$${utilidad.toFixed(2)}</td>
                                 <td style="color:#3498db;">$${pago.toFixed(2)}</td>
-                                ${colVend}
-                                <td style="color:${f[6]?'#2ecc71':'#888'}; font-size:11px;">${f[6]?'🔒':'Libre'}<br>${bResetHID}</td>
+                                ${ROL_ACTUAL === "ADMIN" ? `<td>${f[15]||'ADMIN'}</td>` : ''}
                                 <td>
                                     ${bE}
-                                    <button class="btn-accion btn-editar" onclick="abrirEditUser(${realFila}, '${f[14]||''}', '${f[0]||''}', '${f[11]||''}', '${f[12]||''}', '${planActual}', '${pago}')">✏️ EDITAR</button>
+                                    <button class="btn-accion btn-editar" onclick="abrirEditUser(${realFila}, '${f[14]}', '${f[0]}', '${f[11]}', '${f[12]}', '${planActual}', '${pago}')">✏️ EDITAR</button>
                                     <button class="btn-accion btn-tiempo" onclick="abrirModal(${realFila})">+ TIEMPO</button>
                                     <button class="btn-accion btn-borrar" onclick="borrar(${realFila})">🗑️ ELIMINAR</button>
                                 </td>`;
@@ -284,93 +256,52 @@
     }
 
     function abrirEditUser(fila, user, serial, nom, wsp, plan, pago) {
-        document.getElementById('ed-u-fila').value = fila; 
-        document.getElementById('ed-u-user').value = user !== 'undefined' ? user : '';
-        document.getElementById('ed-u-serial').value = serial !== 'undefined' ? serial : ''; 
-        document.getElementById('ed-u-nombre').value = nom !== 'undefined' ? nom : '';
-        document.getElementById('ed-u-wsp').value = wsp !== 'undefined' ? wsp : ''; 
-        document.getElementById('ed-u-plan').value = plan || 'BASICO';
-        document.getElementById('ed-u-pago').value = pago; 
-        document.getElementById('modal-editar-usuario').style.display = 'flex';
+        document.getElementById('ed-u-fila').value = fila; document.getElementById('ed-u-user').value = user;
+        document.getElementById('ed-u-serial').value = serial; document.getElementById('ed-u-nombre').value = nom;
+        document.getElementById('ed-u-wsp').value = wsp; document.getElementById('ed-u-plan').value = plan;
+        document.getElementById('ed-u-pago').value = pago; document.getElementById('modal-editar-usuario').style.display = 'flex';
     }
     
     async function guardarEdicionUsuario() {
-        let f = document.getElementById('ed-u-fila').value; 
-        let u = document.getElementById('ed-u-user').value.trim(); 
-        let s = document.getElementById('ed-u-serial').value.trim(); 
-        let n = document.getElementById('ed-u-nombre').value.trim();
-        let w = document.getElementById('ed-u-wsp').value.trim(); 
-        let p = document.getElementById('ed-u-plan').value; 
+        let f = document.getElementById('ed-u-fila').value; let u = document.getElementById('ed-u-user').value.trim(); 
+        let s = document.getElementById('ed-u-serial').value.trim(); let n = document.getElementById('ed-u-nombre').value.trim();
+        let w = document.getElementById('ed-u-wsp').value.trim(); let p = document.getElementById('ed-u-plan').value; 
         let pag = document.getElementById('ed-u-pago').value;
-        
         document.getElementById('modal-editar-usuario').style.display = 'none';
-        await fetch(API + `?action=editar_usuario&fila=${f}&usuario=${encodeURIComponent(u)}&serial=${encodeURIComponent(s)}&nombre=${encodeURIComponent(n)}&wsp=${encodeURIComponent(w)}&plan=${encodeURIComponent(p)}&pago=${encodeURIComponent(pag)}`); 
+        await fetch(API + `?action=editar_usuario&fila=${f}&usuario=${encodeURIComponent(u)}&serial=${encodeURIComponent(s)}&nombre=${encodeURIComponent(n)}&wsp=${encodeURIComponent(w)}&plan=${encodeURIComponent(p)}&pago=${encodeURIComponent(pag)}`);
         cargarUsuarios();
     }
 
     async function cargarCajeros() {
         try {
-            const r = await fetch(API + "?action=panel_cajeros"); const d = await r.json();
+            const r = await fetch(API + "?action=panel_cajeros");
+            const d = await r.json();
             const b = document.querySelector("#t-cajeros tbody"); b.innerHTML = "";
             d.datos.forEach((f, i) => {
                 if (i === 0 || !f[0]) return;
-                let realRow = f[6];
                 const tr = document.createElement("tr");
-                let btnEst = f[4]==="Activo" ? `<button class="btn-accion btn-sus" onclick="estadoCajero(${realRow},'Inactivo')">SUSPENDER</button>` : `<button class="btn-accion btn-act" onclick="estadoCajero(${realRow},'Activo')">ACTIVAR</button>`;
-                tr.innerHTML = `<td>${i+1}</td><td style="color:#00e5ff;">${f[0]}</td><td>${f[1]}</td><td>${f[2]}</td><td>${f[3]}</td><td class="${f[4]==='Activo'?'status-activo':'status-inactivo'}">${f[4]}</td>
-                <td>
-                    ${btnEst}
-                    <button class="btn-accion btn-editar" onclick="abrirEditCajero(${realRow}, '${f[0]}', '${f[1]}', '${f[2]}', '${f[3]}')">✏️ EDITAR</button>
-                    <button class="btn-accion btn-borrar" onclick="borrarCajero(${realRow})">🗑️ ELIMINAR</button>
-                </td>`;
+                tr.innerHTML = `<td>${i}</td><td>${f[0]}</td><td>${f[2]}</td><td>${f[3]}</td><td class="${f[4]==='Activo'?'status-activo':'status-inactivo'}">${f[4]}</td>`;
                 b.appendChild(tr);
             });
         } catch(e) {}
-    }
-
-    async function crearCajero() {
-        const u = document.getElementById('c-user').value.trim(); const p = document.getElementById('c-pass').value.trim();
-        const n = document.getElementById('c-nombre').value.trim(); const w = document.getElementById('c-wsp').value.trim();
-        if(!u || !p) return alert("Usuario y Clave obligatorios");
-        await fetch(API + `?action=crear_cajero&user=${encodeURIComponent(u)}&pass=${encodeURIComponent(p)}&nombre=${encodeURIComponent(n)}&wsp=${encodeURIComponent(w)}`); 
-        cargarCajeros();
-    }
-
-    function abrirEditCajero(fila, u, p, n, w) {
-        document.getElementById('ed-c-fila').value = fila; document.getElementById('ed-c-user').value = u;
-        document.getElementById('ed-c-pass').value = p; document.getElementById('ed-c-nombre').value = n;
-        document.getElementById('ed-c-wsp').value = w; document.getElementById('modal-editar-cajero').style.display = 'flex';
-    }
-    
-    async function guardarEdicionCajero() {
-        let f = document.getElementById('ed-c-fila').value; let u = document.getElementById('ed-c-user').value.trim();
-        let p = document.getElementById('ed-c-pass').value.trim(); let n = document.getElementById('ed-c-nombre').value.trim(); let w = document.getElementById('ed-c-wsp').value.trim();
-        document.getElementById('modal-editar-cajero').style.display = 'none';
-        await fetch(API + `?action=editar_cajero&fila=${f}&user=${encodeURIComponent(u)}&pass=${encodeURIComponent(p)}&nombre=${encodeURIComponent(n)}&wsp=${encodeURIComponent(w)}`); 
-        cargarCajeros();
     }
 
     async function cargarTrampas() {
         try {
-            const r = await fetch(API + "?action=panel_trampas"); const d = await r.json();
+            const r = await fetch(API + "?action=panel_trampas");
+            const d = await r.json();
             const b = document.querySelector("#t-trampas tbody"); b.innerHTML = "";
             d.datos.forEach((f, i) => {
                 if (i === 0 || !f[2]) return; 
                 const tr = document.createElement("tr");
-                let fecha = f[0] ? new Date(f[0]).toLocaleString() : '---';
-                tr.innerHTML = `<td>${fecha}</td> <td>${f[1]}</td> <td>${f[2]}</td>`;
+                tr.innerHTML = `<td>${new Date(f[0]).toLocaleString()}</td><td>${f[1]}</td><td>${f[2]}</td>`;
                 b.appendChild(tr);
             });
         } catch(e) {}
     }
 
-    async function limpiarTrampas() { if(!confirm("¿Limpiar patrones duplicados?")) return; document.querySelector('.btn-limpiar-trampas').innerText = "LIMPIANDO..."; await fetch(API + "?action=limpiar_trampas"); document.querySelector('.btn-limpiar-trampas').innerHTML = "<i class='fas fa-trash-alt'></i> LIMPIAR PATRONES DUPLICADOS"; cargarTrampas(); }
-    async function estadoCajero(f, est) { await fetch(API + `?action=cambiar_estado_cajero&fila=${f}&estado=${est}`); cargarCajeros(); }
-    async function borrarCajero(f) { if(confirm("¿Eliminar cajero?")) { await fetch(API + `?action=borrar_cajero&fila=${f}`); cargarCajeros(); } }
     async function cambiarEstado(f, est) { await fetch(API + `?action=cambiar_estado&fila=${f}&estado=${est}`); cargarUsuarios(); }
-    async function cambiarPlan(f, plan) { await fetch(API + `?action=cambiar_plan&fila=${f}&plan=${encodeURIComponent(plan)}`); }
     async function borrar(f) { if(confirm("¿Borrar Licencia?")) { await fetch(API + `?action=borrar_fila&fila=${f}`); cargarUsuarios(); } }
-    async function resetearHID(f) { if(confirm("¿Desanclar dispositivo?")) { await fetch(API + `?action=resetear_hid&fila=${f}`); cargarUsuarios(); } }
     function abrirModal(f) { document.getElementById('fila-tiempo').value = f; document.getElementById('modal-tiempo').style.display = 'flex'; }
     async function enviarTiempo() { let f = document.getElementById('fila-tiempo').value; let d = document.getElementById('add-dias').value; let h = document.getElementById('add-horas').value; await fetch(API + `?action=agregar_tiempo&fila=${f}&dias=${d}&horas=${h}`); document.getElementById('modal-tiempo').style.display = 'none'; cargarUsuarios(); }
 </script>
