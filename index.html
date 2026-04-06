@@ -291,10 +291,28 @@
         const ch=document.getElementById('c-h'); ch.innerHTML=""; _h.slice(0,18).forEach(v => { const cl=(v==='Rojo')?'red':(v==='Negro'?'#fff':'green'); ch.innerHTML+=`<div class="bola" style="background:${cl}; color:${v==='Negro'?'#000':'#fff'}">${v==='Cero'?'0':''}</div>`; });
     }
 
-    document.getElementById('btn-R').onclick=()=>xfR('Rojo'); document.getElementById('btn-N').onclick=()=>xfR('Negro'); document.getElementById('btn-0').onclick=()=>xfR('Cero');
+  document.getElementById('btn-activar-demo').onclick = async function() {
+        const nom = document.getElementById('reg-nombre').value.trim();
+        const rawWsp = document.getElementById('reg-wsp').value.trim();
+        const codPais = document.getElementById('reg-pais').value;
+        const wsp = codPais + rawWsp.replace(/\D/g, '');
+        
+        if(!nom || !rawWsp) return alert("Completa tus datos.");
+        this.innerText = "PROCESANDO...";
 
-    document.addEventListener('contextmenu', e => e.preventDefault()); document.addEventListener('keydown', e => { if(e.key === "F12" || (e.ctrlKey && e.shiftKey && e.keyCode === 73) || (e.ctrlKey && e.keyCode === 85) || (e.ctrlKey && e.keyCode === 83)) { e.preventDefault(); mostrarAlertaHacker(); } if(e.ctrlKey && (e.key === '+' || e.key === '-' || e.key === '=' || e.keyCode === 107 || e.keyCode === 109)) e.preventDefault(); }); document.addEventListener('wheel', e => { if(e.ctrlKey) e.preventDefault(); }, { passive: false });
-    function mostrarAlertaHacker() { if(document.getElementById("pantalla-terror")) return; var pm = document.createElement("div"); pm.id = "pantalla-terror"; pm.style = "position:fixed;top:0;left:0;width:100vw;height:100vh;background:#a00;color:#fff;z-index:999999;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:20px;font-family:Arial;"; pm.innerHTML = `<h1 style="font-size:32px;text-transform:uppercase;font-weight:bold;">⚠️ ALERTA DE SEGURIDAD</h1><p style="font-size:20px;margin-top:15px;font-weight:bold;">Intento de alteración de código detectado.</p><button onclick="this.parentElement.remove()" style="margin-top:30px;padding:15px 30px;background:#000;color:#fff;border:2px solid #fff;border-radius:10px;cursor:pointer;font-weight:bold;">ENTENDIDO</button>`; document.body.appendChild(pm); }
+        try {
+            // Llama a la orden de WhatsApp que está en el Excel
+            const r = await fetch(_URL + `?action=solicitar_demo&nombre=${encodeURIComponent(nom)}&wsp=${wsp}&hid=${_HID}`);
+            const d = await r.json();
+            if(d.status === "success") {
+                alert("✅ ¡SOLICITUD ENVIADA!\n\nRevisa tu WhatsApp y responde 'SI' para activar tus 15 minutos automáticos.");
+                document.getElementById('modal-demo').style.display='none';
+            } else {
+                alert(d.mensaje || "Error al solicitar demo.");
+            }
+        } catch(e) { alert("Error de conexión."); }
+        this.innerText = "ACTIVAR AHORA";
+    };
     </script>
 </body>
 </html>
