@@ -3,78 +3,73 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SISTEMA CENTRAL - TECNOENTRETE</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>CENTRAL - TECNOENTRETE</title>
     <style>
         body { background: #0b0b0b; color: white; font-family: sans-serif; padding: 20px; }
-        #login-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; display: flex; justify-content: center; align-items: center; z-index: 100; }
-        .login-box { background: #111; padding: 30px; border-radius: 15px; border: 2px solid #00e5ff; text-align: center; }
-        input { background: #222; color: #fff; border: 1px solid #444; padding: 10px; margin: 10px 0; width: 100%; border-radius: 5px; }
+        .login-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; display: flex; justify-content: center; align-items: center; z-index: 100; }
+        .box { background: #1a1a1a; padding: 30px; border-radius: 15px; border: 2px solid #00e5ff; text-align: center; width: 300px; }
+        input, select { background: #222; color: #fff; border: 1px solid #444; padding: 10px; margin: 10px 0; width: 100%; border-radius: 5px; box-sizing: border-box; }
         button { background: #00e5ff; color: #000; border: none; padding: 10px; width: 100%; border-radius: 5px; font-weight: bold; cursor: pointer; }
-        .panel { display: none; max-width: 1200px; margin: auto; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; background: #111; font-size: 13px;}
+        .main { display: none; max-width: 1100px; margin: auto; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 13px; }
         th, td { border: 1px solid #333; padding: 10px; text-align: center; }
         th { background: #00e5ff; color: #000; }
-        .btn-refresh { background: #27ae60; color: #fff; margin-bottom: 20px; padding: 10px; width: auto; display: inline-block; cursor: pointer; border-radius: 5px; }
     </style>
 </head>
 <body>
 
-<div id="login-screen">
-    <div class="login-box">
+<div id="l-s" class="login-screen">
+    <div class="box">
         <h2>SISTEMA MAESTRO</h2>
-        <input type="text" id="user-admin" placeholder="Usuario">
-        <input type="password" id="clave-admin" placeholder="Clave">
-        <button onclick="verificarLogin()">INGRESAR</button>
+        <input type="text" id="u-a" placeholder="Usuario">
+        <input type="password" id="c-a" placeholder="Clave">
+        <button onclick="login()">INGRESAR</button>
     </div>
 </div>
 
-<div class="panel" id="panel-principal">
-    <h1>PANEL DE GESTIÓN TECNOENTRETE</h1>
-    <div class="btn-refresh" onclick="cargarUsuarios()">🔄 ACTUALIZAR DATOS</div>
-    
-    <div style="background:#111; padding:15px; border-radius:10px; margin-bottom:20px;">
-        <h3>Crear Nueva Licencia</h3>
-        <div style="display:flex; gap:10px; flex-wrap:wrap">
-            <input style="flex:1" type="text" id="n-usuario" placeholder="Usuario Login">
-            <input style="flex:1" type="text" id="n-serial" placeholder="Clave/Licencia">
-            <input style="flex:1" type="text" id="n-nombre" placeholder="Nombre Cliente">
-            <input style="flex:1" type="text" id="n-wsp" placeholder="WhatsApp">
-            <select id="n-tiempo" style="background:#222; color:#fff; border:1px solid #444; padding:10px; border-radius:5px">
+<div id="p-m" class="main">
+    <h1>PANEL DE GESTIÓN</h1>
+    <div style="background:#111; padding:20px; border-radius:10px;">
+        <h3>Crear Licencia</h3>
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap:10px;">
+            <input type="text" id="n-u" placeholder="Usuario Login">
+            <input type="text" id="n-s" placeholder="Clave/Serial">
+            <input type="text" id="n-n" placeholder="Nombre Cliente">
+            <input type="text" id="n-w" placeholder="WhatsApp">
+            <select id="n-t">
                 <option value="01d-00h:00m:00s">24 Horas</option>
                 <option value="07d-00h:00m:00s">7 Días</option>
-                <option value="30d-00h:00m:00s">30 Días</option>
             </select>
-            <button style="width:150px" onclick="crearUsuario()">GENERAR</button>
+            <button onclick="crear()">GENERAR</button>
         </div>
     </div>
+
+    <button onclick="cargar()" style="margin-top:20px; background:#27ae60; color:white; width:auto; padding:10px 20px;">🔄 ACTUALIZAR LISTA</button>
 
     <table>
         <thead>
             <tr>
-                <th>#</th><th>USUARIO</th><th>CLAVE</th><th>TOKEN</th><th>NOMBRE</th><th>WSP</th><th>PLAN</th><th>ESTADO</th><th>TIEMPO RESTANTE</th><th>ACCIONES</th>
+                <th>#</th><th>USUARIO</th><th>CLAVE</th><th>TOKEN</th><th>ESTADO</th><th>TIEMPO</th><th>ACCIONES</th>
             </tr>
         </thead>
-        <tbody id="lista-usuarios"></tbody>
+        <tbody id="lista"></tbody>
     </table>
 </div>
 
 <script>
-    const API = "https://script.google.com/macros/s/AKfycbVAoiVPr4M2x3qZjW2jEL9yn633Rc7FqcXZaSMzIf6uant1VbLPV7ScwSudHslJYOuzw/exec";
+    const API = "https://script.google.com/macros/s/AKfycbzVAoiVPr4M2x3qZjW2jEL9yn633Rc7FqcXZaSMzIf6uant1VbLPV7ScwSudHslJYOuzw/exec";
 
-    async function verificarLogin() {
-        const u = document.getElementById('user-admin').value;
-        const p = document.getElementById('clave-admin').value;
-        if(u === "tecnoentrete" && p === "777") {
-            document.getElementById('login-screen').style.display = 'none';
-            document.getElementById('panel-principal').style.display = 'block';
-            cargarUsuarios();
-        } else { alert("Datos incorrectos"); }
+    function login() {
+        if(document.getElementById('u-a').value === "tecnoentrete" && document.getElementById('c-a').value === "777") {
+            document.getElementById('l-s').style.display = 'none';
+            document.getElementById('p-m').style.display = 'block';
+            cargar();
+        } else { alert("Error"); }
     }
 
-    async function cargarUsuarios() {
-        const b = document.getElementById('lista-usuarios');
-        b.innerHTML = "<tr><td colspan='10'>Cargando datos del servidor...</td></tr>";
+    async function cargar() {
+        const b = document.getElementById('lista');
+        b.innerHTML = "<tr><td colspan='7'>Cargando...</td></tr>";
         try {
             const r = await fetch(API + "?action=panel_datos&vendedor=ADMIN");
             const d = await r.json();
@@ -84,38 +79,33 @@
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
                     <td>${i}</td>
-                    <td style="color:#f1c40f">${f[14] || '--'}</td>
+                    <td>${f[14] || '--'}</td>
                     <td style="color:#00e5ff">${f[0]}</td>
-                    <td style="font-size:10px; color:#aaa">${f[4] || '--'}</td>
-                    <td>${f[11] || '--'}</td>
-                    <td>${f[12] || '--'}</td>
-                    <td>${f[13] || 'BASICO'}</td>
+                    <td style="font-size:10px">${f[4] || '--'}</td>
                     <td style="color:${f[2]==='Activo'?'#2ecc71':'#e74c3c'}">${f[2]}</td>
                     <td>${f[3]}</td>
-                    <td>
-                        <button style="background:#e74c3c; color:white; padding:5px; font-size:10px" onclick="borrar(${f[17]})">ELIMINAR</button>
-                    </td>
+                    <td><button style="background:#e74c3c; color:white; font-size:10px; width:auto; padding:5px;" onclick="borrar(${f[17]})">ELIMINAR</button></td>
                 `;
                 b.appendChild(tr);
             });
-        } catch(e) { b.innerHTML = "<tr><td colspan='10'>Error de conexión: "+e+"</td></tr>"; }
+        } catch(e) { b.innerHTML = "Error de conexión"; }
     }
 
-    async function crearUsuario() {
-        const u = document.getElementById('n-usuario').value;
-        const s = document.getElementById('n-serial').value;
-        const n = document.getElementById('n-nombre').value;
-        const w = document.getElementById('n-wsp').value;
-        const t = document.getElementById('n-tiempo').value;
-        if(!s) return alert("Pon la clave");
+    async function crear() {
+        const u = document.getElementById('n-u').value;
+        const s = document.getElementById('n-s').value;
+        const n = document.getElementById('n-n').value;
+        const w = document.getElementById('n-w').value;
+        const t = document.getElementById('n-t').value;
+        if(!s) return alert("Falta serial");
         await fetch(API + `?action=crear_usuario&usuario=${u}&serial=${s}&nombre=${n}&wsp=${w}&tiempo=${t}&vendedor=ADMIN`);
-        cargarUsuarios();
+        cargar();
     }
 
     async function borrar(fila) {
-        if(confirm("¿Eliminar licencia?")) {
+        if(confirm("¿Eliminar?")) {
             await fetch(API + `?action=borrar_fila&fila=${fila}`);
-            cargarUsuarios();
+            cargar();
         }
     }
 </script>
