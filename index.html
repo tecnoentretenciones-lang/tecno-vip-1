@@ -183,8 +183,8 @@
     <script>
     let lastTouchEnd = 0; document.addEventListener('touchend', e => { const now = (new Date()).getTime(); if (now - lastTouchEnd <= 300) e.preventDefault(); lastTouchEnd = now; }, { passive: false });
 
-    // AQUÍ ESTÁ EXACTAMENTE EL LINK QUE ME PEDISTE:
-    const _URL = "https://script.google.com/macros/s/AKfycbx6VnOZlB2knfQ9JVBeRqei2qHnYDIqRcxXOWpx4p8NmlFADZRqfXYmaGERd6LkOB9QOA/exec";
+    // AQUÍ ESTÁ EXACTAMENTE EL LINK QUE ME PASASTE:
+    const _URL = "https://script.google.com/macros/s/AKfycbyWfM9LhU6ZZJXM9i71K30SiwJdI6AiCjfwwxi7XFTaQApfYTXyjSliNI13pJ2KQKRBbg/exec";
     
     let _HID = localStorage.getItem('VIP_HID') || 'VIP-'+Math.random().toString(36).substr(2,10).toUpperCase(); localStorage.setItem('VIP_HID', _HID);
     
@@ -271,7 +271,7 @@
     
     window.aceptarMeta = () => { document.getElementById('alerta-meta').style.display = 'none'; _Meta = _ba * 1.20; };
 
-    // TU MOTOR ORIGINAL, NADA FUE TOCADO
+    // TU MOTOR ORIGINAL
     async function xfR(c) {
         if(_isFetching) return; _isFetching = true;
         let per_anterior = _per; let gano_ahora = false;
