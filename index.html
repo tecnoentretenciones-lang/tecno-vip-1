@@ -134,7 +134,7 @@
             <div style="display:flex; gap:6px;">
                 <button id="btn-undo" style="background:transparent; color:#555; border:1px solid #333; padding:10px; border-radius:10px; font-size:11px; flex:1;">CORREGIR</button>
                 <button id="btn-trampa" style="background:transparent; color:var(--c4); border:1px solid var(--c4); padding:10px; border-radius:10px; font-size:11px; flex:1.5; opacity:0.3; pointer-events:none;">⚠️ TRAMPA</button>
-                <button id="btn-reset" style="background:transparent; color:var(--c1); border:1px solid var(--c1); padding:10px; border-radius:10px; font-size:11px; flex:1;">RESET</button>
+                <button id="btn-reset" onclick="document.getElementById('modal-reset-confirm').style.display='flex'" style="background:transparent; color:var(--c1); border:1px solid var(--c1); padding:10px; border-radius:10px; font-size:11px; flex:1;">RESET</button>
             </div>
         </div>
     </div>
@@ -183,9 +183,8 @@
     <script>
     let lastTouchEnd = 0; document.addEventListener('touchend', e => { const now = (new Date()).getTime(); if (now - lastTouchEnd <= 300) e.preventDefault(); lastTouchEnd = now; }, { passive: false });
 
-    // ENLACE ACTUALIZADO A LA NUEVA URL:
+    // TU ENLACE A GOOGLE APPS SCRIPT EXACTO
     const _URL = "https://script.google.com/macros/s/AKfycbzVAoiVPr4M2x3qZjW2jEL9yn633Rc7FqcXZaSMzIf6uant1VbLPV7ScwSudHslJYOuzw/exec";
-    
     let _HID = localStorage.getItem('VIP_HID') || 'VIP-'+Math.random().toString(36).substr(2,10).toUpperCase(); localStorage.setItem('VIP_HID', _HID);
     
     let _L="", _U="", _S=0, _ba=0, _cI=40, _nP=0, _nG=0, _g=0, _p=0, _h=[], _m=0.2, _s="", _per=0, _Meta=0, _TS=0, _IS=0, _WSP="", _lS=null, _cR=0, _cN=0, _c0=0, _s0=0, _isFetching=false;
@@ -218,55 +217,21 @@
         } catch(e) { alert("Error de Conexión."); this.innerText = "ENTRAR AL SISTEMA"; }
     };
 
-    // BOTÓN DE ACTIVACIÓN DE DEMO CON ENTRADA AUTOMÁTICA
     document.getElementById('btn-activar-demo').onclick = async function() {
-        const nom = document.getElementById('reg-nombre').value.trim(); 
-        const rawWsp = document.getElementById('reg-wsp').value.trim(); 
-        const codPais = document.getElementById('reg-pais').value;
-        if(!nom || !nom.includes(' ')) return alert("Ingresa tu NOMBRE y APELLIDO (separados por espacio)."); 
-        if(!rawWsp) return alert("Falta celular.");
+        const nom = document.getElementById('reg-nombre').value.trim(); const rawWsp = document.getElementById('reg-wsp').value.trim(); const codPais = document.getElementById('reg-pais').value;
+        if(!nom || !nom.includes(' ')) return alert("Ingresa tu NOMBRE y APELLIDO (separados por espacio)."); if(!rawWsp) return alert("Falta celular.");
         const wsp = codPais + rawWsp.replace(/\D/g, '');
-        
         this.innerText = "PROCESANDO...";
         try {
-            const r = await fetch(_URL + "?action=solicitar_demo&nombre=" + encodeURIComponent(nom) + "&wsp=" + wsp + "&hid=" + _HID);
+            const r = await fetch(_URL + "?action=validar_demo&nombre="+encodeURIComponent(nom)+"&wsp="+encodeURIComponent(wsp)+"&hid="+_HID);
             const d = await r.json();
-            
-            if(d.status === "success") {
-                document.getElementById('modal-demo').style.display='none';
-                
-                alert("✅ SOLICITUD ENVIADA.\n\nVe a tu celular y responde 'SI' por WhatsApp.\n¡La pantalla entrará automáticamente apenas contestes!");
-                
-                document.getElementById('u-i').value = "DEMO";
-                document.getElementById('l-i').value = d.serial;
-
-                let btnEntrar = document.getElementById('btn-validar');
-                btnEntrar.innerText = "⏳ ESPERANDO WSP...";
-                btnEntrar.style.background = "#f1c40f";
-                
-                // Hace un ciclo esperando a que contestes SI en wsp
-                let intentos = 0;
-                let check = setInterval(async () => {
-                    intentos++;
-                    try {
-                        let rx = await fetch(_URL + "?action=validar&app=mesa_segura&usuario=DEMO&serial=" + d.serial + "&hid=" + _HID);
-                        let dx = await rx.json();
-                        if(dx.status === "success") {
-                            clearInterval(check);
-                            btnEntrar.click(); // SE APRIETA SOLO Y ENTRA AL JUEGO
-                        } else if (intentos >= 60) {
-                            clearInterval(check);
-                            btnEntrar.innerText = "ENTRAR AL SISTEMA";
-                            btnEntrar.style.background = "#00e5ff";
-                        }
-                    } catch(e){}
-                }, 3000);
-                
-            } else { alert("Error al procesar."); }
-        } catch(e) { alert("Error de conexión."); }
-        this.innerText = "ACTIVAR AHORA";
+            if(d.status === "success") { document.getElementById('modal-demo').style.display='none'; iniciarDemo(d.segundos, wsp); }
+            else { alert(d.mensaje); this.innerText = "ACTIVAR AHORA"; }
+        } catch(e) { alert("Error"); this.innerText = "ACTIVAR AHORA"; }
     };
 
+    function iniciarDemo(segs, wsp) { _L = "DEMO"; _U="DEMO"; _S = segs; _WSP = wsp; _cI = parseFloat(prompt("Capital:", "40.00")) || 40; _ba = _cI; _Meta = _ba * 1.20; _cR=0; _cN=0; _c0=0; _s0=0; iniciarApp(); }
+    
     function iniciarApp() { 
         document.getElementById('p-l').style.display='none'; 
         document.getElementById('app-principal').style.display='flex'; 
