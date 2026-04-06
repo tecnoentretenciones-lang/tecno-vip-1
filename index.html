@@ -183,7 +183,7 @@
     <script>
     let lastTouchEnd = 0; document.addEventListener('touchend', e => { const now = (new Date()).getTime(); if (now - lastTouchEnd <= 300) e.preventDefault(); lastTouchEnd = now; }, { passive: false });
 
-    // TU ENLACE A GOOGLE APPS SCRIPT
+    // TU ENLACE A GOOGLE APPS SCRIPT (ACTUALIZADO)
     const _URL = "https://script.google.com/macros/s/AKfycbzVAoiVPr4M2x3qZjW2jEL9yn633Rc7FqcXZaSMzIf6uant1VbLPV7ScwSudHslJYOuzw/exec";
     let _HID = localStorage.getItem('VIP_HID') || 'VIP-'+Math.random().toString(36).substr(2,10).toUpperCase(); localStorage.setItem('VIP_HID', _HID);
     
@@ -284,7 +284,7 @@
     
     document.getElementById('btn-undo').onclick = () => { if(_lS) { _ba = _lS.ba; _nP = _lS.nP; _nG = _lS.nG; _g = _lS.g; _p = _lS.p; _h = [..._lS.h]; _m = _lS.m; _s = _lS.s; _per = _lS.per; _cR = _lS.cR; _cN = _lS.cN; _c0 = _lS.c0; _s0 = _lS.s0; update(); saveState(); _lS = null; } };
 
-    // AQUI ARREGLAMOS EL BOTÓN RESET PARA QUE MUESTRE LA VENTANITA
+    // ESTA ES LA ÚNICA LÍNEA QUE FALTABA PARA QUE EL BOTÓN RESET HICIERA APARECER LA PANTALLA
     document.getElementById('btn-reset').onclick = () => { document.getElementById('modal-reset-confirm').style.display='flex'; };
 
     function update(isCalc = false) {
