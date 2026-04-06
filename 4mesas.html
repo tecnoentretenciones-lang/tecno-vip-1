@@ -41,6 +41,9 @@
 
         @keyframes pulse-text { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
         .loading-st { animation: pulse-text 1s infinite; color: #888 !important; }
+        
+        @keyframes cazador-pulse { 0% { box-shadow: 0 0 10px var(--c4); border-color: var(--c4); } 50% { box-shadow: 0 0 30px var(--c4); border-color: #fff; } 100% { box-shadow: 0 0 10px var(--c4); border-color: var(--c4); } }
+        .modo-cazador { animation: cazador-pulse 1s infinite linear !important; background: #2a2000 !important; }
 
         @media (min-width: 768px) {
             #tabs-container { display: none !important; }
@@ -52,7 +55,7 @@
             .grid-4 #global-wallet { padding: 8px; margin-bottom: 4px; }
             .grid-4 .gw-val { font-size: 2.2vh; }
             .grid-4 .mesa-wrapper > div:nth-child(2) { padding: 1vh !important; gap: 0.8vh !important; justify-content: center; }
-            .grid-4 .mesa-wrapper > div:nth-child(2) > div:first-child { padding: 1vh !important; }
+            .grid-4 .mesa-wrapper > div:nth-child(2) > div:first-child { padding: 1vh !important; transition: 0.3s; }
             .grid-4 [id^="s-t-"] { font-size: 5vh !important; }
             .grid-4 [id^="m-t-"] { font-size: 2.5vh !important; }
             .grid-4 .b-i { height: 6.5vh !important; font-size: 3vh !important; border-radius: 10px; }
@@ -133,9 +136,23 @@
     let capitalGlobal = 0;
     let mesasInstancias = [];
 
-    // ==========================================
-    // FUNCION DE GUARDADO TOTAL PARA COLUMNA F
-    // ==========================================
+    // --- BASE DE DATOS DE TRAMPAS OFFLINE/ONLINE ---
+    let _DB_TRAMPAS = JSON.parse(localStorage.getItem('TECNO_TRAMPAS')) || [
+        {patron: "R-R-N-N-N", quiebre: "ROJO"}, {patron: "N-N-R-R-R", quiebre: "NEGRO"},
+        {patron: "R-N-R-N-R", quiebre: "ROJO"}, {patron: "N-R-N-R-N", quiebre: "NEGRO"}
+    ];
+
+    async function syncTrampas() {
+        try {
+            let res = await fetch(_URL + "?action=obtener_trampas");
+            let data = await res.json();
+            if(data.status === "success" && data.trampas) {
+                _DB_TRAMPAS = data.trampas;
+                localStorage.setItem('TECNO_TRAMPAS', JSON.stringify(_DB_TRAMPAS));
+            }
+        } catch(e) { console.log("Modo Offline - Trampas Locales"); }
+    }
+
     window.saveState = function() { 
         if(!_L) return;
         let utilTotal = mesasInstancias.reduce((a, b) => a + b._nP, 0);
@@ -161,7 +178,6 @@
             if(d.status === "success") { 
                 _S = d.segundos; 
                 
-                // PREGUNTAR SI QUIERE RESTAURAR LA SESIÓN
                 let savedJSON = d.estado_nube || localStorage.getItem('ts_pro_'+_L);
                 if(savedJSON && savedJSON.includes("{")) {
                     if(confirm("☁️ Tienes una sesión guardada en la Nube.\n\n¿Deseas CONTINUAR la partida anterior?")) {
@@ -170,7 +186,7 @@
                             capitalGlobal = parseFloat(st.cap) || 40;
                             let numMesas = st.mesas ? st.mesas.length : 4;
                             document.getElementById('p-l').style.display='none';
-                            iniciarMesas(numMesas, st.mesas); // Inicia con los datos guardados
+                            iniciarMesas(numMesas, st.mesas); 
                             return;
                         } catch(e) {}
                     }
@@ -182,7 +198,6 @@
         } catch(e) { alert("Error de Conexión."); this.innerText = "ENTRAR AL SISTEMA MULTIMESA"; }
     };
 
-    // EL SISTEMA AHORA ACEPTA DATOS GUARDADOS
     window.iniciarMesas = (cant, savedData = null) => {
         if (!savedData) {
             capitalGlobal = parseFloat(prompt("Capital inicial a repartir entre mesas ($ USD):", "40.00")) || 40;
@@ -204,7 +219,7 @@
             <div class="mesa-wrapper ${i===1?'active':''}" id="mesa-${i}">
                 <div style="text-align:center; margin-bottom:-5px; font-weight:bold; color:#888; font-size:12px;">MESA ${i} - UTILIDAD: <span id="u-s-${i}" style="color:var(--c3);">$0.00</span></div>
                 <div style="background:var(--c8); padding:15px; border-radius:15px; display:flex; flex-direction:column; gap:10px; flex-grow:1; border:1px solid #333;">
-                    <div style="background:#1a1a1a; padding:15px; border-radius:15px; text-align:center; border:1px solid #333;">
+                    <div id="sug-ctn-${i}" style="background:#1a1a1a; padding:15px; border-radius:15px; text-align:center; border:1px solid #333; transition:0.3s;">
                         <div id="s-t-${i}" style="font-size:75px; font-weight:900;">---</div>
                         <div id="m-t-${i}" style="color:var(--c4); font-size:26px;">$0.20</div>
                     </div>
@@ -233,24 +248,15 @@
             
             let motor = new MotorFelipe(i);
             
-            // SI HAY DATOS GUARDADOS, LOS INYECTA EN EL MOTOR
             if (savedData && savedData[i-1]) {
                 let sd = savedData[i-1];
-                motor._nP = sd.nP || 0;
-                motor._h = sd.h || [];
-                motor._m = sd.m || 0.2;
-                motor._s = sd.s || "";
-                motor._per = sd.per || 0;
-                motor._cR = sd.cR || 0;
-                motor._cN = sd.cN || 0;
-                motor._c0 = sd.c0 || 0;
-                motor._s0 = sd.s0 || 0;
+                motor._nP = sd.nP || 0; motor._h = sd.h || []; motor._m = sd.m || 0.2; motor._s = sd.s || ""; motor._per = sd.per || 0; motor._cR = sd.cR || 0; motor._cN = sd.cN || 0; motor._c0 = sd.c0 || 0; motor._s0 = sd.s0 || 0;
             }
             mesasInstancias.push(motor);
         }
         
         actualizarBilletera(); 
-        mesasInstancias.forEach(m => m.update()); // Dibuja el historial recuperado
+        mesasInstancias.forEach(m => m.update()); 
         iniciarReloj();
     };
 
@@ -260,14 +266,6 @@
             document.querySelectorAll('.tab-btn')[i-1].classList.toggle('active', i===idActivo);
         }
     };
-
-    function ejecutarResetGlobal() { 
-        if(confirm("¿Resetear todas las mesas y volver a empezar?")) { 
-            mesasInstancias.forEach(m => m.resetear()); 
-            actualizarBilletera(); 
-            saveState(); // LO GUARDA EN BLANCO
-        } 
-    }
 
     function actualizarBilletera() {
         let utilTotal = mesasInstancias.reduce((a, b) => a + b._nP, 0);
@@ -279,6 +277,7 @@
 
     function iniciarReloj() {
         _TS = Date.now(); _IS = _S;
+        syncTrampas(); // CARGAMOS TRAMPAS DE LA NUBE
         setInterval(() => {
             let e = Math.floor((Date.now()-_TS)/1000); _S = Math.max(0, _IS - e);
             let d=Math.floor(_S/86400), h=Math.floor((_S%86400)/3600), m=Math.floor((_S%3600)/60), s=_S%60;
@@ -286,7 +285,7 @@
             if(_S<=0) location.reload();
         }, 1000);
         
-        setInterval(saveState, 15000); // AHORA EL PING LLAMA A SAVESTATE
+        setInterval(saveState, 15000); 
     }
 
     window.addEventListener("pagehide", () => { 
@@ -298,7 +297,7 @@
 
     class MotorFelipe {
         constructor(id) {
-            this.id = id; this._h = []; this._m = 0.2; this._s = ""; this._per = 0; this._nP = 0; this._cR = 0; this._cN = 0; this._c0 = 0; this._s0 = 0; this._lS = null; this._isFetching = false;
+            this.id = id; this._h = []; this._m = 0.2; this._s = ""; this._per = 0; this._nP = 0; this._cR = 0; this._cN = 0; this._c0 = 0; this._s0 = 0; this._lS = null; this._isFetching = false; this._isCazador = false;
         }
         async xfR(c) {
             if(this._isFetching) return; this._isFetching = true;
@@ -308,14 +307,34 @@
                 if(c.toUpperCase() === this._s){ this._nP += this._m; this._m = 0.2; this._per = 0; } else if(c !== 'Cero'){ this._nP -= this._m; this._m *= 2; this._per++; }
             }
             this._h.unshift(c);
+            
+            // --- CEREBRO CAZADOR: DETECCIÓN DE TRAMPAS ---
+            let trampaDetectada = null;
+            if(this._h.length >= 5) { 
+                let pt = this._h.slice(0, 7).map(v => v.charAt(0).toUpperCase()).join("-");
+                trampaDetectada = _DB_TRAMPAS.find(t => t.patron === pt);
+            }
+
             let stDiv = document.getElementById(`s-t-${this.id}`); stDiv.innerText = "⏳"; stDiv.classList.add("loading-st");
+            document.getElementById(`sug-ctn-${this.id}`).classList.remove('modo-cazador');
             this.update(true); actualizarBilletera();
+            
             try {
-                let limitHist = this._h.slice(0, 15);
-                let res = await fetch(_URL + "?action=calcular&historial=" + encodeURIComponent(JSON.stringify(limitHist)));
-                let data = await res.json(); if(data.status === "success") { this._s = data.sugerencia; } else { this._s = "ERR"; }
-            } catch(e) { this._s = "RED"; }
-            this._isFetching = false; stDiv.classList.remove("loading-st"); this.update(); actualizarBilletera(); saveState(); // AQUI SE GUARDA CADA VEZ QUE APRIETAN UN COLOR
+                if(trampaDetectada) {
+                    // MODO CAZADOR ACTIVADO EN ESTA MESA
+                    this._s = trampaDetectada.quiebre.toUpperCase();
+                    this._m = this._m * 2; // Doblar apuesta
+                    this._isCazador = true;
+                } else {
+                    let limitHist = this._h.slice(0, 15);
+                    let res = await fetch(_URL + "?action=calcular&historial=" + encodeURIComponent(JSON.stringify(limitHist)));
+                    let data = await res.json(); if(data.status === "success") { this._s = data.sugerencia; } else { this._s = "ERR"; }
+                    this._isCazador = false;
+                }
+            } catch(e) { this._s = "RED"; this._isCazador = false; }
+            
+            this._isFetching = false; stDiv.classList.remove("loading-st"); this.update(); actualizarBilletera(); saveState(); 
+            
             if(this._per >= 7) {
                 document.getElementById('btn-trampa-'+this.id).style.opacity="1"; document.getElementById('btn-trampa-'+this.id).style.pointerEvents="auto";
                 if(this._per === 7) {
@@ -325,14 +344,29 @@
             } else { document.getElementById('btn-trampa-'+this.id).style.opacity="0.3"; document.getElementById('btn-trampa-'+this.id).style.pointerEvents="none"; }
         }
 
-        deshacer() { if(this._lS) { this._nP=this._lS.nP; this._h=[...this._lS.h]; this._m=this._lS.m; this._s=this._lS.s; this._per=this._lS.per; this._cR=this._lS.cR; this._cN=this._lS.cN; this._c0=this._lS.c0; this._s0=this._lS.s0; this._lS = null; this.update(); actualizarBilletera(); saveState(); } }
-        resetear() { this._h=[]; this._m=0.2; this._s=""; this._per=0; this._cR=0; this._cN=0; this._c0=0; this._s0=0; this._nP=0; document.getElementById('btn-trampa-'+this.id).style.opacity="0.3"; document.getElementById('btn-trampa-'+this.id).style.pointerEvents="none"; this.update(); actualizarBilletera(); saveState(); }
+        deshacer() { if(this._lS) { this._nP=this._lS.nP; this._h=[...this._lS.h]; this._m=this._lS.m; this._s=this._lS.s; this._per=this._lS.per; this._cR=this._lS.cR; this._cN=this._lS.cN; this._c0=this._lS.c0; this._s0=this._lS.s0; this._isCazador=false; this._lS = null; this.update(); actualizarBilletera(); saveState(); } }
+        resetear() { this._h=[]; this._m=0.2; this._s=""; this._per=0; this._cR=0; this._cN=0; this._c0=0; this._s0=0; this._nP=0; this._isCazador=false; document.getElementById('btn-trampa-'+this.id).style.opacity="0.3"; document.getElementById('btn-trampa-'+this.id).style.pointerEvents="none"; this.update(); actualizarBilletera(); saveState(); }
         reportarTrampa() { let patron = this._h.slice(0,7).map(v => v.charAt(0).toUpperCase()).join("-"); navigator.sendBeacon(_URL + "?action=reportar_trampa&usuario=" + encodeURIComponent(_U) + "&serial=" + encodeURIComponent(_L) + "&patron=" + patron + "_MANUAL_4M"); mostrarAlerta("<b>✅ REPORTE MANUAL ENVIADO.</b><br>Mesa " + this.id); document.getElementById('btn-trampa-'+this.id).style.opacity="0.3"; document.getElementById('btn-trampa-'+this.id).style.pointerEvents="none"; }
         
         update(isCalculating = false) {
             document.getElementById(`u-s-${this.id}`).innerText = "$" + this._nP.toFixed(2);
             document.getElementById(`m-t-${this.id}`).innerText = "$" + this._m.toFixed(2);
-            if(!isCalculating) { document.getElementById(`s-t-${this.id}`).innerText = this._s || "---"; document.getElementById(`s-t-${this.id}`).style.color = (this._s === "ROJO") ? "#e74c3c" : (this._s === "NEGRO" ? "#fff" : "#888"); }
+            
+            if(!isCalculating) { 
+                let stDiv = document.getElementById(`s-t-${this.id}`);
+                let sugCtn = document.getElementById(`sug-ctn-${this.id}`);
+                
+                if(this._isCazador) {
+                    stDiv.innerText = "🔥 " + this._s;
+                    stDiv.style.color = "#f1c40f";
+                    sugCtn.classList.add('modo-cazador');
+                } else {
+                    stDiv.innerText = this._s || "---"; 
+                    stDiv.style.color = (this._s === "ROJO") ? "#e74c3c" : (this._s === "NEGRO" ? "#fff" : "#888"); 
+                    sugCtn.classList.remove('modo-cazador');
+                }
+            }
+            
             document.getElementById(`st-R-${this.id}`).innerText = this._cR; document.getElementById(`st-N-${this.id}`).innerText = this._cN; document.getElementById(`st-0-${this.id}`).innerText = this._c0; document.getElementById(`st-s0-${this.id}`).innerText = this._s0;
             const ch = document.getElementById(`c-h-${this.id}`); ch.innerHTML=""; this._h.slice(0,18).forEach(v => { const cl=(v==='Rojo')?'red':(v==='Negro'?'#fff':'green'); ch.innerHTML+=`<div class="bola" style="background:${cl}; color:${v==='Negro'?'#000':'#fff'}">${v==='Cero'?'0':''}</div>`; });
         }
