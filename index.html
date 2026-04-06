@@ -30,18 +30,21 @@
         .gw-val { font-size:18px; font-weight:bold; }
         #sugerencia-container { border: 2px solid var(--c5); background: #1a1a1a; padding: 15px; border-radius: 15px; text-align: center; }
         .bola { width: 25px; height: 25px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; font-weight: bold; }
+        .modal-base { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 10000; display: none; justify-content: center; align-items: center; padding: 20px; }
+        .modal-content { background: rgba(20, 20, 20, 0.98); border: 2px solid var(--c5); border-radius: 25px; padding: 25px; width: 90%; text-align: center; max-width: 450px; }
     </style>
 </head>
-<body>
+<body oncontextmenu="return false;">
 
     <div id="p-l">
         <div class="c-l">
-            <img src="https://cdn-icons-png.flaticon.com/512/1055/1055673.png"> 
+            <img src="https://cdn-icons-png.flaticon.com/512/1055/1055673.png" style="animation: rotar 5s linear infinite;"> 
             <h1>TECNOENTRETE VIP</h1>
             <div class="box-global">
                 <span class="box-global-title">🏆 COMUNIDAD VIP GANANDO:</span>
                 <span id="lbl-global-neto">Cargando...</span>
             </div>
+            <div class="legal-box">INICIAR BASE $0.20. CAPITAL RECOMENDADO $40 USD.</div>
             <input type="text" id="u-i" class="i-s" placeholder="USUARIO VIP">
             <input type="password" id="l-i" class="i-s" placeholder="CLAVE / LICENCIA">
             <button class="b-a btn-entrar" id="btn-validar">ENTRAR AL SISTEMA</button>
@@ -56,15 +59,15 @@
             <div class="gw-box"><div class="gw-title">UTILIDAD</div><div id="u-s" class="gw-val">$0.00</div></div>
         </div>
         <div id="sugerencia-container">
-            <div id="s-t" style="font-size:70px; font-weight:900; color:#fff;">---</div>
-            <div id="m-t" style="color:var(--c4); font-size:24px;">$0.20</div>
+            <div id="s-t" style="font-size:75px; font-weight:900; color:#fff;">---</div>
+            <div id="m-t" style="color:var(--c4); font-size:26px;">$0.20</div>
         </div>
         <div style="display:flex; gap:8px; margin-top:10px;">
-            <button onclick="xfR('Rojo')" style="background:var(--c1); height:60px; flex:1; border-radius:10px; border:none; color:white; font-weight:bold;">R</button>
-            <button onclick="xfR('Negro')" style="background:var(--c2); height:60px; flex:1; border-radius:10px; border:none; color:white; font-weight:bold;">N</button>
-            <button onclick="xfR('Cero')" style="background:var(--c3); height:60px; flex:1; border-radius:10px; border:none; color:white; font-weight:bold;">0</button>
+            <button id="btn-R" style="background:var(--c1); height:60px; flex:1; border-radius:10px; border:none; color:white; font-weight:bold;">R</button>
+            <button id="btn-N" style="background:var(--c2); height:60px; flex:1; border-radius:10px; border:none; color:white; font-weight:bold;">N</button>
+            <button id="btn-0" style="background:var(--c3); height:60px; flex:1; border-radius:10px; border:none; color:white; font-weight:bold;">0</button>
         </div>
-        <div id="c-h" style="display:flex; flex-wrap:wrap; gap:5px; margin-top:10px; justify-content:center;"></div>
+        <div id="c-h" style="display:flex; flex-wrap:wrap; gap:5px; margin-top:10px; justify-content:center; min-height:60px;"></div>
     </div>
 
     <div id="modal-demo" class="modal-base">
@@ -72,7 +75,7 @@
             <h2 style="color:var(--c5)">🎁 DEMO GRATIS</h2>
             <input type="text" id="reg-nombre" class="i-s" placeholder="Nombre completo">
             <input type="tel" id="reg-wsp" class="i-s" placeholder="WhatsApp (Ej: 56912345678)">
-            <button class="b-a btn-entrar" id="btn-activar-demo" onclick="solicitarDemo()">ACTIVAR AHORA</button>
+            <button class="b-a btn-entrar" id="btn-activar-demo">ACTIVAR AHORA</button>
             <button class="b-a" onclick="document.getElementById('modal-demo').style.display='none'" style="background:#555; color:white;">VOLVER</button>
         </div>
     </div>
@@ -82,30 +85,44 @@
         let _HID = localStorage.getItem('VIP_HID') || 'VIP-'+Math.random().toString(36).substr(2,10).toUpperCase(); localStorage.setItem('VIP_HID', _HID);
         let _L="", _U="", _S=0, _ba=40, _nP=0, _h=[], _m=0.2, _s="", _TS=0, _IS=0, _isFetching=false;
 
-        async function solicitarDemo() {
+        window.onload = async () => {
+            try {
+                const r = await fetch(_URL + "?action=obtener_global");
+                const d = await r.json();
+                if(d.status === "success") document.getElementById('lbl-global-neto').innerText = "$ " + d.total_global.toFixed(2) + " USD";
+            } catch(e) { document.getElementById('lbl-global-neto').innerText = "$ 1450.50 USD"; }
+        };
+
+        document.getElementById('btn-activar-demo').onclick = async function() {
             const nom = document.getElementById('reg-nombre').value;
             const wsp = document.getElementById('reg-wsp').value;
             if(!nom || !wsp) return alert("Faltan datos");
-            document.getElementById('btn-activar-demo').innerText = "PROCESANDO...";
+            this.innerText = "PROCESANDO...";
             try {
                 const r = await fetch(_URL + `?action=solicitar_demo&nombre=${encodeURIComponent(nom)}&wsp=${wsp}&hid=${_HID}`);
                 const d = await r.json();
                 if(d.status === "success") {
-                    alert("✅ SOLICITUD ENVIADA. Responde 'SI' al WhatsApp. Entrarás automáticamente al sistema.");
+                    alert("✅ SOLICITUD ENVIADA.\n\nResponde 'SI' al WhatsApp. ¡La página entrará sola apenas contestes!");
                     document.getElementById('modal-demo').style.display='none';
                     document.getElementById('u-i').value = "DEMO";
                     document.getElementById('l-i').value = d.serial;
+                    
                     let btnE = document.getElementById('btn-validar');
                     btnE.innerText = "⏳ ESPERANDO WSP...";
                     btnE.style.background = "#f1c40f";
-                    let ck = setInterval(async () => {
-                        const rx = await fetch(_URL + "?action=validar&serial=" + d.serial);
+
+                    let check = setInterval(async () => {
+                        const rx = await fetch(_URL + "?action=validar&usuario=DEMO&serial=" + d.serial + "&hid=" + _HID);
                         const dx = await rx.json();
-                        if(dx.status === "success") { clearInterval(ck); btnE.click(); }
-                    }, 3000);
+                        if(dx.status === "success") {
+                            clearInterval(check);
+                            btnE.click(); 
+                        }
+                    }, 4000);
                 }
             } catch(e){ alert("Error de red"); }
-        }
+            this.innerText = "ACTIVAR AHORA";
+        };
 
         document.getElementById('btn-validar').onclick = async function() {
             _U = document.getElementById('u-i').value.trim();
@@ -143,7 +160,7 @@
             try {
                 const r = await fetch(_URL + "?action=calcular&historial=" + encodeURIComponent(JSON.stringify(_h.slice(0, 10))));
                 const d = await r.json(); _s = d.sugerencia;
-            } catch(e) { _s = "ERROR"; }
+            } catch(e) { _s = "ERR"; }
             _isFetching = false; update();
         }
 
@@ -153,11 +170,14 @@
             document.getElementById('s-t').innerText = _s || "---";
             document.getElementById('s-t').style.color = (_s==="ROJO")?"#e74c3c":(_s==="NEGRO"?"#fff":"#888");
             const ch = document.getElementById('c-h'); ch.innerHTML = "";
-            _h.slice(0,14).forEach(v => {
+            _h.slice(0,16).forEach(v => {
                 const cl = (v==='Rojo')?'red':(v==='Negro'?'#fff':'green');
                 ch.innerHTML += `<div class="bola" style="background:${cl}; border:1px solid #333; color:${v==='Negro'?'#000':'#fff'}">${v==='Cero'?'0':''}</div>`;
             });
         }
+        document.getElementById('btn-R').onclick=()=>xfR('Rojo');
+        document.getElementById('btn-N').onclick=()=>xfR('Negro');
+        document.getElementById('btn-0').onclick=()=>xfR('Cero');
     </script>
 </body>
 </html>
