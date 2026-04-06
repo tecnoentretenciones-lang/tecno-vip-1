@@ -187,68 +187,86 @@
     const _URL = "https://script.google.com/macros/s/AKfycbzUIdq4jKKOi3_fu3kLsO_cP3Z9ckXp7B6sUiP78B7Km7bDVmaecAIdsWGgGcA8nlE8JA/exec";
     let _HID = localStorage.getItem('VIP_HID') || 'VIP-'+Math.random().toString(36).substr(2,10).toUpperCase(); localStorage.setItem('VIP_HID', _HID);
     
+    // AQUI AGREGAMOS LA VARIABLE _U (Usuario)
     let _L="", _U="", _S=0, _ba=0, _cI=40, _nP=0, _nG=0, _g=0, _p=0, _h=[], _m=0.2, _s="", _per=0, _Meta=0, _TS=0, _IS=0, _WSP="", _lS=null, _cR=0, _cN=0, _c0=0, _s0=0, _isFetching=false;
 
-    window.onload = async () => { try { const r = await fetch(_URL + \"?action=obtener_global\"); const d = await r.json(); if(d.status === \"success\") { let monto = parseFloat(d.total_global); if(monto <= 0) monto = 1450.50; document.getElementById('lbl-global-neto').innerText = \"$ \" + monto.toFixed(2) + \" USD\"; } } catch(e) { document.getElementById('lbl-global-neto').innerText = \"$ 1450.50 USD\"; } };
+    window.onload = async () => { try { const r = await fetch(_URL + "?action=obtener_global"); const d = await r.json(); if(d.status === "success") { let monto = parseFloat(d.total_global); if(monto <= 0) monto = 1450.50; document.getElementById('lbl-global-neto').innerText = "$ " + monto.toFixed(2) + " USD"; } } catch(e) { document.getElementById('lbl-global-neto').innerText = "$ 1450.50 USD"; } };
 
     function mostrarAlerta(mensaje) { document.getElementById('txt-alerta-trampa').innerHTML = mensaje; document.getElementById('alerta-trampa-custom').style.display = 'flex'; }
-    window.ejecutarReset = () => { _h=[]; _m=0.2; _s=\"\"; _per=0; _cR=0; _cN=0; _c0=0; _s0=0; document.getElementById('btn-trampa').style.opacity=\"0.3\"; document.getElementById('btn-trampa').style.pointerEvents=\"none\"; update(); saveState(); document.getElementById('modal-reset-confirm').style.display='none'; };
+    window.ejecutarReset = () => { _h=[]; _m=0.2; _s=""; _per=0; _cR=0; _cN=0; _c0=0; _s0=0; document.getElementById('btn-trampa').style.opacity="0.3"; document.getElementById('btn-trampa').style.pointerEvents="none"; update(); saveState(); document.getElementById('modal-reset-confirm').style.display='none'; };
 
     document.getElementById('btn-validar').onclick = async function() {
         _U = document.getElementById('u-i').value.trim();
-        _L = document.getElementById('l-i').value.trim().toUpperCase();
-        if(!_U || !_L) return alert(\"Ingrese el Usuario VIP\");
-        this.innerText = \"... CONECTANDO ...\";
+        if(!_U) return alert("Ingrese el Usuario VIP");
+        _L = document.getElementById('l-i').value.trim().toUpperCase(); if(!_L) return;
+        this.innerText = "... CONECTANDO ...";
         try {
-            const r = await fetch(_URL + \"?action=validar&app=mesa_segura&usuario=\" + encodeURIComponent(_U) + \"&serial=\" + encodeURIComponent(_L) + \"&hid=\" + _HID);
+            const r = await fetch(_URL + "?action=validar&app=mesa_segura&usuario=" + encodeURIComponent(_U) + "&serial=" + encodeURIComponent(_L) + "&hid=" + _HID);
             const d = await r.json();
-            if(d.status === \"success\") { 
+            if(d.status === "success") { 
                 _S = d.segundos; _nG = parseFloat(d.neto_global) || 0; 
                 let savedJSON = d.estado_nube || localStorage.getItem('ts_'+_L);
                 let restored = false;
-                if(savedJSON && savedJSON.includes(\"{\")) {
-                    if(confirm(\"☁️ Tienes una sesión guardada en la Nube.\\n\\n¿Deseas CONTINUAR la partida anterior?\")) {
-                        try { let st = JSON.parse(savedJSON); _ba = parseFloat(st.ba) || 40; _nP = parseFloat(st.nP) || 0; _nG = parseFloat(st.nG) || _nG; _h = st.h || []; _m = parseFloat(st.m) || 0.2; _s = st.s || \"\"; _per = parseFloat(st.per) || 0; _cI = parseFloat(st.cI) || _ba; _cR = parseInt(st.cR) || 0; _cN = parseInt(st.cN) || 0; _c0 = parseInt(st.c0) || 0; _s0 = parseInt(st.s0) || 0; _Meta = _cI * 1.20; restored = true; } catch(e) {}
+                if(savedJSON && savedJSON.includes("{")) {
+                    if(confirm("☁️ Tienes una sesión guardada en la Nube.\n\n¿Deseas CONTINUAR la partida anterior?")) {
+                        try { let st = JSON.parse(savedJSON); _ba = parseFloat(st.ba) || 40; _nP = parseFloat(st.nP) || 0; _nG = parseFloat(st.nG) || _nG; _h = st.h || []; _m = parseFloat(st.m) || 0.2; _s = st.s || ""; _per = parseFloat(st.per) || 0; _cI = parseFloat(st.cI) || _ba; _cR = parseInt(st.cR) || 0; _cN = parseInt(st.cN) || 0; _c0 = parseInt(st.c0) || 0; _s0 = parseInt(st.s0) || 0; _Meta = _cI * 1.20; restored = true; } catch(e) {}
                     }
                 }
-                if(!restored) { _cI = parseFloat(prompt(\"Capital disponible en mesa:\", \"40.00\")) || 40; _ba = _cI; _Meta = _ba * 1.20; _cR=0; _cN=0; _c0=0; _s0=0; }
+                if(!restored) { _cI = parseFloat(prompt("Capital disponible en mesa:", "40.00")) || 40; _ba = _cI; _Meta = _ba * 1.20; _cR=0; _cN=0; _c0=0; _s0=0; }
                 iniciarApp(); 
-            } else { alert(d.mensaje); this.innerText = \"ENTRAR AL SISTEMA\"; }
-        } catch(e) { alert(\"Error de Conexión.\"); this.innerText = \"ENTRAR AL SISTEMA\"; }
+            } else { alert(d.mensaje); this.innerText = "ENTRAR AL SISTEMA"; }
+        } catch(e) { alert("Error de Conexión."); this.innerText = "ENTRAR AL SISTEMA"; }
     };
 
-    // BOTÓN ACTIVAR DEMO CON WHATSAPP
+    // --- AQUÍ ESTÁ LA ÚNICA LÍNEA MODIFICADA PARA CONECTAR EL WHATSAPP ---
     document.getElementById('btn-activar-demo').onclick = async function() {
-        const nom = document.getElementById('reg-nombre').value.trim(); 
-        const rawWsp = document.getElementById('reg-wsp').value.trim(); 
+        const nom = document.getElementById('reg-nombre').value.trim();
+        const rawWsp = document.getElementById('reg-wsp').value.trim();
         const codPais = document.getElementById('reg-pais').value;
-        if(!nom || !nom.includes(' ')) return alert(\"Ingresa tu NOMBRE y APELLIDO.\"); 
-        if(!rawWsp) return alert(\"Falta número de celular.\");
+        
+        if(!nom || !nom.includes(' ')) return alert("Ingresa tu NOMBRE y APELLIDO (separados por espacio).");
+        if(!rawWsp) return alert("Falta celular.");
         const wsp = codPais + rawWsp.replace(/\D/g, '');
         
-        this.innerText = \"PROCESANDO...\";
+        this.innerText = "PROCESANDO...";
         try {
-            const r = await fetch(_URL + \"?action=solicitar_demo&nombre=\" + encodeURIComponent(nom) + \"&wsp=\" + wsp + \"&hid=\" + _HID);
+            const r = await fetch(_URL + "?action=solicitar_demo&nombre=" + encodeURIComponent(nom) + "&wsp=" + wsp + "&hid=" + _HID);
             const d = await r.json();
-            if(d.status === \"success\") {
-                alert(\"✅ ¡MENSAJE ENVIADO!\\n\\nRevisa tu WhatsApp y responde 'SI' para activar tus 15 minutos automáticos.\");
+            if(d.status === "success") {
+                alert("✅ ¡MENSAJE ENVIADO!\n\nRevisa tu WhatsApp y responde 'SI' para activar tus 15 minutos automáticos.");
                 document.getElementById('modal-demo').style.display='none';
+            } else {
+                alert(d.mensaje || "Error al procesar solicitud");
             }
-        } catch(e) { alert(\"Error de conexión.\"); }
-        this.innerText = \"ACTIVAR AHORA\";
+        } catch(e) { alert("Error de conexión."); }
+        this.innerText = "ACTIVAR AHORA";
     };
 
+    function iniciarDemo(segs, wsp) { _L = "DEMO"; _U="DEMO"; _S = segs; _WSP = wsp; _cI = parseFloat(prompt("Capital:", "40.00")) || 40; _ba = _cI; _Meta = _ba * 1.20; _cR=0; _cN=0; _c0=0; _s0=0; iniciarApp(); }
+    
     function iniciarApp() { 
         document.getElementById('p-l').style.display='none'; 
         document.getElementById('app-principal').style.display='flex'; 
-        _TS = Date.now(); _IS = _S; TM_TICK(); setInterval(TM_TICK, 1000); setInterval(saveState, 15000); update(); 
+        _TS = Date.now(); 
+        _IS = _S; 
+        TM_TICK(); 
+        setInterval(TM_TICK, 1000); 
+        setInterval(saveState, 15000); 
+        update(); 
     }
     
-    function TM_TICK() { if(_S<=0) return; let e = Math.floor((Date.now()-_TS)/1000); _S = Math.max(0, _IS - e); let d=Math.floor(_S/86400), h=Math.floor((_S%86400)/3600), m=Math.floor((_S%3600)/60), s=_S%60; document.getElementById('tmr').innerText = `${d}d-${h}h:${m}m:${s}s`; if(_S<=0) location.reload(); }
+    function TM_TICK() { 
+        if(_S<=0) return; 
+        let e = Math.floor((Date.now()-_TS)/1000); 
+        _S = Math.max(0, _IS - e); 
+        let d=Math.floor(_S/86400), h=Math.floor((_S%86400)/3600), m=Math.floor((_S%3600)/60), s=_S%60; 
+        document.getElementById('tmr').innerText = `${d}d-${h}h:${m}m:${s}s`; 
+        if(_S<=0) location.reload(); 
+    }
     
-    window.addEventListener(\"pagehide\", () => { if(_L !== \"\") navigator.sendBeacon(_URL + \"?action=salir&usuario=\" + encodeURIComponent(_U) + \"&serial=\" + encodeURIComponent(_L)); });
+    window.addEventListener("pagehide", () => { if(_L !== "") navigator.sendBeacon(_URL + "?action=salir&usuario=" + encodeURIComponent(_U) + "&serial=" + encodeURIComponent(_L) + "&wsp=" + encodeURIComponent(_WSP)); });
     
-    function saveState() { let est = JSON.stringify({ba:_ba, nP:_nP, nG:_nG, cI:_cI, h:_h.slice(0,12), m:_m, s:_s, per:_per, cR:_cR, cN:_cN, c0:_c0, s0:_s0}); localStorage.setItem('ts_'+_L, est); let url = _URL + `?action=guardar&usuario=${encodeURIComponent(_U)}&serial=${encodeURIComponent(_L)}&neto_global=${_nG.toFixed(2)}&neto=${_nP.toFixed(2)}&estado=${encodeURIComponent(est)}`; fetch(url).catch(e=>{}); }
+    function saveState() { let est = JSON.stringify({ba:_ba, nP:_nP, nG:_nG, cI:_cI, h:_h.slice(0,12), m:_m, s:_s, per:_per, cR:_cR, cN:_cN, c0:_c0, s0:_s0}); localStorage.setItem('ts_'+_L, est); let url = _URL + `?action=guardar&usuario=${encodeURIComponent(_U)}&serial=${encodeURIComponent(_L)}&neto_global=${_nG.toFixed(2)}&neto=${_nP.toFixed(2)}&estado=${encodeURIComponent(est)}&wsp=${encodeURIComponent(_WSP)}`; fetch(url).catch(e=>{}); }
     
     window.aceptarMeta = () => { document.getElementById('alerta-meta').style.display = 'none'; _Meta = _ba * 1.20; };
 
@@ -257,37 +275,37 @@
         let per_anterior = _per; let gano_ahora = false;
         _lS = {ba:_ba, nP:_nP, nG:_nG, g:_g, p:_p, h:[..._h], m:_m, s:_s, per:_per, cR:_cR, cN:_cN, c0:_c0, s0:_s0};
         if (c === 'Rojo') { _cR++; _s0++; } else if (c === 'Negro') { _cN++; _s0++; } else if (c === 'Cero') { _c0++; _s0 = 0; }
-        if(_s !== \"\" && _s !== \"⏳\") { if(c.toUpperCase() === _s){ _ba += _m; _nP += _m; _nG += _m; _m = 0.2; _g++; _per = 0; gano_ahora = true; } else if(c !== 'Cero'){ _ba -= _m; _nP -= _m; _nG -= _m; _m *= 2; _p++; _per++; } }
+        if(_s !== "" && _s !== "⏳") { if(c.toUpperCase() === _s){ _ba += _m; _nP += _m; _nG += _m; _m = 0.2; _g++; _per = 0; gano_ahora = true; } else if(c !== 'Cero'){ _ba -= _m; _nP -= _m; _nG -= _m; _m *= 2; _p++; _per++; } }
         _h.unshift(c);
         
-        let stDiv = document.getElementById('s-t'); stDiv.innerText = \"⏳\"; stDiv.className = \"loading-st\"; update(true);
+        let stDiv = document.getElementById('s-t'); stDiv.innerText = "⏳"; stDiv.className = "loading-st"; update(true);
         try {
-            let res = await fetch(_URL + \"?action=calcular&historial=\" + encodeURIComponent(JSON.stringify(_h.slice(0, 15))));
-            let data = await res.json(); _s = (data.status === \"success\") ? data.sugerencia : \"ERR\";
-        } catch(e) { _s = \"RED\"; }
-        _isFetching = false; stDiv.className = \"\"; update(); saveState();
+            let res = await fetch(_URL + "?action=calcular&historial=" + encodeURIComponent(JSON.stringify(_h.slice(0, 15))));
+            let data = await res.json(); _s = (data.status === "success") ? data.sugerencia : "ERR";
+        } catch(e) { _s = "RED"; }
+        _isFetching = false; stDiv.className = ""; update(); saveState();
 
         if(gano_ahora && per_anterior >= 4) { let toast = document.getElementById('toast-evasion'); toast.style.display = 'block'; setTimeout(() => { toast.style.display = 'none'; }, 4000); }
         if(_ba >= _Meta) document.getElementById('alerta-meta').style.display='flex';
-        if(_per >= 7) { document.getElementById('btn-trampa').style.opacity=\"1\"; document.getElementById('btn-trampa').style.pointerEvents=\"auto\"; if(_per === 7) { let patronAuto = _h.slice(0,7).map(v => v.charAt(0).toUpperCase()).join(\"-\"); navigator.sendBeacon(_URL + \"?action=reportar_trampa&usuario=\" + encodeURIComponent(_U) + \"&serial=\" + encodeURIComponent(_L) + \"&patron=\" + patronAuto + \"_AUTO_7_ERRORES\"); mostrarAlerta(\"Has acumulado <b>7 pérdidas seguidas</b>. Reporte enviado automáticamente al Cloud.\"); } } 
-        else { document.getElementById('btn-trampa').style.opacity=\"0.3\"; document.getElementById('btn-trampa').style.pointerEvents=\"none\"; }
+        if(_per >= 7) { document.getElementById('btn-trampa').style.opacity="1"; document.getElementById('btn-trampa').style.pointerEvents="auto"; if(_per === 7) { let patronAuto = _h.slice(0,7).map(v => v.charAt(0).toUpperCase()).join("-"); navigator.sendBeacon(_URL + "?action=reportar_trampa&usuario=" + encodeURIComponent(_U) + "&serial=" + encodeURIComponent(_L) + "&patron=" + patronAuto + "_AUTO_7_ERRORES"); mostrarAlerta("Has acumulado <b>7 pérdidas seguidas</b>. Reporte enviado automáticamente al Cloud."); } } 
+        else { document.getElementById('btn-trampa').style.opacity="0.3"; document.getElementById('btn-trampa').style.pointerEvents="none"; }
     }
 
-    document.getElementById('btn-trampa').onclick = async () => { let patron = _h.slice(0,7).map(v => v.charAt(0).toUpperCase()).join(\"-\"); try { navigator.sendBeacon(_URL + \"?action=reportar_trampa&usuario=\" + encodeURIComponent(_U) + \"&serial=\" + encodeURIComponent(_L) + \"&patron=\" + patron + \"_MANUAL\"); mostrarAlerta(\"<b>✅ REPORTE MANUAL ENVIADO AL CLOUD.</b>\"); document.getElementById('btn-trampa').style.opacity=\"0.3\"; document.getElementById('btn-trampa').style.pointerEvents=\"none\"; } catch(e) {} };
+    document.getElementById('btn-trampa').onclick = async () => { let patron = _h.slice(0,7).map(v => v.charAt(0).toUpperCase()).join("-"); try { navigator.sendBeacon(_URL + "?action=reportar_trampa&usuario=" + encodeURIComponent(_U) + "&serial=" + encodeURIComponent(_L) + "&patron=" + patron + "_MANUAL"); mostrarAlerta("<b>✅ REPORTE MANUAL ENVIADO AL CLOUD.</b>"); document.getElementById('btn-trampa').style.opacity="0.3"; document.getElementById('btn-trampa').style.pointerEvents="none"; } catch(e) {} };
     
     document.getElementById('btn-undo').onclick = () => { if(_lS) { _ba = _lS.ba; _nP = _lS.nP; _nG = _lS.nG; _g = _lS.g; _p = _lS.p; _h = [..._lS.h]; _m = _lS.m; _s = _lS.s; _per = _lS.per; _cR = _lS.cR; _cN = _lS.cN; _c0 = _lS.c0; _s0 = _lS.s0; update(); saveState(); _lS = null; } };
 
     function update(isCalc = false) {
-        document.getElementById('c-i').innerText=\"$\"+_ba.toFixed(2); document.getElementById('u-s').innerText=\"$\"+_nP.toFixed(2); document.getElementById('n-g').innerText=\"$\"+_nG.toFixed(2);
-        if(!isCalc) { document.getElementById('s-t').innerText=_s||\"---\"; document.getElementById('s-t').style.color=(_s===\"ROJO\")?\"#e74c3c\":(_s===\"NEGRO\"?\"#fff\":\"#888\"); }
-        document.getElementById('m-t').innerText=\"$\"+_m.toFixed(2); document.getElementById('st-R').innerText=_cR; document.getElementById('st-N').innerText=_cN; document.getElementById('st-0').innerText=_c0; document.getElementById('st-s0').innerText=_s0;
-        const ch=document.getElementById('c-h'); ch.innerHTML=\"\"; _h.slice(0,18).forEach(v => { const cl=(v==='Rojo')?'red':(v==='Negro'?'#fff':'green'); ch.innerHTML+=`<div class=\"bola\" style=\"background:${cl}; color:${v==='Negro'?'#000':'#fff'}\">${v==='Cero'?'0':''}</div>`; });
+        document.getElementById('c-i').innerText="$"+_ba.toFixed(2); document.getElementById('u-s').innerText="$"+_nP.toFixed(2); document.getElementById('n-g').innerText="$"+_nG.toFixed(2);
+        if(!isCalc) { document.getElementById('s-t').innerText=_s||"---"; document.getElementById('s-t').style.color=(_s==="ROJO")?"#e74c3c":(_s==="NEGRO"?"#fff":"#888"); }
+        document.getElementById('m-t').innerText="$"+_m.toFixed(2); document.getElementById('st-R').innerText=_cR; document.getElementById('st-N').innerText=_cN; document.getElementById('st-0').innerText=_c0; document.getElementById('st-s0').innerText=_s0;
+        const ch=document.getElementById('c-h'); ch.innerHTML=""; _h.slice(0,18).forEach(v => { const cl=(v==='Rojo')?'red':(v==='Negro'?'#fff':'green'); ch.innerHTML+=`<div class="bola" style="background:${cl}; color:${v==='Negro'?'#000':'#fff'}">${v==='Cero'?'0':''}</div>`; });
     }
 
     document.getElementById('btn-R').onclick=()=>xfR('Rojo'); document.getElementById('btn-N').onclick=()=>xfR('Negro'); document.getElementById('btn-0').onclick=()=>xfR('Cero');
 
-    document.addEventListener('contextmenu', e => e.preventDefault()); document.addEventListener('keydown', e => { if(e.key === \"F12\" || (e.ctrlKey && e.shiftKey && e.keyCode === 73) || (e.ctrlKey && e.keyCode === 85) || (e.ctrlKey && e.keyCode === 83)) { e.preventDefault(); mostrarAlertaHacker(); } if(e.ctrlKey && (e.key === '+' || e.key === '-' || e.key === '=' || e.keyCode === 107 || e.keyCode === 109)) e.preventDefault(); }); document.addEventListener('wheel', e => { if(e.ctrlKey) e.preventDefault(); }, { passive: false });
-    function mostrarAlertaHacker() { if(document.getElementById(\"pantalla-terror\")) return; var pm = document.createElement(\"div\"); pm.id = \"pantalla-terror\"; pm.style = \"position:fixed;top:0;left:0;width:100vw;height:100vh;background:#a00;color:#fff;z-index:999999;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:20px;font-family:Arial;\"; pm.innerHTML = `<h1 style=\"font-size:32px;text-transform:uppercase;font-weight:bold;\">⚠️ ALERTA DE SEGURIDAD</h1><p style=\"font-size:20px;margin-top:15px;font-weight:bold;\">Intento de alteración de código detectado.</p><button onclick=\"this.parentElement.remove()\" style=\"margin-top:30px;padding:15px 30px;background:#000;color:#fff;border:2px solid #fff;border-radius:10px;cursor:pointer;font-weight:bold;\">ENTENDIDO</button>`; document.body.appendChild(pm); }
+    document.addEventListener('contextmenu', e => e.preventDefault()); document.addEventListener('keydown', e => { if(e.key === "F12" || (e.ctrlKey && e.shiftKey && e.keyCode === 73) || (e.ctrlKey && e.keyCode === 85) || (e.ctrlKey && e.keyCode === 83)) { e.preventDefault(); mostrarAlertaHacker(); } if(e.ctrlKey && (e.key === '+' || e.key === '-' || e.key === '=' || e.keyCode === 107 || e.keyCode === 109)) e.preventDefault(); }); document.addEventListener('wheel', e => { if(e.ctrlKey) e.preventDefault(); }, { passive: false });
+    function mostrarAlertaHacker() { if(document.getElementById("pantalla-terror")) return; var pm = document.createElement("div"); pm.id = "pantalla-terror"; pm.style = "position:fixed;top:0;left:0;width:100vw;height:100vh;background:#a00;color:#fff;z-index:999999;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:20px;font-family:Arial;"; pm.innerHTML = `<h1 style="font-size:32px;text-transform:uppercase;font-weight:bold;">⚠️ ALERTA DE SEGURIDAD</h1><p style="font-size:20px;margin-top:15px;font-weight:bold;">Intento de alteración de código detectado.</p><button onclick="this.parentElement.remove()" style="margin-top:30px;padding:15px 30px;background:#000;color:#fff;border:2px solid #fff;border-radius:10px;cursor:pointer;font-weight:bold;">ENTENDIDO</button>`; document.body.appendChild(pm); }
     </script>
 </body>
 </html>
