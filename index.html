@@ -6,6 +6,7 @@
     <title>TECNOENTRETE VIP - MESA SEGURA CLOUD</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
+        /* REGRESO A TU ESTILO ORIGINAL */
         :root { --c1: #e74c3c; --c2: #2c3e50; --c3: #27ae60; --c4: #f1c40f; --c5: #00e5ff; --c8: #111; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; touch-action: none !important; user-select: none !important; -webkit-user-drag: none; overscroll-behavior: none; }
         html, body { height: 100%; width: 100%; margin: 0; padding: 0; overflow: hidden !important; background-color: #000; position: fixed; font-family: 'Segoe UI', sans-serif; }
@@ -19,14 +20,13 @@
         .legal-box { background: rgba(231, 76, 60, 0.1); border: 1px solid #e74c3c; padding: 15px; border-radius: 10px; margin-bottom: 15px; font-size: 11px; color: #e74c3c; text-align: left; line-height: 1.5; font-weight: 600;}
         .i-s { width: 100%; background: #000; border: 1px solid #444; color: #f1c40f; padding: 15px; border-radius: 10px; font-size: 18px; text-align: center; margin-bottom: 15px; outline: none; font-weight: bold; }
         .b-a { border: none; padding: 18px; border-radius: 10px; font-weight: 900; width: 100%; cursor: pointer; text-transform: uppercase; font-size: 14px; margin-bottom: 10px; transition: transform 0.1s;}
-        .b-a:active { transform: scale(0.97); }
         .btn-entrar { background: #00e5ff; color: #000; }
         .btn-demo { background: #0b2228; color: #00e5ff; border: 2px solid #00e5ff; }
+        
         #app-principal { display: none; flex-direction: column; width: 100%; height: 100dvh; max-width: 500px; padding: calc(env(safe-area-inset-top) + 10px) 10px 10px 10px; margin: auto; }
         .tmr-big { background:#000; border:2px solid var(--c5); border-radius: 12px; padding:10px; text-align:center; font-size: 26px; color: var(--c5); font-weight: 900; margin-bottom: 5px;}
         #global-wallet { background:#000; border:1px solid #333; border-radius:15px; padding:12px; display:flex; justify-content:space-around; margin-bottom: 5px; }
         .gw-box { text-align:center; }
-        .gw-title { font-size:11px; color:#888; }
         .gw-val { font-size:18px; font-weight:bold; }
         .bola { width: 22px; height: 22px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 9px; font-weight: bold; }
         .modal-base { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 10000; display: none; justify-content: center; align-items: center; padding: 20px; }
@@ -45,22 +45,30 @@
                 <span id="lbl-global-neto">Cargando...</span>
             </div>
 
+            <div class="legal-box">
+                REGLAS DE ORO Y PATRÓN DE ROBO:<br>
+                - Iniciar siempre con monto base $0.20.<br>
+                - Capital recomendado en mesa: $40 USD.
+            </div>
+            
             <input type="text" id="u-i" class="i-s" placeholder="USUARIO VIP" autocomplete="off">
             <input type="password" id="l-i" class="i-s" placeholder="CLAVE / LICENCIA" autocomplete="off">
             
             <button class="b-a btn-entrar" id="btn-validar">ENTRAR AL SISTEMA</button>
-            <button class="b-a btn-demo" onclick="document.getElementById('modal-demo').style.display='flex'">PROBAR DEMO 15 MIN</button>
+            <button class="b-a btn-demo" onclick="document.getElementById('modal-demo').style.display='flex'">PROBAR DEMO GRATIS</button>
         </div>
     </div>
 
     <div id="app-principal">
         <div id="tmr" class="tmr-big">00d-00h:00m:00s</div>
+        
         <div id="global-wallet">
-            <div class="gw-box"><div class="gw-title">UTILIDAD</div><div id="u-s" class="gw-val" style="color:var(--c3);">$0.00</div></div>
-            <div class="gw-box"><div class="gw-title">GLOBAL</div><div id="n-g" class="gw-val" style="color:var(--c5);">$0.00</div></div>
+            <div class="gw-box"><div style="font-size:11px; color:#888;">CAPITAL</div><div id="c-i" class="gw-val" style="color:#fff;">$0.00</div></div>
+            <div class="gw-box"><div style="font-size:11px; color:#888;">UTILIDAD</div><div id="u-s" class="gw-val" style="color:var(--c3);">$0.00</div></div>
+            <div class="gw-box"><div style="font-size:11px; color:#888;">GLOBAL</div><div id="n-g" class="gw-val" style="color:var(--c5);">$0.00</div></div>
         </div>
 
-        <div style="background:var(--c8); padding:15px; border-radius:15px; display:flex; flex-direction:column; gap:10px; border:1px solid #333; flex-grow:1;">
+        <div style="background:var(--c8); padding:15px; border-radius:15px; display:flex; flex-direction:column; gap:10px; flex-grow:1; border:1px solid #333;">
             <div id="sugerencia-container" style="border: 2px solid var(--c5); background: #1a1a1a; padding: 15px; border-radius: 15px; text-align: center;">
                 <div id="s-t" style="font-size:75px; font-weight:900;">---</div>
                 <div id="m-t" style="color:var(--c4); font-size:26px;">$0.20</div>
@@ -76,75 +84,61 @@
 
     <div id="modal-demo" class="modal-base">
         <div class="modal-content">
-            <h2 style="color:var(--c5);">🎁 SOLICITAR DEMO</h2>
-            <p style="color:#aaa; font-size:13px;">Recibirás un mensaje en tu WhatsApp para confirmar la activación.</p>
+            <h2 style="color:var(--c5);">🎁 ACTIVAR DEMO</h2>
             <input type="text" id="reg-nombre" class="i-s" placeholder="NOMBRE Y APELLIDO">
             <div style="display: flex; gap: 8px;">
-                <select id="reg-pais" class="i-s" style="width: 40%;">
-                    <option value="569">🇨🇱 +569</option>
-                </select>
+                <select id="reg-pais" class="i-s" style="width: 40%;"><option value="569">🇨🇱 +569</option></select>
                 <input type="tel" id="reg-wsp" class="i-s" placeholder="Celular" style="width: 60%;">
             </div>
             <button class="b-a btn-entrar" id="btn-activar-demo">ACTIVAR POR WHATSAPP</button>
-            <button onclick="document.getElementById('modal-demo').style.display='none'" style="color:#888; background:none; border:none; text-decoration:underline;">Cerrar</button>
+            <button onclick="document.getElementById('modal-demo').style.display='none'" style="color:#888; background:none; border:none; text-decoration:underline;">Volver</button>
         </div>
     </div>
 
     <script>
-    // URL DE TU GOOGLE APPS SCRIPT (EL MISMO QUE SIEMPRE USAS)
     const _URL = "https://script.google.com/macros/s/AKfycbzUIdq4jKKOi3_fu3kLsO_cP3Z9ckXp7B6sUiP78B7Km7bDVmaecAIdsWGgGcA8nlE8JA/exec";
     let _HID = localStorage.getItem('VIP_HID') || 'VIP-'+Math.random().toString(36).substr(2,10).toUpperCase(); localStorage.setItem('VIP_HID', _HID);
     
-    let _L="", _U="", _S=0, _ba=0, _nP=0, _nG=0, _h=[], _m=0.2, _s="", _per=0, _TS=0, _IS=0, _isFetching=false;
+    let _L="", _U="", _S=0, _nP=0, _nG=0, _h=[], _m=0.2, _s="", _per=0, _TS=0, _IS=0, _isFetching=false;
 
-    // CARGAR MONTO GLOBAL AL INICIO
-    window.onload = async () => { 
-        try { 
-            const r = await fetch(_URL + "?action=obtener_global"); 
-            const d = await r.json(); 
-            document.getElementById('lbl-global-neto').innerText = "$ " + (d.total_global || 1450.50).toFixed(2) + " USD"; 
-        } catch(e) { document.getElementById('lbl-global-neto').innerText = "$ 1450.50 USD"; }
-    };
-
-    // BOTON VALIDAR (ENTRAR)
+    // BOTON VALIDAR (ENTRADA PRINCIPAL)
     document.getElementById('btn-validar').onclick = async function() {
         _U = document.getElementById('u-i').value.trim();
         _L = document.getElementById('l-i').value.trim().toUpperCase();
-        if(!_U || !_L) return alert("Completa los datos");
+        if(!_U || !_L) return alert("Ingrese sus credenciales.");
 
-        this.innerText = "... CONECTANDO ...";
+        this.innerText = "... VALIDANDO ...";
         try {
-            const r = await fetch(_URL + `?action=validar&usuario=${_U}&serial=${_L}&hid=${_HID}`);
+            const r = await fetch(_URL + `?action=validar&usuario=${encodeURIComponent(_U)}&serial=${encodeURIComponent(_L)}&hid=${_HID}`);
             const d = await r.json();
             if(d.status === "success") { 
-                _S = d.segundos; 
-                _nG = parseFloat(d.neto_global) || 0; 
+                _S = d.segundos; _nG = parseFloat(d.neto_global) || 0; 
                 iniciarApp(); 
             } else { 
-                alert(d.mensaje || "Error: Su demo aún no está activa o expiró."); 
+                alert(d.mensaje || "Licencia no activa. Responde 'SI' al WhatsApp para activar."); 
                 this.innerText = "ENTRAR AL SISTEMA"; 
             }
         } catch(e) { alert("Error de Conexión."); this.innerText = "ENTRAR AL SISTEMA"; }
     };
 
-    // BOTON SOLICITAR DEMO (AUTOMATIZADO CON GREEN API)
+    // BOTON DEMO (ENVÍO DE WHATSAPP)
     document.getElementById('btn-activar-demo').onclick = async function() {
         const nom = document.getElementById('reg-nombre').value.trim();
         const rawWsp = document.getElementById('reg-wsp').value.trim();
         const codPais = document.getElementById('reg-pais').value;
         const wsp = codPais + rawWsp.replace(/\D/g, '');
         
-        if(!nom || !rawWsp) return alert("Completa los datos");
-        this.innerText = "ENVIANDO WHATSAPP...";
+        if(!nom || !rawWsp) return alert("Completa tus datos.");
+        this.innerText = "PROCESANDO...";
 
         try {
             const r = await fetch(_URL + `?action=solicitar_demo&nombre=${encodeURIComponent(nom)}&wsp=${wsp}&hid=${_HID}`);
             const d = await r.json();
             if(d.status === "success") {
-                alert("✅ MENSAJE ENVIADO.\n\nRevisa tu WhatsApp ahora mismo. Responde con la palabra 'SI' para activar tus 15 minutos de prueba inmediatamente.");
+                alert("✅ SOLICITUD ENVIADA.\n\nRevisa tu WhatsApp y responde 'SI' para activar tus 15 minutos automáticos.");
                 document.getElementById('modal-demo').style.display='none';
             }
-        } catch(e) { alert("Error al conectar."); }
+        } catch(e) { alert("Error de red."); }
         this.innerText = "ACTIVAR POR WHATSAPP";
     };
 
@@ -165,24 +159,20 @@
         if(_S<=0) location.reload(); 
     }
 
-    // MOTOR DE JUEGO (ENVIA AL EXCEL PARA EL CALCULO PROTEGIDO)
+    // REGRESO AL MOTOR DE CÁLCULO ORIGINAL PROTEGIDO
     async function xfR(c) {
         if(_isFetching) return; _isFetching = true;
         _h.unshift(c);
-        
-        // Lógica de banca local
         if(_s !== "") {
-            if(c.toUpperCase() === _s){ _nP += _m; _nG += _m; _m = 0.2; _per = 0; } 
-            else if(c !== 'Cero'){ _nP -= _m; _nG -= _m; _m *= 2; _per++; }
+            if(c.toUpperCase() === _s){ _nP += _m; _nG += _m; _m = 0.2; } 
+            else if(c !== 'Cero'){ _nP -= _m; _nG -= _m; _m *= 2; }
         }
-
         document.getElementById('s-t').innerText = "⏳";
         try {
             const res = await fetch(_URL + "?action=calcular&historial=" + JSON.stringify(_h.slice(0, 10)));
             const data = await res.json();
             _s = data.sugerencia;
-        } catch(e) { _s = "ERROR"; }
-        
+        } catch(e) { _s = "REINTENTE"; }
         _isFetching = false;
         update();
     }
@@ -194,7 +184,7 @@
         document.getElementById('s-t').style.color=(_s==="ROJO")?"#e74c3c":"#fff";
         document.getElementById('m-t').innerText="$"+_m.toFixed(2);
         const ch=document.getElementById('c-h'); ch.innerHTML="";
-        _h.slice(0,15).forEach(v => {
+        _h.slice(0,18).forEach(v => {
             const cl=(v==='Rojo')?'#e74c3c':(v==='Negro'?'#fff':'#27ae60');
             ch.innerHTML+=`<div class="bola" style="background:${cl}; color:${v==='Negro'?'#000':'#fff'}"></div>`;
         });
