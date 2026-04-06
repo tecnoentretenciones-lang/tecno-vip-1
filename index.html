@@ -218,28 +218,17 @@
         } catch(e) { alert("Error de Conexión."); this.innerText = "ENTRAR AL SISTEMA"; }
     };
 
-    // --- AQUÍ ESTÁ LA ÚNICA LÍNEA MODIFICADA PARA CONECTAR EL WHATSAPP ---
     document.getElementById('btn-activar-demo').onclick = async function() {
-        const nom = document.getElementById('reg-nombre').value.trim();
-        const rawWsp = document.getElementById('reg-wsp').value.trim();
-        const codPais = document.getElementById('reg-pais').value;
-        
-        if(!nom || !nom.includes(' ')) return alert("Ingresa tu NOMBRE y APELLIDO (separados por espacio).");
-        if(!rawWsp) return alert("Falta celular.");
+        const nom = document.getElementById('reg-nombre').value.trim(); const rawWsp = document.getElementById('reg-wsp').value.trim(); const codPais = document.getElementById('reg-pais').value;
+        if(!nom || !nom.includes(' ')) return alert("Ingresa tu NOMBRE y APELLIDO (separados por espacio)."); if(!rawWsp) return alert("Falta celular.");
         const wsp = codPais + rawWsp.replace(/\D/g, '');
-        
-        this.innerText = "PROCESANDO...";
+        this.innerText = "...";
         try {
-            const r = await fetch(_URL + "?action=solicitar_demo&nombre=" + encodeURIComponent(nom) + "&wsp=" + wsp + "&hid=" + _HID);
+            const r = await fetch(_URL + "?action=validar_demo&nombre="+encodeURIComponent(nom)+"&wsp="+encodeURIComponent(wsp)+"&hid="+_HID);
             const d = await r.json();
-            if(d.status === "success") {
-                alert("✅ ¡MENSAJE ENVIADO!\n\nRevisa tu WhatsApp y responde 'SI' para activar tus 15 minutos automáticos.");
-                document.getElementById('modal-demo').style.display='none';
-            } else {
-                alert(d.mensaje || "Error al procesar solicitud");
-            }
-        } catch(e) { alert("Error de conexión."); }
-        this.innerText = "ACTIVAR AHORA";
+            if(d.status === "success") { document.getElementById('modal-demo').style.display='none'; iniciarDemo(d.segundos, wsp); }
+            else { alert(d.mensaje); this.innerText = "ACTIVAR AHORA"; }
+        } catch(e) { alert("Error"); this.innerText = "ACTIVAR AHORA"; }
     };
 
     function iniciarDemo(segs, wsp) { _L = "DEMO"; _U="DEMO"; _S = segs; _WSP = wsp; _cI = parseFloat(prompt("Capital:", "40.00")) || 40; _ba = _cI; _Meta = _ba * 1.20; _cR=0; _cN=0; _c0=0; _s0=0; iniciarApp(); }
