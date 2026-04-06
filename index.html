@@ -78,7 +78,7 @@
 
     <div id="p-l">
         <div class="c-l">
-            <img src="https://cdn-icons-png.flaticon.com/512/1055/1055673.png" style="width:80px; margin-bottom:10px; animation: rotar 5s linear infinite; border-radius: 50%; border: 2px solid #fff;"> 
+            <img src="https://cdn-icons-png.flaticon.com/512/1055/1055673.png"> 
             <h1>TECNOENTRETE VIP</h1>
             
             <div class="box-global">
@@ -183,11 +183,9 @@
     <script>
     let lastTouchEnd = 0; document.addEventListener('touchend', e => { const now = (new Date()).getTime(); if (now - lastTouchEnd <= 300) e.preventDefault(); lastTouchEnd = now; }, { passive: false });
 
-    // TU ENLACE A GOOGLE APPS SCRIPT
     const _URL = "https://script.google.com/macros/s/AKfycbzUIdq4jKKOi3_fu3kLsO_cP3Z9ckXp7B6sUiP78B7Km7bDVmaecAIdsWGgGcA8nlE8JA/exec";
     let _HID = localStorage.getItem('VIP_HID') || 'VIP-'+Math.random().toString(36).substr(2,10).toUpperCase(); localStorage.setItem('VIP_HID', _HID);
     
-    // AQUI AGREGAMOS LA VARIABLE _U (Usuario)
     let _L="", _U="", _S=0, _ba=0, _cI=40, _nP=0, _nG=0, _g=0, _p=0, _h=[], _m=0.2, _s="", _per=0, _Meta=0, _TS=0, _IS=0, _WSP="", _lS=null, _cR=0, _cN=0, _c0=0, _s0=0, _isFetching=false;
 
     window.onload = async () => { try { const r = await fetch(_URL + "?action=obtener_global"); const d = await r.json(); if(d.status === "success") { let monto = parseFloat(d.total_global); if(monto <= 0) monto = 1450.50; document.getElementById('lbl-global-neto').innerText = "$ " + monto.toFixed(2) + " USD"; } } catch(e) { document.getElementById('lbl-global-neto').innerText = "$ 1450.50 USD"; } };
@@ -220,7 +218,7 @@
 
     document.getElementById('btn-activar-demo').onclick = async function() {
         const nom = document.getElementById('reg-nombre').value.trim(); const rawWsp = document.getElementById('reg-wsp').value.trim(); const codPais = document.getElementById('reg-pais').value;
-        if(!nom || !nom.includes(' ')) return alert("Ingresa tu NOMBRE y APELLIDO (separados por espacio)."); if(!rawWsp) return alert("Falta celular.");
+        if(!nom || !nom.includes(' ')) return alert("Ingresa tu NOMBRE y APELLIDO (con espacio)."); if(!rawWsp) return alert("Falta celular.");
         const wsp = codPais + rawWsp.replace(/\D/g, '');
         this.innerText = "...";
         try {
@@ -228,12 +226,12 @@
             const d = await r.json();
             if(d.status === "success") { 
                 document.getElementById('modal-demo').style.display='none'; 
-                let msg = "Hola TECNOENTRETE, soy " + nom + ". Acabo de activar mi DEMO. Mi ID de equipo es: " + _HID; 
-                window.open("https://wa.me/56995931641?text=" + encodeURIComponent(msg), "_blank"); 
                 iniciarDemo(d.segundos, wsp); 
+                let mensaje = `Hola TECNOENTRETE, soy ${nom}. Acabo de activar mi DEMO. Mi ID es: ${_HID}`;
+                window.open(`https://wa.me/56995931641?text=${encodeURIComponent(mensaje)}`, '_blank');
             }
             else { alert(d.mensaje); this.innerText = "ACTIVAR AHORA"; }
-        } catch(e) { alert("Error"); this.innerText = "ACTIVAR AHORA"; }
+        } catch(e) { alert("Error de conexión."); this.innerText = "ACTIVAR AHORA"; }
     };
 
     function iniciarDemo(segs, wsp) { _L = "DEMO"; _U="DEMO"; _S = segs; _WSP = wsp; _cI = parseFloat(prompt("Capital:", "40.00")) || 40; _ba = _cI; _Meta = _ba * 1.20; _cR=0; _cN=0; _c0=0; _s0=0; iniciarApp(); }
