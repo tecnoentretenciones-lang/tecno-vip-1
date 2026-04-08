@@ -32,11 +32,11 @@
         .gw-val { font-size:18px; font-weight:bold; }
         .bola { width: 22px; height: 22px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 9px; font-weight: bold; }
         
-        /* ESTADÍSTICAS MÁS GRANDES Y PRO */
-        #stats-bar { background:#0a0a0a; border:2px solid #333; border-radius:12px; padding:15px 20px; display:flex; justify-content:space-between; font-size:15px; font-weight:900; color:#ccc; margin-top:5px; margin-bottom: 5px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
+        /* ESTADÍSTICAS MÁS GRANDES Y PRO (Manteniendo tu estilo) */
+        #stats-bar { background:#0a0a0a; border:1px solid #333; border-radius:10px; padding:10px 15px; display:flex; justify-content:space-between; font-size:14px; font-weight:900; color:#ccc; margin-top:-2px; margin-bottom:5px;}
         
-        /* BOTONES INFERIORES MÁS GRANDES Y PRO */
-        .btn-bottom { background:transparent; border:2px solid #333; padding:16px 10px; border-radius:12px; font-size:14px; font-weight:900; flex:1; cursor:pointer; text-transform: uppercase; transition: transform 0.1s; }
+        /* BOTONES INFERIORES PRO */
+        .btn-bottom { background:transparent; border:1px solid #333; padding:14px 10px; border-radius:10px; font-size:12px; font-weight:900; flex:1; cursor:pointer; text-transform: uppercase; transition: transform 0.1s; }
         .btn-bottom:active { transform: scale(0.95); }
         #btn-undo { color:#ccc; }
         #btn-trampa { color:var(--c4); border-color:var(--c4); }
@@ -63,7 +63,7 @@
             .bola { width: 45px !important; height: 45px !important; font-size: 18px !important; border-width: 2px; }
             #c-h { height: 120px !important; gap: 12px !important; padding: 15px !important; border-radius: 20px !important; }
             #stats-bar { font-size: 18px !important; padding: 20px !important; border-radius: 15px !important;}
-            .btn-bottom { font-size: 18px !important; padding: 20px !important; border-radius: 15px !important; }
+            .btn-bottom { font-size: 16px !important; padding: 20px !important; border-radius: 15px !important; }
         }
     </style>
 </head>
@@ -113,7 +113,7 @@
 
             <div class="legal-box">
                 REGLAS DE ORO Y PATRÓN DE ROBO:<br>
-                - Iniciar siempre con monto base correspondiente.<br>
+                - Selecciona tu moneda ANTES de entrar.<br>
                 - Capital recomendado en mesa: x200 de la base.<br>
                 - Si la racha contraria llega a 7 veces seguidas, use el botón ⚠️ TRAMPA para reportar el patrón.
             </div>
@@ -219,36 +219,24 @@
     
     let _L="", _U="", _S=0, _ba=0, _cI=40, _nP=0, _nG=0, _g=0, _p=0, _h=[], _m=0.2, _s="", _per=0, _Meta=0, _TS=0, _IS=0, _WSP="", _lS=null, _cR=0, _cN=0, _c0=0, _s0=0, _isFetching=false;
     
-    // SISTEMA MONEDA USD / CLP CON CONVERSIÓN EN TIEMPO REAL
+    // SISTEMA MONEDA FIJA: Solo cambia color en el menú. No hace conversiones locas.
     let _MONEDA = "USD";
     function setMoneda(mon) {
-        if (_MONEDA === mon) return;
         _MONEDA = mon;
         document.getElementById('btn-usd').style.background = mon === 'USD' ? 'var(--c5)' : '#222';
         document.getElementById('btn-usd').style.color = mon === 'USD' ? '#000' : '#fff';
         document.getElementById('btn-clp').style.background = mon === 'CLP' ? 'var(--c5)' : '#222';
         document.getElementById('btn-clp').style.color = mon === 'CLP' ? '#000' : '#fff';
-        
-        if(_h.length > 0 || _ba > 0) {
-            if (mon === 'CLP') {
-                _ba *= 1000; _nP *= 1000; _nG *= 1000; _m *= 1000; _cI *= 1000; _Meta *= 1000;
-            } else {
-                _ba /= 1000; _nP /= 1000; _nG /= 1000; _m /= 1000; _cI /= 1000; _Meta /= 1000;
-            }
-        } else {
-            _m = (mon === 'USD') ? 0.20 : 200;
-        }
-        update(false);
     }
 
     window.onload = async () => { try { const r = await fetch(_URL + "?action=obtener_global"); const d = await r.json(); if(d.status === "success") { let monto = parseFloat(d.total_global); if(monto <= 0) monto = 1450.50; document.getElementById('lbl-global-neto').innerText = "$ " + monto.toFixed(2) + " USD"; } } catch(e) { document.getElementById('lbl-global-neto').innerText = "$ 1450.50 USD"; } };
 
     function mostrarAlerta(mensaje) { document.getElementById('txt-alerta-trampa').innerHTML = mensaje; document.getElementById('alerta-trampa-custom').style.display = 'flex'; }
     
-    // BOTÓN RESET REPARADO AL 100% (Limpia todo)
+    // BOTÓN RESET REPARADO: Limpia historial visual y reinicia saldos.
     window.ejecutarReset = () => { 
         _h=[]; _m=(_MONEDA==='USD'?0.2:200); _s=""; _per=0; _cR=0; _cN=0; _c0=0; _s0=0; 
-        _nP=0; _nG=0; _ba=_cI; // Restaura los saldos base
+        _nP=0; _nG=0; _ba=_cI; // Vuelve el capital a la normalidad
         document.getElementById('btn-trampa').style.opacity="0.3"; 
         document.getElementById('btn-trampa').style.pointerEvents="none"; 
         document.getElementById('c-h').innerHTML = ""; // BORRA LAS BOLITAS
@@ -274,7 +262,11 @@
                         try { let st = JSON.parse(savedJSON); _ba = parseFloat(st.ba) || (_MONEDA==='USD'?40:40000); _nP = parseFloat(st.nP) || 0; _nG = parseFloat(st.nG) || _nG; _h = st.h || []; _m = parseFloat(st.m) || (_MONEDA==='USD'?0.2:200); _s = st.s || ""; _per = parseFloat(st.per) || 0; _cI = parseFloat(st.cI) || _ba; _cR = parseInt(st.cR) || 0; _cN = parseInt(st.cN) || 0; _c0 = parseInt(st.c0) || 0; _s0 = parseInt(st.s0) || 0; _Meta = _cI * 1.20; restored = true; } catch(e) {}
                     }
                 }
-                if(!restored) { _cI = parseFloat(prompt(`Capital disponible en mesa (${_MONEDA}):`, _MONEDA==='USD' ? "40.00" : "40000")) || (_MONEDA==='USD'?40:40000); _ba = _cI; _Meta = _ba * 1.20; _cR=0; _cN=0; _c0=0; _s0=0; }
+                if(!restored) { 
+                    _cI = parseFloat(prompt(`Capital disponible en mesa (${_MONEDA}):`, _MONEDA==='USD' ? "40.00" : "40000")) || (_MONEDA==='USD'?40:40000); 
+                    _ba = _cI; _Meta = _ba * 1.20; _cR=0; _cN=0; _c0=0; _s0=0; 
+                    _m = (_MONEDA === 'USD') ? 0.20 : 200; // FIJA LA MONEDA AL ENTRAR
+                }
                 iniciarApp(); 
             } else { alert(d.mensaje); this.innerText = "ENTRAR AL SISTEMA"; }
         } catch(e) { alert("Error de Conexión."); this.innerText = "ENTRAR AL SISTEMA"; }
@@ -353,11 +345,12 @@
 
     function update(isCalc = false) {
         let p = (_MONEDA === 'USD') ? "$" : ""; let sfx = (_MONEDA === 'CLP') ? " CLP" : "";
-        document.getElementById('c-i').innerText=p+_ba.toLocaleString(undefined, {minimumFractionDigits: (_MONEDA==='USD'?2:0)})+sfx; 
-        document.getElementById('u-s').innerText=p+_nP.toLocaleString(undefined, {minimumFractionDigits: (_MONEDA==='USD'?2:0)})+sfx; 
-        document.getElementById('n-g').innerText=p+_nG.toLocaleString(undefined, {minimumFractionDigits: (_MONEDA==='USD'?2:0)})+sfx;
+        let fr = (_MONEDA === 'USD') ? 2 : 0; // Configura los decimales correctos por moneda
+        document.getElementById('c-i').innerText=p+_ba.toLocaleString('en-US', {minimumFractionDigits: fr, maximumFractionDigits: fr})+sfx; 
+        document.getElementById('u-s').innerText=p+_nP.toLocaleString('en-US', {minimumFractionDigits: fr, maximumFractionDigits: fr})+sfx; 
+        document.getElementById('n-g').innerText=p+_nG.toLocaleString('en-US', {minimumFractionDigits: fr, maximumFractionDigits: fr})+sfx;
         if(!isCalc) { document.getElementById('s-t').innerText=_s||"---"; document.getElementById('s-t').style.color=(_s==="ROJO")?"#e74c3c":(_s==="NEGRO"?"#fff":"#888"); }
-        document.getElementById('m-t').innerText=p+_m.toLocaleString(undefined, {minimumFractionDigits: (_MONEDA==='USD'?2:0)})+sfx; 
+        document.getElementById('m-t').innerText=p+_m.toLocaleString('en-US', {minimumFractionDigits: fr, maximumFractionDigits: fr})+sfx; 
         document.getElementById('st-R').innerText=_cR; document.getElementById('st-N').innerText=_cN; document.getElementById('st-0').innerText=_c0; document.getElementById('st-s0').innerText=_s0;
         const ch=document.getElementById('c-h'); ch.innerHTML=""; _h.slice(0,18).forEach(v => { const cl=(v==='Rojo')?'red':(v==='Negro'?'#fff':'green'); ch.innerHTML+=`<div class="bola" style="background:${cl}; color:${v==='Negro'?'#000':'#fff'}">${v==='Cero'?'0':''}</div>`; });
     }
