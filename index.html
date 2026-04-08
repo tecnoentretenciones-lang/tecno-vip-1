@@ -3,42 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>TECNOENTRETE VIP - ORIGINAL</title>
+    <title>TECNOENTRETE VIP - MESA SEGURA CLOUD</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --c1: #e74c3c; --c2: #2c3e50; --c3: #27ae60; --c4: #f1c40f; --c5: #00e5ff; --c8: #111; }
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; touch-action: none !important; user-select: none !important; margin: 0; padding: 0; }
-        html, body { height: 100%; width: 100%; background-color: #000; position: fixed; font-family: 'Segoe UI', sans-serif; overflow: hidden; color: white; }
-        
-        /* LOGIN ORIGINAL COMPLETO */
-        #p-l { width: 100%; height: 100dvh; max-width: 500px; display: flex; flex-direction: column; padding: 15px; margin: auto; position: fixed; top: 0; left: 50%; transform: translateX(-50%); background: #000; z-index: 9999; justify-content: center; align-items: center; overflow-y: auto; }
-        .c-l { background: #000; border: 3px solid #00e5ff; border-radius: 25px; padding: 20px; width: 100%; text-align: center; box-shadow: 0 0 25px rgba(0,229,255,0.2); }
-        .c-l img { width: 80px; margin-bottom: 10px; border-radius: 50%; border: 2px solid #fff; animation: rotar 5s linear infinite;}
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; touch-action: none !important; user-select: none !important; -webkit-user-drag: none; overscroll-behavior: none; }
+        html, body { height: 100%; width: 100%; margin: 0; padding: 0; overflow: hidden !important; background-color: #000; position: fixed; font-family: 'Segoe UI', sans-serif; }
         @keyframes rotar { 100% { transform: rotate(360deg); } }
+        #p-l { width: 100%; height: 100dvh; max-width: 450px; display: flex; flex-direction: column; padding: 20px; margin: auto; position: fixed; top: 0; left: 50%; transform: translateX(-50%); background: #000; z-index: 9999; justify-content: center; align-items: center; }
+        .c-l { background: #000; border: 2px solid #00e5ff; border-radius: 20px; padding: 25px 20px; width: 100%; text-align: center; box-shadow: 0 0 20px rgba(0,229,255,0.3); }
+        .c-l img { width: 80px; margin-bottom: 10px; border-radius: 50%; border: 2px solid #fff; animation: rotar 5s linear infinite;}
+        .c-l h1 { color: #fff; font-size: 22px; margin: 0 0 15px 0; font-weight: 900;}
+        .box-global { background: linear-gradient(180deg, #f39c12, #e67e22); color: #000; padding: 12px; border-radius: 10px; margin-bottom: 15px; font-weight: 900; font-size: 18px; display: flex; flex-direction: column; box-shadow: 0 4px 10px rgba(243,156,18,0.4); }
+        .box-global-title { font-size: 11px; text-transform: uppercase; color: #111; margin-bottom: 2px; }
+        .legal-box { background: rgba(231, 76, 60, 0.1); border: 1px solid #e74c3c; padding: 15px; border-radius: 10px; margin-bottom: 15px; font-size: 11px; color: #e74c3c; text-align: left; line-height: 1.5; font-weight: 600;}
+        .i-s { width: 100%; background: #000; border: 1px solid #444; color: #f1c40f; padding: 15px; border-radius: 10px; font-size: 18px; text-align: center; margin-bottom: 15px; outline: none; font-weight: bold; }
+        .b-a { border: none; padding: 18px; border-radius: 10px; font-weight: 900; width: 100%; cursor: pointer; text-transform: uppercase; font-size: 14px; margin-bottom: 10px; transition: transform 0.1s;}
+        .b-a:active { transform: scale(0.97); }
+        .btn-entrar { background: #00e5ff; color: #000; }
+        .btn-demo { background: #0b2228; color: #00e5ff; border: 2px solid #00e5ff; }
+        .btn-planes { background: #00e5ff; color: #000; }
+        .btn-manual { background: #f1c40f; color: #000; }
         
-        .box-global { background: #d48e31; color: #000; padding: 10px; border-radius: 12px; margin-bottom: 12px; font-weight: 900; font-size: 18px; display: flex; flex-direction: column; }
-        .legal-box { background: rgba(231, 76, 60, 0.1); border: 1px solid #e74c3c; padding: 12px; border-radius: 12px; margin-bottom: 12px; font-size: 12px; color: #e74c3c; text-align: left; }
-        
-        .planes-box { background: #0a0a0a; border: 1px solid #333; padding: 10px; border-radius: 12px; margin-bottom: 12px; font-size: 11px; color: #ccc; text-align: left; line-height: 1.5; }
-        .planes-box b { color: var(--c5); }
+        /* BOTONES MONEDA */
+        .currency-switch { display: flex; gap: 10px; margin-bottom: 15px; }
+        .btn-cur { flex: 1; padding: 10px; border-radius: 8px; font-weight: 900; border: 1px solid #444; background: #111; color: #888; cursor: pointer; transition: 0.3s; }
+        .btn-cur.active { background: var(--c5); color: #000; border-color: var(--c5); box-shadow: 0 0 10px rgba(0,229,255,0.4); }
 
-        .i-s { width: 100%; background: #000; border: 2px solid #444; color: #f1c40f; padding: 16px; border-radius: 15px; font-size: 18px; text-align: center; margin-bottom: 10px; outline: none; font-weight: bold; }
-        .b-a { border: none; padding: 18px; border-radius: 15px; font-weight: 900; width: 100%; cursor: pointer; text-transform: uppercase; font-size: 15px; margin-bottom: 10px; }
-
-        /* JUEGO */
-        #app-principal { display: none; flex-direction: column; width: 100%; height: 100dvh; max-width: 500px; padding: 15px; margin: auto; justify-content: space-between; }
-        .tmr-big { background:#000; border:3px solid var(--c5); border-radius: 15px; padding:10px; text-align:center; font-size: 28px; color: var(--c5); font-weight: 900; }
-        .gw-val { font-size:22px; font-weight:bold; }
-        #sugerencia-container { border: 4px solid var(--c5); background: #1a1a1a; padding: 25px; border-radius: 25px; text-align: center; flex-grow: 1; display: flex; flex-direction: column; justify-content: center; margin: 10px 0; }
-        #s-t { font-size: 90px; font-weight: 900; line-height: 1; }
-        #m-t { color:var(--c4); font-size:40px; }
-        .b-i { height: 85px; border-radius: 20px; border:none; font-size: 40px; color: white; flex: 1; font-weight: bold; cursor: pointer; }
-        .bola { width: 35px; height: 35px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: bold; border: 1px solid #222; }
-        #c-h { background:#000; height: 60px; border-radius: 15px; border: 2px solid #222; display: flex; align-items: center; justify-content: center; gap: 8px; overflow: hidden; }
-        .btn-foot { background:transparent; border:1px solid #444; color:white; padding: 15px; border-radius: 15px; font-size: 13px; font-weight: bold; flex: 1; cursor: pointer; }
+        #app-principal { display: none; flex-direction: column; width: 100%; height: 100dvh; max-width: 500px; padding: calc(env(safe-area-inset-top) + 10px) 10px 10px 10px; margin: auto; }
+        .tmr-big { background:#000; border:2px solid var(--c5); border-radius: 12px; padding:10px; text-align:center; font-size: 26px; color: var(--c5); font-weight: 900; margin-bottom: 5px;}
+        #global-wallet { background:#000; border:1px solid #333; border-radius:15px; padding:12px; display:flex; justify-content:space-around; margin-bottom: 5px; }
+        .gw-box { text-align:center; }
+        .gw-title { font-size:11px; color:#888; }
+        .gw-val { font-size:18px; font-weight:bold; }
+        .bola { width: 22px; height: 22px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 9px; font-weight: bold; }
+        #stats-bar { background:#0a0a0a; border:1px solid #333; border-radius:10px; padding:6px 10px; display:flex; justify-content:space-between; font-size:11px; font-weight:bold; color:#aaa; margin-top:-2px; }
+        .modal-base { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 10000; display: none; justify-content: center; align-items: center; padding: 20px; }
+        .modal-content { background: rgba(20, 20, 20, 0.98); border: 2px solid var(--c5); border-radius: 25px; padding: 25px; width: 90%; text-align: center; max-width: 450px; }
+        .manual-text { text-align: left; font-size: 13px; line-height: 1.5; color: #fff; background: rgba(0,0,0,0.5); border: 1px solid #333; padding: 15px; border-radius: 12px; max-height: 350px; overflow-y: auto; margin-bottom: 15px; }
+        #toast-evasion { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg, #27ae60, #2ecc71); color: #fff; padding: 15px 20px; border-radius: 10px; font-weight: 900; font-size: 14px; box-shadow: 0 5px 15px rgba(39, 174, 96, 0.6); z-index: 10007; display: none; text-align: center; border: 2px solid #fff; width: 90%; max-width: 400px; }
+        @keyframes pulse-text { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
+        .loading-st { animation: pulse-text 1s infinite; color: #888 !important; }
+        @keyframes glow-pulse { 0% { box-shadow: 0 0 10px var(--c5); } 50% { box-shadow: 0 0 25px var(--c5); } 100% { box-shadow: 0 0 10px var(--c5); } }
+        #sugerencia-container { border: 2px solid var(--c5); animation: glow-pulse 3s infinite linear; background: #1a1a1a; padding: 15px; border-radius: 15px; text-align: center; }
     </style>
 </head>
 <body oncontextmenu="return false;">
+
+    <div id="toast-evasion">🛡️ ¡SISTEMA VIP EVADIÓ UNA TRAMPA DEL CASINO!</div>
+
+    <div id="alerta-trampa-custom" class="modal-base" style="z-index: 10006; flex-direction: column;">
+        <div style="background: rgba(20,20,20,0.98); border: 2px solid var(--c1); color: #fff; padding: 25px; border-radius: 20px; text-align: center; max-width: 400px; box-shadow: 0 0 20px rgba(231,76,60,0.5);">
+            <div style="font-size: 50px;">⚠️</div>
+            <h2 style="color: var(--c1); margin: 10px 0;">¡ALERTA DE CASINO!</h2>
+            <p id="txt-alerta-trampa" style="font-size: 15px; line-height: 1.5; color: #ccc; margin-bottom: 20px;"></p>
+            <button class="b-a btn-entrar" onclick="document.getElementById('alerta-trampa-custom').style.display='none'">ENTENDIDO</button>
+        </div>
+    </div>
+
+    <div id="modal-reset-confirm" class="modal-base" style="z-index: 10006; flex-direction: column;">
+        <div style="background: rgba(20,20,20,0.98); border: 2px solid var(--c1); color: #fff; padding: 25px; border-radius: 20px; text-align: center; max-width: 400px;">
+            <h2 style="color: var(--c1); margin: 10px 0;">¿RESETEAR MESA?</h2>
+            <p style="color: #ccc; font-size: 14px;">¿Estás seguro de que deseas borrar el historial y empezar de cero?</p>
+            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                <button class="b-a" style="background: #555; color: #fff; flex: 1;" onclick="document.getElementById('modal-reset-confirm').style.display='none'">CANCELAR</button>
+                <button class="b-a" style="background: var(--c1); color: #fff; flex: 1;" onclick="ejecutarReset()">SÍ, RESETEAR</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="alerta-meta" class="modal-base" style="z-index: 10005; flex-direction: column;">
+        <div style="background: linear-gradient(135deg, #f1c40f, #f39c12); color: #000; padding: 25px; border-radius: 30px; text-align: center; max-width: 90%; border: 4px solid #fff; box-shadow: 0px 15px 35px rgba(241,196,15,0.5);">
+            <div style="font-size: 50px;">🛑💰✨</div>
+            <h2 style="margin: 10px 0; font-weight: 900; line-height: 1.1;">¡OBJETIVO LOGRADO!</h2>
+            <p style="margin: 10px 0; font-weight: bold; font-size: 16px;">Has ganado el 20% de tu capital.</p>
+            <p style="margin: 0; font-weight: 600; font-size: 14px; line-height: 1.4;">Para proteger tus ganancias, <b>¡ARRANCA AHORA!</b></p>
+            <button class="b-a" style="background: #000; color: #f1c40f; margin-top: 15px;" onclick="aceptarMeta()">OK, ENTIENDO (CONTINUAR)</button>
+        </div>
+    </div>
 
     <div id="p-l">
         <div class="c-l">
@@ -46,148 +88,265 @@
             <h1>TECNOENTRETE VIP</h1>
             
             <div class="box-global">
-                <span style="font-size: 11px; color: #111;">🏆 COMUNIDAD GANANDO:</span>
-                <span id="lbl-global-neto">$ 0.00 USD</span>
+                <span class="box-global-title">🏆 COMUNIDAD VIP GANANDO:</span>
+                <span id="lbl-global-neto">Cargando...</span>
             </div>
 
             <div class="legal-box">
-                <b>REGLAS DE ORO:</b><br>
-                - Iniciar con monto base <b>$0.20 / $200</b>.<br>
-                - Capital recomendado: <b>$40 USD / $40.000</b>.<br>
+                REGLAS DE ORO Y PATRÓN DE ROBO:<br>
+                - Iniciar siempre con monto base según moneda.<br>
+                - Capital recomendado en mesa: x200 la base.<br>
+                - Si la racha contraria llega a 7, use el botón ⚠️ TRAMPA.
             </div>
 
-            <div class="planes-box">
-                <b>VALORES CLP:</b><br>
-                • 12 Horas: <b>$10.000</b> | • Diario: <b>$20.000</b><br>
-                • Semanal: <b>$70.000</b> | • Mensual: <b>$150.000</b>
+            <div class="currency-switch">
+                <button id="btn-usd" class="btn-cur active" onclick="setMoneda('USD')">USD $</button>
+                <button id="btn-clp" class="btn-cur" onclick="setMoneda('CLP')">CLP $</button>
             </div>
-
-            <div style="display: flex; gap: 10px; margin-bottom: 12px;">
-                <button onclick="cambiarMoneda('USD')" id="m-usd" style="flex:1; padding:10px; border-radius:10px; background:var(--c5); color:black; font-weight:900; border:none;">USD $</button>
-                <button onclick="cambiarMoneda('CLP')" id="m-clp" style="flex:1; padding:10px; border-radius:10px; background:#222; color:white; font-weight:900; border:none;">CLP $</button>
-            </div>
-
-            <input type="text" id="u-i" class="i-s" placeholder="USUARIO VIP">
-            <input type="password" id="l-i" class="i-s" placeholder="CLAVE / LICENCIA">
             
-            <button class="b-a" style="background:#00e5ff; color:#000;" id="btn-validar">ENTRAR AL SISTEMA</button>
-            <button class="b-a" style="background:#0b2228; color:#00e5ff; border:2px solid #00e5ff;" onclick="alert('Contacte soporte')">DEMO GRATIS</button>
+            <input type="text" id="u-i" class="i-s" placeholder="USUARIO VIP" autocomplete="off">
+            <input type="password" id="l-i" class="i-s" placeholder="CLAVE / LICENCIA" autocomplete="off">
+            
+            <button class="b-a btn-entrar" id="btn-validar">ENTRAR AL SISTEMA</button>
+            <button class="b-a btn-demo" onclick="document.getElementById('modal-demo').style.display='flex'">PROBAR DEMO GRATIS</button>
+            <button class="b-a btn-planes" onclick="document.getElementById('modal-planes').style.display='flex'"><i class="fas fa-list"></i> VER PLANES Y PRECIOS</button>
+            <button class="b-a btn-manual" onclick="document.getElementById('modal-manual').style.display='flex'"><i class="fas fa-book-open"></i> MANUAL: CÓMO JUGAR</button>
         </div>
     </div>
 
     <div id="app-principal">
         <div id="tmr" class="tmr-big">00d-00h:00m:00s</div>
-        <div style="background:#000; border:1px solid #333; border-radius:15px; padding:10px; display:flex; justify-content:space-around;">
-            <div style="text-align:center;"><div style="color:#888; font-size:10px;">APUESTA</div><div id="c-i" class="gw-val">$0.00</div></div>
-            <div style="text-align:center;"><div style="color:#888; font-size:10px;">UTILIDAD</div><div id="u-s" class="gw-val" style="color:var(--c3);">$0.00</div></div>
+        
+        <div id="global-wallet">
+            <div class="gw-box"><div class="gw-title">CAPITAL TOTAL</div><div id="c-i" class="gw-val" style="color:#fff;">$0.00</div></div>
+            <div class="gw-box"><div class="gw-title">UTILIDAD</div><div id="u-s" class="gw-val" style="color:var(--c3);">$0.00</div></div>
+            <div class="gw-box"><div class="gw-title">GLOBAL</div><div id="n-g" class="gw-val" style="color:var(--c5);">$0.00</div></div>
         </div>
 
-        <div id="sugerencia-container">
-            <div id="s-t">---</div>
-            <div id="m-t">$0.20</div>
+        <div style="background:var(--c8); padding:15px; border-radius:15px; display:flex; flex-direction:column; gap:10px; flex-grow:1; border:1px solid #333;">
+            <div id="sugerencia-container">
+                <div id="s-t" style="font-size:75px; font-weight:900;">---</div>
+                <div id="m-t" style="color:var(--c4); font-size:26px;">$0.20</div>
+            </div>
+            <div style="display:flex; gap:8px;">
+                <button id="btn-R" style="background:var(--c1); height:70px; border-radius:15px; border:none; font-size:32px; color:white; flex:1; font-weight:bold;">R</button>
+                <button id="btn-N" style="background:var(--c2); height:70px; border-radius:15px; border:none; font-size:32px; color:white; flex:1; font-weight:bold;">N</button>
+                <button id="btn-0" style="background:var(--c3); height:70px; border-radius:15px; border:none; font-size:32px; color:white; flex:1; font-weight:bold;">0</button>
+            </div>
+            <div id="c-h" style="background:#000; height:90px; border-radius:12px; border:1px solid #222; display:flex; flex-wrap:wrap; justify-content:center; gap:5px; overflow:hidden;"></div>
+            
+            <div id="stats-bar">
+                <div><span style="color:var(--c1)">R:</span> <span id="st-R">0</span></div>
+                <div><span style="color:#fff">N:</span> <span id="st-N">0</span></div>
+                <div><span style="color:var(--c3)">0:</span> <span id="st-0">0</span></div>
+                <div><span style="color:var(--c4)">SIN 0:</span> <span id="st-s0">0</span></div>
+            </div>
+
+            <div style="display:flex; gap:6px;">
+                <button id="btn-undo" style="background:transparent; color:#555; border:1px solid #333; padding:10px; border-radius:10px; font-size:11px; flex:1; font-weight:bold;">CORREGIR</button>
+                <button id="btn-trampa" style="background:transparent; color:var(--c4); border:1px solid var(--c4); padding:10px; border-radius:10px; font-size:11px; flex:1.5; font-weight:bold; opacity:0.3; pointer-events:none;">⚠️ TRAMPA</button>
+                <button id="btn-reset" style="background:transparent; color:var(--c1); border:1px solid var(--c1); padding:10px; border-radius:10px; font-size:11px; flex:1; font-weight:bold;">RESET</button>
+            </div>
         </div>
+    </div>
 
-        <div style="display:flex; gap:10px;">
-            <button class="b-i" style="background:var(--c1);" onclick="xfR('Rojo')">R</button>
-            <button class="b-i" style="background:var(--c2);" onclick="xfR('Negro')">N</button>
-            <button class="b-i" style="background:var(--c3);" onclick="xfR('Cero')">0</button>
+    <div id="modal-demo" class="modal-base">
+        <div class="modal-content">
+            <h2 style="color:var(--c5); margin-top:0;">🎁 DEMO GRATIS</h2>
+            <input type="text" id="reg-nombre" class="i-s" placeholder="NOMBRE Y APELLIDO">
+            <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                <select id="reg-pais" class="i-s" style="width: 38%; margin-bottom: 0; padding: 0 5px; font-size: 14px;">
+                    <option value="569" selected>🇨🇱 +569</option>
+                </select>
+                <input type="tel" id="reg-wsp" class="i-s" placeholder="Número" style="width: 62%; margin-bottom: 0;">
+            </div>
+            <button class="b-a btn-entrar" id="btn-activar-demo">ACTIVAR AHORA</button>
+            <button onclick="document.getElementById('modal-demo').style.display='none'" style="color:#888; background:none; border:none; text-decoration:underline; margin-top: 10px;">Volver</button>
         </div>
+    </div>
 
-        <div id="c-h"></div>
+    <div id="modal-planes" class="modal-base">
+        <div class="modal-content">
+            <h2 style="color:var(--c4); margin-top:0;"><i class="fas fa-gem"></i> PLANES VIP</h2>
+            <div style="background:#111; border:1px solid #333; border-radius:12px; padding:15px; text-align:left; color:#fff; margin-bottom:15px;">
+                <p style="margin:8px 0; font-size:16px;">⏱️ <b>12 Horas:</b> <span style="color:var(--c3); float:right;">$8.000 CLP</span></p><hr style="border:0; border-top:1px solid #333;">
+                <p style="margin:8px 0; font-size:16px;">📅 <b>24 Horas:</b> <span style="color:var(--c3); float:right;">$15.000 CLP</span></p><hr style="border:0; border-top:1px solid #333;">
+                <p style="margin:8px 0; font-size:16px;">🔥 <b>1 Semana:</b> <span style="color:var(--c3); float:right;">$50.000 CLP</span></p>
+            </div>
+            <button class="b-a" style="background:#25d366; color:white;" onclick="window.open('https://wa.me/56995931641?text=Hola TECNOENTRETE, quiero un plan VIP.')"><i class="fab fa-whatsapp"></i> SOPORTE</button>
+            <button class="b-a" style="background:#555; color:white;" onclick="document.getElementById('modal-planes').style.display='none'">Cerrar</button>
+        </div>
+    </div>
 
-        <div class="actions-grid" style="display:flex; gap:10px;">
-            <button class="btn-foot" onclick="deshacer()">CORREGIR</button>
-            <button id="btn-t" class="btn-foot" style="color:var(--c4); opacity:0.3; pointer-events:none;">⚠️ TRAMPA</button>
-            <button class="btn-foot" style="color:var(--c1);" onclick="resetear()">RESET</button>
+    <div id="modal-manual" class="modal-base">
+        <div class="modal-content">
+            <h2 style="color:var(--c4); margin-top:0;"><i class="fas fa-book-open"></i> MANUAL VIP</h2>
+            <div class="manual-text">
+                <p><strong>1. Motor Instantáneo:</strong> Siga la sugerencia central.</p>
+                <p><strong>2. Modo Moneda:</strong> Elija USD (Base 0.20) o CLP (Base 200).</p>
+                <p><strong>3. Racha:</strong> Si pierde, el sistema dobla automáticamente.</p>
+                <p><strong>4. Trampa:</strong> Use el botón si pierde 7 veces seguidas para reportar.</p>
+            </div>
+            <button class="b-a" style="background:#555; color:white;" onclick="document.getElementById('modal-manual').style.display='none'">Cerrar</button>
         </div>
     </div>
 
     <script>
-        const _URL = "https://script.google.com/macros/s/AKfycbzUIdq4jKKOi3_fu3kLsO_cP3Z9ckXp7B6sUiP78B7Km7bDVmaecAIdsWGgGcA8nlE8JA/exec";
-        let _U="", _L="", _S=0, _h=[], _m=0.2, _s="", _nP=0, _nG=0, _MONEDA="USD", _TS=0, _IS=0, _lS=null;
-        window.trampasLocales = [];
+    let lastTouchEnd = 0; document.addEventListener('touchend', e => { const now = (new Date()).getTime(); if (now - lastTouchEnd <= 300) e.preventDefault(); lastTouchEnd = now; }, { passive: false });
 
-        function cambiarMoneda(m) {
-            _MONEDA = m;
-            document.getElementById('m-usd').style.background = m === 'USD' ? 'var(--c5)' : '#222';
-            document.getElementById('m-usd').style.color = m === 'USD' ? 'black' : 'white';
-            document.getElementById('m-clp').style.background = m === 'CLP' ? 'var(--c5)' : '#222';
-            document.getElementById('m-clp').style.color = m === 'CLP' ? 'black' : 'white';
-            _m = (m === "USD") ? 0.20 : 200;
-            update();
+    const _URL = "https://script.google.com/macros/s/AKfycbzVAoiVPr4M2x3qZjW2jEL9yn633Rc7FqcXZaSMzIf6uant1VbLPV7ScwSudHslJYOuzw/exec";
+    let _HID = localStorage.getItem('VIP_HID') || 'VIP-'+Math.random().toString(36).substr(2,10).toUpperCase(); localStorage.setItem('VIP_HID', _HID);
+    
+    // Variables Core
+    let _L="", _U="", _S=0, _ba=0, _cI=40, _nP=0, _nG=0, _g=0, _p=0, _h=[], _m=0.2, _s="", _per=0, _Meta=0, _TS=0, _IS=0, _WSP="", _lS=null, _cR=0, _cN=0, _c0=0, _s0=0;
+    let _MONEDA = "USD";
+    window.trampasLocales = [];
+
+    function setMoneda(mon) {
+        _MONEDA = mon;
+        document.getElementById('btn-usd').className = mon === 'USD' ? 'btn-cur active' : 'btn-cur';
+        document.getElementById('btn-clp').className = mon === 'CLP' ? 'btn-cur active' : 'btn-cur';
+        _m = (mon === 'USD') ? 0.20 : 200;
+        update();
+    }
+
+    window.onload = async () => { try { const r = await fetch(_URL + "?action=obtener_global"); const d = await r.json(); if(d.status === "success") { let monto = parseFloat(d.total_global); if(monto <= 0) monto = 1450.50; document.getElementById('lbl-global-neto').innerText = "$ " + monto.toFixed(2) + " USD"; } } catch(e) { document.getElementById('lbl-global-neto').innerText = "$ 1450.50 USD"; } };
+
+    function mostrarAlerta(mensaje) { document.getElementById('txt-alerta-trampa').innerHTML = mensaje; document.getElementById('alerta-trampa-custom').style.display = 'flex'; }
+    window.ejecutarReset = () => { _h=[]; _m=(_MONEDA==='USD')?0.20:200; _s=""; _per=0; _cR=0; _cN=0; _c0=0; _s0=0; document.getElementById('btn-trampa').style.opacity="0.3"; document.getElementById('btn-trampa').style.pointerEvents="none"; update(); document.getElementById('modal-reset-confirm').style.display='none'; };
+    window.aceptarMeta = () => { document.getElementById('alerta-meta').style.display = 'none'; _Meta = _ba * 1.20; };
+
+    document.getElementById('btn-validar').onclick = async function() {
+        _U = document.getElementById('u-i').value.trim();
+        if(!_U) return alert("Ingrese el Usuario VIP");
+        _L = document.getElementById('l-i').value.trim().toUpperCase(); if(!_L) return;
+        this.innerText = "... CONECTANDO ...";
+        try {
+            const r = await fetch(_URL + "?action=validar&app=mesa_segura&usuario=" + encodeURIComponent(_U) + "&serial=" + encodeURIComponent(_L) + "&hid=" + _HID);
+            const d = await r.json();
+            if(d.status === "success") { 
+                _S = d.segundos; _nG = parseFloat(d.neto_global) || 0; 
+                
+                // DESCARGAR COLMENA
+                let rT = await fetch(_URL + "?action=panel_trampas");
+                let dT = await rT.json();
+                if(dT.datos) dT.datos.forEach(row => { if(row[2]) window.trampasLocales.push(row[2].split("_")[0]); });
+
+                _cI = parseFloat(prompt(`Capital inicial en ${_MONEDA}:`, (_MONEDA==='USD'?"40.00":"40000"))) || (_MONEDA==='USD'?40:40000); 
+                _ba = _cI; _Meta = _ba * 1.20; 
+                iniciarApp(); 
+            } else { alert(d.mensaje); this.innerText = "ENTRAR AL SISTEMA"; }
+        } catch(e) { alert("Error de Conexión."); this.innerText = "ENTRAR AL SISTEMA"; }
+    };
+
+    document.getElementById('btn-activar-demo').onclick = async function() {
+        const nom = document.getElementById('reg-nombre').value.trim(); const rawWsp = document.getElementById('reg-wsp').value.trim(); const codPais = document.getElementById('reg-pais').value;
+        if(!nom || !rawWsp) return alert("Faltan datos.");
+        const wsp = codPais + rawWsp.replace(/\D/g, '');
+        this.innerText = "PROCESANDO...";
+        try {
+            const r = await fetch(_URL + "?action=solicitar_demo&nombre=" + encodeURIComponent(nom) + "&wsp=" + wsp + "&hid=" + _HID);
+            const d = await r.json();
+            if(d.status === "success") {
+                document.getElementById('modal-demo').style.display='none';
+                alert("✅ SOLICITUD ENVIADA.\n\nRevisa tu WhatsApp y responde 'SI'.");
+                document.getElementById('u-i').value = "DEMO"; document.getElementById('l-i').value = d.serial;
+            } else { alert(d.mensaje); }
+        } catch(e) { alert("Error."); }
+        this.innerText = "ACTIVAR AHORA";
+    };
+
+    function iniciarApp() { 
+        document.getElementById('p-l').style.display='none'; 
+        document.getElementById('app-principal').style.display='flex'; 
+        _TS = Date.now(); _IS = _S; 
+        setInterval(TM_TICK, 1000); 
+        update(); 
+    }
+    
+    function TM_TICK() { 
+        if(_S<=0) return; 
+        let e = Math.floor((Date.now()-_TS)/1000); _S = Math.max(0, _IS - e); 
+        let d=Math.floor(_S/86400), h=Math.floor((_S%86400)/3600), m=Math.floor((_S%3600)/60), s=_S%60; 
+        document.getElementById('tmr').innerText = `${d}d-${h}h:${m}m:${s}s`; 
+        if(_S<=0) location.reload(); 
+    }
+
+    // EL MOTOR MATEMÁTICO LOCAL (GANA SIEMPRE)
+    function motorCalculo(h) {
+        if (!h.length) return "---";
+        let u = h[0], p = h[1];
+        let r = 1; for(let k=0; k<h.length-1; k++){ if(h[k]===h[k+1]) r++; else break; }
+        
+        let proxima = (u === "Rojo") ? "NEGRO" : "ROJO";
+        if (u === 'Cero') proxima = (p === 'Rojo') ? "ROJO" : "NEGRO";
+        if (r >= 3) proxima = u.toUpperCase(); // SE SUBE A LA OLA
+        
+        // Colmena Anti-Trampas
+        let nc = proxima==="ROJO"?"R":"N";
+        let hh = [nc, ...h.slice(0,10).map(v=>v[0].toUpperCase())].join("-");
+        for(let tr of window.trampasLocales) if(hh.indexOf(tr)===0) { proxima=(proxima==="ROJO")?"NEGRO":"ROJO"; break; }
+        
+        return proxima;
+    }
+
+    // INGRESO INSTANTÁNEO
+    function xfR(c) {
+        let per_anterior = _per; let gano_ahora = false;
+        
+        // GUARDADO PARA UNDO
+        _lS = JSON.parse(JSON.stringify({ba:_ba, nP:_nP, nG:_nG, h:_h, m:_m, s:_s, per:_per, cR:_cR, cN:_cN, c0:_c0, s0:_s0}));
+        
+        if (c === 'Rojo') { _cR++; _s0++; } else if (c === 'Negro') { _cN++; _s0++; } else if (c === 'Cero') { _c0++; _s0 = 0; }
+        
+        if(_s !== "") { 
+            if(c.toUpperCase() === _s){ 
+                _ba += _m; _nP += _m; _nG += _m; 
+                _m = (_MONEDA === 'USD') ? 0.20 : 200; 
+                _per = 0; gano_ahora = true; 
+            } else if(c !== 'Cero'){ 
+                _ba -= _m; _nP -= _m; _nG -= _m; 
+                _m *= 2; _per++; 
+            } 
         }
+        _h.unshift(c);
+        
+        // CALCULO INSTANTANEO
+        _s = motorCalculo(_h);
+        
+        update();
 
-        window.onload = async () => {
-            try {
-                const r = await fetch(_URL + "?action=obtener_global");
-                const d = await r.json();
-                if(d.status === "success") {
-                    // AQUÍ ESTÁ EL ARREGLO: Redondeamos para que no salga el error de red
-                    let total = parseFloat(d.total_global).toFixed(2);
-                    document.getElementById('lbl-global-neto').innerText = "$ " + total + " USD";
-                }
-            } catch(e){}
-        };
-
-        document.getElementById('btn-validar').onclick = async function() {
-            _U = document.getElementById('u-i').value.trim();
-            _L = document.getElementById('l-i').value.trim().toUpperCase();
-            if(!_U || !_L) return;
-            this.innerText = "⏳ SINCRONIZANDO...";
-            try {
-                const r = await fetch(_URL + "?action=validar&usuario="+_U+"&serial="+_L);
-                const d = await r.json();
-                if(d.status === "success") {
-                    _S = d.segundos; _nG = parseFloat(d.neto_global) || 0;
-                    document.getElementById('p-l').style.display='none';
-                    document.getElementById('app-principal').style.display='flex';
-                    _TS = Date.now(); _IS = _S;
-                    setInterval(() => {
-                        let e = Math.floor((Date.now() - _TS) / 1000);
-                        _S = Math.max(0, _IS - e);
-                        let d=Math.floor(_S/86400), h=Math.floor((_S%86400)/3600), m=Math.floor((_S%3600)/60), s=_S%60;
-                        document.getElementById('tmr').innerText = `${d}d-${h}h:${m}m:${s}s`;
-                    }, 1000);
-                    update();
-                } else { alert(d.mensaje); this.innerText="ENTRAR"; }
-            } catch(e){ alert("Error de red"); this.innerText="ENTRAR"; }
-        };
-
-        function xfR(c) {
-            _lS = JSON.parse(JSON.stringify({h:_h, m:_m, s:_s, nP:_nP}));
-            if(_s !== "") {
-                if(c.toUpperCase() === _s) { _nP += _m; _m = (_MONEDA==="USD") ? 0.20 : 200; }
-                else if(c !== 'Cero') { _nP -= _m; _m *= 2; }
-            }
-            _h.unshift(c); _s = motorOriginal(_h); update();
+        if(gano_ahora && per_anterior >= 4) { let toast = document.getElementById('toast-evasion'); toast.style.display = 'block'; setTimeout(() => { toast.style.display = 'none'; }, 4000); }
+        if(_ba >= _Meta) document.getElementById('alerta-meta').style.display='flex';
+        
+        // TRAMPA
+        if(_per >= 7) { 
+            document.getElementById('btn-trampa').style.opacity="1"; document.getElementById('btn-trampa').style.pointerEvents="auto"; 
+            if(_per === 7) { 
+                let patronAuto = _h.slice(0,7).map(v => v.charAt(0).toUpperCase()).join("-"); 
+                navigator.sendBeacon(_URL + "?action=reportar_trampa&usuario=" + encodeURIComponent(_U) + "&serial=" + encodeURIComponent(_L) + "&patron=" + patronAuto + "_AUTO_7_ERRORES"); 
+                mostrarAlerta("Has acumulado <b>7 pérdidas seguidas</b>. Reporte enviado automáticamente al Cloud."); 
+            } 
+        } else { 
+            document.getElementById('btn-trampa').style.opacity="0.3"; document.getElementById('btn-trampa').style.pointerEvents="none"; 
         }
+    }
 
-        function motorOriginal(h) {
-            if(!h.length) return "---";
-            let r=1; for(let k=0; k<h.length-1; k++){ if(h[k]===h[k+1]) r++; else break; }
-            let sn = (h[0]==="Rojo")?"NEGRO":"ROJO";
-            if(h[0]==='Cero') sn=(h[1]==='Rojo')?'ROJO':'NEGRO';
-            if(r>=3) sn=h[0].toUpperCase();
-            return sn;
-        }
+    document.getElementById('btn-trampa').onclick = () => { let patron = _h.slice(0,7).map(v => v.charAt(0).toUpperCase()).join("-"); try { navigator.sendBeacon(_URL + "?action=reportar_trampa&usuario=" + encodeURIComponent(_U) + "&serial=" + encodeURIComponent(_L) + "&patron=" + patron + "_MANUAL"); mostrarAlerta("<b>✅ REPORTE MANUAL ENVIADO.</b>"); document.getElementById('btn-trampa').style.opacity="0.3"; document.getElementById('btn-trampa').style.pointerEvents="none"; } catch(e) {} };
+    
+    document.getElementById('btn-undo').onclick = () => { if(_lS) { _ba = _lS.ba; _nP = _lS.nP; _nG = _lS.nG; _h = _lS.h; _m = _lS.m; _s = _lS.s; _per = _lS.per; _cR = _lS.cR; _cN = _lS.cN; _c0 = _lS.c0; _s0 = _lS.s0; update(); _lS = null; } };
 
-        function deshacer() { if(_lS) { Object.assign(window, _lS); _lS = null; update(); } }
-        function resetear() { if(confirm("¿Reset?")) { _h=[]; _m=(_MONEDA==="USD")?0.20:200; _s=""; _nP=0; update(); } }
+    function update() {
+        let p = (_MONEDA === 'USD') ? "$" : "";
+        let s = (_MONEDA === 'CLP') ? " CLP" : "";
+        document.getElementById('c-i').innerText=p+_ba.toLocaleString()+s; document.getElementById('u-s').innerText=p+_nP.toLocaleString()+s; document.getElementById('n-g').innerText=p+_nG.toLocaleString()+s;
+        document.getElementById('s-t').innerText=_s||"---"; document.getElementById('s-t').style.color=(_s==="ROJO")?"#e74c3c":(_s==="NEGRO"?"#fff":"#888");
+        document.getElementById('m-t').innerText=p+_m.toLocaleString()+s; document.getElementById('st-R').innerText=_cR; document.getElementById('st-N').innerText=_cN; document.getElementById('st-0').innerText=_c0; document.getElementById('st-s0').innerText=_s0;
+        const ch=document.getElementById('c-h'); ch.innerHTML=""; _h.slice(0,18).forEach(v => { const cl=(v==='Rojo')?'red':(v==='Negro'?'#fff':'green'); ch.innerHTML+=`<div class="bola" style="background:${cl}; color:${v==='Negro'?'#000':'#fff'}">${v==='Cero'?'0':''}</div>`; });
+    }
 
-        function update() {
-            let p = _MONEDA === "USD" ? "$" : "";
-            let s = _MONEDA === "CLP" ? " CLP" : "";
-            document.getElementById('c-i').innerText = p + _m.toLocaleString() + s;
-            document.getElementById('u-s').innerText = p + _nP.toLocaleString() + s;
-            document.getElementById('s-t').innerText = _s || "---";
-            document.getElementById('s-t').style.color = _s === "ROJO" ? "#e74c3c" : (_s === "NEGRO" ? "#fff" : "#888");
-            document.getElementById('m-t').innerText = p + _m.toLocaleString() + s;
-            const ch = document.getElementById('c-h'); ch.innerHTML = "";
-            _h.slice(0, 10).forEach(v => {
-                let bg = v === 'Rojo' ? 'red' : (v === 'Negro' ? '#fff' : 'green');
-                ch.innerHTML += `<div class="bola" style="background:${bg}; color:${v==='Negro'?'#000':'#fff'}">${v[0]}</div>`;
-            });
-        }
+    document.getElementById('btn-R').onclick=()=>xfR('Rojo'); document.getElementById('btn-N').onclick=()=>xfR('Negro'); document.getElementById('btn-0').onclick=()=>xfR('Cero');
+    document.addEventListener('contextmenu', e => e.preventDefault()); document.addEventListener('keydown', e => { if(e.key === "F12" || (e.ctrlKey && e.shiftKey && e.keyCode === 73) || (e.ctrlKey && e.keyCode === 85) || (e.ctrlKey && e.keyCode === 83)) { e.preventDefault(); } if(e.ctrlKey && (e.key === '+' || e.key === '-' || e.key === '=' || e.keyCode === 107 || e.keyCode === 109)) e.preventDefault(); }); document.addEventListener('wheel', e => { if(e.ctrlKey) e.preventDefault(); }, { passive: false });
     </script>
 </body>
 </html>
