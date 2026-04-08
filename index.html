@@ -17,12 +17,6 @@
         .box-global { background: linear-gradient(180deg, #f39c12, #e67e22); color: #000; padding: 12px; border-radius: 10px; margin-bottom: 15px; font-weight: 900; font-size: 18px; display: flex; flex-direction: column; box-shadow: 0 4px 10px rgba(243,156,18,0.4); }
         .box-global-title { font-size: 11px; text-transform: uppercase; color: #111; margin-bottom: 2px; }
         .legal-box { background: rgba(231, 76, 60, 0.1); border: 1px solid #e74c3c; padding: 15px; border-radius: 10px; margin-bottom: 15px; font-size: 11px; color: #e74c3c; text-align: left; line-height: 1.5; font-weight: 600;}
-        
-        /* BOTONES MONEDA */
-        .currency-switch { display: flex; gap: 10px; margin-bottom: 15px; }
-        .btn-cur { flex: 1; padding: 10px; border-radius: 8px; font-weight: 900; border: 1px solid #444; background: #111; color: #888; cursor: pointer; transition: 0.3s; }
-        .btn-cur.active { background: var(--c5); color: #000; border-color: var(--c5); box-shadow: 0 0 10px rgba(0,229,255,0.4); }
-
         .i-s { width: 100%; background: #000; border: 1px solid #444; color: #f1c40f; padding: 15px; border-radius: 10px; font-size: 18px; text-align: center; margin-bottom: 15px; outline: none; font-weight: bold; }
         .b-a { border: none; padding: 18px; border-radius: 10px; font-weight: 900; width: 100%; cursor: pointer; text-transform: uppercase; font-size: 14px; margin-bottom: 10px; transition: transform 0.1s;}
         .b-a:active { transform: scale(0.97); }
@@ -94,14 +88,9 @@
 
             <div class="legal-box">
                 REGLAS DE ORO Y PATRÓN DE ROBO:<br>
-                - Iniciar siempre con monto base correspondiente.<br>
-                - Capital recomendado en mesa: x200 la base.<br>
+                - Iniciar siempre con monto base $0.20.<br>
+                - Capital recomendado en mesa: $40 USD.<br>
                 - Si la racha contraria llega a 7 veces seguidas, use el botón ⚠️ TRAMPA para reportar el patrón.
-            </div>
-
-            <div class="currency-switch">
-                <button id="btn-usd" class="btn-cur active" onclick="setMoneda('USD')">USD $</button>
-                <button id="btn-clp" class="btn-cur" onclick="setMoneda('CLP')">CLP $</button>
             </div>
             
             <input type="text" id="u-i" class="i-s" placeholder="USUARIO VIP" autocomplete="off">
@@ -143,9 +132,9 @@
             </div>
 
             <div style="display:flex; gap:6px;">
-                <button id="btn-undo" style="background:transparent; color:#555; border:1px solid #333; padding:10px; border-radius:10px; font-size:11px; flex:1; font-weight:bold;">CORREGIR</button>
-                <button id="btn-trampa" style="background:transparent; color:var(--c4); border:1px solid var(--c4); padding:10px; border-radius:10px; font-size:11px; flex:1.5; font-weight:bold; opacity:0.3; pointer-events:none;">⚠️ TRAMPA</button>
-                <button id="btn-reset" style="background:transparent; color:var(--c1); border:1px solid var(--c1); padding:10px; border-radius:10px; font-size:11px; flex:1; font-weight:bold;">RESET</button>
+                <button id="btn-undo" style="background:transparent; color:#555; border:1px solid #333; padding:10px; border-radius:10px; font-size:11px; flex:1;">CORREGIR</button>
+                <button id="btn-trampa" style="background:transparent; color:var(--c4); border:1px solid var(--c4); padding:10px; border-radius:10px; font-size:11px; flex:1.5; opacity:0.3; pointer-events:none;">⚠️ TRAMPA</button>
+                <button id="btn-reset" style="background:transparent; color:var(--c1); border:1px solid var(--c1); padding:10px; border-radius:10px; font-size:11px; flex:1;">RESET</button>
             </div>
         </div>
     </div>
@@ -182,8 +171,8 @@
         <div class="modal-content">
             <h2 style="color:var(--c4); margin-top:0;"><i class="fas fa-book-open"></i> MANUAL VIP</h2>
             <div class="manual-text">
-                <p><strong>1. Capital:</strong> Base <strong>$0.20 USD</strong> o <strong>$200 CLP</strong>.</p>
-                <p><strong>2. Motor:</strong> Siga la sugerencia en grande (S.T.). El cálculo se hace de forma segura en la nube.</p>
+                <p><strong>1. Capital:</strong> $40 USD recomendado. Base <strong>$0.20</strong>.</p>
+                <p><strong>2. Motor:</strong> Siga la sugerencia en grande (S.T.).</p>
                 <p><strong>3. Racha:</strong> Si pierde, el sistema dobla automáticamente.</p>
                 <p><strong>4. Trampa:</strong> Si pierde 7 veces seguidas, use el botón ⚠️ TRAMPA.</p>
             </div>
@@ -194,25 +183,17 @@
     <script>
     let lastTouchEnd = 0; document.addEventListener('touchend', e => { const now = (new Date()).getTime(); if (now - lastTouchEnd <= 300) e.preventDefault(); lastTouchEnd = now; }, { passive: false });
 
-    const _URL = "https://script.google.com/macros/s/AKfycbzVAoiVPr4M2x3qZjW2jEL9yn633Rc7FqcXZaSMzIf6uant1VbLPV7ScwSudHslJYOuzw/exec";
-    
+    // TU ENLACE A GOOGLE APPS SCRIPT
+    const _URL = "https://script.google.com/macros/s/AKfycbzUIdq4jKKOi3_fu3kLsO_cP3Z9ckXp7B6sUiP78B7Km7bDVmaecAIdsWGgGcA8nlE8JA/exec";
     let _HID = localStorage.getItem('VIP_HID') || 'VIP-'+Math.random().toString(36).substr(2,10).toUpperCase(); localStorage.setItem('VIP_HID', _HID);
     
+    // AQUI AGREGAMOS LA VARIABLE _U (Usuario)
     let _L="", _U="", _S=0, _ba=0, _cI=40, _nP=0, _nG=0, _g=0, _p=0, _h=[], _m=0.2, _s="", _per=0, _Meta=0, _TS=0, _IS=0, _WSP="", _lS=null, _cR=0, _cN=0, _c0=0, _s0=0, _isFetching=false;
-    let _MONEDA = "USD";
-
-    function setMoneda(mon) {
-        _MONEDA = mon;
-        document.getElementById('btn-usd').className = mon === 'USD' ? 'btn-cur active' : 'btn-cur';
-        document.getElementById('btn-clp').className = mon === 'CLP' ? 'btn-cur active' : 'btn-cur';
-        _m = (mon === 'USD') ? 0.20 : 200;
-        update(true);
-    }
 
     window.onload = async () => { try { const r = await fetch(_URL + "?action=obtener_global"); const d = await r.json(); if(d.status === "success") { let monto = parseFloat(d.total_global); if(monto <= 0) monto = 1450.50; document.getElementById('lbl-global-neto').innerText = "$ " + monto.toFixed(2) + " USD"; } } catch(e) { document.getElementById('lbl-global-neto').innerText = "$ 1450.50 USD"; } };
 
     function mostrarAlerta(mensaje) { document.getElementById('txt-alerta-trampa').innerHTML = mensaje; document.getElementById('alerta-trampa-custom').style.display = 'flex'; }
-    window.ejecutarReset = () => { _h=[]; _m=(_MONEDA==='USD')?0.20:200; _s=""; _per=0; _cR=0; _cN=0; _c0=0; _s0=0; document.getElementById('btn-trampa').style.opacity="0.3"; document.getElementById('btn-trampa').style.pointerEvents="none"; update(); saveState(); document.getElementById('modal-reset-confirm').style.display='none'; };
+    window.ejecutarReset = () => { _h=[]; _m=0.2; _s=""; _per=0; _cR=0; _cN=0; _c0=0; _s0=0; document.getElementById('btn-trampa').style.opacity="0.3"; document.getElementById('btn-trampa').style.pointerEvents="none"; update(); saveState(); document.getElementById('modal-reset-confirm').style.display='none'; };
 
     document.getElementById('btn-validar').onclick = async function() {
         _U = document.getElementById('u-i').value.trim();
@@ -228,43 +209,30 @@
                 let restored = false;
                 if(savedJSON && savedJSON.includes("{")) {
                     if(confirm("☁️ Tienes una sesión guardada en la Nube.\n\n¿Deseas CONTINUAR la partida anterior?")) {
-                        try { let st = JSON.parse(savedJSON); _ba = parseFloat(st.ba) || (_MONEDA==='USD'?40:40000); _nP = parseFloat(st.nP) || 0; _nG = parseFloat(st.nG) || _nG; _h = st.h || []; _m = parseFloat(st.m) || (_MONEDA==='USD'?0.20:200); _s = st.s || ""; _per = parseFloat(st.per) || 0; _cI = parseFloat(st.cI) || _ba; _cR = parseInt(st.cR) || 0; _cN = parseInt(st.cN) || 0; _c0 = parseInt(st.c0) || 0; _s0 = parseInt(st.s0) || 0; _Meta = _cI * 1.20; restored = true; } catch(e) {}
+                        try { let st = JSON.parse(savedJSON); _ba = parseFloat(st.ba) || 40; _nP = parseFloat(st.nP) || 0; _nG = parseFloat(st.nG) || _nG; _h = st.h || []; _m = parseFloat(st.m) || 0.2; _s = st.s || ""; _per = parseFloat(st.per) || 0; _cI = parseFloat(st.cI) || _ba; _cR = parseInt(st.cR) || 0; _cN = parseInt(st.cN) || 0; _c0 = parseInt(st.c0) || 0; _s0 = parseInt(st.s0) || 0; _Meta = _cI * 1.20; restored = true; } catch(e) {}
                     }
                 }
-                if(!restored) { 
-                    _cI = parseFloat(prompt(`Capital disponible en mesa (${_MONEDA}):`, _MONEDA==='USD' ? "40.00" : "40000")) || (_MONEDA==='USD'?40:40000); 
-                    _ba = _cI; _Meta = _ba * 1.20; _cR=0; _cN=0; _c0=0; _s0=0; 
-                }
+                if(!restored) { _cI = parseFloat(prompt("Capital disponible en mesa:", "40.00")) || 40; _ba = _cI; _Meta = _ba * 1.20; _cR=0; _cN=0; _c0=0; _s0=0; }
                 iniciarApp(); 
             } else { alert(d.mensaje); this.innerText = "ENTRAR AL SISTEMA"; }
         } catch(e) { alert("Error de Conexión."); this.innerText = "ENTRAR AL SISTEMA"; }
     };
 
     document.getElementById('btn-activar-demo').onclick = async function() {
-        const nom = document.getElementById('reg-nombre').value.trim(); 
-        const rawWsp = document.getElementById('reg-wsp').value.trim(); 
-        const codPais = document.getElementById('reg-pais').value;
-        if(!nom || !nom.includes(' ')) return alert("Ingresa tu NOMBRE y APELLIDO (separados por espacio)."); 
-        if(!rawWsp) return alert("Falta celular.");
+        const nom = document.getElementById('reg-nombre').value.trim(); const rawWsp = document.getElementById('reg-wsp').value.trim(); const codPais = document.getElementById('reg-pais').value;
+        if(!nom || !nom.includes(' ')) return alert("Ingresa tu NOMBRE y APELLIDO (separados por espacio)."); if(!rawWsp) return alert("Falta celular.");
         const wsp = codPais + rawWsp.replace(/\D/g, '');
-        
-        this.innerText = "PROCESANDO...";
+        this.innerText = "...";
         try {
-            const r = await fetch(_URL + "?action=solicitar_demo&nombre=" + encodeURIComponent(nom) + "&wsp=" + wsp + "&hid=" + _HID);
+            const r = await fetch(_URL + "?action=validar_demo&nombre="+encodeURIComponent(nom)+"&wsp="+encodeURIComponent(wsp)+"&hid="+_HID);
             const d = await r.json();
-            
-            if(d.status === "success") {
-                document.getElementById('modal-demo').style.display='none';
-                alert("✅ SOLICITUD ENVIADA.\n\nRevisa tu WhatsApp y responde 'SI'.\n\n(Tus datos ya se rellenaron solos). Una vez que respondas SI, presiona 'ENTRAR AL SISTEMA'.");
-                document.getElementById('u-i').value = "DEMO";
-                document.getElementById('l-i').value = d.serial;
-            } else { 
-                alert(d.mensaje || "Error al procesar."); 
-            }
-        } catch(e) { alert("Error de conexión."); }
-        this.innerText = "ACTIVAR AHORA";
+            if(d.status === "success") { document.getElementById('modal-demo').style.display='none'; iniciarDemo(d.segundos, wsp); }
+            else { alert(d.mensaje); this.innerText = "ACTIVAR AHORA"; }
+        } catch(e) { alert("Error"); this.innerText = "ACTIVAR AHORA"; }
     };
 
+    function iniciarDemo(segs, wsp) { _L = "DEMO"; _U="DEMO"; _S = segs; _WSP = wsp; _cI = parseFloat(prompt("Capital:", "40.00")) || 40; _ba = _cI; _Meta = _ba * 1.20; _cR=0; _cN=0; _c0=0; _s0=0; iniciarApp(); }
+    
     function iniciarApp() { 
         document.getElementById('p-l').style.display='none'; 
         document.getElementById('app-principal').style.display='flex'; 
@@ -294,25 +262,11 @@
     async function xfR(c) {
         if(_isFetching) return; _isFetching = true;
         let per_anterior = _per; let gano_ahora = false;
-        
-        // BACKUP PARA UNDO (Copia profunda del estado)
-        _lS = JSON.parse(JSON.stringify({ba:_ba, nP:_nP, nG:_nG, g:_g, p:_p, h:_h, m:_m, s:_s, per:_per, cR:_cR, cN:_cN, c0:_c0, s0:_s0}));
-        
+        _lS = {ba:_ba, nP:_nP, nG:_nG, g:_g, p:_p, h:[..._h], m:_m, s:_s, per:_per, cR:_cR, cN:_cN, c0:_c0, s0:_s0};
         if (c === 'Rojo') { _cR++; _s0++; } else if (c === 'Negro') { _cN++; _s0++; } else if (c === 'Cero') { _c0++; _s0 = 0; }
-        
-        if(_s !== "" && _s !== "⏳" && _s !== "ERR" && _s !== "RED") { 
-            if(c.toUpperCase() === _s){ 
-                _ba += _m; _nP += _m; _nG += _m; 
-                _m = (_MONEDA === 'USD') ? 0.20 : 200; 
-                _g++; _per = 0; gano_ahora = true; 
-            } else if(c !== 'Cero'){ 
-                _ba -= _m; _nP -= _m; _nG -= _m; 
-                _m *= 2; _p++; _per++; 
-            } 
-        }
+        if(_s !== "" && _s !== "⏳") { if(c.toUpperCase() === _s){ _ba += _m; _nP += _m; _nG += _m; _m = 0.2; _g++; _per = 0; gano_ahora = true; } else if(c !== 'Cero'){ _ba -= _m; _nP -= _m; _nG -= _m; _m *= 2; _p++; _per++; } }
         _h.unshift(c);
         
-        // LLAMADA AL EXCEL (CEREBRO EN LA NUBE)
         let stDiv = document.getElementById('s-t'); stDiv.innerText = "⏳"; stDiv.className = "loading-st"; update(true);
         try {
             let res = await fetch(_URL + "?action=calcular&historial=" + encodeURIComponent(JSON.stringify(_h.slice(0, 15))));
@@ -322,40 +276,19 @@
 
         if(gano_ahora && per_anterior >= 4) { let toast = document.getElementById('toast-evasion'); toast.style.display = 'block'; setTimeout(() => { toast.style.display = 'none'; }, 4000); }
         if(_ba >= _Meta) document.getElementById('alerta-meta').style.display='flex';
-        if(_per >= 7) { 
-            document.getElementById('btn-trampa').style.opacity="1"; document.getElementById('btn-trampa').style.pointerEvents="auto"; 
-            if(_per === 7) { 
-                let patronAuto = _h.slice(0,7).map(v => v.charAt(0).toUpperCase()).join("-"); 
-                navigator.sendBeacon(_URL + "?action=reportar_trampa&usuario=" + encodeURIComponent(_U) + "&serial=" + encodeURIComponent(_L) + "&patron=" + patronAuto + "_AUTO_7_ERRORES"); 
-                mostrarAlerta("Has acumulado <b>7 pérdidas seguidas</b>. Reporte enviado automáticamente al Cloud."); 
-            } 
-        } 
+        if(_per >= 7) { document.getElementById('btn-trampa').style.opacity="1"; document.getElementById('btn-trampa').style.pointerEvents="auto"; if(_per === 7) { let patronAuto = _h.slice(0,7).map(v => v.charAt(0).toUpperCase()).join("-"); navigator.sendBeacon(_URL + "?action=reportar_trampa&usuario=" + encodeURIComponent(_U) + "&serial=" + encodeURIComponent(_L) + "&patron=" + patronAuto + "_AUTO_7_ERRORES"); mostrarAlerta("Has acumulado <b>7 pérdidas seguidas</b>. Reporte enviado automáticamente al Cloud."); } } 
         else { document.getElementById('btn-trampa').style.opacity="0.3"; document.getElementById('btn-trampa').style.pointerEvents="none"; }
     }
 
     document.getElementById('btn-trampa').onclick = async () => { let patron = _h.slice(0,7).map(v => v.charAt(0).toUpperCase()).join("-"); try { navigator.sendBeacon(_URL + "?action=reportar_trampa&usuario=" + encodeURIComponent(_U) + "&serial=" + encodeURIComponent(_L) + "&patron=" + patron + "_MANUAL"); mostrarAlerta("<b>✅ REPORTE MANUAL ENVIADO AL CLOUD.</b>"); document.getElementById('btn-trampa').style.opacity="0.3"; document.getElementById('btn-trampa').style.pointerEvents="none"; } catch(e) {} };
     
-    // BOTÓN CORREGIR REPARADO
-    document.getElementById('btn-undo').onclick = () => { if(_lS && !_isFetching) { _ba = _lS.ba; _nP = _lS.nP; _nG = _lS.nG; _g = _lS.g; _p = _lS.p; _h = [..._lS.h]; _m = _lS.m; _s = _lS.s; _per = _lS.per; _cR = _lS.cR; _cN = _lS.cN; _c0 = _lS.c0; _s0 = _lS.s0; update(); saveState(); _lS = null; } };
+    document.getElementById('btn-undo').onclick = () => { if(_lS) { _ba = _lS.ba; _nP = _lS.nP; _nG = _lS.nG; _g = _lS.g; _p = _lS.p; _h = [..._lS.h]; _m = _lS.m; _s = _lS.s; _per = _lS.per; _cR = _lS.cR; _cN = _lS.cN; _c0 = _lS.c0; _s0 = _lS.s0; update(); saveState(); _lS = null; } };
 
     function update(isCalc = false) {
-        let p = (_MONEDA === 'USD') ? "$" : "";
-        let s = (_MONEDA === 'CLP') ? " CLP" : "";
-        
-        document.getElementById('c-i').innerText = p + _ba.toLocaleString() + s; 
-        document.getElementById('u-s').innerText = p + _nP.toLocaleString() + s; 
-        document.getElementById('n-g').innerText = p + _nG.toLocaleString() + s;
-        
-        if(!isCalc) { 
-            document.getElementById('s-t').innerText=_s||"---"; 
-            document.getElementById('s-t').style.color=(_s==="ROJO")?"#e74c3c":(_s==="NEGRO"?"#fff":"#888"); 
-        }
-        
-        document.getElementById('m-t').innerText = p + _m.toLocaleString() + s; 
-        document.getElementById('st-R').innerText=_cR; document.getElementById('st-N').innerText=_cN; document.getElementById('st-0').innerText=_c0; document.getElementById('st-s0').innerText=_s0;
-        
-        const ch=document.getElementById('c-h'); ch.innerHTML=""; 
-        _h.slice(0,18).forEach(v => { const cl=(v==='Rojo')?'red':(v==='Negro'?'#fff':'green'); ch.innerHTML+=`<div class="bola" style="background:${cl}; color:${v==='Negro'?'#000':'#fff'}">${v==='Cero'?'0':''}</div>`; });
+        document.getElementById('c-i').innerText="$"+_ba.toFixed(2); document.getElementById('u-s').innerText="$"+_nP.toFixed(2); document.getElementById('n-g').innerText="$"+_nG.toFixed(2);
+        if(!isCalc) { document.getElementById('s-t').innerText=_s||"---"; document.getElementById('s-t').style.color=(_s==="ROJO")?"#e74c3c":(_s==="NEGRO"?"#fff":"#888"); }
+        document.getElementById('m-t').innerText="$"+_m.toFixed(2); document.getElementById('st-R').innerText=_cR; document.getElementById('st-N').innerText=_cN; document.getElementById('st-0').innerText=_c0; document.getElementById('st-s0').innerText=_s0;
+        const ch=document.getElementById('c-h'); ch.innerHTML=""; _h.slice(0,18).forEach(v => { const cl=(v==='Rojo')?'red':(v==='Negro'?'#fff':'green'); ch.innerHTML+=`<div class="bola" style="background:${cl}; color:${v==='Negro'?'#000':'#fff'}">${v==='Cero'?'0':''}</div>`; });
     }
 
     document.getElementById('btn-R').onclick=()=>xfR('Rojo'); document.getElementById('btn-N').onclick=()=>xfR('Negro'); document.getElementById('btn-0').onclick=()=>xfR('Cero');
@@ -365,4 +298,3 @@
     </script>
 </body>
 </html>
-
