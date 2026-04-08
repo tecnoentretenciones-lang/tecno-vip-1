@@ -66,6 +66,17 @@
 </head>
 <body oncontextmenu="return false;">
 
+    <div id="modal-moneda" class="modal-base" style="z-index: 10006; flex-direction: column;">
+        <div style="background: rgba(20,20,20,0.98); border: 2px solid var(--c5); color: #fff; padding: 25px; border-radius: 20px; text-align: center; max-width: 400px; box-shadow: 0 0 20px rgba(0,229,255,0.3);">
+            <h2 style="color: var(--c5); margin: 0 0 15px 0;">💰 TIPO DE MONEDA</h2>
+            <p style="color: #ccc; font-size: 14px; margin-bottom: 20px; line-height: 1.4;">Selecciona la moneda que usarás. Esta opción quedará guardada para tu cuenta.</p>
+            <div style="display: flex; gap: 10px;">
+                <button class="b-a" style="background: var(--c5); color: #000; flex: 1;" onclick="seleccionarMonedaInicial('USD')">DÓLARES (USD)</button>
+                <button class="b-a" style="background: #222; color: #fff; flex: 1; border: 1px solid #444;" onclick="seleccionarMonedaInicial('CLP')">PESOS (CLP)</button>
+            </div>
+        </div>
+    </div>
+
     <div id="toast-evasion">🛡️ ¡SISTEMA VIP EVADIÓ UNA TRAMPA DEL CASINO!</div>
 
     <div id="alerta-trampa-custom" class="modal-base" style="z-index: 10006; flex-direction: column;">
@@ -110,16 +121,11 @@
 
             <div class="legal-box">
                 REGLAS DE ORO Y PATRÓN DE ROBO:<br>
-                - Selecciona tu moneda ANTES de entrar.<br>
+                - Iniciar siempre con monto base correspondiente.<br>
                 - Capital recomendado en mesa: x200 de la base.<br>
                 - Si la racha contraria llega a 7 veces seguidas, use el botón ⚠️ TRAMPA para reportar el patrón.
             </div>
 
-            <div style="display: flex; gap: 10px; margin-bottom: 15px; width: 100%;">
-                <button id="btn-usd" class="b-a" style="margin-bottom:0; flex:1; background:var(--c5); color:#000;" onclick="setMoneda('USD')">USD $</button>
-                <button id="btn-clp" class="b-a" style="margin-bottom:0; flex:1; background:#222; color:#fff;" onclick="setMoneda('CLP')">CLP $</button>
-            </div>
-            
             <input type="text" id="u-i" class="i-s" placeholder="USUARIO VIP" autocomplete="off">
             <input type="password" id="l-i" class="i-s" placeholder="CLAVE / LICENCIA" autocomplete="off">
             
@@ -216,15 +222,10 @@
     
     let _L="", _U="", _S=0, _ba=0, _cI=40, _nP=0, _nG=0, _g=0, _p=0, _h=[], _m=0.2, _s="", _per=0, _Meta=0, _TS=0, _IS=0, _WSP="", _lS=null, _cR=0, _cN=0, _c0=0, _s0=0, _isFetching=false;
     
-    // SISTEMA MONEDA FIJA (Selección única en el inicio)
+    // SISTEMA MONEDA PREDEFINIDA
     let _MONEDA = "USD";
-    function setMoneda(mon) {
-        _MONEDA = mon;
-        document.getElementById('btn-usd').style.background = mon === 'USD' ? 'var(--c5)' : '#222';
-        document.getElementById('btn-usd').style.color = mon === 'USD' ? '#000' : '#fff';
-        document.getElementById('btn-clp').style.background = mon === 'CLP' ? 'var(--c5)' : '#222';
-        document.getElementById('btn-clp').style.color = mon === 'CLP' ? '#000' : '#fff';
-    }
+    let _savedJSON_temp = null;
+    let _d_temp = null;
 
     window.onload = async () => { try { const r = await fetch(_URL + "?action=obtener_global"); const d = await r.json(); if(d.status === "success") { let monto = parseFloat(d.total_global); if(monto <= 0) monto = 1450.50; document.getElementById('lbl-global-neto').innerText = "$ " + monto.toFixed(2) + " USD"; } } catch(e) { document.getElementById('lbl-global-neto').innerText = "$ 1450.50 USD"; } };
 
@@ -251,29 +252,58 @@
             const d = await r.json();
             if(d.status === "success") { 
                 _S = d.segundos; _nG = parseFloat(d.neto_global) || 0; 
-                let savedJSON = d.estado_nube || localStorage.getItem('ts_'+_L);
-                let restored = false;
-                if(savedJSON && savedJSON.includes("{")) {
-                    if(confirm("☁️ Tienes una sesión guardada en la Nube.\n\n¿Deseas CONTINUAR la partida anterior?")) {
-                        try { let st = JSON.parse(savedJSON); _ba = parseFloat(st.ba) || (_MONEDA==='USD'?40:40000); _nP = parseFloat(st.nP) || 0; _nG = parseFloat(st.nG) || _nG; _h = st.h || []; _m = parseFloat(st.m) || (_MONEDA==='USD'?0.2:200); _s = st.s || ""; _per = parseFloat(st.per) || 0; _cI = parseFloat(st.cI) || _ba; _cR = parseInt(st.cR) || 0; _cN = parseInt(st.cN) || 0; _c0 = parseInt(st.c0) || 0; _s0 = parseInt(st.s0) || 0; _Meta = _cI * 1.20; restored = true; } catch(e) {}
-                    }
+                _savedJSON_temp = d.estado_nube || localStorage.getItem('ts_'+_L);
+                _d_temp = d;
+                
+                // Verifica si el usuario ya tiene su moneda guardada
+                let savedMoneda = localStorage.getItem('VIP_MONEDA_' + _L);
+                if (!savedMoneda) {
+                    // Si no la tiene, esconde el inicio y le muestra la ventanita para elegirla
+                    document.getElementById('p-l').style.display = 'none';
+                    document.getElementById('modal-moneda').style.display = 'flex';
+                } else {
+                    // Si ya la tiene, entra directo
+                    ejecutarIngreso(savedMoneda);
                 }
-                if(!restored) { 
-                    _cI = parseFloat(prompt(`Capital disponible en mesa (${_MONEDA}):`, _MONEDA==='USD' ? "40.00" : "40000")) || (_MONEDA==='USD'?40:40000); 
-                    _ba = _cI; _Meta = _ba * 1.20; _cR=0; _cN=0; _c0=0; _s0=0; 
-                    _m = (_MONEDA === 'USD') ? 0.20 : 200; // BLOQUEAMOS LA BASE SEGÚN LA MONEDA ELEGIDA
-                }
-                iniciarApp(); 
             } else { alert(d.mensaje); this.innerText = "ENTRAR AL SISTEMA"; }
         } catch(e) { alert("Error de Conexión."); this.innerText = "ENTRAR AL SISTEMA"; }
     };
+
+    // Función que se activa al presionar el botón del modal de moneda
+    window.seleccionarMonedaInicial = function(mon) {
+        localStorage.setItem('VIP_MONEDA_' + _L, mon);
+        document.getElementById('modal-moneda').style.display = 'none';
+        ejecutarIngreso(mon);
+    };
+
+    function ejecutarIngreso(mon) {
+        _MONEDA = mon;
+        let restored = false;
+        if(_savedJSON_temp && _savedJSON_temp.includes("{")) {
+            if(confirm("☁️ Tienes una sesión guardada en la Nube.\n\n¿Deseas CONTINUAR la partida anterior?")) {
+                try { 
+                    let st = JSON.parse(_savedJSON_temp); 
+                    _ba = parseFloat(st.ba) || (_MONEDA==='USD'?40:40000); 
+                    _nP = parseFloat(st.nP) || 0; _nG = parseFloat(st.nG) || _nG; _h = st.h || []; 
+                    _m = parseFloat(st.m) || (_MONEDA==='USD'?0.2:200); _s = st.s || ""; _per = parseFloat(st.per) || 0; 
+                    _cI = parseFloat(st.cI) || _ba; _cR = parseInt(st.cR) || 0; _cN = parseInt(st.cN) || 0; _c0 = parseInt(st.c0) || 0; _s0 = parseInt(st.s0) || 0; 
+                    _Meta = _cI * 1.20; restored = true; 
+                } catch(e) {}
+            }
+        }
+        if(!restored) { 
+            _cI = parseFloat(prompt(`Capital disponible en mesa (${_MONEDA}):`, _MONEDA==='USD' ? "40.00" : "40000")) || (_MONEDA==='USD'?40:40000); 
+            _ba = _cI; _Meta = _ba * 1.20; _cR=0; _cN=0; _c0=0; _s0=0; 
+            _m = (_MONEDA === 'USD') ? 0.20 : 200; 
+        }
+        iniciarApp();
+    }
 
     document.getElementById('btn-activar-demo').onclick = async function() {
         const nom = document.getElementById('reg-nombre').value.trim(); const rawWsp = document.getElementById('reg-wsp').value.trim(); const codPais = document.getElementById('reg-pais').value;
         if(!nom || !nom.includes(' ')) return alert("Ingresa tu NOMBRE y APELLIDO (separados por espacio)."); if(!rawWsp) return alert("Falta celular.");
         const wsp = codPais + rawWsp.replace(/\D/g, '');
         this.innerText = "PROCESANDO...";
-        
         try {
             const r = await fetch(_URL + "?action=solicitar_demo&nombre=" + encodeURIComponent(nom) + "&wsp=" + wsp + "&hid=" + _HID);
             const d = await r.json();
@@ -282,9 +312,7 @@
                 alert("✅ SOLICITUD ENVIADA.\n\nRevisa tu WhatsApp y responde 'SI'.");
                 document.getElementById('u-i').value = "DEMO"; document.getElementById('l-i').value = d.serial;
                 this.innerText = "ACTIVAR AHORA";
-            } else { 
-                throw new Error("Fallo de red");
-            }
+            } else { throw new Error("Fallo de red"); }
         } catch(e) { 
             let msg = `Hola TECNOENTRETE, mi nombre es ${nom} y quiero activar mi DEMO VIP.`;
             window.open(`https://wa.me/56995931641?text=${encodeURIComponent(msg)}`, '_blank');
