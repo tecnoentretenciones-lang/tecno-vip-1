@@ -3,51 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>TECNOENTRETE VIP - MESA SEGURA CLOUD</title>
+    <title>TECNOENTRETE VIP - MESA SEGURA</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --c1: #e74c3c; --c2: #2c3e50; --c3: #27ae60; --c4: #f1c40f; --c5: #00e5ff; --c8: #111; }
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; touch-action: none !important; user-select: none !important; -webkit-user-drag: none; overscroll-behavior: none; }
-        input, select { user-select: text !important; -webkit-user-select: text !important; }
-        html, body { height: 100%; width: 100%; margin: 0; padding: 0; overflow: hidden !important; background-color: #000; position: fixed; font-family: 'Segoe UI', sans-serif; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; touch-action: none !important; user-select: none !important; margin: 0; padding: 0; }
+        html, body { height: 100%; width: 100%; background-color: #000; position: fixed; font-family: 'Segoe UI', sans-serif; overflow: hidden; }
         
-        /* LA RULETA GIRANDO - RESTAURADA */
+        /* LOGIN AJUSTADO PARA CELULAR */
+        #p-l { width: 100%; height: 100dvh; max-width: 500px; display: flex; flex-direction: column; padding: 15px; margin: auto; position: fixed; top: 0; left: 50%; transform: translateX(-50%); background: #000; z-index: 9999; justify-content: center; align-items: center; }
+        .c-l { background: #000; border: 2px solid #00e5ff; border-radius: 20px; padding: 20px; width: 100%; text-align: center; box-shadow: 0 0 20px rgba(0,229,255,0.3); }
+        .c-l img { width: 70px; margin-bottom: 10px; border-radius: 50%; animation: rotar 5s linear infinite;}
         @keyframes rotar { 100% { transform: rotate(360deg); } }
-        
-        #p-l { width: 100%; height: 100dvh; max-width: 450px; display: flex; flex-direction: column; padding: 20px; margin: auto; position: fixed; top: 0; left: 50%; transform: translateX(-50%); background: #000; z-index: 9999; justify-content: center; align-items: center; overflow-y: auto; }
-        .c-l { background: #000; border: 3px solid #00e5ff; border-radius: 25px; padding: 30px; width: 100%; text-align: center; box-shadow: 0 0 30px rgba(0,229,255,0.3); }
-        .c-l img { width: 100px; margin-bottom: 10px; border-radius: 50%; border: 2px solid #fff; animation: rotar 5s linear infinite;}
-        .c-l h1 { color: #fff; font-size: 28px; margin: 0 0 15px 0; font-weight: 900;}
-        
-        /* CAJAS DE REGLAS Y PRECIOS - RESTAURADAS */
-        .box-global { background: linear-gradient(180deg, #f39c12, #e67e22); color: #000; padding: 12px; border-radius: 10px; margin-bottom: 15px; font-weight: 900; font-size: 20px; display: flex; flex-direction: column; }
-        .legal-box { background: rgba(231, 76, 60, 0.1); border: 1px solid #e74c3c; padding: 15px; border-radius: 10px; margin-bottom: 15px; font-size: 13px; color: #e74c3c; text-align: left; line-height: 1.4; font-weight: 600;}
-        
-        .i-s { width: 100%; background: #000; border: 2px solid #444; color: #f1c40f; padding: 18px; border-radius: 12px; font-size: 20px; text-align: center; margin-bottom: 12px; outline: none; font-weight: bold; }
-        .b-a { border: none; padding: 18px; border-radius: 12px; font-weight: 900; width: 100%; cursor: pointer; text-transform: uppercase; font-size: 15px; margin-bottom: 10px; }
+        .c-l h1 { color: #fff; font-size: 22px; margin-bottom: 10px; }
+        .legal-box { background: rgba(231, 76, 60, 0.1); border: 1px solid #e74c3c; padding: 10px; border-radius: 8px; margin-bottom: 10px; font-size: 11px; color: #e74c3c; text-align: left; }
+        .i-s { width: 100%; background: #000; border: 1px solid #444; color: #f1c40f; padding: 12px; border-radius: 10px; font-size: 16px; text-align: center; margin-bottom: 8px; outline: none; }
+        .b-a { border: none; padding: 14px; border-radius: 10px; font-weight: 900; width: 100%; cursor: pointer; text-transform: uppercase; font-size: 14px; margin-bottom: 8px; }
 
-        /* JUEGO PRINCIPAL */
-        #app-principal { display: none; flex-direction: column; width: 100%; height: 100dvh; max-width: 900px; padding: 20px; margin: auto; }
-        .tmr-big { background:#000; border:3px solid var(--c5); border-radius: 15px; padding:15px; text-align:center; font-size: 35px; color: var(--c5); font-weight: 900; margin-bottom: 15px;}
+        /* APP PRINCIPAL - AJUSTE PANTALLA COMPLETA */
+        #app-principal { display: none; flex-direction: column; width: 100%; height: 100dvh; max-width: 500px; padding: 10px; margin: auto; justify-content: space-between; }
         
-        /* SELECTOR CLP/USD - NUEVO PERO DISCRETO */
-        .selector-moneda { display: flex; gap: 5px; margin-bottom: 10px; justify-content: center; }
-        .m-btn { background: #222; color: #888; border: 1px solid #444; padding: 5px 15px; border-radius: 5px; font-size: 12px; cursor: pointer; }
-        .m-btn.active { background: var(--c5); color: #000; font-weight: bold; }
+        .tmr-big { background:#000; border:2px solid var(--c5); border-radius: 12px; padding:8px; text-align:center; font-size: 22px; color: var(--c5); font-weight: bold; }
+        
+        #global-wallet { background:#000; border:1px solid #333; border-radius:15px; padding:10px; display:flex; justify-content:space-around; }
+        .gw-box { text-align: center; }
+        .gw-val { font-size:18px; font-weight:bold; }
 
-        #global-wallet { background:#000; border:2px solid #333; border-radius:20px; padding:20px; display:flex; justify-content:space-around; margin-bottom: 15px; }
-        .gw-val { font-size:26px; font-weight:bold; }
-        
-        /* CÍRCULOS PERFECTOS REPARADOS */
-        .bola { width: 45px; height: 45px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 18px; font-weight: bold; border: 2px solid #222; flex-shrink: 0;}
-        
-        #sugerencia-container { border: 3px solid var(--c5); background: #1a1a1a; padding: 30px; border-radius: 20px; text-align: center; margin-bottom: 15px; }
-        #s-t { font-size:120px; font-weight:900; line-height: 1; }
-        #m-t { color:var(--c4); font-size:45px; }
+        #sugerencia-container { border: 2px solid var(--c5); background: #111; padding: 15px; border-radius: 15px; text-align: center; flex-grow: 1; display: flex; flex-direction: column; justify-content: center; margin: 5px 0; }
+        #s-t { font-size: 70px; font-weight: 900; line-height: 1; } /* Tamaño de letra corregido */
+        #m-t { color:var(--c4); font-size:30px; margin-top: 5px; }
 
-        .b-i { height:110px; border-radius:20px; border:none; font-size:50px; color:white; flex:1; font-weight:bold; cursor: pointer; }
+        .input-grid { display: flex; gap: 8px; margin-bottom: 5px; }
+        .b-i { height: 70px; border-radius: 15px; border:none; font-size: 35px; color: white; flex: 1; font-weight: bold; cursor: pointer; }
         
-        #stats-bar { background:#0a0a0a; border:2px solid #333; border-radius:15px; padding:15px 25px; display:flex; justify-content:space-between; font-size:20px; font-weight:bold; color:#aaa; margin-bottom: 15px;}
+        .bola { width: 30px; height: 30px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; border: 1px solid #222; }
+        #c-h { background:#000; height: 50px; border-radius: 10px; border: 1px solid #222; display: flex; align-items: center; justify-content: center; gap: 5px; overflow: hidden; }
+
+        #stats-bar { background:#0a0a0a; border:1px solid #333; border-radius:10px; padding:8px; display:flex; justify-content:space-between; font-size:14px; font-weight:bold; color:#aaa; }
+
+        .actions-grid { display:flex; gap:8px; margin-top: 5px; }
+        .btn-act { background:transparent; border:1px solid #444; color:white; padding: 12px; border-radius: 10px; font-size: 12px; font-weight: bold; flex: 1; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -55,162 +50,115 @@
         <div class="c-l">
             <img src="https://cdn-icons-png.flaticon.com/512/1055/1055673.png"> 
             <h1>TECNOENTRETE VIP</h1>
-            <div class="box-global">
-                <span style="font-size: 12px; color: #111;">🏆 COMUNIDAD GANANDO:</span>
-                <span id="lbl-global-neto">Cargando...</span>
-            </div>
             <div class="legal-box">
-                <b>REGLAS DE ORO:</b><br>
-                - Iniciar con monto base <b>$0.20</b>.<br>
-                - Capital recomendado en mesa: <b>$40 USD</b>.<br>
-                - No nos hacemos responsables por pérdidas por mal uso.<br>
-                - Prohibida la reventa de esta licencia.
+                REGLAS DE ORO: Iniciar con $0.20. Capital recomendado $40 USD. No nos hacemos responsables por pérdidas.
             </div>
-            <div class="selector-moneda">
-                <button class="m-btn active" id="btn-usd" onclick="cambiarMoneda('USD')">USD</button>
-                <button class="m-btn" id="btn-clp" onclick="cambiarMoneda('CLP')">CLP</button>
+            <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                <button class="m-btn" id="btn-usd" onclick="cambiarMoneda('USD')" style="flex:1; padding:5px; border-radius:5px; background:var(--c5); color:black; font-weight:bold; border:none;">USD</button>
+                <button class="m-btn" id="btn-clp" onclick="cambiarMoneda('CLP')" style="flex:1; padding:5px; border-radius:5px; background:#222; color:white; border:none;">CLP</button>
             </div>
             <input type="text" id="u-i" class="i-s" placeholder="USUARIO VIP">
             <input type="password" id="l-i" class="i-s" placeholder="CLAVE / LICENCIA">
             <button class="b-a" style="background:#00e5ff; color:#000;" id="btn-validar">ENTRAR AL SISTEMA</button>
-            <button class="b-a" style="background:#0b2228; color:#00e5ff; border:2px solid #00e5ff;" onclick="solicitarDemo()">PROBAR DEMO GRATIS</button>
-            <div style="color: #555; font-size: 11px; margin-top: 10px;">Versión 1.0.4 - Protección Anti-Robo Activa</div>
         </div>
     </div>
 
     <div id="app-principal">
         <div id="tmr" class="tmr-big">00d-00h:00m:00s</div>
+
         <div id="global-wallet">
-            <div class="gw-box"><div style="color:#888; font-size:12px;">APUESTA</div><div id="c-i" class="gw-val" style="color:#fff;">$0.00</div></div>
-            <div class="gw-box"><div style="color:#888; font-size:12px;">UTILIDAD</div><div id="u-s" class="gw-val" style="color:var(--c3);">$0.00</div></div>
-            <div class="gw-box"><div style="color:#888; font-size:12px;">GLOBAL</div><div id="n-g" class="gw-val" style="color:var(--c5);">$0.00</div></div>
+            <div class="gw-box"><div style="color:#888; font-size:10px;">APUESTA</div><div id="c-i" class="gw-val" style="color:#fff;">$0.00</div></div>
+            <div class="gw-box"><div style="color:#888; font-size:10px;">UTILIDAD</div><div id="u-s" class="gw-val" style="color:var(--c3);">$0.00</div></div>
+            <div class="gw-box"><div style="color:#888; font-size:10px;">TIEMPO</div><div id="n-g" class="gw-val" style="color:var(--c5);">$0.00</div></div>
         </div>
-        <div style="background:var(--c8); padding:20px; border-radius:20px; display:flex; flex-direction:column; gap:15px; border:2px solid #333; flex-grow:1; justify-content:center;">
-            <div id="sugerencia-container">
-                <div id="s-t">---</div>
-                <div id="m-t">$0.20</div>
-            </div>
-            <div style="display:flex; gap:10px;">
-                <button id="btn-R" class="b-i" style="background:var(--c1);">R</button>
-                <button id="btn-N" class="b-i" style="background:var(--c2);">N</button>
-                <button id="btn-0" class="b-i" style="background:var(--c3);">0</button>
-            </div>
-            <div id="c-h" style="background:#000; height:100px; border-radius:15px; border:2px solid #222; display:flex; flex-wrap:nowrap; justify-content:center; align-items:center; gap:8px; overflow:hidden; padding: 0 10px;"></div>
-            <div id="stats-bar">
-                <div>R: <span id="st-R">0</span></div>
-                <div>N: <span id="st-N">0</span></div>
-                <div>0: <span id="st-0">0</span></div>
-            </div>
-            <div style="display:flex; gap:10px;">
-                <button id="btn-undo" style="background:transparent; color:#888; border:1px solid #333; padding:20px; border-radius:12px; font-weight:bold; flex:1;">CORREGIR</button>
-                <button id="btn-trampa" style="background:transparent; color:var(--c4); border:2px solid var(--c4); padding:20px; border-radius:12px; font-weight:bold; flex:1.5; opacity:0.3; pointer-events:none;">⚠️ TRAMPA</button>
-                <button id="btn-reset" style="background:transparent; color:var(--c1); border:2px solid var(--c1); padding:20px; border-radius:12px; font-weight:bold; flex:1;">RESET</button>
-            </div>
+
+        <div id="sugerencia-container">
+            <div id="s-t">---</div>
+            <div id="m-t">$0.20</div>
+        </div>
+
+        <div class="input-grid">
+            <button id="btn-R" class="b-i" style="background:var(--c1);" onclick="xfR('Rojo')">R</button>
+            <button id="btn-N" class="b-i" style="background:var(--c2);" onclick="xfR('Negro')">N</button>
+            <button id="btn-0" class="b-i" style="background:var(--c3);" onclick="xfR('Cero')">0</button>
+        </div>
+
+        <div id="c-h"></div>
+
+        <div id="stats-bar">
+            <div>R: <span id="st-R">0</span></div>
+            <div>N: <span id="st-N">0</span></div>
+            <div>0: <span id="st-0">0</span></div>
+        </div>
+
+        <div class="actions-grid">
+            <button class="btn-act" onclick="deshacer()">CORREGIR</button>
+            <button id="btn-trampa" class="btn-act" style="color:var(--c4); border-color:var(--c4); opacity:0.3; pointer-events:none;" onclick="alert('Trampa enviada')">⚠️ TRAMPA</button>
+            <button class="btn-act" style="color:var(--c1);" onclick="resetear()">RESET</button>
         </div>
     </div>
 
     <script>
         const _URL = "https://script.google.com/macros/s/AKfycbzUIdq4jKKOi3_fu3kLsO_cP3Z9ckXp7B6sUiP78B7Km7bDVmaecAIdsWGgGcA8nlE8JA/exec";
-        let _U="", _L="", _S=0, _ba=40, _nP=0, _nG=0, _h=[], _m=0.2, _s="", _per=0, _TS=0, _IS=0, _lS=null, _cR=0, _cN=0, _c0=0;
-        let _MONEDA = "USD";
-        window.trampasLocales = [];
+        let _h=[], _m=0.2, _s="", _nP=0, _cR=0, _cN=0, _c0=0, _lS=null, _cur="USD", _per=0;
 
         function cambiarMoneda(m) {
-            _MONEDA = m;
-            document.getElementById('btn-usd').classList.toggle('active', m === 'USD');
-            document.getElementById('btn-clp').classList.toggle('active', m === 'CLP');
+            _cur = m;
+            document.getElementById('btn-usd').style.background = m === 'USD' ? 'var(--c5)' : '#222';
+            document.getElementById('btn-usd').style.color = m === 'USD' ? 'black' : 'white';
+            document.getElementById('btn-clp').style.background = m === 'CLP' ? 'var(--c5)' : '#222';
+            document.getElementById('btn-clp').style.color = m === 'CLP' ? 'black' : 'white';
             _m = (m === "USD") ? 0.20 : 200;
-            _ba = (m === "USD") ? 40 : 40000;
             update();
         }
 
-        // MOTOR ORIGINAL: SE SUBE A LA OLA Y SE MANTIENE
-        function motorCalculoOriginal(h) {
-            if (!h.length) return "---";
-            let u=h[0], p=h[1];
+        document.getElementById('btn-validar').onclick = function() {
+            document.getElementById('p-l').style.display = 'none';
+            document.getElementById('app-principal').style.display = 'flex';
+            update();
+        };
+
+        function xfR(c) {
+            _lS = {h:[..._h], m:_m, s:_s, nP:_nP, cR:_cR, cN:_cN, c0:_c0, per:_per};
+            if(c==='Rojo')_cR++; else if(c==='Negro')_cN++; else if(c==='Cero')_c0++;
+            if(_s !== "") {
+                if(c.toUpperCase() === _s) { _nP += _m; _m = (_cur==="USD")?0.20:200; _per=0; }
+                else if(c !== 'Cero') { _nP -= _m; _m *= 2; _per++; }
+            }
+            _h.unshift(c);
+            _s = motorCalculo(_h);
+            if(_per >= 7) { document.getElementById('btn-trampa').style.opacity="1"; document.getElementById('btn-trampa').style.pointerEvents="auto"; }
+            update();
+        }
+
+        function motorCalculo(h) {
+            if(!h.length) return "---";
             let r=1; for(let k=0; k<h.length-1; k++){ if(h[k]===h[k+1]) r++; else break; }
-            let sn = (u==="Rojo")?"NEGRO":"ROJO";
-            if(u==='Cero') sn=(p==='Rojo')?'ROJO':'NEGRO';
-            if(r>=3) sn=u.toUpperCase(); // Se sube a la ola
-            
-            // Filtro de trampas
-            let nc = sn==="ROJO"?"R":"N";
-            let hh = [nc, ...h.map(v=>v[0].toUpperCase())].join("-");
-            for(let tr of window.trampasLocales) if(hh.indexOf(tr)===0) { sn=(sn==="ROJO")?"NEGRO":"ROJO"; break; }
+            let sn = (h[0]==="Rojo")?"NEGRO":"ROJO";
+            if(h[0]==='Cero') sn=(h[1]==='Rojo')?'ROJO':'NEGRO';
+            if(r>=3) sn=h[0].toUpperCase();
             return sn;
         }
 
-        window.onload = async () => { try { const r=await fetch(_URL+"?action=obtener_global"); const d=await r.json(); if(d.status==="success") document.getElementById('lbl-global-neto').innerText="$ "+parseFloat(d.total_global).toFixed(2)+" USD"; } catch(e){} };
-
-        document.getElementById('btn-validar').onclick = async function() {
-            _U = document.getElementById('u-i').value.trim(); _L = document.getElementById('l-i').value.trim().toUpperCase();
-            if(!_U || !_L) return; this.innerText = "⏳ VALIDANDO...";
-            try {
-                const r = await fetch(_URL + "?action=validar&usuario="+encodeURIComponent(_U)+"&serial="+encodeURIComponent(_L));
-                const d = await r.json();
-                if(d.status === "success") {
-                    _S = d.segundos; _nG = parseFloat(d.neto_global)||0;
-                    this.innerText = "🐝 CARGANDO TRAMPAS...";
-                    let rT = await fetch(_URL+"?action=panel_trampas");
-                    let dT = await rT.json();
-                    if(dT.datos) dT.datos.forEach(row => { if(row[2]) window.trampasLocales.push(row[2].split("_")[0]); });
-                    document.getElementById('p-l').style.display='none'; document.getElementById('app-principal').style.display='flex';
-                    _TS=Date.now(); _IS=_S; setInterval(TM_TICK, 1000); update();
-                } else { alert(d.mensaje); this.innerText="ENTRAR"; }
-            } catch(e) { alert("Error"); }
-        };
-
-        function TM_TICK() { 
-            let e=Math.floor((Date.now()-_TS)/1000); _S=Math.max(0,_IS-e);
-            let d=Math.floor(_S/86400), h=Math.floor((_S%86400)/3600), m=Math.floor((_S%3600)/60), s=_S%60;
-            document.getElementById('tmr').innerText = `${d}d-${h}h:${m}m:${s}s`;
-        }
-
-        function xfR(c) {
-            // Backup para UNDO (CORREGIR)
-            _lS = {ba:_ba, nP:_nP, nG:_nG, h:[..._h], m:_m, s:_s, per:_per, cR:_cR, cN:_cN, c0:_c0};
-            
-            if(c==='Rojo')_cR++; else if(c==='Negro')_cN++; else if(c==='Cero')_c0++;
-            
-            if(_s!==""){
-                if(c.toUpperCase()===_s){ 
-                    _ba+=_m; _nP+=_m; _nG+=_m; 
-                    _m=(_MONEDA==="USD")?0.20:200; _per=0; 
-                } else if(c!=='Cero'){ 
-                    _ba-=_m; _nP-=_m; _nG-=_m; _m*=2; _per++; 
-                }
-            }
-            _h.unshift(c); _s=motorCalculoOriginal(_h.slice(0,15)); update();
-            if(_per>=7) { document.getElementById('btn-trampa').style.opacity="1"; document.getElementById('btn-trampa').style.pointerEvents="auto"; }
-        }
+        function deshacer() { if(_lS){ Object.assign(window, _lS); _lS=null; update(); } }
+        function resetear() { if(confirm("¿Reset?")){ _h=[]; _m=(_cur==="USD")?0.20:200; _s=""; _nP=0; _cR=0; _cN=0; _c0=0; update(); } }
 
         function update() {
-            let simbolo = (_MONEDA === "USD") ? "$" : "";
-            let sufijo = (_MONEDA === "CLP") ? " CLP" : "";
-            
-            document.getElementById('c-i').innerText=simbolo+_ba.toLocaleString()+sufijo;
-            document.getElementById('u-s').innerText=simbolo+_nP.toLocaleString()+sufijo;
-            document.getElementById('n-g').innerText=simbolo+_nG.toLocaleString()+sufijo;
-            document.getElementById('s-t').innerText=_s||"---";
-            document.getElementById('s-t').style.color=(_s==="ROJO"?"#e74c3c":(_s==="NEGRO"?"#fff":"#888"));
-            document.getElementById('m-t').innerText=simbolo+_m.toLocaleString()+sufijo;
-            
-            document.getElementById('st-R').innerText=_cR;
-            document.getElementById('st-N').innerText=_cN;
-            document.getElementById('st-0').innerText=_c0;
-
-            const ch=document.getElementById('c-h'); ch.innerHTML="";
-            _h.slice(0,18).forEach(v => {
-                let cl=(v==='Rojo'?'red':(v==='Negro'?'#fff':'green'));
-                ch.innerHTML+=`<div class="bola" style="background:${cl}; color:${v==='Negro'?'#000':'#fff'}">${v==='Cero'?'0':''}</div>`;
+            let p = _cur === "USD" ? "$" : "";
+            document.getElementById('s-t').innerText = _s || "---";
+            document.getElementById('s-t').style.color = _s === "ROJO" ? "#e74c3c" : (_s === "NEGRO" ? "#fff" : "#888");
+            document.getElementById('m-t').innerText = p + _m.toLocaleString();
+            document.getElementById('c-i').innerText = p + _m.toLocaleString();
+            document.getElementById('u-s').innerText = p + _nP.toLocaleString();
+            document.getElementById('st-R').innerText = _cR;
+            document.getElementById('st-N').innerText = _cN;
+            document.getElementById('st-0').innerText = _c0;
+            const ch = document.getElementById('c-h'); ch.innerHTML = "";
+            _h.slice(0, 12).forEach(v => {
+                let bg = v === 'Rojo' ? 'red' : (v === 'Negro' ? '#fff' : 'green');
+                ch.innerHTML += `<div class="bola" style="background:${bg}; color:${v==='Negro'?'#000':'#fff'}">${v[0]}</div>`;
             });
         }
-
-        document.getElementById('btn-R').onclick=()=>xfR('Rojo');
-        document.getElementById('btn-N').onclick=()=>xfR('Negro');
-        document.getElementById('btn-0').onclick=()=>xfR('Cero');
-        document.getElementById('btn-undo').onclick=()=>{ if(_lS){ Object.assign(window, _lS); _lS=null; update(); } };
-        document.getElementById('btn-reset').onclick=()=>{ if(confirm("¿Borrar historial?")){ _h=[]; _m=(_MONEDA==="USD")?0.20:200; _s=""; _per=0; update(); } };
     </script>
 </body>
 </html>
