@@ -91,7 +91,7 @@
     <div id="modal-reset-confirm" class="modal-base" style="z-index: 10006; flex-direction: column;">
         <div style="background: rgba(20,20,20,0.98); border: 2px solid var(--c1); color: #fff; padding: 25px; border-radius: 20px; text-align: center; max-width: 400px;">
             <h2 style="color: var(--c1); margin: 10px 0;">¿RESETEAR MESA?</h2>
-            <p style="color: #ccc; font-size: 14px;">Esto borrará el historial de bolitas, pero <b>TU UTILIDAD Y GLOBAL SE MANTENDRÁN INTACTOS</b>.</p>
+            <p style="color: #ccc; font-size: 14px;">Esto borrará el historial de bolitas de la pantalla, pero <b>TU UTILIDAD Y GLOBAL SE MANTENDRÁN INTACTOS</b>.</p>
             <div style="display: flex; gap: 10px; margin-top: 20px;">
                 <button class="b-a" style="background: #555; color: #fff; flex: 1;" onclick="document.getElementById('modal-reset-confirm').style.display='none'">CANCELAR</button>
                 <button class="b-a" style="background: var(--c1); color: #fff; flex: 1;" onclick="ejecutarReset()">SÍ, BORRAR BOLITAS</button>
@@ -223,19 +223,16 @@
     
     let _MONEDA = "USD";
     let _savedJSON_temp = null;
-    let _d_temp = null;
 
     window.onload = async () => { try { const r = await fetch(_URL + "?action=obtener_global"); const d = await r.json(); if(d.status === "success") { let monto = parseFloat(d.total_global); if(monto <= 0) monto = 1450.50; document.getElementById('lbl-global-neto').innerText = "$ " + monto.toFixed(2) + " USD"; } } catch(e) { document.getElementById('lbl-global-neto').innerText = "$ 1450.50 USD"; } };
 
     function mostrarAlerta(mensaje) { document.getElementById('txt-alerta-trampa').innerHTML = mensaje; document.getElementById('alerta-trampa-custom').style.display = 'flex'; }
     
-    // 🔥 REPARACIÓN DEL RESET: Solo borra historia y bolitas, mantiene Capital/Utilidad/Global 🔥
+    // 🔥 REPARACIÓN DEL RESET: Borra bolitas pero mantiene Parcial y Global intactos 🔥
     window.ejecutarReset = () => { 
         _h=[]; _m=(_MONEDA==='USD'?0.2:200); _s=""; _per=0; _cR=0; _cN=0; _c0=0; _s0=0; 
-        // NO BORRAMOS _ba, _nP ni _nG. Se mantienen los saldos.
         document.getElementById('btn-trampa').style.opacity="0.3"; 
         document.getElementById('btn-trampa').style.pointerEvents="none"; 
-        document.getElementById('c-h').innerHTML = ""; // Limpia la interfaz visual de las bolitas
         update(false); 
         saveState(); 
         document.getElementById('modal-reset-confirm').style.display='none'; 
@@ -252,7 +249,6 @@
             if(d.status === "success") { 
                 _S = d.segundos; _nG = parseFloat(d.neto_global) || 0; 
                 _savedJSON_temp = d.estado_nube || localStorage.getItem('ts_'+_L);
-                _d_temp = d;
                 
                 let savedMoneda = localStorage.getItem('VIP_MONEDA_' + _L);
                 if (!savedMoneda) {
@@ -274,12 +270,16 @@
     function ejecutarIngreso(mon) {
         _MONEDA = mon;
         let restored = false;
+        
+        // 🔥 SIEMPRE EMPIEZA LA UTILIDAD DE LA SESIÓN EN 0 🔥
+        _nP = 0; 
+
         if(_savedJSON_temp && _savedJSON_temp.includes("{")) {
             if(confirm("☁️ Tienes una sesión guardada en la Nube.\n\n¿Deseas CONTINUAR la partida anterior?")) {
                 try { 
                     let st = JSON.parse(_savedJSON_temp); 
                     _ba = parseFloat(st.ba) || (_MONEDA==='USD'?40:40000); 
-                    _nP = parseFloat(st.nP) || 0; _nG = parseFloat(st.nG) || _nG; _h = st.h || []; 
+                    _nG = parseFloat(st.nG) || _nG; _h = st.h || []; 
                     _m = parseFloat(st.m) || (_MONEDA==='USD'?0.2:200); _s = st.s || ""; _per = parseFloat(st.per) || 0; 
                     _cI = parseFloat(st.cI) || _ba; _cR = parseInt(st.cR) || 0; _cN = parseInt(st.cN) || 0; _c0 = parseInt(st.c0) || 0; _s0 = parseInt(st.s0) || 0; 
                     _Meta = _cI * 1.20; restored = true; 
@@ -307,7 +307,7 @@
                 alert("✅ SOLICITUD ENVIADA.\n\nRevisa tu WhatsApp y responde 'SI'.");
                 document.getElementById('u-i').value = "DEMO"; document.getElementById('l-i').value = d.serial;
                 this.innerText = "ACTIVAR AHORA";
-            } else { throw new Error("Fallo de red"); }
+            } else { alert(d.mensaje); this.innerText = "ACTIVAR AHORA"; } // Muestra si el WhatsApp ya existe
         } catch(e) { 
             let msg = `Hola TECNOENTRETE, mi nombre es ${nom} y quiero activar mi DEMO VIP.`;
             window.open(`https://wa.me/56995931641?text=${encodeURIComponent(msg)}`, '_blank');
@@ -360,6 +360,7 @@
     document.getElementById('btn-trampa').onclick = async () => { let patron = _h.slice(0,7).map(v => v.charAt(0).toUpperCase()).join("-"); try { navigator.sendBeacon(_URL + "?action=reportar_trampa&usuario=" + encodeURIComponent(_U) + "&serial=" + encodeURIComponent(_L) + "&patron=" + patron + "_MANUAL"); mostrarAlerta("<b>✅ REPORTE MANUAL ENVIADO AL CLOUD.</b>"); document.getElementById('btn-trampa').style.opacity="0.3"; document.getElementById('btn-trampa').style.pointerEvents="none"; } catch(e) {} };
     
     document.getElementById('btn-undo').onclick = () => { if(_lS) { _ba = _lS.ba; _nP = _lS.nP; _nG = _lS.nG; _g = _lS.g; _p = _lS.p; _h = [..._lS.h]; _m = _lS.m; _s = _lS.s; _per = _lS.per; _cR = _lS.cR; _cN = _lS.cN; _c0 = _lS.c0; _s0 = _lS.s0; update(false); saveState(); _lS = null; } };
+    document.getElementById('btn-reset').onclick = () => { document.getElementById('modal-reset-confirm').style.display='flex'; };
 
     function update(isCalc = false) {
         let p = (_MONEDA === 'USD') ? "$" : ""; let sfx = (_MONEDA === 'CLP') ? " CLP" : "";
