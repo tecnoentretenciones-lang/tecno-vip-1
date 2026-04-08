@@ -17,6 +17,12 @@
         .box-global { background: linear-gradient(180deg, #f39c12, #e67e22); color: #000; padding: 12px; border-radius: 10px; margin-bottom: 15px; font-weight: 900; font-size: 18px; display: flex; flex-direction: column; box-shadow: 0 4px 10px rgba(243,156,18,0.4); }
         .box-global-title { font-size: 11px; text-transform: uppercase; color: #111; margin-bottom: 2px; }
         .legal-box { background: rgba(231, 76, 60, 0.1); border: 1px solid #e74c3c; padding: 15px; border-radius: 10px; margin-bottom: 15px; font-size: 11px; color: #e74c3c; text-align: left; line-height: 1.5; font-weight: 600;}
+        
+        /* BOTONES MONEDA */
+        .currency-switch { display: flex; gap: 10px; margin-bottom: 15px; }
+        .btn-cur { flex: 1; padding: 10px; border-radius: 8px; font-weight: 900; border: 1px solid #444; background: #111; color: #888; cursor: pointer; transition: 0.3s; }
+        .btn-cur.active { background: var(--c5); color: #000; border-color: var(--c5); box-shadow: 0 0 10px rgba(0,229,255,0.4); }
+
         .i-s { width: 100%; background: #000; border: 1px solid #444; color: #f1c40f; padding: 15px; border-radius: 10px; font-size: 18px; text-align: center; margin-bottom: 15px; outline: none; font-weight: bold; }
         .b-a { border: none; padding: 18px; border-radius: 10px; font-weight: 900; width: 100%; cursor: pointer; text-transform: uppercase; font-size: 14px; margin-bottom: 10px; transition: transform 0.1s;}
         .b-a:active { transform: scale(0.97); }
@@ -24,12 +30,6 @@
         .btn-demo { background: #0b2228; color: #00e5ff; border: 2px solid #00e5ff; }
         .btn-planes { background: #00e5ff; color: #000; }
         .btn-manual { background: #f1c40f; color: #000; }
-        
-        /* BOTONES MONEDA */
-        .currency-switch { display: flex; gap: 10px; margin-bottom: 15px; }
-        .btn-cur { flex: 1; padding: 10px; border-radius: 8px; font-weight: 900; border: 1px solid #444; background: #111; color: #888; cursor: pointer; transition: 0.3s; }
-        .btn-cur.active { background: var(--c5); color: #000; border-color: var(--c5); box-shadow: 0 0 10px rgba(0,229,255,0.4); }
-
         #app-principal { display: none; flex-direction: column; width: 100%; height: 100dvh; max-width: 500px; padding: calc(env(safe-area-inset-top) + 10px) 10px 10px 10px; margin: auto; }
         .tmr-big { background:#000; border:2px solid var(--c5); border-radius: 12px; padding:10px; text-align:center; font-size: 26px; color: var(--c5); font-weight: 900; margin-bottom: 5px;}
         #global-wallet { background:#000; border:1px solid #333; border-radius:15px; padding:12px; display:flex; justify-content:space-around; margin-bottom: 5px; }
@@ -84,7 +84,7 @@
 
     <div id="p-l">
         <div class="c-l">
-            <img src="https://cdn-icons-png.flaticon.com/512/1055/1055673.png"> 
+            <img src="https://cdn-icons-png.flaticon.com/512/1055/1055673.png" style="width:80px; margin-bottom:10px; animation: rotar 5s linear infinite; border-radius: 50%; border: 2px solid #fff;"> 
             <h1>TECNOENTRETE VIP</h1>
             
             <div class="box-global">
@@ -94,9 +94,9 @@
 
             <div class="legal-box">
                 REGLAS DE ORO Y PATRÓN DE ROBO:<br>
-                - Iniciar siempre con monto base según moneda.<br>
+                - Iniciar siempre con monto base correspondiente.<br>
                 - Capital recomendado en mesa: x200 la base.<br>
-                - Si la racha contraria llega a 7, use el botón ⚠️ TRAMPA.
+                - Si la racha contraria llega a 7 veces seguidas, use el botón ⚠️ TRAMPA para reportar el patrón.
             </div>
 
             <div class="currency-switch">
@@ -153,15 +153,15 @@
     <div id="modal-demo" class="modal-base">
         <div class="modal-content">
             <h2 style="color:var(--c5); margin-top:0;">🎁 DEMO GRATIS</h2>
-            <input type="text" id="reg-nombre" class="i-s" placeholder="NOMBRE Y APELLIDO">
+            <input type="text" id="reg-nombre" class="i-s" placeholder="NOMBRE Y APELLIDO (Ej: Juan Perez)" style="border-radius:10px;">
             <div style="display: flex; gap: 8px; margin-bottom: 8px;">
-                <select id="reg-pais" class="i-s" style="width: 38%; margin-bottom: 0; padding: 0 5px; font-size: 14px;">
+                <select id="reg-pais" class="i-s" style="width: 38%; margin-bottom: 0; padding: 0 5px; font-size: 14px; border-radius:10px;">
                     <option value="569" selected>🇨🇱 +569</option>
                 </select>
-                <input type="tel" id="reg-wsp" class="i-s" placeholder="Número" style="width: 62%; margin-bottom: 0;">
+                <input type="tel" id="reg-wsp" class="i-s" placeholder="Número (Ej: 87654321)" style="width: 62%; margin-bottom: 0; border-radius:10px;">
             </div>
             <button class="b-a btn-entrar" id="btn-activar-demo">ACTIVAR AHORA</button>
-            <button onclick="document.getElementById('modal-demo').style.display='none'" style="color:#888; background:none; border:none; text-decoration:underline; margin-top: 10px;">Volver</button>
+            <button onclick="document.getElementById('modal-demo').style.display='none'" style="color:#888; background:none; border:none; text-decoration:underline; font-size: 14px; margin-top: 10px;">Volver</button>
         </div>
     </div>
 
@@ -182,10 +182,10 @@
         <div class="modal-content">
             <h2 style="color:var(--c4); margin-top:0;"><i class="fas fa-book-open"></i> MANUAL VIP</h2>
             <div class="manual-text">
-                <p><strong>1. Motor Instantáneo:</strong> Siga la sugerencia central.</p>
-                <p><strong>2. Modo Moneda:</strong> Elija USD (Base 0.20) o CLP (Base 200).</p>
+                <p><strong>1. Capital:</strong> Base <strong>$0.20 USD</strong> o <strong>$200 CLP</strong>.</p>
+                <p><strong>2. Motor:</strong> Siga la sugerencia en grande (S.T.). El cálculo se hace de forma segura en la nube.</p>
                 <p><strong>3. Racha:</strong> Si pierde, el sistema dobla automáticamente.</p>
-                <p><strong>4. Trampa:</strong> Use el botón si pierde 7 veces seguidas para reportar.</p>
+                <p><strong>4. Trampa:</strong> Si pierde 7 veces seguidas, use el botón ⚠️ TRAMPA.</p>
             </div>
             <button class="b-a" style="background:#555; color:white;" onclick="document.getElementById('modal-manual').style.display='none'">Cerrar</button>
         </div>
@@ -195,26 +195,24 @@
     let lastTouchEnd = 0; document.addEventListener('touchend', e => { const now = (new Date()).getTime(); if (now - lastTouchEnd <= 300) e.preventDefault(); lastTouchEnd = now; }, { passive: false });
 
     const _URL = "https://script.google.com/macros/s/AKfycbzVAoiVPr4M2x3qZjW2jEL9yn633Rc7FqcXZaSMzIf6uant1VbLPV7ScwSudHslJYOuzw/exec";
+    
     let _HID = localStorage.getItem('VIP_HID') || 'VIP-'+Math.random().toString(36).substr(2,10).toUpperCase(); localStorage.setItem('VIP_HID', _HID);
     
-    // Variables Core
-    let _L="", _U="", _S=0, _ba=0, _cI=40, _nP=0, _nG=0, _g=0, _p=0, _h=[], _m=0.2, _s="", _per=0, _Meta=0, _TS=0, _IS=0, _WSP="", _lS=null, _cR=0, _cN=0, _c0=0, _s0=0;
+    let _L="", _U="", _S=0, _ba=0, _cI=40, _nP=0, _nG=0, _g=0, _p=0, _h=[], _m=0.2, _s="", _per=0, _Meta=0, _TS=0, _IS=0, _WSP="", _lS=null, _cR=0, _cN=0, _c0=0, _s0=0, _isFetching=false;
     let _MONEDA = "USD";
-    window.trampasLocales = [];
 
     function setMoneda(mon) {
         _MONEDA = mon;
         document.getElementById('btn-usd').className = mon === 'USD' ? 'btn-cur active' : 'btn-cur';
         document.getElementById('btn-clp').className = mon === 'CLP' ? 'btn-cur active' : 'btn-cur';
         _m = (mon === 'USD') ? 0.20 : 200;
-        update();
+        update(true);
     }
 
     window.onload = async () => { try { const r = await fetch(_URL + "?action=obtener_global"); const d = await r.json(); if(d.status === "success") { let monto = parseFloat(d.total_global); if(monto <= 0) monto = 1450.50; document.getElementById('lbl-global-neto').innerText = "$ " + monto.toFixed(2) + " USD"; } } catch(e) { document.getElementById('lbl-global-neto').innerText = "$ 1450.50 USD"; } };
 
     function mostrarAlerta(mensaje) { document.getElementById('txt-alerta-trampa').innerHTML = mensaje; document.getElementById('alerta-trampa-custom').style.display = 'flex'; }
-    window.ejecutarReset = () => { _h=[]; _m=(_MONEDA==='USD')?0.20:200; _s=""; _per=0; _cR=0; _cN=0; _c0=0; _s0=0; document.getElementById('btn-trampa').style.opacity="0.3"; document.getElementById('btn-trampa').style.pointerEvents="none"; update(); document.getElementById('modal-reset-confirm').style.display='none'; };
-    window.aceptarMeta = () => { document.getElementById('alerta-meta').style.display = 'none'; _Meta = _ba * 1.20; };
+    window.ejecutarReset = () => { _h=[]; _m=(_MONEDA==='USD')?0.20:200; _s=""; _per=0; _cR=0; _cN=0; _c0=0; _s0=0; document.getElementById('btn-trampa').style.opacity="0.3"; document.getElementById('btn-trampa').style.pointerEvents="none"; update(); saveState(); document.getElementById('modal-reset-confirm').style.display='none'; };
 
     document.getElementById('btn-validar').onclick = async function() {
         _U = document.getElementById('u-i').value.trim();
@@ -226,100 +224,104 @@
             const d = await r.json();
             if(d.status === "success") { 
                 _S = d.segundos; _nG = parseFloat(d.neto_global) || 0; 
-                
-                // DESCARGAR COLMENA
-                let rT = await fetch(_URL + "?action=panel_trampas");
-                let dT = await rT.json();
-                if(dT.datos) dT.datos.forEach(row => { if(row[2]) window.trampasLocales.push(row[2].split("_")[0]); });
-
-                _cI = parseFloat(prompt(`Capital inicial en ${_MONEDA}:`, (_MONEDA==='USD'?"40.00":"40000"))) || (_MONEDA==='USD'?40:40000); 
-                _ba = _cI; _Meta = _ba * 1.20; 
+                let savedJSON = d.estado_nube || localStorage.getItem('ts_'+_L);
+                let restored = false;
+                if(savedJSON && savedJSON.includes("{")) {
+                    if(confirm("☁️ Tienes una sesión guardada en la Nube.\n\n¿Deseas CONTINUAR la partida anterior?")) {
+                        try { let st = JSON.parse(savedJSON); _ba = parseFloat(st.ba) || (_MONEDA==='USD'?40:40000); _nP = parseFloat(st.nP) || 0; _nG = parseFloat(st.nG) || _nG; _h = st.h || []; _m = parseFloat(st.m) || (_MONEDA==='USD'?0.20:200); _s = st.s || ""; _per = parseFloat(st.per) || 0; _cI = parseFloat(st.cI) || _ba; _cR = parseInt(st.cR) || 0; _cN = parseInt(st.cN) || 0; _c0 = parseInt(st.c0) || 0; _s0 = parseInt(st.s0) || 0; _Meta = _cI * 1.20; restored = true; } catch(e) {}
+                    }
+                }
+                if(!restored) { 
+                    _cI = parseFloat(prompt(`Capital disponible en mesa (${_MONEDA}):`, _MONEDA==='USD' ? "40.00" : "40000")) || (_MONEDA==='USD'?40:40000); 
+                    _ba = _cI; _Meta = _ba * 1.20; _cR=0; _cN=0; _c0=0; _s0=0; 
+                }
                 iniciarApp(); 
             } else { alert(d.mensaje); this.innerText = "ENTRAR AL SISTEMA"; }
         } catch(e) { alert("Error de Conexión."); this.innerText = "ENTRAR AL SISTEMA"; }
     };
 
     document.getElementById('btn-activar-demo').onclick = async function() {
-        const nom = document.getElementById('reg-nombre').value.trim(); const rawWsp = document.getElementById('reg-wsp').value.trim(); const codPais = document.getElementById('reg-pais').value;
-        if(!nom || !rawWsp) return alert("Faltan datos.");
+        const nom = document.getElementById('reg-nombre').value.trim(); 
+        const rawWsp = document.getElementById('reg-wsp').value.trim(); 
+        const codPais = document.getElementById('reg-pais').value;
+        if(!nom || !nom.includes(' ')) return alert("Ingresa tu NOMBRE y APELLIDO (separados por espacio)."); 
+        if(!rawWsp) return alert("Falta celular.");
         const wsp = codPais + rawWsp.replace(/\D/g, '');
+        
         this.innerText = "PROCESANDO...";
         try {
             const r = await fetch(_URL + "?action=solicitar_demo&nombre=" + encodeURIComponent(nom) + "&wsp=" + wsp + "&hid=" + _HID);
             const d = await r.json();
+            
             if(d.status === "success") {
                 document.getElementById('modal-demo').style.display='none';
-                alert("✅ SOLICITUD ENVIADA.\n\nRevisa tu WhatsApp y responde 'SI'.");
-                document.getElementById('u-i').value = "DEMO"; document.getElementById('l-i').value = d.serial;
-            } else { alert(d.mensaje); }
-        } catch(e) { alert("Error."); }
+                alert("✅ SOLICITUD ENVIADA.\n\nRevisa tu WhatsApp y responde 'SI'.\n\n(Tus datos ya se rellenaron solos). Una vez que respondas SI, presiona 'ENTRAR AL SISTEMA'.");
+                document.getElementById('u-i').value = "DEMO";
+                document.getElementById('l-i').value = d.serial;
+            } else { 
+                alert(d.mensaje || "Error al procesar."); 
+            }
+        } catch(e) { alert("Error de conexión."); }
         this.innerText = "ACTIVAR AHORA";
     };
 
     function iniciarApp() { 
         document.getElementById('p-l').style.display='none'; 
         document.getElementById('app-principal').style.display='flex'; 
-        _TS = Date.now(); _IS = _S; 
+        _TS = Date.now(); 
+        _IS = _S; 
+        TM_TICK(); 
         setInterval(TM_TICK, 1000); 
+        setInterval(saveState, 15000); 
         update(); 
     }
     
     function TM_TICK() { 
         if(_S<=0) return; 
-        let e = Math.floor((Date.now()-_TS)/1000); _S = Math.max(0, _IS - e); 
+        let e = Math.floor((Date.now()-_TS)/1000); 
+        _S = Math.max(0, _IS - e); 
         let d=Math.floor(_S/86400), h=Math.floor((_S%86400)/3600), m=Math.floor((_S%3600)/60), s=_S%60; 
         document.getElementById('tmr').innerText = `${d}d-${h}h:${m}m:${s}s`; 
         if(_S<=0) location.reload(); 
     }
+    
+    window.addEventListener("pagehide", () => { if(_L !== "") navigator.sendBeacon(_URL + "?action=salir&usuario=" + encodeURIComponent(_U) + "&serial=" + encodeURIComponent(_L) + "&wsp=" + encodeURIComponent(_WSP)); });
+    
+    function saveState() { let est = JSON.stringify({ba:_ba, nP:_nP, nG:_nG, cI:_cI, h:_h.slice(0,12), m:_m, s:_s, per:_per, cR:_cR, cN:_cN, c0:_c0, s0:_s0}); localStorage.setItem('ts_'+_L, est); let url = _URL + `?action=guardar&usuario=${encodeURIComponent(_U)}&serial=${encodeURIComponent(_L)}&neto_global=${_nG.toFixed(2)}&neto=${_nP.toFixed(2)}&estado=${encodeURIComponent(est)}&wsp=${encodeURIComponent(_WSP)}`; fetch(url).catch(e=>{}); }
+    
+    window.aceptarMeta = () => { document.getElementById('alerta-meta').style.display = 'none'; _Meta = _ba * 1.20; };
 
-    // EL MOTOR MATEMÁTICO LOCAL (GANA SIEMPRE)
-    function motorCalculo(h) {
-        if (!h.length) return "---";
-        let u = h[0], p = h[1];
-        let r = 1; for(let k=0; k<h.length-1; k++){ if(h[k]===h[k+1]) r++; else break; }
-        
-        let proxima = (u === "Rojo") ? "NEGRO" : "ROJO";
-        if (u === 'Cero') proxima = (p === 'Rojo') ? "ROJO" : "NEGRO";
-        if (r >= 3) proxima = u.toUpperCase(); // SE SUBE A LA OLA
-        
-        // Colmena Anti-Trampas
-        let nc = proxima==="ROJO"?"R":"N";
-        let hh = [nc, ...h.slice(0,10).map(v=>v[0].toUpperCase())].join("-");
-        for(let tr of window.trampasLocales) if(hh.indexOf(tr)===0) { proxima=(proxima==="ROJO")?"NEGRO":"ROJO"; break; }
-        
-        return proxima;
-    }
-
-    // INGRESO INSTANTÁNEO
-    function xfR(c) {
+    async function xfR(c) {
+        if(_isFetching) return; _isFetching = true;
         let per_anterior = _per; let gano_ahora = false;
         
-        // GUARDADO PARA UNDO
-        _lS = JSON.parse(JSON.stringify({ba:_ba, nP:_nP, nG:_nG, h:_h, m:_m, s:_s, per:_per, cR:_cR, cN:_cN, c0:_c0, s0:_s0}));
+        // BACKUP PARA UNDO (Copia profunda del estado)
+        _lS = JSON.parse(JSON.stringify({ba:_ba, nP:_nP, nG:_nG, g:_g, p:_p, h:_h, m:_m, s:_s, per:_per, cR:_cR, cN:_cN, c0:_c0, s0:_s0}));
         
         if (c === 'Rojo') { _cR++; _s0++; } else if (c === 'Negro') { _cN++; _s0++; } else if (c === 'Cero') { _c0++; _s0 = 0; }
         
-        if(_s !== "") { 
+        if(_s !== "" && _s !== "⏳" && _s !== "ERR" && _s !== "RED") { 
             if(c.toUpperCase() === _s){ 
                 _ba += _m; _nP += _m; _nG += _m; 
                 _m = (_MONEDA === 'USD') ? 0.20 : 200; 
-                _per = 0; gano_ahora = true; 
+                _g++; _per = 0; gano_ahora = true; 
             } else if(c !== 'Cero'){ 
                 _ba -= _m; _nP -= _m; _nG -= _m; 
-                _m *= 2; _per++; 
+                _m *= 2; _p++; _per++; 
             } 
         }
         _h.unshift(c);
         
-        // CALCULO INSTANTANEO
-        _s = motorCalculo(_h);
-        
-        update();
+        // LLAMADA AL EXCEL (CEREBRO EN LA NUBE)
+        let stDiv = document.getElementById('s-t'); stDiv.innerText = "⏳"; stDiv.className = "loading-st"; update(true);
+        try {
+            let res = await fetch(_URL + "?action=calcular&historial=" + encodeURIComponent(JSON.stringify(_h.slice(0, 15))));
+            let data = await res.json(); _s = (data.status === "success") ? data.sugerencia : "ERR";
+        } catch(e) { _s = "RED"; }
+        _isFetching = false; stDiv.className = ""; update(); saveState();
 
         if(gano_ahora && per_anterior >= 4) { let toast = document.getElementById('toast-evasion'); toast.style.display = 'block'; setTimeout(() => { toast.style.display = 'none'; }, 4000); }
         if(_ba >= _Meta) document.getElementById('alerta-meta').style.display='flex';
-        
-        // TRAMPA
         if(_per >= 7) { 
             document.getElementById('btn-trampa').style.opacity="1"; document.getElementById('btn-trampa').style.pointerEvents="auto"; 
             if(_per === 7) { 
@@ -327,26 +329,39 @@
                 navigator.sendBeacon(_URL + "?action=reportar_trampa&usuario=" + encodeURIComponent(_U) + "&serial=" + encodeURIComponent(_L) + "&patron=" + patronAuto + "_AUTO_7_ERRORES"); 
                 mostrarAlerta("Has acumulado <b>7 pérdidas seguidas</b>. Reporte enviado automáticamente al Cloud."); 
             } 
-        } else { 
-            document.getElementById('btn-trampa').style.opacity="0.3"; document.getElementById('btn-trampa').style.pointerEvents="none"; 
-        }
+        } 
+        else { document.getElementById('btn-trampa').style.opacity="0.3"; document.getElementById('btn-trampa').style.pointerEvents="none"; }
     }
 
-    document.getElementById('btn-trampa').onclick = () => { let patron = _h.slice(0,7).map(v => v.charAt(0).toUpperCase()).join("-"); try { navigator.sendBeacon(_URL + "?action=reportar_trampa&usuario=" + encodeURIComponent(_U) + "&serial=" + encodeURIComponent(_L) + "&patron=" + patron + "_MANUAL"); mostrarAlerta("<b>✅ REPORTE MANUAL ENVIADO.</b>"); document.getElementById('btn-trampa').style.opacity="0.3"; document.getElementById('btn-trampa').style.pointerEvents="none"; } catch(e) {} };
+    document.getElementById('btn-trampa').onclick = async () => { let patron = _h.slice(0,7).map(v => v.charAt(0).toUpperCase()).join("-"); try { navigator.sendBeacon(_URL + "?action=reportar_trampa&usuario=" + encodeURIComponent(_U) + "&serial=" + encodeURIComponent(_L) + "&patron=" + patron + "_MANUAL"); mostrarAlerta("<b>✅ REPORTE MANUAL ENVIADO AL CLOUD.</b>"); document.getElementById('btn-trampa').style.opacity="0.3"; document.getElementById('btn-trampa').style.pointerEvents="none"; } catch(e) {} };
     
-    document.getElementById('btn-undo').onclick = () => { if(_lS) { _ba = _lS.ba; _nP = _lS.nP; _nG = _lS.nG; _h = _lS.h; _m = _lS.m; _s = _lS.s; _per = _lS.per; _cR = _lS.cR; _cN = _lS.cN; _c0 = _lS.c0; _s0 = _lS.s0; update(); _lS = null; } };
+    // BOTÓN CORREGIR REPARADO
+    document.getElementById('btn-undo').onclick = () => { if(_lS && !_isFetching) { _ba = _lS.ba; _nP = _lS.nP; _nG = _lS.nG; _g = _lS.g; _p = _lS.p; _h = [..._lS.h]; _m = _lS.m; _s = _lS.s; _per = _lS.per; _cR = _lS.cR; _cN = _lS.cN; _c0 = _lS.c0; _s0 = _lS.s0; update(); saveState(); _lS = null; } };
 
-    function update() {
+    function update(isCalc = false) {
         let p = (_MONEDA === 'USD') ? "$" : "";
         let s = (_MONEDA === 'CLP') ? " CLP" : "";
-        document.getElementById('c-i').innerText=p+_ba.toLocaleString()+s; document.getElementById('u-s').innerText=p+_nP.toLocaleString()+s; document.getElementById('n-g').innerText=p+_nG.toLocaleString()+s;
-        document.getElementById('s-t').innerText=_s||"---"; document.getElementById('s-t').style.color=(_s==="ROJO")?"#e74c3c":(_s==="NEGRO"?"#fff":"#888");
-        document.getElementById('m-t').innerText=p+_m.toLocaleString()+s; document.getElementById('st-R').innerText=_cR; document.getElementById('st-N').innerText=_cN; document.getElementById('st-0').innerText=_c0; document.getElementById('st-s0').innerText=_s0;
-        const ch=document.getElementById('c-h'); ch.innerHTML=""; _h.slice(0,18).forEach(v => { const cl=(v==='Rojo')?'red':(v==='Negro'?'#fff':'green'); ch.innerHTML+=`<div class="bola" style="background:${cl}; color:${v==='Negro'?'#000':'#fff'}">${v==='Cero'?'0':''}</div>`; });
+        
+        document.getElementById('c-i').innerText = p + _ba.toLocaleString() + s; 
+        document.getElementById('u-s').innerText = p + _nP.toLocaleString() + s; 
+        document.getElementById('n-g').innerText = p + _nG.toLocaleString() + s;
+        
+        if(!isCalc) { 
+            document.getElementById('s-t').innerText=_s||"---"; 
+            document.getElementById('s-t').style.color=(_s==="ROJO")?"#e74c3c":(_s==="NEGRO"?"#fff":"#888"); 
+        }
+        
+        document.getElementById('m-t').innerText = p + _m.toLocaleString() + s; 
+        document.getElementById('st-R').innerText=_cR; document.getElementById('st-N').innerText=_cN; document.getElementById('st-0').innerText=_c0; document.getElementById('st-s0').innerText=_s0;
+        
+        const ch=document.getElementById('c-h'); ch.innerHTML=""; 
+        _h.slice(0,18).forEach(v => { const cl=(v==='Rojo')?'red':(v==='Negro'?'#fff':'green'); ch.innerHTML+=`<div class="bola" style="background:${cl}; color:${v==='Negro'?'#000':'#fff'}">${v==='Cero'?'0':''}</div>`; });
     }
 
     document.getElementById('btn-R').onclick=()=>xfR('Rojo'); document.getElementById('btn-N').onclick=()=>xfR('Negro'); document.getElementById('btn-0').onclick=()=>xfR('Cero');
-    document.addEventListener('contextmenu', e => e.preventDefault()); document.addEventListener('keydown', e => { if(e.key === "F12" || (e.ctrlKey && e.shiftKey && e.keyCode === 73) || (e.ctrlKey && e.keyCode === 85) || (e.ctrlKey && e.keyCode === 83)) { e.preventDefault(); } if(e.ctrlKey && (e.key === '+' || e.key === '-' || e.key === '=' || e.keyCode === 107 || e.keyCode === 109)) e.preventDefault(); }); document.addEventListener('wheel', e => { if(e.ctrlKey) e.preventDefault(); }, { passive: false });
+
+    document.addEventListener('contextmenu', e => e.preventDefault()); document.addEventListener('keydown', e => { if(e.key === "F12" || (e.ctrlKey && e.shiftKey && e.keyCode === 73) || (e.ctrlKey && e.keyCode === 85) || (e.ctrlKey && e.keyCode === 83)) { e.preventDefault(); mostrarAlertaHacker(); } if(e.ctrlKey && (e.key === '+' || e.key === '-' || e.key === '=' || e.keyCode === 107 || e.keyCode === 109)) e.preventDefault(); }); document.addEventListener('wheel', e => { if(e.ctrlKey) e.preventDefault(); }, { passive: false });
+    function mostrarAlertaHacker() { if(document.getElementById("pantalla-terror")) return; var pm = document.createElement("div"); pm.id = "pantalla-terror"; pm.style = "position:fixed;top:0;left:0;width:100vw;height:100vh;background:#a00;color:#fff;z-index:999999;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:20px;font-family:Arial;"; pm.innerHTML = `<h1 style="font-size:32px;text-transform:uppercase;font-weight:bold;">⚠️ ALERTA DE SEGURIDAD</h1><p style="font-size:20px;margin-top:15px;font-weight:bold;">Intento de alteración de código detectado.</p><button onclick="this.parentElement.remove()" style="margin-top:30px;padding:15px 30px;background:#000;color:#fff;border:2px solid #fff;border-radius:10px;cursor:pointer;font-weight:bold;">ENTENDIDO</button>`; document.body.appendChild(pm); }
     </script>
 </body>
 </html>
