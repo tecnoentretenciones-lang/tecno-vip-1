@@ -91,10 +91,10 @@
     <div id="modal-reset-confirm" class="modal-base" style="z-index: 10006; flex-direction: column;">
         <div style="background: rgba(20,20,20,0.98); border: 2px solid var(--c1); color: #fff; padding: 25px; border-radius: 20px; text-align: center; max-width: 400px;">
             <h2 style="color: var(--c1); margin: 10px 0;">¿RESETEAR MESA?</h2>
-            <p style="color: #ccc; font-size: 14px;">¿Estás seguro de que deseas borrar el historial y empezar de cero?</p>
+            <p style="color: #ccc; font-size: 14px;">Esto borrará el historial de bolitas, pero <b>TU UTILIDAD Y GLOBAL SE MANTENDRÁN INTACTOS</b>.</p>
             <div style="display: flex; gap: 10px; margin-top: 20px;">
                 <button class="b-a" style="background: #555; color: #fff; flex: 1;" onclick="document.getElementById('modal-reset-confirm').style.display='none'">CANCELAR</button>
-                <button class="b-a" style="background: var(--c1); color: #fff; flex: 1;" onclick="ejecutarReset()">SÍ, RESETEAR</button>
+                <button class="b-a" style="background: var(--c1); color: #fff; flex: 1;" onclick="ejecutarReset()">SÍ, BORRAR BOLITAS</button>
             </div>
         </div>
     </div>
@@ -121,11 +121,11 @@
 
             <div class="legal-box">
                 REGLAS DE ORO Y PATRÓN DE ROBO:<br>
-                - Iniciar siempre con monto base correspondiente.<br>
+                - Seleccionará su moneda al entrar.<br>
                 - Capital recomendado en mesa: x200 de la base.<br>
-                - Si la racha contraria llega a 7 veces seguidas, use el botón ⚠️ TRAMPA para reportar el patrón.
+                - Si la racha contraria llega a 7 veces seguidas, use el botón ⚠️ TRAMPA.
             </div>
-
+            
             <input type="text" id="u-i" class="i-s" placeholder="USUARIO VIP" autocomplete="off">
             <input type="password" id="l-i" class="i-s" placeholder="CLAVE / LICENCIA" autocomplete="off">
             
@@ -217,12 +217,10 @@
     let lastTouchEnd = 0; document.addEventListener('touchend', e => { const now = (new Date()).getTime(); if (now - lastTouchEnd <= 300) e.preventDefault(); lastTouchEnd = now; }, { passive: false });
 
     const _URL = "https://script.google.com/macros/s/AKfycbzUIdq4jKKOi3_fu3kLsO_cP3Z9ckXp7B6sUiP78B7Km7bDVmaecAIdsWGgGcA8nlE8JA/exec";
-    
     let _HID = localStorage.getItem('VIP_HID') || 'VIP-'+Math.random().toString(36).substr(2,10).toUpperCase(); localStorage.setItem('VIP_HID', _HID);
     
     let _L="", _U="", _S=0, _ba=0, _cI=40, _nP=0, _nG=0, _g=0, _p=0, _h=[], _m=0.2, _s="", _per=0, _Meta=0, _TS=0, _IS=0, _WSP="", _lS=null, _cR=0, _cN=0, _c0=0, _s0=0, _isFetching=false;
     
-    // SISTEMA MONEDA PREDEFINIDA
     let _MONEDA = "USD";
     let _savedJSON_temp = null;
     let _d_temp = null;
@@ -231,12 +229,13 @@
 
     function mostrarAlerta(mensaje) { document.getElementById('txt-alerta-trampa').innerHTML = mensaje; document.getElementById('alerta-trampa-custom').style.display = 'flex'; }
     
+    // 🔥 REPARACIÓN DEL RESET: Solo borra historia y bolitas, mantiene Capital/Utilidad/Global 🔥
     window.ejecutarReset = () => { 
         _h=[]; _m=(_MONEDA==='USD'?0.2:200); _s=""; _per=0; _cR=0; _cN=0; _c0=0; _s0=0; 
-        _nP=0; _nG=0; _ba=_cI;
+        // NO BORRAMOS _ba, _nP ni _nG. Se mantienen los saldos.
         document.getElementById('btn-trampa').style.opacity="0.3"; 
         document.getElementById('btn-trampa').style.pointerEvents="none"; 
-        document.getElementById('c-h').innerHTML = ""; 
+        document.getElementById('c-h').innerHTML = ""; // Limpia la interfaz visual de las bolitas
         update(false); 
         saveState(); 
         document.getElementById('modal-reset-confirm').style.display='none'; 
@@ -255,21 +254,17 @@
                 _savedJSON_temp = d.estado_nube || localStorage.getItem('ts_'+_L);
                 _d_temp = d;
                 
-                // Verifica si el usuario ya tiene su moneda guardada
                 let savedMoneda = localStorage.getItem('VIP_MONEDA_' + _L);
                 if (!savedMoneda) {
-                    // Si no la tiene, esconde el inicio y le muestra la ventanita para elegirla
                     document.getElementById('p-l').style.display = 'none';
                     document.getElementById('modal-moneda').style.display = 'flex';
                 } else {
-                    // Si ya la tiene, entra directo
                     ejecutarIngreso(savedMoneda);
                 }
             } else { alert(d.mensaje); this.innerText = "ENTRAR AL SISTEMA"; }
         } catch(e) { alert("Error de Conexión."); this.innerText = "ENTRAR AL SISTEMA"; }
     };
 
-    // Función que se activa al presionar el botón del modal de moneda
     window.seleccionarMonedaInicial = function(mon) {
         localStorage.setItem('VIP_MONEDA_' + _L, mon);
         document.getElementById('modal-moneda').style.display = 'none';
@@ -365,7 +360,6 @@
     document.getElementById('btn-trampa').onclick = async () => { let patron = _h.slice(0,7).map(v => v.charAt(0).toUpperCase()).join("-"); try { navigator.sendBeacon(_URL + "?action=reportar_trampa&usuario=" + encodeURIComponent(_U) + "&serial=" + encodeURIComponent(_L) + "&patron=" + patron + "_MANUAL"); mostrarAlerta("<b>✅ REPORTE MANUAL ENVIADO AL CLOUD.</b>"); document.getElementById('btn-trampa').style.opacity="0.3"; document.getElementById('btn-trampa').style.pointerEvents="none"; } catch(e) {} };
     
     document.getElementById('btn-undo').onclick = () => { if(_lS) { _ba = _lS.ba; _nP = _lS.nP; _nG = _lS.nG; _g = _lS.g; _p = _lS.p; _h = [..._lS.h]; _m = _lS.m; _s = _lS.s; _per = _lS.per; _cR = _lS.cR; _cN = _lS.cN; _c0 = _lS.c0; _s0 = _lS.s0; update(false); saveState(); _lS = null; } };
-    document.getElementById('btn-reset').onclick = () => { document.getElementById('modal-reset-confirm').style.display='flex'; };
 
     function update(isCalc = false) {
         let p = (_MONEDA === 'USD') ? "$" : ""; let sfx = (_MONEDA === 'CLP') ? " CLP" : "";
