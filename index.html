@@ -1,350 +1,327 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>TECNOENTRETE VIP - MESA SEGURA CLOUD</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        :root { --c1: #e74c3c; --c2: #2c3e50; --c3: #27ae60; --c4: #f1c40f; --c5: #00e5ff; --c8: #111; }
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; touch-action: none !important; user-select: none !important; -webkit-user-drag: none; overscroll-behavior: none; }
-        html, body { height: 100%; width: 100%; margin: 0; padding: 0; overflow: hidden !important; background-color: #000; position: fixed; font-family: 'Segoe UI', sans-serif; }
-        @keyframes rotar { 100% { transform: rotate(360deg); } }
-        #p-l { width: 100%; height: 100dvh; max-width: 450px; display: flex; flex-direction: column; padding: 20px; margin: auto; position: fixed; top: 0; left: 50%; transform: translateX(-50%); background: #000; z-index: 9999; justify-content: center; align-items: center; }
-        .c-l { background: #000; border: 2px solid #00e5ff; border-radius: 20px; padding: 25px 20px; width: 100%; text-align: center; box-shadow: 0 0 20px rgba(0,229,255,0.3); }
-        .c-l img { width: 80px; margin-bottom: 10px; border-radius: 50%; border: 2px solid #fff; animation: rotar 5s linear infinite;}
-        .c-l h1 { color: #fff; font-size: 22px; margin: 0 0 15px 0; font-weight: 900;}
-        .box-global { background: linear-gradient(180deg, #f39c12, #e67e22); color: #000; padding: 12px; border-radius: 10px; margin-bottom: 15px; font-weight: 900; font-size: 18px; display: flex; flex-direction: column; box-shadow: 0 4px 10px rgba(243,156,18,0.4); }
-        .box-global-title { font-size: 11px; text-transform: uppercase; color: #111; margin-bottom: 2px; }
-        .legal-box { background: rgba(231, 76, 60, 0.1); border: 1px solid #e74c3c; padding: 15px; border-radius: 10px; margin-bottom: 15px; font-size: 11px; color: #e74c3c; text-align: left; line-height: 1.5; font-weight: 600;}
-        .i-s { width: 100%; background: #000; border: 1px solid #444; color: #f1c40f; padding: 15px; border-radius: 10px; font-size: 18px; text-align: center; margin-bottom: 15px; outline: none; font-weight: bold; }
-        .b-a { border: none; padding: 18px; border-radius: 10px; font-weight: 900; width: 100%; cursor: pointer; text-transform: uppercase; font-size: 14px; margin-bottom: 10px; transition: transform 0.1s;}
-        .b-a:active { transform: scale(0.97); }
-        .btn-entrar { background: #00e5ff; color: #000; }
-        .btn-demo { background: #0b2228; color: #00e5ff; border: 2px solid #00e5ff; }
-        .btn-planes { background: #00e5ff; color: #000; }
-        .btn-manual { background: #f1c40f; color: #000; }
-        #app-principal { display: none; flex-direction: column; width: 100%; height: 100dvh; max-width: 500px; padding: calc(env(safe-area-inset-top) + 10px) 10px 10px 10px; margin: auto; }
-        .tmr-big { background:#000; border:2px solid var(--c5); border-radius: 12px; padding:10px; text-align:center; font-size: 26px; color: var(--c5); font-weight: 900; margin-bottom: 5px;}
-        #global-wallet { background:#000; border:1px solid #333; border-radius:15px; padding:12px; display:flex; justify-content:space-around; margin-bottom: 5px; }
-        .gw-box { text-align:center; }
-        .gw-title { font-size:11px; color:#888; }
-        .gw-val { font-size:18px; font-weight:bold; }
-        .bola { width: 22px; height: 22px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 9px; font-weight: bold; }
-        #stats-bar { background:#0a0a0a; border:1px solid #333; border-radius:10px; padding:6px 10px; display:flex; justify-content:space-between; font-size:11px; font-weight:bold; color:#aaa; margin-top:-2px; }
-        .modal-base { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 10000; display: none; justify-content: center; align-items: center; padding: 20px; }
-        .modal-content { background: rgba(20, 20, 20, 0.98); border: 2px solid var(--c5); border-radius: 25px; padding: 25px; width: 90%; text-align: center; max-width: 450px; }
-        .manual-text { text-align: left; font-size: 13px; line-height: 1.5; color: #fff; background: rgba(0,0,0,0.5); border: 1px solid #333; padding: 15px; border-radius: 12px; max-height: 350px; overflow-y: auto; margin-bottom: 15px; }
-        #toast-evasion { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg, #27ae60, #2ecc71); color: #fff; padding: 15px 20px; border-radius: 10px; font-weight: 900; font-size: 14px; box-shadow: 0 5px 15px rgba(39, 174, 96, 0.6); z-index: 10007; display: none; text-align: center; border: 2px solid #fff; width: 90%; max-width: 400px; }
-        @keyframes pulse-text { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
-        .loading-st { animation: pulse-text 1s infinite; color: #888 !important; }
-        @keyframes glow-pulse { 0% { box-shadow: 0 0 10px var(--c5); } 50% { box-shadow: 0 0 25px var(--c5); } 100% { box-shadow: 0 0 10px var(--c5); } }
-        #sugerencia-container { border: 2px solid var(--c5); animation: glow-pulse 3s infinite linear; background: #1a1a1a; padding: 15px; border-radius: 15px; text-align: center; }
+var ID_INSTANCE = "7107571244";
+var API_TOKEN = "ed338e34155a4ba3a513bff14bcc7817d81938774ced491a90";
+var GREEN_URL = "https://7107.api.greenapi.com";
 
-        /* MAGIA PARA COMPUTADOR (ESCALADO AUTOMÁTICO) */
-        @media (min-width: 768px) {
-            #app-principal { max-width: 800px; justify-content: center; padding: 30px; }
-            .tmr-big { font-size: 38px !important; padding: 15px !important; }
-            .gw-val { font-size: 28px !important; }
-            .gw-title { font-size: 14px !important; }
-            #s-t { font-size: 140px !important; }
-            #m-t { font-size: 45px !important; }
-            .b-i { height: 110px !important; font-size: 55px !important; border-radius: 25px !important; }
-            .bola { width: 45px !important; height: 45px !important; font-size: 18px !important; border-width: 2px; }
-            #c-h { height: 120px !important; gap: 12px !important; padding: 15px !important; border-radius: 20px !important; }
-            #stats-bar { font-size: 16px !important; padding: 15px !important; border-radius: 15px !important;}
+function doGet(e) {
+  try {
+    var ss = SpreadsheetApp.getActiveSpreadsheet();
+    var action = e.parameter.action;
+    var hojaL = ss.getSheetByName("licencias") || ss.getSheetByName("Licencias");
+    var hojaC = ss.getSheetByName("Cajeros");
+    var data = hojaL ? hojaL.getDataRange().getValues() : [];
+
+    if (action === "solicitar_demo" || action === "validar_demo") {
+        var nNombre = e.parameter.nombre || "Usuario";
+        var nWsp = String(e.parameter.wsp || "").replace(/\D/g, '');
+        var nHid = e.parameter.hid || "";
+
+        for (var i = 1; i < data.length; i++) {
+            var celdaWsp = String(data[i][12]).replace(/\D/g, '');
+            if (celdaWsp !== "" && celdaWsp === nWsp) {
+                return _res({"status": "error", "mensaje": "Este número de WhatsApp ya fue utilizado para una demo."});
+            }
         }
-    </style>
-</head>
-<body oncontextmenu="return false;">
 
-    <div id="toast-evasion">🛡️ ¡SISTEMA VIP EVADIÓ UNA TRAMPA DEL CASINO!</div>
+        var nSerial = "DEMO_" + Math.floor(1000 + Math.random() * 9000);
+        var nuevaFila = new Array(17).fill("");
+        nuevaFila[0] = nSerial; nuevaFila[1] = "00d-00h:15m:00s"; nuevaFila[2] = "Pendiente"; nuevaFila[3] = "00d-00h:15m:00s 🔴 OFFLINE"; nuevaFila[4] = Utilities.getUuid(); nuevaFila[6] = nHid; nuevaFila[7] = new Date(); nuevaFila[8] = 0; nuevaFila[9] = 0; nuevaFila[10] = 0; nuevaFila[11] = nNombre; nuevaFila[12] = nWsp; nuevaFila[13] = "BASICO"; nuevaFila[14] = "DEMO"; nuevaFila[15] = "SISTEMA"; nuevaFila[16] = new Date();
+        hojaL.appendRow(nuevaFila);
 
-    <div id="alerta-trampa-custom" class="modal-base" style="z-index: 10006; flex-direction: column;">
-        <div style="background: rgba(20,20,20,0.98); border: 2px solid var(--c1); color: #fff; padding: 25px; border-radius: 20px; text-align: center; max-width: 400px; box-shadow: 0 0 20px rgba(231,76,60,0.5);">
-            <div style="font-size: 50px;">⚠️</div>
-            <h2 style="color: var(--c1); margin: 10px 0;">¡ALERTA DE CASINO!</h2>
-            <p id="txt-alerta-trampa" style="font-size: 15px; line-height: 1.5; color: #ccc; margin-bottom: 20px;"></p>
-            <button class="b-a btn-entrar" onclick="document.getElementById('alerta-trampa-custom').style.display='none'">ENTENDIDO</button>
-        </div>
-    </div>
-
-    <div id="modal-reset-confirm" class="modal-base" style="z-index: 10006; flex-direction: column;">
-        <div style="background: rgba(20,20,20,0.98); border: 2px solid var(--c1); color: #fff; padding: 25px; border-radius: 20px; text-align: center; max-width: 400px;">
-            <h2 style="color: var(--c1); margin: 10px 0;">¿RESETEAR MESA?</h2>
-            <p style="color: #ccc; font-size: 14px;">¿Estás seguro de que deseas borrar el historial y empezar de cero?</p>
-            <div style="display: flex; gap: 10px; margin-top: 20px;">
-                <button class="b-a" style="background: #555; color: #fff; flex: 1;" onclick="document.getElementById('modal-reset-confirm').style.display='none'">CANCELAR</button>
-                <button class="b-a" style="background: var(--c1); color: #fff; flex: 1;" onclick="ejecutarReset()">SÍ, RESETEAR</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="alerta-meta" class="modal-base" style="z-index: 10005; flex-direction: column;">
-        <div style="background: linear-gradient(135deg, #f1c40f, #f39c12); color: #000; padding: 25px; border-radius: 30px; text-align: center; max-width: 90%; border: 4px solid #fff; box-shadow: 0px 15px 35px rgba(241,196,15,0.5);">
-            <div style="font-size: 50px;">🛑💰✨</div>
-            <h2 style="margin: 10px 0; font-weight: 900; line-height: 1.1;">¡OBJETIVO LOGRADO!</h2>
-            <p style="margin: 10px 0; font-weight: bold; font-size: 16px;">Has ganado el 20% de tu capital.</p>
-            <p style="margin: 0; font-weight: 600; font-size: 14px; line-height: 1.4;">Para proteger tus ganancias, <b>¡ARRANCA AHORA!</b></p>
-            <button class="b-a" style="background: #000; color: #f1c40f; margin-top: 15px;" onclick="aceptarMeta()">OK, ENTIENDO (CONTINUAR)</button>
-        </div>
-    </div>
-
-    <div id="p-l">
-        <div class="c-l">
-            <img src="https://cdn-icons-png.flaticon.com/512/1055/1055673.png" style="width:80px; margin-bottom:10px; animation: rotar 5s linear infinite; border-radius: 50%; border: 2px solid #fff;"> 
-            <h1>TECNOENTRETE VIP</h1>
-            
-            <div class="box-global">
-                <span class="box-global-title">🏆 COMUNIDAD VIP GANANDO:</span>
-                <span id="lbl-global-neto">Cargando...</span>
-            </div>
-
-            <div class="legal-box">
-                REGLAS DE ORO Y PATRÓN DE ROBO:<br>
-                - Iniciar siempre con monto base correspondiente.<br>
-                - Capital recomendado en mesa: x200 de la base.<br>
-                - Si la racha contraria llega a 7 veces seguidas, use el botón ⚠️ TRAMPA para reportar el patrón.
-            </div>
-
-            <div style="display: flex; gap: 10px; margin-bottom: 15px; width: 100%;">
-                <button id="btn-usd" class="b-a" style="margin-bottom:0; flex:1; background:var(--c5); color:#000;" onclick="setMoneda('USD')">USD $</button>
-                <button id="btn-clp" class="b-a" style="margin-bottom:0; flex:1; background:#222; color:#fff;" onclick="setMoneda('CLP')">CLP $</button>
-            </div>
-            
-            <input type="text" id="u-i" class="i-s" placeholder="USUARIO VIP" autocomplete="off">
-            <input type="password" id="l-i" class="i-s" placeholder="CLAVE / LICENCIA" autocomplete="off">
-            
-            <button class="b-a btn-entrar" id="btn-validar">ENTRAR AL SISTEMA</button>
-            <button class="b-a btn-demo" onclick="document.getElementById('modal-demo').style.display='flex'">PROBAR DEMO GRATIS</button>
-            <button class="b-a btn-planes" onclick="document.getElementById('modal-planes').style.display='flex'"><i class="fas fa-list"></i> VER PLANES Y PRECIOS</button>
-            <button class="b-a btn-manual" onclick="document.getElementById('modal-manual').style.display='flex'"><i class="fas fa-book-open"></i> MANUAL: CÓMO JUGAR</button>
-        </div>
-    </div>
-
-    <div id="app-principal">
-        <div id="tmr" class="tmr-big">00d-00h:00m:00s</div>
-        
-        <div id="global-wallet">
-            <div class="gw-box"><div class="gw-title">CAPITAL TOTAL</div><div id="c-i" class="gw-val" style="color:#fff;">$0.00</div></div>
-            <div class="gw-box"><div class="gw-title">UTILIDAD</div><div id="u-s" class="gw-val" style="color:var(--c3);">$0.00</div></div>
-            <div class="gw-box"><div class="gw-title">GLOBAL</div><div id="n-g" class="gw-val" style="color:var(--c5);">$0.00</div></div>
-        </div>
-
-        <div style="background:var(--c8); padding:15px; border-radius:15px; display:flex; flex-direction:column; gap:10px; flex-grow:1; border:1px solid #333;">
-            <div id="sugerencia-container">
-                <div id="s-t" style="font-size:75px; font-weight:900;">---</div>
-                <div id="m-t" style="color:var(--c4); font-size:26px;">$0.20</div>
-            </div>
-            <div style="display:flex; gap:8px;">
-                <button id="btn-R" style="background:var(--c1); height:70px; border-radius:15px; border:none; font-size:32px; color:white; flex:1; font-weight:bold;">R</button>
-                <button id="btn-N" style="background:var(--c2); height:70px; border-radius:15px; border:none; font-size:32px; color:white; flex:1; font-weight:bold;">N</button>
-                <button id="btn-0" style="background:var(--c3); height:70px; border-radius:15px; border:none; font-size:32px; color:white; flex:1; font-weight:bold;">0</button>
-            </div>
-            <div id="c-h" style="background:#000; height:90px; border-radius:12px; border:1px solid #222; display:flex; flex-wrap:wrap; justify-content:center; gap:5px; overflow:hidden;"></div>
-            
-            <div id="stats-bar">
-                <div><span style="color:var(--c1)">R:</span> <span id="st-R">0</span></div>
-                <div><span style="color:#fff">N:</span> <span id="st-N">0</span></div>
-                <div><span style="color:var(--c3)">0:</span> <span id="st-0">0</span></div>
-                <div><span style="color:var(--c4)">SIN 0:</span> <span id="st-s0">0</span></div>
-            </div>
-
-            <div style="display:flex; gap:6px;">
-                <button id="btn-undo" style="background:transparent; color:#555; border:1px solid #333; padding:10px; border-radius:10px; font-size:11px; flex:1; font-weight:bold;">CORREGIR</button>
-                <button id="btn-trampa" style="background:transparent; color:var(--c4); border:1px solid var(--c4); padding:10px; border-radius:10px; font-size:11px; flex:1.5; font-weight:bold; opacity:0.3; pointer-events:none;">⚠️ TRAMPA</button>
-                <button id="btn-reset" style="background:transparent; color:var(--c1); border:1px solid var(--c1); padding:10px; border-radius:10px; font-size:11px; flex:1; font-weight:bold;">RESET</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="modal-demo" class="modal-base">
-        <div class="modal-content">
-            <h2 style="color:var(--c5); margin-top:0;">🎁 DEMO GRATIS</h2>
-            <input type="text" id="reg-nombre" class="i-s" placeholder="NOMBRE Y APELLIDO (Ej: Juan Perez)" style="border-radius:10px;">
-            <div style="display: flex; gap: 8px; margin-bottom: 8px;">
-                <select id="reg-pais" class="i-s" style="width: 38%; margin-bottom: 0; padding: 0 5px; font-size: 14px; border-radius:10px;">
-                    <option value="569" selected>🇨🇱 +569</option>
-                </select>
-                <input type="tel" id="reg-wsp" class="i-s" placeholder="Número (Ej: 87654321)" style="width: 62%; margin-bottom: 0; border-radius:10px;">
-            </div>
-            <button class="b-a btn-entrar" id="btn-activar-demo">ACTIVAR AHORA</button>
-            <button onclick="document.getElementById('modal-demo').style.display='none'" style="color:#888; background:none; border:none; text-decoration:underline; font-size: 14px; margin-top: 10px;">Volver</button>
-        </div>
-    </div>
-
-    <div id="modal-planes" class="modal-base">
-        <div class="modal-content">
-            <h2 style="color:var(--c4); margin-top:0;"><i class="fas fa-gem"></i> PLANES VIP</h2>
-            <div style="background:#111; border:1px solid #333; border-radius:12px; padding:15px; text-align:left; color:#fff; margin-bottom:15px;">
-                <p style="margin:8px 0; font-size:16px;">⏱️ <b>12 Horas:</b> <span style="color:var(--c3); float:right;">$8.000 CLP</span></p><hr style="border:0; border-top:1px solid #333;">
-                <p style="margin:8px 0; font-size:16px;">📅 <b>24 Horas:</b> <span style="color:var(--c3); float:right;">$15.000 CLP</span></p><hr style="border:0; border-top:1px solid #333;">
-                <p style="margin:8px 0; font-size:16px;">🔥 <b>1 Semana:</b> <span style="color:var(--c3); float:right;">$50.000 CLP</span></p>
-            </div>
-            <button class="b-a" style="background:#25d366; color:white;" onclick="window.open('https://wa.me/56995931641?text=Hola TECNOENTRETE, quiero un plan VIP.')"><i class="fab fa-whatsapp"></i> SOPORTE</button>
-            <button class="b-a" style="background:#555; color:white;" onclick="document.getElementById('modal-planes').style.display='none'">Cerrar</button>
-        </div>
-    </div>
-
-    <div id="modal-manual" class="modal-base">
-        <div class="modal-content">
-            <h2 style="color:var(--c4); margin-top:0;"><i class="fas fa-book-open"></i> MANUAL VIP</h2>
-            <div class="manual-text">
-                <p><strong>1. Capital:</strong> Base <strong>$0.20 USD</strong> o <strong>$200 CLP</strong>.</p>
-                <p><strong>2. Motor:</strong> Siga la sugerencia en grande (S.T.). El cálculo se hace seguro en la nube.</p>
-                <p><strong>3. Racha:</strong> Si pierde, el sistema dobla automáticamente.</p>
-                <p><strong>4. Trampa:</strong> Si pierde 7 veces seguidas, use el botón ⚠️ TRAMPA.</p>
-            </div>
-            <button class="b-a" style="background:#555; color:white;" onclick="document.getElementById('modal-manual').style.display='none'">Cerrar</button>
-        </div>
-    </div>
-
-    <script>
-    let lastTouchEnd = 0; document.addEventListener('touchend', e => { const now = (new Date()).getTime(); if (now - lastTouchEnd <= 300) e.preventDefault(); lastTouchEnd = now; }, { passive: false });
-
-    const _URL = "https://script.google.com/macros/s/AKfycbzUIdq4jKKOi3_fu3kLsO_cP3Z9ckXp7B6sUiP78B7Km7bDVmaecAIdsWGgGcA8nlE8JA/exec";
-    
-    let _HID = localStorage.getItem('VIP_HID') || 'VIP-'+Math.random().toString(36).substr(2,10).toUpperCase(); localStorage.setItem('VIP_HID', _HID);
-    
-    let _L="", _U="", _S=0, _ba=0, _cI=40, _nP=0, _nG=0, _g=0, _p=0, _h=[], _m=0.2, _s="", _per=0, _Meta=0, _TS=0, _IS=0, _WSP="", _lS=null, _cR=0, _cN=0, _c0=0, _s0=0, _isFetching=false;
-    
-    // SISTEMA MONEDA USD / CLP
-    let _MONEDA = "USD";
-    function setMoneda(mon) {
-        _MONEDA = mon;
-        document.getElementById('btn-usd').style.background = mon === 'USD' ? 'var(--c5)' : '#222';
-        document.getElementById('btn-usd').style.color = mon === 'USD' ? '#000' : '#fff';
-        document.getElementById('btn-clp').style.background = mon === 'CLP' ? 'var(--c5)' : '#222';
-        document.getElementById('btn-clp').style.color = mon === 'CLP' ? '#000' : '#fff';
-        if(_h.length === 0) { _m = (mon === 'USD') ? 0.20 : 200; }
-        update(false);
+        try {
+            var msg = "Hola " + nNombre + ",\n¿Quieres activar tu DEMO de 15 minutos en TECNOENTRETE?\n\nResponde *SI* para empezar ahora.";
+            UrlFetchApp.fetch(GREEN_URL + "/waInstance" + ID_INSTANCE + "/sendMessage/" + API_TOKEN, { "method": "post", "contentType": "application/json", "payload": JSON.stringify({ "chatId": nWsp + "@c.us", "message": msg }) });
+        } catch(waErr){}
+        return _res({"status": "success", "serial": nSerial, "segundos": 900});
     }
 
-    window.onload = async () => { try { const r = await fetch(_URL + "?action=obtener_global"); const d = await r.json(); if(d.status === "success") { let monto = parseFloat(d.total_global); if(monto <= 0) monto = 1450.50; document.getElementById('lbl-global-neto').innerText = "$ " + monto.toFixed(2) + " USD"; } } catch(e) { document.getElementById('lbl-global-neto').innerText = "$ 1450.50 USD"; } };
+    if (action === "crear_usuario") {
+        var nSerial = String(e.parameter.serial || "").toUpperCase().trim(); 
+        var nUsuario = String(e.parameter.usuario || "").trim(); 
+        var nTiempo = e.parameter.tiempo || "00d-12h:00m:00s";
+        var nPlan = String(e.parameter.plan || "BASICO").toUpperCase(); 
+        var nNombre = e.parameter.nombre || ""; var nWsp = e.parameter.wsp || ""; 
+        var nPago = parseFloat(e.parameter.pago) || 0; var nVendedor = e.parameter.vendedor || "ADMIN"; 
+        
+        var nuevaFila = new Array(17).fill("");
+        nuevaFila[0] = nSerial; nuevaFila[1] = nTiempo; nuevaFila[2] = "Activo"; nuevaFila[3] = nTiempo + " 🔴 OFFLINE"; nuevaFila[4] = Utilities.getUuid(); nuevaFila[8] = 0; nuevaFila[9] = 0; nuevaFila[10] = nPago; nuevaFila[11] = nNombre; nuevaFila[12] = nWsp; nuevaFila[13] = nPlan; nuevaFila[14] = nUsuario; nuevaFila[15] = nVendedor; nuevaFila[16] = new Date();
+        hojaL.appendRow(nuevaFila);
+        return _res({"status": "success"});
+    }
 
-    function mostrarAlerta(mensaje) { document.getElementById('txt-alerta-trampa').innerHTML = mensaje; document.getElementById('alerta-trampa-custom').style.display = 'flex'; }
-    
-    // BOTÓN RESET REPARADO AL 100%
-    window.ejecutarReset = () => { 
-        _h=[]; _m=(_MONEDA==='USD'?0.2:200); _s=""; _per=0; _cR=0; _cN=0; _c0=0; _s0=0; 
-        _nP=0; _nG=0; _ba=_cI; // Restaura los saldos a cero
-        document.getElementById('btn-trampa').style.opacity="0.3"; 
-        document.getElementById('btn-trampa').style.pointerEvents="none"; 
-        update(false); // Limpia visualmente las bolas
-        saveState(); 
-        document.getElementById('modal-reset-confirm').style.display='none'; 
-    };
+    // 🔥 EL MOTOR REPARADO DE OLA INTERCALADA 🔥
+    if (action === "calcular") {
+        var historial = [];
+        try { historial = JSON.parse(e.parameter.historial); } catch(err) {}
+        if (!historial || historial.length === 0) return _res({"status": "success", "sugerencia": "---"});
 
-    document.getElementById('btn-validar').onclick = async function() {
-        _U = document.getElementById('u-i').value.trim();
-        if(!_U) return alert("Ingrese el Usuario VIP");
-        _L = document.getElementById('l-i').value.trim().toUpperCase(); if(!_L) return;
-        this.innerText = "... CONECTANDO ...";
-        try {
-            const r = await fetch(_URL + "?action=validar&app=mesa_segura&usuario=" + encodeURIComponent(_U) + "&serial=" + encodeURIComponent(_L) + "&hid=" + _HID);
-            const d = await r.json();
-            if(d.status === "success") { 
-                _S = d.segundos; _nG = parseFloat(d.neto_global) || 0; 
-                let savedJSON = d.estado_nube || localStorage.getItem('ts_'+_L);
-                let restored = false;
-                if(savedJSON && savedJSON.includes("{")) {
-                    if(confirm("☁️ Tienes una sesión guardada en la Nube.\n\n¿Deseas CONTINUAR la partida anterior?")) {
-                        try { let st = JSON.parse(savedJSON); _ba = parseFloat(st.ba) || (_MONEDA==='USD'?40:40000); _nP = parseFloat(st.nP) || 0; _nG = parseFloat(st.nG) || _nG; _h = st.h || []; _m = parseFloat(st.m) || (_MONEDA==='USD'?0.2:200); _s = st.s || ""; _per = parseFloat(st.per) || 0; _cI = parseFloat(st.cI) || _ba; _cR = parseInt(st.cR) || 0; _cN = parseInt(st.cN) || 0; _c0 = parseInt(st.c0) || 0; _s0 = parseInt(st.s0) || 0; _Meta = _cI * 1.20; restored = true; } catch(e) {}
+        var u = historial[0] || "", p = historial[1] || "", a = historial[2] || "", t = historial[3] || "";
+        
+        // 1. Contador Ola Normal
+        var racha_actual = 1;
+        for(var k=0; k<historial.length-1; k++){ if(historial[k] === historial[k+1]) racha_actual++; else break; }
+
+        // 2. Contador Ola Intercalada (Ping-Pong)
+        var racha_intercalada = 1;
+        for(var i=0; i<historial.length-1; i++){
+            if(historial[i] !== historial[i+1] && historial[i] !== 'Cero' && historial[i+1] !== 'Cero') racha_intercalada++;
+            else break;
+        }
+
+        var sugerencia_normal = "";
+        
+        if(u === 'Cero'){ 
+            sugerencia_normal = (p === 'Rojo') ? 'ROJO' : (p === 'Negro' ? 'NEGRO' : ''); 
+        } else if(racha_actual >= 3){ 
+            sugerencia_normal = u.toUpperCase(); // Sube a la ola normal (RRR)
+        } else if(racha_intercalada >= 4) {
+            sugerencia_normal = (u === "Rojo") ? "NEGRO" : "ROJO"; // SUBO A LA OLA INTERCALADA (Ping-Pong)
+        } else if(u === p && a === t && u !== a && historial[4] === historial[5] && u === historial[4]){ 
+            sugerencia_normal = (u === "Rojo") ? "NEGRO" : "ROJO"; 
+        } else if(u === p && a === t && u !== a && a !== ""){ 
+            sugerencia_normal = u.toUpperCase(); 
+        } else { 
+            sugerencia_normal = (u === "Rojo") ? "NEGRO" : "ROJO"; // Opuesto Base
+        }
+
+        var s_final = sugerencia_normal;
+
+        // PROTECCIÓN: Si estamos en plena ola (Intercalada o Normal), bloqueamos el Anti-Trampa
+        if (racha_actual >= 4 || racha_intercalada >= 4) {
+             if (u !== 'Cero') s_final = sugerencia_normal; 
+        } else {
+            var next_c = sugerencia_normal === "ROJO" ? "R" : (sugerencia_normal === "NEGRO" ? "N" : "");
+            if (next_c !== "" && u !== 'Cero') {
+                var mapHist = historial.map(function(v) { return String(v).charAt(0).toUpperCase(); });
+                mapHist.unshift(next_c);
+                var h_hipo = mapHist.join("-");
+                var trampasDB = []; 
+                var cachedTrampas = CacheService.getScriptCache().get("trampas_db");
+                
+                if (cachedTrampas) { trampasDB = JSON.parse(cachedTrampas); } else {
+                    var hT = ss.getSheetByName("Trampas");
+                    if (hT) {
+                        var dataT = hT.getDataRange().getValues();
+                        if(dataT.length > 1) { 
+                            for (var x = 1; x < dataT.length; x++) { 
+                                if(!dataT[x][2]) continue; 
+                                var ptn = String(dataT[x][2]).toUpperCase().split("_")[0].trim().replace(/ROJO/g, 'R').replace(/NEGRO/g, 'N').replace(/CERO/g, '0'); 
+                                if (ptn.length > 2) trampasDB.push(ptn); 
+                            } 
+                        }
+                    }
+                    CacheService.getScriptCache().put("trampas_db", JSON.stringify(trampasDB), 900);
+                }
+                
+                for(var j=0; j<trampasDB.length; j++) { 
+                    if(trampasDB[j].length > 2 && h_hipo.indexOf(trampasDB[j]) === 0) { 
+                        s_final = (sugerencia_normal === "ROJO") ? "NEGRO" : "ROJO"; 
+                        break; 
+                    } 
+                }
+            }
+        }
+        return _res({"status": "success", "sugerencia": s_final});
+    }
+
+    if (action === "registrar_vale") {
+        var hVales = ss.getSheetByName("Vales");
+        if(!hVales) return _res({"status": "error", "mensaje": "Falta hoja Vales"});
+        var codigo = String(e.parameter.codigo).trim();
+        var dataV = hVales.getDataRange().getValues();
+        for(var i=1; i<dataV.length; i++) { if(String(dataV[i][2]).trim() === codigo) return _res({"status": "error", "mensaje": "Voucher ya cobrado"}); }
+        var montoMaq = parseFloat(e.parameter.monto_maquina) || 0; var montoPagado = parseFloat(e.parameter.monto_pagado) || 0;
+        hVales.appendRow([new Date(), e.parameter.cajero, codigo, montoMaq, montoPagado, montoMaq - montoPagado]);
+        return _res({"status": "success", "mensaje": "✅ Pago registrado"});
+    }
+
+    if (action === "registrar_cierre") {
+        var hCont = ss.getSheetByName("Contabilidad");
+        if(!hCont) return _res({"status": "error", "mensaje": "Falta hoja Contabilidad"});
+        var maq = String(e.parameter.maquina).trim();
+        var entHist = parseFloat(e.parameter.entrada_hist) || 0; var salHist = parseFloat(e.parameter.salida_hist) || 0;
+        var dataC = hCont.getDataRange().getValues();
+        var ultEnt = 0, ultSal = 0;
+        for(var i=dataC.length-1; i>=1; i--) { if(String(dataC[i][2]).trim() === maq) { ultEnt = parseFloat(dataC[i][3]) || 0; ultSal = parseFloat(dataC[i][4]) || 0; break; } }
+        var entDia = (ultEnt === 0) ? 0 : (entHist - ultEnt); var salDia = (ultSal === 0) ? 0 : (salHist - ultSal);
+        hCont.appendRow([new Date(), e.parameter.cajero, maq, entHist, salHist, entDia, salDia, entDia - salDia]);
+        return _res({"status": "success", "mensaje": "✅ Cierre guardado."});
+    }
+
+    if (action === "login_panel") {
+        if (e.parameter.u === "tecnoentrete" && e.parameter.p === "777") return _res({"status": "success", "rol": "ADMIN", "usuario": "ADMIN"});
+        if (hojaC) {
+            var dataC = hojaC.getDataRange().getValues();
+            for (var c = 1; c < dataC.length; c++) {
+                if (dataC[c][0] == e.parameter.u && dataC[c][1] == e.parameter.p) {
+                    if (dataC[c][4] !== "Activo") return _res({"status": "error", "mensaje": "Cajero suspendido."});
+                    return _res({"status": "success", "rol": "CAJERO", "usuario": dataC[c][0]});
+                }
+            }
+        }
+        return _res({"status": "error", "mensaje": "Clave incorrecta."});
+    }
+
+    if (action === "panel_cajeros") {
+      if (!hojaC) return _res({"status": "error", "mensaje": "Crea la hoja Cajeros"});
+      var dC = hojaC.getDataRange().getValues();
+      for(var c=0; c<dC.length; c++) dC[c][6] = c+1; 
+      return _res({"status": "success", "datos": dC});
+    }
+    if (action === "crear_cajero") { hojaC.appendRow([e.parameter.user, e.parameter.pass, e.parameter.nombre, e.parameter.wsp, "Activo"]); return _res({"status": "success"}); }
+    if (action === "borrar_cajero") { if(e.parameter.fila > 1) hojaC.deleteRow(parseInt(e.parameter.fila)); return _res({"status": "success"}); }
+    if (action === "cambiar_estado_cajero") { if(e.parameter.fila > 1) hojaC.getRange(parseInt(e.parameter.fila), 5).setValue(e.parameter.estado); return _res({"status": "success"}); }
+    if (action === "editar_cajero") {
+        var fC = parseInt(e.parameter.fila);
+        if(fC > 1 && hojaC) {
+            if(e.parameter.user !== undefined) hojaC.getRange(fC, 1).setValue(e.parameter.user);
+            if(e.parameter.pass !== undefined) hojaC.getRange(fC, 2).setValue(e.parameter.pass);
+            if(e.parameter.nombre !== undefined) hojaC.getRange(fC, 3).setValue(e.parameter.nombre);
+            if(e.parameter.wsp !== undefined) hojaC.getRange(fC, 4).setValue(e.parameter.wsp);
+            return _res({"status": "success"});
+        }
+    }
+
+    if (action === "panel_datos") {
+        var reqVendedor = e.parameter.vendedor || "ADMIN";
+        var ahora = new Date().getTime();
+        var datosFiltrados = [];
+        for (var i = 0; i < data.length; i++) {
+            if (i === 0) { datosFiltrados.push(data[i]); continue; }
+            if (!data[i][0]) continue;
+            if (data[i][4] === undefined || data[i][4] === null || String(data[i][4]).trim() === "") {
+                var newToken = Utilities.getUuid(); hojaL.getRange(i+1, 5).setValue(newToken); data[i][4] = newToken; 
+            }
+            var lastPing = data[i][16] ? new Date(data[i][16]).getTime() : 0;
+            var txtTiempo = data[i][3] || "";
+            if (ahora - lastPing > 30000 && String(txtTiempo).indexOf("🟢 ONLINE") !== -1) {
+                txtTiempo = String(txtTiempo).replace("🟢 ONLINE", "🔴 OFFLINE");
+                hojaL.getRange(i+1, 4).setValue(txtTiempo);
+                data[i][3] = txtTiempo;
+            }
+            if (reqVendedor === "ADMIN" || data[i][15] === reqVendedor) { data[i][17] = i + 1; datosFiltrados.push(data[i]); }
+        }
+        return _res({"status": "success", "datos": datosFiltrados});
+    }
+
+    if (action === "obtener_global") {
+       var sum = 0; for (var i = 1; i < data.length; i++) { if(String(data[i][0]).indexOf("DEMO")===-1) { var v = parseFloat(data[i][9]); if (!isNaN(v)) sum += v; } } 
+       return _res({"status": "success", "total_global": Math.max(0, sum)});
+    }
+
+    if (action === "validar") {
+      var sIn = String(e.parameter.serial || "").toUpperCase().trim();
+      var uIn = String(e.parameter.usuario || "").toUpperCase().trim();
+      for (var i = 1; i < data.length; i++) {
+        var rowSerial = data[i][0] ? String(data[i][0]).toUpperCase().trim() : "";
+        var rowUser = data[i][14] ? String(data[i][14]).toUpperCase().trim() : ""; 
+        if (rowSerial === sIn && (rowUser === "" || rowUser === uIn)) {
+           if (String(data[i][2]).trim() !== "Activo") return _res({"status": "error", "mensaje": "INACTIVO"});
+           if (e.parameter.app === "multimesa") {
+               var planDB = data[i][13] ? String(data[i][13]).toUpperCase().trim() : ""; 
+               if (planDB !== "VIP" && planDB !== "PRO") { return _res({"status": "error", "mensaje": "ACCESO DENEGADO. NECESITA PLAN VIP."}); }
+           }
+           var hidG = data[i][6] ? String(data[i][6]).trim() : ""; var hidE = e.parameter.hid ? String(e.parameter.hid).trim() : "";
+           if (hidG === "") { hojaL.getRange(i+1, 7).setValue(hidE); } else if (hidG !== hidE) { return _res({"status": "error", "mensaje": "EQUIPO NO AUTORIZADO"}); }
+           hojaL.getRange(i+1, 17).setValue(new Date()); 
+           var f = data[i][7] || new Date(); if(!data[i][7]) hojaL.getRange(i+1, 8).setValue(f); 
+           var s = _calcRestante(f, data[i][1]); 
+           if (s <= 0) { hojaL.getRange(i+1, 3).setValue("Inactivo"); return _res({"status": "error", "mensaje": "EXPIRADO"}); }
+           return _res({ "status": "success", "segundos": s, "estado_nube": data[i][5] || "", "neto_global": data[i][10] || 0 });
+        }
+      }
+      return _res({"status": "error", "mensaje": "USUARIO O CLAVE INCORRECTA"});
+    }
+
+    if (action === "guardar") {
+      var sIn = String(e.parameter.serial || "").toUpperCase().trim();
+      var uIn = String(e.parameter.usuario || "").toUpperCase().trim();
+      for (var i = 1; i < data.length; i++) {
+         var rowSerial = data[i][0] ? String(data[i][0]).toUpperCase().trim() : "";
+         var rowUser = data[i][14] ? String(data[i][14]).toUpperCase().trim() : "";
+         if (rowSerial === sIn && (rowUser === "" || rowUser === uIn)) {
+            var s = _calcRestante(data[i][7], data[i][1]);
+            if (s <= 0) { hojaL.getRange(i+1, 3).setValue("Inactivo"); return _res({"status": "kicked"}); }
+            hojaL.getRange(i+1, 17).setValue(new Date()); 
+            hojaL.getRange(i+1, 4).setValue(_segundosATexto(s) + " 🟢 ONLINE");
+            if (e.parameter.estado) hojaL.getRange(i+1, 6).setValue(e.parameter.estado); 
+            
+            if (e.parameter.neto_global) {
+                var miGlobal = parseFloat(e.parameter.neto_global) || 0;
+                hojaL.getRange(i+1, 10).setValue(miGlobal); 
+                
+                var sum = 0;
+                var allData = hojaL.getDataRange().getValues();
+                for (var r = 1; r < allData.length; r++) {
+                    if (String(allData[r][0]).indexOf("DEMO") === -1) {
+                        if (r === i) {
+                            sum += miGlobal; 
+                        } else {
+                            var v = parseFloat(allData[r][9]); 
+                            if (!isNaN(v)) sum += v;
+                        }
                     }
                 }
-                if(!restored) { _cI = parseFloat(prompt(`Capital disponible en mesa (${_MONEDA}):`, _MONEDA==='USD' ? "40.00" : "40000")) || (_MONEDA==='USD'?40:40000); _ba = _cI; _Meta = _ba * 1.20; _cR=0; _cN=0; _c0=0; _s0=0; }
-                iniciarApp(); 
-            } else { alert(d.mensaje); this.innerText = "ENTRAR AL SISTEMA"; }
-        } catch(e) { alert("Error de Conexión."); this.innerText = "ENTRAR AL SISTEMA"; }
-    };
-
-    // BOTON DEMO (CON FALLBACK DE WHATSAPP REPARADO)
-    document.getElementById('btn-activar-demo').onclick = async function() {
-        const nom = document.getElementById('reg-nombre').value.trim(); const rawWsp = document.getElementById('reg-wsp').value.trim(); const codPais = document.getElementById('reg-pais').value;
-        if(!nom || !nom.includes(' ')) return alert("Ingresa tu NOMBRE y APELLIDO (separados por espacio)."); if(!rawWsp) return alert("Falta celular.");
-        const wsp = codPais + rawWsp.replace(/\D/g, '');
-        this.innerText = "PROCESANDO...";
-        
-        try {
-            const r = await fetch(_URL + "?action=solicitar_demo&nombre=" + encodeURIComponent(nom) + "&wsp=" + wsp + "&hid=" + _HID);
-            const d = await r.json();
-            if(d.status === "success") {
-                document.getElementById('modal-demo').style.display='none';
-                alert("✅ SOLICITUD ENVIADA.\n\nRevisa tu WhatsApp y responde 'SI'.");
-                document.getElementById('u-i').value = "DEMO"; document.getElementById('l-i').value = d.serial;
-                this.innerText = "ACTIVAR AHORA";
-            } else { 
-                throw new Error("Fallo de red o Google App Script");
+                hojaL.getRange(2, 11).setValue(sum); 
             }
-        } catch(e) { 
-            // SI FALLA LA CONEXIÓN A GOOGLE, ABRE WHATSAPP DIRECTO
-            let msg = `Hola TECNOENTRETE, mi nombre es ${nom} y quiero activar mi DEMO VIP.`;
-            window.open(`https://wa.me/56995931641?text=${encodeURIComponent(msg)}`, '_blank');
-            document.getElementById('modal-demo').style.display='none';
-            this.innerText = "ACTIVAR AHORA";
-        }
-    };
 
-    function iniciarDemo(segs, wsp) { _L = "DEMO"; _U="DEMO"; _S = segs; _WSP = wsp; _cI = parseFloat(prompt(`Capital (${_MONEDA}):`, _MONEDA==='USD' ? "40.00" : "40000")) || (_MONEDA==='USD'?40:40000); _ba = _cI; _Meta = _ba * 1.20; _cR=0; _cN=0; _c0=0; _s0=0; iniciarApp(); }
-    
-    function iniciarApp() { 
-        document.getElementById('p-l').style.display='none'; 
-        document.getElementById('app-principal').style.display='flex'; 
-        _TS = Date.now(); _IS = _S; TM_TICK(); setInterval(TM_TICK, 1000); setInterval(saveState, 15000); update(); 
+            return _res({"status": "success"});
+         }
+      }
+      return _res({"status": "error"});
     }
-    
-    function TM_TICK() { 
-        if(_S<=0) return; 
-        let e = Math.floor((Date.now()-_TS)/1000); _S = Math.max(0, _IS - e); 
-        let d=Math.floor(_S/86400), h=Math.floor((_S%86400)/3600), m=Math.floor((_S%3600)/60), s=_S%60; 
-        document.getElementById('tmr').innerText = `${d}d-${h}h:${m}m:${s}s`; 
-        if(_S<=0) location.reload(); 
-    }
-    
-    window.addEventListener("pagehide", () => { if(_L !== "") navigator.sendBeacon(_URL + "?action=salir&usuario=" + encodeURIComponent(_U) + "&serial=" + encodeURIComponent(_L) + "&wsp=" + encodeURIComponent(_WSP)); });
-    
-    function saveState() { let est = JSON.stringify({ba:_ba, nP:_nP, nG:_nG, cI:_cI, h:_h.slice(0,12), m:_m, s:_s, per:_per, cR:_cR, cN:_cN, c0:_c0, s0:_s0}); localStorage.setItem('ts_'+_L, est); let url = _URL + `?action=guardar&usuario=${encodeURIComponent(_U)}&serial=${encodeURIComponent(_L)}&neto_global=${_nG.toFixed(2)}&neto=${_nP.toFixed(2)}&estado=${encodeURIComponent(est)}&wsp=${encodeURIComponent(_WSP)}`; fetch(url).catch(e=>{}); }
-    
-    window.aceptarMeta = () => { document.getElementById('alerta-meta').style.display = 'none'; _Meta = _ba * 1.20; };
 
-    // BOTON CORREGIR (UNDO) INTACTO
-    async function xfR(c) {
-        if(_isFetching) return; _isFetching = true;
-        let per_anterior = _per; let gano_ahora = false;
-        _lS = {ba:_ba, nP:_nP, nG:_nG, g:_g, p:_p, h:[..._h], m:_m, s:_s, per:_per, cR:_cR, cN:_cN, c0:_c0, s0:_s0};
-        if (c === 'Rojo') { _cR++; _s0++; } else if (c === 'Negro') { _cN++; _s0++; } else if (c === 'Cero') { _c0++; _s0 = 0; }
-        if(_s !== "" && _s !== "⏳") { if(c.toUpperCase() === _s){ _ba += _m; _nP += _m; _nG += _m; _m = (_MONEDA==='USD'?0.20:200); _g++; _per = 0; gano_ahora = true; } else if(c !== 'Cero'){ _ba -= _m; _nP -= _m; _nG -= _m; _m *= 2; _p++; _per++; } }
-        _h.unshift(c);
+    if (action === "editar_usuario") { var fU = parseInt(e.parameter.fila); if(fU > 1) { if(e.parameter.serial !== undefined) hojaL.getRange(fU, 1).setValue(String(e.parameter.serial).toUpperCase().trim()); if(e.parameter.usuario !== undefined) hojaL.getRange(fU, 15).setValue(String(e.parameter.usuario).trim()); if(e.parameter.nombre !== undefined) hojaL.getRange(fU, 12).setValue(e.parameter.nombre); if(e.parameter.wsp !== undefined) hojaL.getRange(fU, 13).setValue(e.parameter.wsp); if(e.parameter.plan !== undefined) hojaL.getRange(fU, 14).setValue(String(e.parameter.plan).toUpperCase()); if(e.parameter.pago !== undefined) hojaL.getRange(fU, 10).setValue(parseFloat(e.parameter.pago)); return _res({"status": "success"}); } }
+    if (action === "borrar_fila") { if(e.parameter.fila > 1) hojaL.deleteRow(parseInt(e.parameter.fila)); return _res({"status": "success"}); }
+    if (action === "cambiar_estado") { if(e.parameter.fila > 1) hojaL.getRange(parseInt(e.parameter.fila), 3).setValue(e.parameter.estado); return _res({"status": "success"}); }
+    if (action === "resetear_hid") { if(e.parameter.fila > 1) hojaL.getRange(parseInt(e.parameter.fila), 7).setValue(""); return _res({"status": "success"}); }
+    if (action === "cambiar_plan") { if(e.parameter.fila > 1) hojaL.getRange(parseInt(e.parameter.fila), 14).setValue(String(e.parameter.plan).toUpperCase()); return _res({"status": "success"}); } 
+    if (action === "panel_trampas") { var hojaT = ss.getSheetByName("Trampas"); if (!hojaT) return _res({"status": "error"}); return _res({"status": "success", "datos": hojaT.getDataRange().getValues()}); }
+    if (action === "limpiar_trampas") { var hojaT = ss.getSheetByName("Trampas"); if (!hojaT) return _res({"status": "error"}); var dataT = hojaT.getDataRange().getValues(); var unicos = {}; var nuevasFilas = []; if(dataT.length > 0) nuevasFilas.push(dataT[0]); for (var i = 1; i < dataT.length; i++) { var patron = dataT[i][2] ? String(dataT[i][2]).trim() : ""; if (patron !== "" && !unicos[patron]) { unicos[patron] = true; nuevasFilas.push(dataT[i]); } } hojaT.clearContents(); hojaT.getRange(1, 1, nuevasFilas.length, nuevasFilas[0].length).setValues(nuevasFilas); CacheService.getScriptCache().remove("trampas_db"); return _res({"status": "success"}); }
+    if (action === "reportar_trampa") { var hojaT = ss.getSheetByName("Trampas"); if(hojaT) { var p = String(e.parameter.patron || "").toUpperCase().split("_")[0].trim(); var uR = String(e.parameter.usuario || "DESCONOCIDO").toUpperCase(); var sR = String(e.parameter.serial || "").toUpperCase(); var dup = false; var ult = hojaT.getLastRow(); if(ult > 1) { var dt = hojaT.getRange(2, 3, ult - 1, 1).getValues(); for(var j=0; j<dt.length; j++) if(String(dt[j][0]).toUpperCase().split("_")[0].trim() === p) { dup = true; break; } } if(!dup && p.length > 5) { hojaT.appendRow([new Date(), uR + " (" + sR + ")", p, "REPORTADA"]); CacheService.getScriptCache().remove("trampas_db"); } } return _res({"status": "success"}); }
+    if (action === "salir") { var sIn = String(e.parameter.serial || "").toUpperCase().trim(); var uIn = String(e.parameter.usuario || "").toUpperCase().trim(); for (var i = 1; i < data.length; i++) { var rowSerial = data[i][0] ? String(data[i][0]).toUpperCase().trim() : ""; var rowUser = data[i][14] ? String(data[i][14]).toUpperCase().trim() : ""; if (rowSerial === sIn && (rowUser === "" || rowUser === uIn)) { var s = _calcRestante(data[i][7], data[i][1]); hojaL.getRange(i+1, 4).setValue(_segundosATexto(s) + " 🔴 OFFLINE"); return _res({"status": "success"}); } } return _res({"status": "error"}); }
+    if (action === "agregar_tiempo") { if(e.parameter.fila > 1) { var fIdx = parseInt(e.parameter.fila); var extraSegundos = ((parseInt(e.parameter.dias)||0) * 86400) + ((parseInt(e.parameter.horas)||0) * 3600); var fAct = hojaL.getRange(fIdx, 8).getValue(); var contrato = hojaL.getRange(fIdx, 2).getValue(); var rest = (fAct && contrato) ? _calcRestante(fAct, contrato) : 0; hojaL.getRange(fIdx, 2).setValue(_segundosATexto(rest + extraSegundos)); hojaL.getRange(fIdx, 8).setValue(new Date()); hojaL.getRange(fIdx, 3).setValue("Activo"); return _res({"status": "success"}); } return _res({"status": "error"}); }
+
+  } catch(err) { return _res({"status": "error", "mensaje": String(err)}); }
+}
+
+function _calcRestante(f, c) { var t = _textoASegundos(c); var tr = Math.floor((new Date().getTime() - new Date(f).getTime()) / 1000); return Math.max(0, t - tr); }
+function _textoASegundos(t) { try { var s = String(t); var d = s.match(/(\d+)d/); d = d ? parseInt(d[1]) : 0; var h = s.match(/(\d+)h/); h = h ? parseInt(h[1]) : 0; var m = s.match(/(\d+)m/); m = m ? parseInt(m[1]) : 0; return (d * 86400) + (h * 3600) + (m * 60); } catch(e) { return 0; } }
+function _segundosATexto(sT){ var d=Math.floor(sT/86400), h=Math.floor((sT%86400)/3600), m=Math.floor((sT%3600)/60), s=sT%60; return d+"d-"+h+"h:"+m+"m:"+s+"s"; }
+function _res(o){ return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON); }
+
+function doPost(e) {
+  try {
+    var ss = SpreadsheetApp.getActiveSpreadsheet();
+    var hojaL = ss.getSheetByName("licencias") || ss.getSheetByName("Licencias");
+    var json = JSON.parse(e.postData.contents);
+    
+    if (json.typeWebhook === "incomingMessageReceived") {
+      var mData = json.messageData;
+      var txt = (mData.typeMessage === "textMessage") ? mData.textMessageData.textMessage : (mData.extendedTextMessageData ? mData.extendedTextMessageData.text : "");
+      txt = String(txt).toUpperCase().trim();
+      
+      if (txt.indexOf("SI") !== -1 || txt.indexOf("SÍ") !== -1) {
+        var num8 = String(json.senderData.sender).replace(/\D/g, '').slice(-8);
+        var d = hojaL.getDataRange().getValues();
         
-        let stDiv = document.getElementById('s-t'); stDiv.innerText = "⏳"; stDiv.className = "loading-st"; update(true);
-        try {
-            let res = await fetch(_URL + "?action=calcular&historial=" + encodeURIComponent(JSON.stringify(_h.slice(0, 15))));
-            let data = await res.json(); _s = (data.status === "success") ? data.sugerencia : "ERR";
-        } catch(e) { _s = "RED"; }
-        _isFetching = false; stDiv.className = ""; update(); saveState();
-
-        if(gano_ahora && per_anterior >= 4) { let toast = document.getElementById('toast-evasion'); toast.style.display = 'block'; setTimeout(() => { toast.style.display = 'none'; }, 4000); }
-        if(_ba >= _Meta) document.getElementById('alerta-meta').style.display='flex';
-        if(_per >= 7) { document.getElementById('btn-trampa').style.opacity="1"; document.getElementById('btn-trampa').style.pointerEvents="auto"; if(_per === 7) { let patronAuto = _h.slice(0,7).map(v => v.charAt(0).toUpperCase()).join("-"); navigator.sendBeacon(_URL + "?action=reportar_trampa&usuario=" + encodeURIComponent(_U) + "&serial=" + encodeURIComponent(_L) + "&patron=" + patronAuto + "_AUTO_7_ERRORES"); mostrarAlerta("Has acumulado <b>7 pérdidas seguidas</b>. Reporte enviado automáticamente al Cloud."); } } 
-        else { document.getElementById('btn-trampa').style.opacity="0.3"; document.getElementById('btn-trampa').style.pointerEvents="none"; }
+        for (var i = d.length - 1; i >= 1; i--) {
+          var celdaWsp = String(d[i][12]).replace(/\D/g, '');
+          if (celdaWsp.indexOf(num8) !== -1 && String(d[i][2]).toLowerCase() === "pendiente") {
+            var fIdx = i + 1;
+            hojaL.getRange(fIdx, 3).setValue("Activo");
+            hojaL.getRange(fIdx, 8).setValue(new Date());
+            
+            try {
+              UrlFetchApp.fetch(GREEN_URL + "/waInstance" + ID_INSTANCE + "/sendMessage/" + API_TOKEN, { 
+                  "method": "post", "contentType": "application/json", 
+                  "payload": JSON.stringify({ "chatId": json.senderData.sender, "message": "✅ ¡DEMO ACTIVADA!\nTu acceso ha comenzado. Vuelve a la página web y presiona 'ENTRAR AL SISTEMA'." }) 
+              });
+            } catch(werr) {}
+            break;
+          }
+        }
+      }
     }
-
-    document.getElementById('btn-trampa').onclick = async () => { let patron = _h.slice(0,7).map(v => v.charAt(0).toUpperCase()).join("-"); try { navigator.sendBeacon(_URL + "?action=reportar_trampa&usuario=" + encodeURIComponent(_U) + "&serial=" + encodeURIComponent(_L) + "&patron=" + patron + "_MANUAL"); mostrarAlerta("<b>✅ REPORTE MANUAL ENVIADO AL CLOUD.</b>"); document.getElementById('btn-trampa').style.opacity="0.3"; document.getElementById('btn-trampa').style.pointerEvents="none"; } catch(e) {} };
-    
-    document.getElementById('btn-undo').onclick = () => { if(_lS) { _ba = _lS.ba; _nP = _lS.nP; _nG = _lS.nG; _g = _lS.g; _p = _lS.p; _h = [..._lS.h]; _m = _lS.m; _s = _lS.s; _per = _lS.per; _cR = _lS.cR; _cN = _lS.cN; _c0 = _lS.c0; _s0 = _lS.s0; update(false); saveState(); _lS = null; } };
-
-    function update(isCalc = false) {
-        let p = (_MONEDA === 'USD') ? "$" : ""; let sfx = (_MONEDA === 'CLP') ? " CLP" : "";
-        document.getElementById('c-i').innerText=p+_ba.toLocaleString()+sfx; document.getElementById('u-s').innerText=p+_nP.toLocaleString()+sfx; document.getElementById('n-g').innerText=p+_nG.toLocaleString()+sfx;
-        if(!isCalc) { document.getElementById('s-t').innerText=_s||"---"; document.getElementById('s-t').style.color=(_s==="ROJO")?"#e74c3c":(_s==="NEGRO"?"#fff":"#888"); }
-        document.getElementById('m-t').innerText=p+_m.toLocaleString()+sfx; document.getElementById('st-R').innerText=_cR; document.getElementById('st-N').innerText=_cN; document.getElementById('st-0').innerText=_c0; document.getElementById('st-s0').innerText=_s0;
-        const ch=document.getElementById('c-h'); ch.innerHTML=""; _h.slice(0,18).forEach(v => { const cl=(v==='Rojo')?'red':(v==='Negro'?'#fff':'green'); ch.innerHTML+=`<div class="bola" style="background:${cl}; color:${v==='Negro'?'#000':'#fff'}">${v==='Cero'?'0':''}</div>`; });
-    }
-
-    document.getElementById('btn-R').onclick=()=>xfR('Rojo'); document.getElementById('btn-N').onclick=()=>xfR('Negro'); document.getElementById('btn-0').onclick=()=>xfR('Cero');
-
-    document.addEventListener('contextmenu', e => e.preventDefault()); document.addEventListener('keydown', e => { if(e.key === "F12" || (e.ctrlKey && e.shiftKey && e.keyCode === 73) || (e.ctrlKey && e.keyCode === 85) || (e.ctrlKey && e.keyCode === 83)) { e.preventDefault(); mostrarAlertaHacker(); } if(e.ctrlKey && (e.key === '+' || e.key === '-' || e.key === '=' || e.keyCode === 107 || e.keyCode === 109)) e.preventDefault(); }); document.addEventListener('wheel', e => { if(e.ctrlKey) e.preventDefault(); }, { passive: false });
-    function mostrarAlertaHacker() { if(document.getElementById("pantalla-terror")) return; var pm = document.createElement("div"); pm.id = "pantalla-terror"; pm.style = "position:fixed;top:0;left:0;width:100vw;height:100vh;background:#a00;color:#fff;z-index:999999;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:20px;font-family:Arial;"; pm.innerHTML = `<h1 style="font-size:32px;text-transform:uppercase;font-weight:bold;">⚠️ ALERTA DE SEGURIDAD</h1><p style="font-size:20px;margin-top:15px;font-weight:bold;">Intento de alteración de código detectado.</p><button onclick="this.parentElement.remove()" style="margin-top:30px;padding:15px 30px;background:#000;color:#fff;border:2px solid #fff;border-radius:10px;cursor:pointer;font-weight:bold;">ENTENDIDO</button>`; document.body.appendChild(pm); }
-    </script>
-</body>
-</html>
+  } catch(err) {}
+  return ContentService.createTextOutput("OK");
+}
