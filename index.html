@@ -3,50 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>TECNOENTRETE VIP - MESA SEGURA CLOUD</title>
+    <title>TECNOENTRETE VIP - ORIGINAL</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --c1: #e74c3c; --c2: #2c3e50; --c3: #27ae60; --c4: #f1c40f; --c5: #00e5ff; --c8: #111; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; touch-action: none !important; user-select: none !important; margin: 0; padding: 0; }
         html, body { height: 100%; width: 100%; background-color: #000; position: fixed; font-family: 'Segoe UI', sans-serif; overflow: hidden; color: white; }
         
-        /* INICIO ORIGINAL COMPLETO */
+        /* LOGIN ORIGINAL COMPLETO */
         #p-l { width: 100%; height: 100dvh; max-width: 500px; display: flex; flex-direction: column; padding: 15px; margin: auto; position: fixed; top: 0; left: 50%; transform: translateX(-50%); background: #000; z-index: 9999; justify-content: center; align-items: center; overflow-y: auto; }
-        .c-l { background: #000; border: 3px solid #00e5ff; border-radius: 25px; padding: 25px; width: 100%; text-align: center; box-shadow: 0 0 30px rgba(0,229,255,0.3); }
-        .c-l img { width: 90px; margin-bottom: 10px; border-radius: 50%; border: 2px solid #fff; animation: rotar 5s linear infinite;}
+        .c-l { background: #000; border: 3px solid #00e5ff; border-radius: 25px; padding: 20px; width: 100%; text-align: center; box-shadow: 0 0 25px rgba(0,229,255,0.2); }
+        .c-l img { width: 80px; margin-bottom: 10px; border-radius: 50%; border: 2px solid #fff; animation: rotar 5s linear infinite;}
         @keyframes rotar { 100% { transform: rotate(360deg); } }
         
-        .box-global { background: linear-gradient(180deg, #f39c12, #e67e22); color: #000; padding: 12px; border-radius: 12px; margin-bottom: 12px; font-weight: 900; font-size: 20px; display: flex; flex-direction: column; }
-        .legal-box { background: rgba(231, 76, 60, 0.1); border: 1px solid #e74c3c; padding: 15px; border-radius: 12px; margin-bottom: 12px; font-size: 13px; color: #e74c3c; text-align: left; line-height: 1.4; }
+        .box-global { background: #d48e31; color: #000; padding: 10px; border-radius: 12px; margin-bottom: 12px; font-weight: 900; font-size: 18px; display: flex; flex-direction: column; }
+        .legal-box { background: rgba(231, 76, 60, 0.1); border: 1px solid #e74c3c; padding: 12px; border-radius: 12px; margin-bottom: 12px; font-size: 12px; color: #e74c3c; text-align: left; }
         
-        /* DETALLE DE PLANES Y PRECIOS */
-        .planes-box { background: #111; border: 1px solid #333; padding: 10px; border-radius: 10px; margin-bottom: 12px; font-size: 12px; color: #aaa; text-align: left; }
+        .planes-box { background: #0a0a0a; border: 1px solid #333; padding: 10px; border-radius: 12px; margin-bottom: 12px; font-size: 11px; color: #ccc; text-align: left; line-height: 1.5; }
         .planes-box b { color: var(--c5); }
 
-        .i-s { width: 100%; background: #000; border: 2px solid #444; color: #f1c40f; padding: 16px; border-radius: 15px; font-size: 20px; text-align: center; margin-bottom: 10px; outline: none; font-weight: bold; }
+        .i-s { width: 100%; background: #000; border: 2px solid #444; color: #f1c40f; padding: 16px; border-radius: 15px; font-size: 18px; text-align: center; margin-bottom: 10px; outline: none; font-weight: bold; }
         .b-a { border: none; padding: 18px; border-radius: 15px; font-weight: 900; width: 100%; cursor: pointer; text-transform: uppercase; font-size: 15px; margin-bottom: 10px; }
 
-        /* JUEGO PANTALLA COMPLETA */
-        #app-principal { display: none; flex-direction: column; width: 100%; height: 100dvh; max-width: 500px; padding: 15px; margin: auto; justify-content: space-between; position: relative; padding-top: calc(env(safe-area-inset-top) + 10px); }
-        .tmr-big { background:#000; border:3px solid var(--c5); border-radius: 15px; padding:12px; text-align:center; font-size: 32px; color: var(--c5); font-weight: 900; }
-        
-        #global-wallet { background:#000; border:2px solid #333; border-radius:20px; padding:15px; display:flex; justify-content:space-around; }
-        .gw-val { font-size:24px; font-weight:bold; }
-        
-        /* MONEDA PEQUEÑA CLP */
-        .currency-tag { font-size: 14px; color: #888; margin-left: 4px; font-weight: normal; }
-
-        #sugerencia-container { border: 4px solid var(--c5); background: #1a1a1a; padding: 30px; border-radius: 25px; text-align: center; flex-grow: 1; display: flex; flex-direction: column; justify-content: center; margin: 10px 0; }
-        #s-t { font-size: 110px; font-weight: 900; line-height: 1; }
-        #m-t { color:var(--c4); font-size:45px; display: flex; align-items: baseline; justify-content: center; }
-
-        .b-i { height: 95px; border-radius: 20px; border:none; font-size: 45px; color: white; flex: 1; font-weight: bold; cursor: pointer; }
-        .bola { width: 38px; height: 38px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: bold; border: 1px solid #222; flex-shrink: 0; }
-        #c-h { background:#000; height: 70px; border-radius: 15px; border: 2px solid #222; display: flex; align-items: center; justify-content: center; gap: 8px; overflow: hidden; padding: 0 10px; }
-
-        #stats-bar { background:#0a0a0a; border:2px solid #333; border-radius:12px; padding:12px; display:flex; justify-content:space-between; font-size:18px; font-weight:bold; color:#aaa; }
-        .actions-grid { display:flex; gap:10px; margin-bottom: 5px; }
-        .btn-foot { background:transparent; border:1px solid #444; color:white; padding: 18px; border-radius: 15px; font-size: 14px; font-weight: bold; flex: 1; cursor: pointer; }
+        /* JUEGO */
+        #app-principal { display: none; flex-direction: column; width: 100%; height: 100dvh; max-width: 500px; padding: 15px; margin: auto; justify-content: space-between; }
+        .tmr-big { background:#000; border:3px solid var(--c5); border-radius: 15px; padding:10px; text-align:center; font-size: 28px; color: var(--c5); font-weight: 900; }
+        .gw-val { font-size:22px; font-weight:bold; }
+        #sugerencia-container { border: 4px solid var(--c5); background: #1a1a1a; padding: 25px; border-radius: 25px; text-align: center; flex-grow: 1; display: flex; flex-direction: column; justify-content: center; margin: 10px 0; }
+        #s-t { font-size: 90px; font-weight: 900; line-height: 1; }
+        #m-t { color:var(--c4); font-size:40px; }
+        .b-i { height: 85px; border-radius: 20px; border:none; font-size: 40px; color: white; flex: 1; font-weight: bold; cursor: pointer; }
+        .bola { width: 35px; height: 35px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: bold; border: 1px solid #222; }
+        #c-h { background:#000; height: 60px; border-radius: 15px; border: 2px solid #222; display: flex; align-items: center; justify-content: center; gap: 8px; overflow: hidden; }
+        .btn-foot { background:transparent; border:1px solid #444; color:white; padding: 15px; border-radius: 15px; font-size: 13px; font-weight: bold; flex: 1; cursor: pointer; }
     </style>
 </head>
 <body oncontextmenu="return false;">
@@ -57,24 +46,23 @@
             <h1>TECNOENTRETE VIP</h1>
             
             <div class="box-global">
-                <span style="font-size: 12px; color: #111;">🏆 COMUNIDAD GANANDO:</span>
+                <span style="font-size: 11px; color: #111;">🏆 COMUNIDAD GANANDO:</span>
                 <span id="lbl-global-neto">$ 0.00 USD</span>
             </div>
 
             <div class="legal-box">
                 <b>REGLAS DE ORO:</b><br>
-                - Iniciar con monto base <b>$0.20</b>.<br>
-                - Capital recomendado: <b>$40 USD</b>.<br>
-                - No nos hacemos responsables por pérdidas.
+                - Iniciar con monto base <b>$0.20 / $200</b>.<br>
+                - Capital recomendado: <b>$40 USD / $40.000</b>.<br>
             </div>
 
             <div class="planes-box">
-                <b>PLANES:</b><br>
-                • Básico (1 Mesa): <b>$35 USD / 30 Días</b><br>
-                • PRO (Multimesa): <b>$60 USD / 30 Días</b>
+                <b>VALORES CLP:</b><br>
+                • 12 Horas: <b>$10.000</b> | • Diario: <b>$20.000</b><br>
+                • Semanal: <b>$70.000</b> | • Mensual: <b>$150.000</b>
             </div>
 
-            <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+            <div style="display: flex; gap: 10px; margin-bottom: 12px;">
                 <button onclick="cambiarMoneda('USD')" id="m-usd" style="flex:1; padding:10px; border-radius:10px; background:var(--c5); color:black; font-weight:900; border:none;">USD $</button>
                 <button onclick="cambiarMoneda('CLP')" id="m-clp" style="flex:1; padding:10px; border-radius:10px; background:#222; color:white; font-weight:900; border:none;">CLP $</button>
             </div>
@@ -83,22 +71,20 @@
             <input type="password" id="l-i" class="i-s" placeholder="CLAVE / LICENCIA">
             
             <button class="b-a" style="background:#00e5ff; color:#000;" id="btn-validar">ENTRAR AL SISTEMA</button>
-            <button class="b-a" style="background:#0b2228; color:#00e5ff; border:2px solid #00e5ff;" onclick="solicitarDemo()">PROBAR DEMO GRATIS</button>
+            <button class="b-a" style="background:#0b2228; color:#00e5ff; border:2px solid #00e5ff;" onclick="alert('Contacte soporte')">DEMO GRATIS</button>
         </div>
     </div>
 
     <div id="app-principal">
         <div id="tmr" class="tmr-big">00d-00h:00m:00s</div>
-
-        <div id="global-wallet">
-            <div class="gw-box"><div style="color:#888; font-size:11px;">APUESTA</div><div id="c-i" class="gw-val" style="color:#fff;">$0.00</div></div>
-            <div class="gw-box"><div style="color:#888; font-size:11px;">UTILIDAD</div><div id="u-s" class="gw-val" style="color:var(--c3);">$0.00</div></div>
-            <div class="gw-box"><div style="color:#888; font-size:11px;">TOTAL</div><div id="n-g" class="gw-val" style="color:var(--c5);">$0.00</div></div>
+        <div style="background:#000; border:1px solid #333; border-radius:15px; padding:10px; display:flex; justify-content:space-around;">
+            <div style="text-align:center;"><div style="color:#888; font-size:10px;">APUESTA</div><div id="c-i" class="gw-val">$0.00</div></div>
+            <div style="text-align:center;"><div style="color:#888; font-size:10px;">UTILIDAD</div><div id="u-s" class="gw-val" style="color:var(--c3);">$0.00</div></div>
         </div>
 
         <div id="sugerencia-container">
             <div id="s-t">---</div>
-            <div id="m-t">0.20 <span class="currency-tag" id="tag-m">USD</span></div>
+            <div id="m-t">$0.20</div>
         </div>
 
         <div style="display:flex; gap:10px;">
@@ -109,23 +95,16 @@
 
         <div id="c-h"></div>
 
-        <div id="stats-bar">
-            <div>R: <span id="st-R">0</span></div>
-            <div>N: <span id="st-N">0</span></div>
-            <div>0: <span id="st-0">0</span></div>
-        </div>
-
-        <div class="actions-grid">
+        <div class="actions-grid" style="display:flex; gap:10px;">
             <button class="btn-foot" onclick="deshacer()">CORREGIR</button>
-            <button id="btn-t" class="btn-foot" style="color:var(--c4); opacity:0.3; pointer-events:none;" onclick="reportarTrampa()">⚠️ TRAMPA</button>
+            <button id="btn-t" class="btn-foot" style="color:var(--c4); opacity:0.3; pointer-events:none;">⚠️ TRAMPA</button>
             <button class="btn-foot" style="color:var(--c1);" onclick="resetear()">RESET</button>
         </div>
     </div>
 
     <script>
         const _URL = "https://script.google.com/macros/s/AKfycbzUIdq4jKKOi3_fu3kLsO_cP3Z9ckXp7B6sUiP78B7Km7bDVmaecAIdsWGgGcA8nlE8JA/exec";
-        let _U="", _L="", _S=0, _h=[], _m=0.2, _s="", _nP=0, _nG=0, _cR=0, _cN=0, _c0=0, _per=0;
-        let _lS = null, _MONEDA = "USD", _TS=0, _IS=0;
+        let _U="", _L="", _S=0, _h=[], _m=0.2, _s="", _nP=0, _nG=0, _MONEDA="USD", _TS=0, _IS=0, _lS=null;
         window.trampasLocales = [];
 
         function cambiarMoneda(m) {
@@ -142,7 +121,11 @@
             try {
                 const r = await fetch(_URL + "?action=obtener_global");
                 const d = await r.json();
-                if(d.status === "success") document.getElementById('lbl-global-neto').innerText = "$ " + d.total_global + " USD";
+                if(d.status === "success") {
+                    // AQUÍ ESTÁ EL ARREGLO: Redondeamos para que no salga el error de red
+                    let total = parseFloat(d.total_global).toFixed(2);
+                    document.getElementById('lbl-global-neto').innerText = "$ " + total + " USD";
+                }
             } catch(e){}
         };
 
@@ -150,44 +133,33 @@
             _U = document.getElementById('u-i').value.trim();
             _L = document.getElementById('l-i').value.trim().toUpperCase();
             if(!_U || !_L) return;
-            this.innerText = "⏳ VALIDANDO...";
+            this.innerText = "⏳ SINCRONIZANDO...";
             try {
-                const r = await fetch(_URL + "?action=validar&usuario="+encodeURIComponent(_U)+"&serial="+encodeURIComponent(_L));
+                const r = await fetch(_URL + "?action=validar&usuario="+_U+"&serial="+_L);
                 const d = await r.json();
                 if(d.status === "success") {
                     _S = d.segundos; _nG = parseFloat(d.neto_global) || 0;
-                    this.innerText = "🐝 SINCRONIZANDO...";
-                    let rT = await fetch(_URL + "?action=panel_trampas");
-                    let dT = await rT.json();
-                    if(dT.datos) dT.datos.forEach(row => { if(row[2]) window.trampasLocales.push(row[2].split("_")[0]); });
-                    
                     document.getElementById('p-l').style.display='none';
                     document.getElementById('app-principal').style.display='flex';
                     _TS = Date.now(); _IS = _S;
-                    setInterval(TM_TICK, 1000);
+                    setInterval(() => {
+                        let e = Math.floor((Date.now() - _TS) / 1000);
+                        _S = Math.max(0, _IS - e);
+                        let d=Math.floor(_S/86400), h=Math.floor((_S%86400)/3600), m=Math.floor((_S%3600)/60), s=_S%60;
+                        document.getElementById('tmr').innerText = `${d}d-${h}h:${m}m:${s}s`;
+                    }, 1000);
                     update();
                 } else { alert(d.mensaje); this.innerText="ENTRAR"; }
             } catch(e){ alert("Error de red"); this.innerText="ENTRAR"; }
         };
 
-        function TM_TICK() {
-            let e = Math.floor((Date.now() - _TS) / 1000);
-            _S = Math.max(0, _IS - e);
-            let d=Math.floor(_S/86400), h=Math.floor((_S%86400)/3600), m=Math.floor((_S%3600)/60), s=_S%60;
-            document.getElementById('tmr').innerText = `${d}d-${h}h:${m}m:${s}s`;
-            if(_S <= 0 && _IS > 0) location.reload();
-        }
-
         function xfR(c) {
-            _lS = JSON.parse(JSON.stringify({h:_h, m:_m, s:_s, nP:_nP, nG:_nG, cR:_cR, cN:_cN, c0:_c0, per:_per}));
-            if(c==='Rojo')_cR++; else if(c==='Negro')_cN++; else if(c==='Cero')_c0++;
+            _lS = JSON.parse(JSON.stringify({h:_h, m:_m, s:_s, nP:_nP}));
             if(_s !== "") {
-                if(c.toUpperCase() === _s) { _nP += _m; _m = (_MONEDA==="USD") ? 0.20 : 200; _per = 0; }
-                else if(c !== 'Cero') { _nP -= _m; _m *= 2; _per++; }
+                if(c.toUpperCase() === _s) { _nP += _m; _m = (_MONEDA==="USD") ? 0.20 : 200; }
+                else if(c !== 'Cero') { _nP -= _m; _m *= 2; }
             }
-            _h.unshift(c); _s = motorOriginal(_h);
-            if(_per >= 7) { document.getElementById('btn-t').style.opacity="1"; document.getElementById('btn-t').style.pointerEvents="auto"; }
-            update();
+            _h.unshift(c); _s = motorOriginal(_h); update();
         }
 
         function motorOriginal(h) {
@@ -196,31 +168,26 @@
             let sn = (h[0]==="Rojo")?"NEGRO":"ROJO";
             if(h[0]==='Cero') sn=(h[1]==='Rojo')?'ROJO':'NEGRO';
             if(r>=3) sn=h[0].toUpperCase();
-            let nc = sn==="ROJO"?"R":"N", hh = [nc, ...h.slice(0,10).map(v=>v[0].toUpperCase())].join("-");
-            for(let tr of window.trampasLocales) if(hh.indexOf(tr)===0) { sn=(sn==="ROJO")?"NEGRO":"ROJO"; break; }
             return sn;
         }
 
         function deshacer() { if(_lS) { Object.assign(window, _lS); _lS = null; update(); } }
-        function resetear() { if(confirm("¿Reset?")) { _h=[]; _m=(_MONEDA==="USD")?0.20:200; _s=""; _nP=0; _cR=0; _cN=0; _c0=0; update(); } }
+        function resetear() { if(confirm("¿Reset?")) { _h=[]; _m=(_MONEDA==="USD")?0.20:200; _s=""; _nP=0; update(); } }
 
         function update() {
             let p = _MONEDA === "USD" ? "$" : "";
-            document.getElementById('tag-m').innerText = _MONEDA;
-            document.getElementById('c-i').innerText = p + _m.toLocaleString();
-            document.getElementById('u-s').innerText = p + _nP.toLocaleString();
-            document.getElementById('n-g').innerText = p + _nG.toLocaleString();
+            let s = _MONEDA === "CLP" ? " CLP" : "";
+            document.getElementById('c-i').innerText = p + _m.toLocaleString() + s;
+            document.getElementById('u-s').innerText = p + _nP.toLocaleString() + s;
             document.getElementById('s-t').innerText = _s || "---";
             document.getElementById('s-t').style.color = _s === "ROJO" ? "#e74c3c" : (_s === "NEGRO" ? "#fff" : "#888");
-            document.getElementById('m-t').innerHTML = _m.toLocaleString() + ` <span class="currency-tag">${_MONEDA}</span>`;
-            document.getElementById('st-R').innerText = _cR; document.getElementById('st-N').innerText = _cN; document.getElementById('st-0').innerText = _c0;
+            document.getElementById('m-t').innerText = p + _m.toLocaleString() + s;
             const ch = document.getElementById('c-h'); ch.innerHTML = "";
-            _h.slice(0, 12).forEach(v => {
+            _h.slice(0, 10).forEach(v => {
                 let bg = v === 'Rojo' ? 'red' : (v === 'Negro' ? '#fff' : 'green');
                 ch.innerHTML += `<div class="bola" style="background:${bg}; color:${v==='Negro'?'#000':'#fff'}">${v[0]}</div>`;
             });
         }
-        function solicitarDemo() { window.open("https://wa.me/tu_numero", "_blank"); }
     </script>
 </body>
 </html>
