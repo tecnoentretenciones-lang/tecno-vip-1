@@ -65,6 +65,17 @@
 </head>
 <body oncontextmenu="return false;">
 
+    <div id="modal-moneda" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 10006; display: none; justify-content: center; align-items: center; flex-direction: column; padding:20px;">
+        <div style="background: rgba(20,20,20,0.98); border: 2px solid var(--c5); color: #fff; padding: 25px; border-radius: 20px; text-align: center; max-width: 400px; box-shadow: 0 0 20px rgba(0,229,255,0.3);">
+            <h2 style="color: var(--c5); margin: 0 0 15px 0;">💰 TIPO DE MONEDA</h2>
+            <p style="color: #ccc; font-size: 14px; margin-bottom: 20px; line-height: 1.4;">Selecciona la moneda que usarás. Esta opción quedará guardada para tu cuenta.</p>
+            <div style="display: flex; gap: 10px;">
+                <button style="background: var(--c5); color: #000; border: none; padding: 15px; border-radius: 10px; font-weight: bold; flex: 1; cursor: pointer;" onclick="seleccionarMonedaInicial('USD')">DÓLARES (USD)</button>
+                <button style="background: #222; color: #fff; border: 1px solid #444; padding: 15px; border-radius: 10px; font-weight: bold; flex: 1; cursor: pointer;" onclick="seleccionarMonedaInicial('CLP')">PESOS (CLP)</button>
+            </div>
+        </div>
+    </div>
+
     <div id="alerta-trampa-custom" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.92); z-index: 10006; display: none; justify-content: center; align-items: center; flex-direction: column; padding:20px;">
         <div style="background: rgba(20,20,20,0.98); border: 2px solid var(--c1); color: #fff; padding: 25px; border-radius: 20px; text-align: center; max-width: 400px; box-shadow: 0 0 20px rgba(231,76,60,0.5);">
             <div style="font-size: 50px;">⚠️</div>
@@ -132,6 +143,10 @@
     let _S = 0, _TS = 0, _IS = 0;
     let capitalGlobal = 0;
     let mesasInstancias = [];
+    
+    // Variables para la Moneda
+    let _MONEDA = "USD";
+    window._restoredData = null; // Para la nube
 
     window.saveState = function() { 
         if(!_L) return;
@@ -159,28 +174,59 @@
                 _S = d.segundos; 
                 
                 let savedJSON = d.estado_nube || localStorage.getItem('ts_pro_'+_L);
+                let restored = false;
+                let numMesas = 4;
+
                 if(savedJSON && savedJSON.includes("{")) {
                     if(confirm("☁️ Tienes una sesión guardada en la Nube.\n\n¿Deseas CONTINUAR la partida anterior?")) {
                         try { 
                             let st = JSON.parse(savedJSON); 
                             capitalGlobal = parseFloat(st.cap) || 40;
-                            let numMesas = st.mesas ? st.mesas.length : 4;
-                            document.getElementById('p-l').style.display='none';
-                            iniciarMesas(numMesas, st.mesas);
-                            return;
+                            numMesas = st.mesas ? st.mesas.length : 4;
+                            restored = true;
+                            window._restoredData = st.mesas; // Lo guardamos para cuando se elija moneda
                         } catch(e) {}
                     }
                 }
 
                 document.getElementById('p-l').style.display='none';
-                document.getElementById('p-select').style.display='flex';
+                
+                // 🔥 AQUÍ ENTRA LA LÓGICA DE LA MONEDA 🔥
+                let savedMoneda = localStorage.getItem('VIP_MONEDA_PRO_' + _L);
+                if (!savedMoneda) {
+                    document.getElementById('modal-moneda').style.display = 'flex';
+                } else {
+                    _MONEDA = savedMoneda;
+                    continuarFlujo(restored, numMesas);
+                }
             } else { alert(d.mensaje); this.innerText = "ENTRAR AL SISTEMA MULTIMESA"; }
         } catch(e) { alert("Error de Conexión."); this.innerText = "ENTRAR AL SISTEMA MULTIMESA"; }
     };
 
+    // Función que se activa al elegir moneda en el Modal
+    window.seleccionarMonedaInicial = function(mon) {
+        _MONEDA = mon;
+        localStorage.setItem('VIP_MONEDA_PRO_' + _L, mon);
+        document.getElementById('modal-moneda').style.display = 'none';
+        
+        let wasRestored = window._restoredData ? true : false;
+        let numMesas = window._restoredData ? window._restoredData.length : 4;
+        continuarFlujo(wasRestored, numMesas);
+    };
+
+    window.continuarFlujo = function(restored, numMesas) {
+        if (restored) {
+            iniciarMesas(numMesas, window._restoredData);
+        } else {
+            document.getElementById('p-select').style.display='flex';
+        }
+    };
+
     window.iniciarMesas = (cant, savedData = null) => {
         if (!savedData) {
-            capitalGlobal = parseFloat(prompt("Capital inicial a repartir entre mesas ($ USD):", "40.00")) || 40;
+            // PREGUNTA EL CAPITAL BASADO EN LA MONEDA
+            let mjs = _MONEDA === 'USD' ? "40.00" : "40000";
+            capitalGlobal = parseFloat(prompt(`Capital inicial a repartir entre mesas (${_MONEDA}):`, mjs)) || (_MONEDA === 'USD' ? 40 : 40000);
         }
         document.getElementById('p-select').style.display = 'none';
         document.getElementById('app-principal').style.display = 'flex';
@@ -232,13 +278,15 @@
                 let sd = savedData[i-1];
                 motor._nP = sd.nP || 0;
                 motor._h = sd.h || [];
-                motor._m = sd.m || 0.2;
+                motor._m = sd.m || (_MONEDA === 'USD' ? 0.2 : 200);
                 motor._s = sd.s || "";
                 motor._per = sd.per || 0;
                 motor._cR = sd.cR || 0;
                 motor._cN = sd.cN || 0;
                 motor._c0 = sd.c0 || 0;
                 motor._s0 = sd.s0 || 0;
+            } else {
+                motor._m = (_MONEDA === 'USD') ? 0.20 : 200; // BLOQUEA LA APUESTA BASE SEGÚN LA MONEDA
             }
             mesasInstancias.push(motor);
         }
@@ -255,12 +303,20 @@
         }
     };
 
+    // FORMATEA LOS NÚMEROS A USD O CLP SEGÚN LA ELECCIÓN
+    function formatearDinero(val) {
+        let p = (_MONEDA === 'USD') ? "$" : "";
+        let sfx = (_MONEDA === 'CLP') ? " CLP" : "";
+        let fr = (_MONEDA === 'USD') ? 2 : 0;
+        return p + val.toLocaleString('en-US', {minimumFractionDigits: fr, maximumFractionDigits: fr}) + sfx;
+    }
+
     function actualizarBilletera() {
         let utilTotal = mesasInstancias.reduce((a, b) => a + b._nP, 0);
         let netoTotal = capitalGlobal + utilTotal;
-        document.getElementById('gw-cap').innerText = "$" + capitalGlobal.toFixed(2);
-        document.getElementById('gw-util').innerText = "$" + utilTotal.toFixed(2);
-        document.getElementById('gw-neto').innerText = "$" + netoTotal.toFixed(2);
+        document.getElementById('gw-cap').innerText = formatearDinero(capitalGlobal);
+        document.getElementById('gw-util').innerText = formatearDinero(utilTotal);
+        document.getElementById('gw-neto').innerText = formatearDinero(netoTotal);
     }
 
     function iniciarReloj() {
@@ -290,7 +346,7 @@
             this._lS = {nP:this._nP, h:[...this._h], m:this._m, s:this._s, per:this._per, cR:this._cR, cN:this._cN, c0:this._c0, s0:this._s0};
             if (c === 'Rojo') { this._cR++; this._s0++; } else if (c === 'Negro') { this._cN++; this._s0++; } else if (c === 'Cero') { this._c0++; this._s0 = 0; }
             if(this._s !== "" && this._s !== "⏳") {
-                if(c.toUpperCase() === this._s){ this._nP += this._m; this._m = 0.2; this._per = 0; } else if(c !== 'Cero'){ this._nP -= this._m; this._m *= 2; this._per++; }
+                if(c.toUpperCase() === this._s){ this._nP += this._m; this._m = (_MONEDA === 'USD') ? 0.20 : 200; this._per = 0; } else if(c !== 'Cero'){ this._nP -= this._m; this._m *= 2; this._per++; }
             }
             this._h.unshift(c);
             let stDiv = document.getElementById(`s-t-${this.id}`); stDiv.innerText = "⏳"; stDiv.classList.add("loading-st");
@@ -310,7 +366,6 @@
             } else { document.getElementById('btn-trampa-'+this.id).style.opacity="0.3"; document.getElementById('btn-trampa-'+this.id).style.pointerEvents="none"; }
         }
 
-        // 🔥 CORREGIDO: Deshacer restaura TODO a la jugada anterior (bolitas, utilidad y motor)
         deshacer() { 
             if(this._lS) { 
                 this._nP = this._lS.nP; this._h = [...this._lS.h]; this._m = this._lS.m; this._s = this._lS.s; this._per = this._lS.per; this._cR = this._lS.cR; this._cN = this._lS.cN; this._c0 = this._lS.c0; this._s0 = this._lS.s0; 
@@ -319,10 +374,9 @@
             } 
         }
         
-        // 🔥 CORREGIDO: Reset solo borra la interfaz y el historial visual, tu utilidad queda intacta
+        // RESET: BORRA BOLITAS, MANTIENE UTILIDAD
         resetear() { 
-            this._h=[]; this._m=0.2; this._s=""; this._per=0; this._cR=0; this._cN=0; this._c0=0; this._s0=0; 
-            // NO se toca this._nP (Utilidad)
+            this._h=[]; this._m=(_MONEDA === 'USD' ? 0.20 : 200); this._s=""; this._per=0; this._cR=0; this._cN=0; this._c0=0; this._s0=0; 
             document.getElementById('btn-trampa-'+this.id).style.opacity="0.3"; 
             document.getElementById('btn-trampa-'+this.id).style.pointerEvents="none"; 
             this.update(); actualizarBilletera(); saveState(); 
@@ -331,8 +385,8 @@
         reportarTrampa() { let patron = this._h.slice(0,7).map(v => v.charAt(0).toUpperCase()).join("-"); navigator.sendBeacon(_URL + "?action=reportar_trampa&usuario=" + encodeURIComponent(_U) + "&serial=" + encodeURIComponent(_L) + "&patron=" + patron + "_MANUAL_4M"); mostrarAlerta("<b>✅ REPORTE MANUAL ENVIADO.</b><br>Mesa " + this.id); document.getElementById('btn-trampa-'+this.id).style.opacity="0.3"; document.getElementById('btn-trampa-'+this.id).style.pointerEvents="none"; }
         
         update(isCalculating = false) {
-            document.getElementById(`u-s-${this.id}`).innerText = "$" + this._nP.toFixed(2);
-            document.getElementById(`m-t-${this.id}`).innerText = "$" + this._m.toFixed(2);
+            document.getElementById(`u-s-${this.id}`).innerText = formatearDinero(this._nP);
+            document.getElementById(`m-t-${this.id}`).innerText = formatearDinero(this._m);
             if(!isCalculating) { document.getElementById(`s-t-${this.id}`).innerText = this._s || "---"; document.getElementById(`s-t-${this.id}`).style.color = (this._s === "ROJO") ? "#e74c3c" : (this._s === "NEGRO" ? "#fff" : "#888"); }
             document.getElementById(`st-R-${this.id}`).innerText = this._cR; document.getElementById(`st-N-${this.id}`).innerText = this._cN; document.getElementById(`st-0-${this.id}`).innerText = this._c0; document.getElementById(`st-s0-${this.id}`).innerText = this._s0;
             const ch = document.getElementById(`c-h-${this.id}`); ch.innerHTML=""; this._h.slice(0,18).forEach(v => { const cl=(v==='Rojo')?'red':(v==='Negro'?'#fff':'green'); ch.innerHTML+=`<div class="bola" style="background:${cl}; color:${v==='Negro'?'#000':'#fff'}">${v==='Cero'?'0':''}</div>`; });
