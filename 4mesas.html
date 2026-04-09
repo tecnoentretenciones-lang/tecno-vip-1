@@ -133,9 +133,6 @@
     let capitalGlobal = 0;
     let mesasInstancias = [];
 
-    // ==========================================
-    // FUNCION DE GUARDADO TOTAL PARA COLUMNA F
-    // ==========================================
     window.saveState = function() { 
         if(!_L) return;
         let utilTotal = mesasInstancias.reduce((a, b) => a + b._nP, 0);
@@ -161,7 +158,6 @@
             if(d.status === "success") { 
                 _S = d.segundos; 
                 
-                // PREGUNTAR SI QUIERE RESTAURAR LA SESIÓN
                 let savedJSON = d.estado_nube || localStorage.getItem('ts_pro_'+_L);
                 if(savedJSON && savedJSON.includes("{")) {
                     if(confirm("☁️ Tienes una sesión guardada en la Nube.\n\n¿Deseas CONTINUAR la partida anterior?")) {
@@ -170,7 +166,7 @@
                             capitalGlobal = parseFloat(st.cap) || 40;
                             let numMesas = st.mesas ? st.mesas.length : 4;
                             document.getElementById('p-l').style.display='none';
-                            iniciarMesas(numMesas, st.mesas); // Inicia con los datos guardados
+                            iniciarMesas(numMesas, st.mesas);
                             return;
                         } catch(e) {}
                     }
@@ -182,7 +178,6 @@
         } catch(e) { alert("Error de Conexión."); this.innerText = "ENTRAR AL SISTEMA MULTIMESA"; }
     };
 
-    // EL SISTEMA AHORA ACEPTA DATOS GUARDADOS
     window.iniciarMesas = (cant, savedData = null) => {
         if (!savedData) {
             capitalGlobal = parseFloat(prompt("Capital inicial a repartir entre mesas ($ USD):", "40.00")) || 40;
@@ -223,9 +218,9 @@
                     </div>
 
                     <div style="display:flex; gap:6px;">
-                        <button style="background:transparent; color:#555; border:1px solid #333; padding:10px; border-radius:10px; font-size:11px; flex:1;" onclick="mesasInstancias[${i-1}].deshacer()">CORREGIR</button>
-                        <button id="btn-trampa-${i}" style="background:transparent; color:var(--c4); border:1px solid var(--c4); padding:10px; border-radius:10px; font-size:11px; flex:1.5; opacity:0.3; pointer-events:none;" onclick="mesasInstancias[${i-1}].reportarTrampa()">⚠️ TRAMPA</button>
-                        <button style="background:transparent; color:var(--c1); border:1px solid var(--c1); padding:10px; border-radius:10px; font-size:11px; flex:1;" onclick="mesasInstancias[${i-1}].resetear()">RESET</button>
+                        <button style="background:transparent; color:#555; border:1px solid #333; padding:10px; border-radius:10px; font-size:11px; flex:1; cursor:pointer;" onclick="mesasInstancias[${i-1}].deshacer()">CORREGIR</button>
+                        <button id="btn-trampa-${i}" style="background:transparent; color:var(--c4); border:1px solid var(--c4); padding:10px; border-radius:10px; font-size:11px; flex:1.5; opacity:0.3; pointer-events:none; cursor:pointer;" onclick="mesasInstancias[${i-1}].reportarTrampa()">⚠️ TRAMPA</button>
+                        <button style="background:transparent; color:var(--c1); border:1px solid var(--c1); padding:10px; border-radius:10px; font-size:11px; flex:1; cursor:pointer;" onclick="mesasInstancias[${i-1}].resetear()">RESET</button>
                     </div>
                 </div>
             </div>`;
@@ -233,7 +228,6 @@
             
             let motor = new MotorFelipe(i);
             
-            // SI HAY DATOS GUARDADOS, LOS INYECTA EN EL MOTOR
             if (savedData && savedData[i-1]) {
                 let sd = savedData[i-1];
                 motor._nP = sd.nP || 0;
@@ -250,7 +244,7 @@
         }
         
         actualizarBilletera(); 
-        mesasInstancias.forEach(m => m.update()); // Dibuja el historial recuperado
+        mesasInstancias.forEach(m => m.update()); 
         iniciarReloj();
     };
 
@@ -260,14 +254,6 @@
             document.querySelectorAll('.tab-btn')[i-1].classList.toggle('active', i===idActivo);
         }
     };
-
-    function ejecutarResetGlobal() { 
-        if(confirm("¿Resetear todas las mesas y volver a empezar?")) { 
-            mesasInstancias.forEach(m => m.resetear()); 
-            actualizarBilletera(); 
-            saveState(); // LO GUARDA EN BLANCO
-        } 
-    }
 
     function actualizarBilletera() {
         let utilTotal = mesasInstancias.reduce((a, b) => a + b._nP, 0);
@@ -285,8 +271,7 @@
             document.getElementById('tmr').innerText = `${d}d-${h}h:${m}m:${s}s`;
             if(_S<=0) location.reload();
         }, 1000);
-        
-        setInterval(saveState, 15000); // AHORA EL PING LLAMA A SAVESTATE
+        setInterval(saveState, 15000); 
     }
 
     window.addEventListener("pagehide", () => { 
@@ -315,7 +300,7 @@
                 let res = await fetch(_URL + "?action=calcular&historial=" + encodeURIComponent(JSON.stringify(limitHist)));
                 let data = await res.json(); if(data.status === "success") { this._s = data.sugerencia; } else { this._s = "ERR"; }
             } catch(e) { this._s = "RED"; }
-            this._isFetching = false; stDiv.classList.remove("loading-st"); this.update(); actualizarBilletera(); saveState(); // AQUI SE GUARDA CADA VEZ QUE APRIETAN UN COLOR
+            this._isFetching = false; stDiv.classList.remove("loading-st"); this.update(); actualizarBilletera(); saveState(); 
             if(this._per >= 7) {
                 document.getElementById('btn-trampa-'+this.id).style.opacity="1"; document.getElementById('btn-trampa-'+this.id).style.pointerEvents="auto";
                 if(this._per === 7) {
@@ -325,8 +310,24 @@
             } else { document.getElementById('btn-trampa-'+this.id).style.opacity="0.3"; document.getElementById('btn-trampa-'+this.id).style.pointerEvents="none"; }
         }
 
-        deshacer() { if(this._lS) { this._nP=this._lS.nP; this._h=[...this._lS.h]; this._m=this._lS.m; this._s=this._lS.s; this._per=this._lS.per; this._cR=this._lS.cR; this._cN=this._lS.cN; this._c0=this._lS.c0; this._s0=this._lS.s0; this._lS = null; this.update(); actualizarBilletera(); saveState(); } }
-        resetear() { this._h=[]; this._m=0.2; this._s=""; this._per=0; this._cR=0; this._cN=0; this._c0=0; this._s0=0; this._nP=0; document.getElementById('btn-trampa-'+this.id).style.opacity="0.3"; document.getElementById('btn-trampa-'+this.id).style.pointerEvents="none"; this.update(); actualizarBilletera(); saveState(); }
+        // 🔥 CORREGIDO: Deshacer restaura TODO a la jugada anterior (bolitas, utilidad y motor)
+        deshacer() { 
+            if(this._lS) { 
+                this._nP = this._lS.nP; this._h = [...this._lS.h]; this._m = this._lS.m; this._s = this._lS.s; this._per = this._lS.per; this._cR = this._lS.cR; this._cN = this._lS.cN; this._c0 = this._lS.c0; this._s0 = this._lS.s0; 
+                this._lS = null; 
+                this.update(); actualizarBilletera(); saveState(); 
+            } 
+        }
+        
+        // 🔥 CORREGIDO: Reset solo borra la interfaz y el historial visual, tu utilidad queda intacta
+        resetear() { 
+            this._h=[]; this._m=0.2; this._s=""; this._per=0; this._cR=0; this._cN=0; this._c0=0; this._s0=0; 
+            // NO se toca this._nP (Utilidad)
+            document.getElementById('btn-trampa-'+this.id).style.opacity="0.3"; 
+            document.getElementById('btn-trampa-'+this.id).style.pointerEvents="none"; 
+            this.update(); actualizarBilletera(); saveState(); 
+        }
+        
         reportarTrampa() { let patron = this._h.slice(0,7).map(v => v.charAt(0).toUpperCase()).join("-"); navigator.sendBeacon(_URL + "?action=reportar_trampa&usuario=" + encodeURIComponent(_U) + "&serial=" + encodeURIComponent(_L) + "&patron=" + patron + "_MANUAL_4M"); mostrarAlerta("<b>✅ REPORTE MANUAL ENVIADO.</b><br>Mesa " + this.id); document.getElementById('btn-trampa-'+this.id).style.opacity="0.3"; document.getElementById('btn-trampa-'+this.id).style.pointerEvents="none"; }
         
         update(isCalculating = false) {
