@@ -19,42 +19,39 @@
         .legal-box { background: rgba(231, 76, 60, 0.1); border: 1px solid #e74c3c; padding: 15px; border-radius: 10px; margin-bottom: 15px; font-size: 11px; color: #e74c3c; text-align: left; line-height: 1.5; font-weight: 600;}
         .i-s { width: 100%; background: #000; border: 1px solid #444; color: #f1c40f; padding: 15px; border-radius: 10px; font-size: 18px; text-align: center; margin-bottom: 15px; outline: none; font-weight: bold; }
         .b-a { border: none; padding: 18px; border-radius: 10px; font-weight: 900; width: 100%; cursor: pointer; text-transform: uppercase; font-size: 14px; margin-bottom: 10px; transition: transform 0.1s;}
-        .b-a:active { transform: scale(0.97); }
         .btn-entrar { background: #00e5ff; color: #000; }
         .btn-demo { background: #0b2228; color: #00e5ff; border: 2px solid #00e5ff; }
-        .btn-planes { background: #00e5ff; color: #000; }
-        .btn-manual { background: #f1c40f; color: #000; }
         #app-principal { display: none; flex-direction: column; width: 100%; height: 100dvh; max-width: 500px; padding: calc(env(safe-area-inset-top) + 10px) 10px 10px 10px; margin: auto; }
         .tmr-big { background:#000; border:2px solid var(--c5); border-radius: 12px; padding:10px; text-align:center; font-size: 26px; color: var(--c5); font-weight: 900; margin-bottom: 5px;}
         #global-wallet { background:#000; border:1px solid #333; border-radius:15px; padding:12px; display:flex; justify-content:space-around; margin-bottom: 5px; }
-        .gw-box { text-align:center; }
-        .gw-title { font-size:11px; color:#888; }
         .gw-val { font-size:18px; font-weight:bold; }
         .bola { width: 22px; height: 22px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 9px; font-weight: bold; }
-        #stats-bar { background:#0a0a0a; border:1px solid #333; border-radius:10px; padding:10px 15px; display:flex; justify-content:space-between; font-size:14px; font-weight:900; color:#ccc; margin-top:-2px; margin-bottom:5px;}
-        .btn-bottom { background:transparent; border:1px solid #333; padding:14px 10px; border-radius:10px; font-size:12px; font-weight:900; flex:1; cursor:pointer; text-transform: uppercase; transition: transform 0.1s; }
+        #stats-bar { background:#0a0a0a; border:2px solid #333; border-radius:12px; padding:15px 20px; display:flex; justify-content:space-between; font-size:15px; font-weight:900; color:#ccc; margin-top:5px; margin-bottom: 5px; }
+        .btn-bottom { background:transparent; border:2px solid #333; padding:16px 10px; border-radius:12px; font-size:14px; font-weight:900; flex:1; cursor:pointer; text-transform: uppercase; }
         .modal-base { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 10000; display: none; justify-content: center; align-items: center; padding: 20px; }
         .modal-content { background: rgba(20, 20, 20, 0.98); border: 2px solid var(--c5); border-radius: 25px; padding: 25px; width: 90%; text-align: center; max-width: 450px; }
-        .manual-text { text-align: left; font-size: 13px; line-height: 1.5; color: #fff; background: rgba(0,0,0,0.5); border: 1px solid #333; padding: 15px; border-radius: 12px; max-height: 350px; overflow-y: auto; margin-bottom: 15px; }
+        #toast-evasion { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg, #27ae60, #2ecc71); color: #fff; padding: 15px 20px; border-radius: 10px; font-weight: 900; z-index: 10007; display: none; border: 2px solid #fff; }
+        .loading-st { animation: pulse 1s infinite; color: #888 !important; }
+        @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
+        #sugerencia-container { border: 2px solid var(--c5); background: #1a1a1a; padding: 15px; border-radius: 15px; text-align: center; }
     </style>
 </head>
 <body oncontextmenu="return false;">
 
-    <div id="modal-moneda" class="modal-base" style="z-index: 10006; flex-direction: column;">
-        <div style="background: rgba(20,20,20,0.98); border: 2px solid var(--c5); color: #fff; padding: 25px; border-radius: 20px; text-align: center; max-width: 400px;">
-            <h2 style="color: var(--c5); margin-bottom: 15px;">💰 SELECCIONAR MONEDA</h2>
-            <div style="display: flex; gap: 10px;">
-                <button class="b-a" style="background: var(--c5); color: #000; flex: 1;" onclick="seleccionarMonedaInicial('USD')">DÓLARES (USD)</button>
-                <button class="b-a" style="background: #222; color: #fff; flex: 1; border: 1px solid #444;" onclick="seleccionarMonedaInicial('CLP')">PESOS (CLP)</button>
-            </div>
+    <div id="toast-evasion">🛡️ ¡SISTEMA VIP EVADIÓ UNA TRAMPA DEL CASINO!</div>
+
+    <div id="alerta-trampa-custom" class="modal-base">
+        <div class="modal-content" style="border-color: var(--c1);">
+            <div style="font-size: 50px;">⚠️</div>
+            <h2 style="color: var(--c1);">¡ALERTA DE CASINO!</h2>
+            <p id="txt-alerta-trampa" style="color: #ccc;"></p>
+            <button class="b-a btn-entrar" onclick="document.getElementById('alerta-trampa-custom').style.display='none'">ENTENDIDO</button>
         </div>
     </div>
 
-    <div id="toast-evasion" style="display:none; position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #27ae60; color: #fff; padding: 15px; border-radius: 10px; z-index: 10007;">🛡️ TRAMPA EVADIDA</div>
-
     <div id="p-l">
         <div class="c-l">
-            <img src="https://cdn-icons-png.flaticon.com/512/1055/1055673.png" alt="Logo"> 
+            <img src="https://cdn-icons-png.flaticon.com/512/1055/1055673.png"> 
             <h1>TECNOENTRETE VIP</h1>
             
             <div class="box-global">
@@ -63,44 +60,53 @@
             </div>
 
             <div class="legal-box">
-                REGLAS:<br>
-                - Capital Mínimo: $100 USD / $100.000 CLP.<br>
-                - Apuesta Recomendada: $0.20 USD / $200 CLP.
+                <b>⚠️ AVISO DE RESPONSABILIDAD:</b><br>
+                - Capital Mínimo: $100.000 CLP / $100 USD.<br>
+                - Capital Recomendado: $200.000 CLP / $200 USD.<br>
+                - Tecnoentrete no se hace responsable por mal uso del sistema o fluctuaciones del azar. Juegue con responsabilidad.
+            </div>
+
+            <div style="display: flex; gap: 10px; margin-bottom: 15px; width: 100%;">
+                <button id="btn-usd" class="b-a" style="flex:1; background:var(--c5); color:#000;" onclick="setMoneda('USD')">USD $</button>
+                <button id="btn-clp" class="b-a" style="flex:1; background:#222; color:#fff;" onclick="setMoneda('CLP')">CLP $</button>
             </div>
             
             <input type="text" id="u-i" class="i-s" placeholder="USUARIO VIP">
-            <input type="password" id="l-i" class="i-s" placeholder="LICENCIA">
+            <input type="password" id="l-i" class="i-s" placeholder="CLAVE / LICENCIA">
             
             <button class="b-a btn-entrar" id="btn-validar">ENTRAR AL SISTEMA</button>
             <button class="b-a btn-demo" onclick="document.getElementById('modal-demo').style.display='flex'">PROBAR DEMO GRATIS</button>
-            <button class="b-a btn-planes" onclick="document.getElementById('modal-planes').style.display='flex'">VER PLANES</button>
-            <button class="b-a btn-manual" onclick="document.getElementById('modal-manual').style.display='flex'">MANUAL</button>
         </div>
     </div>
 
     <div id="app-principal">
         <div id="tmr" class="tmr-big">00d-00h:00m:00s</div>
         <div id="global-wallet">
-            <div class="gw-box"><div class="gw-title">CAPITAL</div><div id="c-i" class="gw-val" style="color:#fff;">$0</div></div>
-            <div class="gw-box"><div class="gw-title">UTILIDAD</div><div id="u-s" class="gw-val" style="color:var(--c3);">$0</div></div>
-            <div class="gw-box"><div class="gw-title">GLOBAL</div><div id="n-g" class="gw-val" style="color:var(--c5);">$0</div></div>
+            <div class="gw-box"><div>CAPITAL</div><div id="c-i" class="gw-val" style="color:#fff;">$0</div></div>
+            <div class="gw-box"><div>UTILIDAD</div><div id="u-s" class="gw-val" style="color:var(--c3);">$0</div></div>
+            <div class="gw-box"><div>GLOBAL</div><div id="n-g" class="gw-val" style="color:var(--c5);">$0</div></div>
         </div>
 
         <div style="background:var(--c8); padding:15px; border-radius:15px; display:flex; flex-direction:column; gap:10px; border:1px solid #333;">
             <div id="sugerencia-container">
-                <div id="s-t" style="font-size:75px; font-weight:900; text-align: center;">---</div>
-                <div id="m-t" style="color:var(--c4); font-size:26px; text-align: center;">$0.20</div>
+                <div id="s-t" style="font-size:75px; font-weight:900;">---</div>
+                <div id="m-t" style="color:var(--c4); font-size:26px;">$0.20</div>
             </div>
             <div style="display:flex; gap:8px;">
                 <button id="btn-R" style="background:var(--c1); height:70px; border-radius:15px; color:white; flex:1; font-weight:bold; border:none;">R</button>
                 <button id="btn-N" style="background:var(--c2); height:70px; border-radius:15px; color:white; flex:1; font-weight:bold; border:none;">N</button>
                 <button id="btn-0" style="background:var(--c3); height:70px; border-radius:15px; color:white; flex:1; font-weight:bold; border:none;">0</button>
             </div>
-            <div id="c-h" style="background:#000; height:90px; border-radius:12px; border:1px solid #222; display:flex; flex-wrap:wrap; justify-content:center; gap:5px; overflow:hidden; padding: 10px;"></div>
+            <div id="c-h" style="background:#000; height:90px; border-radius:12px; border:1px solid #222; display:flex; flex-wrap:wrap; justify-content:center; gap:5px; overflow:hidden;"></div>
+            <div id="stats-bar">
+                <div>R: <span id="st-R">0</span></div>
+                <div>N: <span id="st-N">0</span></div>
+                <div>0: <span id="st-0">0</span></div>
+            </div>
             <div style="display:flex; gap:8px;">
                 <button id="btn-undo" class="btn-bottom">CORREGIR</button>
-                <button id="btn-trampa" class="btn-bottom" style="opacity:0.3; pointer-events:none; color: #f1c40f;">⚠️ TRAMPA</button>
-                <button id="btn-reset" class="btn-bottom" style="color: #e74c3c;">RESET</button>
+                <button id="btn-trampa" class="btn-bottom" style="opacity:0.3; pointer-events:none;">⚠️ TRAMPA</button>
+                <button id="btn-reset" class="btn-bottom" style="color: var(--c1);">RESET</button>
             </div>
         </div>
     </div>
@@ -109,64 +115,34 @@
         <div class="modal-content">
             <h2 style="color:var(--c5);">🎁 DEMO GRATIS</h2>
             <input type="text" id="reg-nombre" class="i-s" placeholder="NOMBRE Y APELLIDO">
-            <div style="display: flex; gap: 8px;">
-                <select id="reg-pais" class="i-s" style="width: 40%; font-size: 14px;">
+            <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                <select id="reg-pais" class="i-s" style="width: 38%; font-size: 14px;">
                     <option value="569" selected>🇨🇱 +569</option>
                     <option value="54">🇦🇷 +54</option>
                     <option value="51">🇵🇪 +51</option>
                     <option value="57">🇨🇴 +57</option>
                     <option value="52">🇲🇽 +52</option>
                 </select>
-                <input type="tel" id="reg-wsp" class="i-s" placeholder="Número" style="width: 60%;">
+                <input type="tel" id="reg-wsp" class="i-s" placeholder="Número" style="width: 62%;">
             </div>
-            <button class="b-a btn-entrar" id="btn-activar-demo" onclick="activarDemo()">ACTIVAR AHORA</button>
-            <button class="b-a" style="background:#555; color:#fff;" onclick="document.getElementById('modal-demo').style.display='none'">CERRAR</button>
-        </div>
-    </div>
-
-    <div id="modal-planes" class="modal-base">
-        <div class="modal-content">
-            <h2 style="color:var(--c4);">PLANES VIP</h2>
-            <div style="text-align:left; color:#fff; margin-bottom:15px;">
-                <p>12 Horas: $8.000 CLP</p>
-                <p>24 Horas: $15.000 CLP</p>
-                <p>1 Semana: $50.000 CLP</p>
-            </div>
-            <button class="b-a" style="background:#25d366; color:#fff;" onclick="window.open('https://wa.me/56995931641')">WHATSAPP SOPORTE</button>
-            <button class="b-a" style="background:#555; color:#fff;" onclick="document.getElementById('modal-planes').style.display='none'">CERRAR</button>
-        </div>
-    </div>
-
-    <div id="modal-manual" class="modal-base">
-        <div class="modal-content">
-            <h2 style="color:var(--c4);">MANUAL VIP</h2>
-            <div class="manual-text">
-                <p>Capital Mínimo: $100 USD / $100.000 CLP.</p>
-                <p>Apuesta Base: $0.20 USD / $200 CLP.</p>
-            </div>
-            <button class="b-a" style="background:#555; color:#fff;" onclick="document.getElementById('modal-manual').style.display='none'">CERRAR</button>
+            <button class="b-a btn-entrar" id="btn-activar-demo">ACTIVAR AHORA</button>
         </div>
     </div>
 
     <script>
     const _URL = "https://script.google.com/macros/s/AKfycbzUIdq4jKKOi3_fu3kLsO_cP3Z9ckXp7B6sUiP78B7Km7bDVmaecAIdsWGgGcA8nlE8JA/exec";
     let _HID = localStorage.getItem('VIP_HID') || 'VIP-'+Math.random().toString(36).substr(2,10).toUpperCase(); localStorage.setItem('VIP_HID', _HID);
-    let _L="", _U="", _S=0, _ba=0, _nP=0, _nG=0, _h=[], _m=0.2, _s="", _per=0, _TS=0, _IS=0, _MONEDA="USD", _lS=null;
+    let _L="", _U="", _S=0, _ba=0, _cI=100, _nP=0, _nG=0, _h=[], _m=0.2, _s="", _per=0, _TS=0, _IS=0, _MONEDA = "USD", _isFetching=false;
 
-    // MOTOR ORIGINAL RESTAURADO
-    function calcularMotorLocal(historial) {
-        if (!historial || historial.length === 0) return "---";
-        let u = historial[0].toUpperCase();
-        return (u === "ROJO") ? "NEGRO" : "ROJO";
-    }
-
-    // RELOJ ORIGINAL RESTAURADO
-    function TM_TICK() { 
-        if(_S<=0) return; 
-        let e = Math.floor((Date.now()-_TS)/1000); let res = Math.max(0, _IS - e); 
-        let d=Math.floor(res/86400), h=Math.floor((res%86400)/3600), m=Math.floor((res%3600)/60), s=res%60; 
-        document.getElementById('tmr').innerText = `${d}d-${h}h:${m}m:${s}s`; 
-        if(res<=0) location.reload(); 
+    function setMoneda(mon) {
+        if (_MONEDA === mon) return;
+        _MONEDA = mon;
+        document.getElementById('btn-usd').style.background = mon === 'USD' ? 'var(--c5)' : '#222';
+        document.getElementById('btn-usd').style.color = mon === 'USD' ? '#000' : '#fff';
+        document.getElementById('btn-clp').style.background = mon === 'CLP' ? 'var(--c5)' : '#222';
+        document.getElementById('btn-clp').style.color = mon === 'CLP' ? '#000' : '#fff';
+        _m = (mon === 'USD') ? 0.20 : 200;
+        update();
     }
 
     document.getElementById('btn-validar').onclick = async function() {
@@ -179,73 +155,56 @@
             const d = await r.json();
             if(d.status === "success") {
                 _S = d.segundos; _nG = parseFloat(d.neto_global) || 0;
-                document.getElementById('p-l').style.display = 'none';
-                document.getElementById('modal-moneda').style.display = 'flex';
+                let sug = (_MONEDA==='USD') ? "100.00" : "100000";
+                _cI = parseFloat(prompt(`Capital mínimo (${_MONEDA}). Mínimo $100 / $100.000:`, sug)) || (_MONEDA==='USD'?100:100000);
+                _ba = _cI; iniciarApp();
             } else { alert(d.mensaje); this.innerText = "ENTRAR AL SISTEMA"; }
         } catch(e) { alert("Error de red"); this.innerText = "ENTRAR AL SISTEMA"; }
     };
 
-    window.seleccionarMonedaInicial = function(mon) {
-        _MONEDA = mon;
-        document.getElementById('modal-moneda').style.display = 'none';
-        let sug = (_MONEDA==='USD') ? "100.00" : "100000";
-        let val = prompt(`Mínimo ${_MONEDA==='USD'?'$100':'$100.000'}. Capital:`, sug);
-        _ba = parseFloat(val) || (_MONEDA==='USD'?100:100000);
-        _m = (_MONEDA==='USD') ? 0.20 : 200;
-        iniciarApp();
-    };
-
     function iniciarApp() {
+        document.getElementById('p-l').style.display='none';
         document.getElementById('app-principal').style.display='flex';
-        _TS = Date.now(); _IS = _S;
-        setInterval(TM_TICK, 1000);
-        update();
+        _TS = Date.now(); _IS = _S; setInterval(TM_TICK, 1000); update();
     }
 
-    function xfR(c) {
-        _lS = {ba:_ba, nP:_nP, nG:_nG, h:[..._h], m:_m, s:_s, per:_per};
-        if(_s !== "") {
+    function TM_TICK() { 
+        if(_S<=0) return; let e = Math.floor((Date.now()-_TS)/1000); let res = Math.max(0, _IS - e); 
+        let d=Math.floor(res/86400), h=Math.floor((res%86400)/3600), m=Math.floor((res%3600)/60), s=res%60; 
+        document.getElementById('tmr').innerText = `${d}d-${h}h:${m}m:${s}s`; 
+    }
+
+    async function xfR(c) {
+        if(_isFetching) return; _isFetching = true;
+        if(_s !== "" && _s !== "⏳") {
             if(c.toUpperCase() === _s) { _ba += _m; _nP += _m; _nG += _m; _m = (_MONEDA==='USD'?0.2:200); _per = 0; }
             else if(c !== 'Cero') { _ba -= _m; _nP -= _m; _nG -= _m; _m *= 2; _per++; }
         }
         _h.unshift(c);
-        _s = calcularMotorLocal(_h);
-        if(_per >= 7) { 
-            document.getElementById('btn-trampa').style.opacity="1"; 
-            document.getElementById('btn-trampa').style.pointerEvents="auto"; 
-        }
-        update();
+        let stDiv = document.getElementById('s-t'); stDiv.innerText = "⏳"; stDiv.className = "loading-st"; update(true);
+        try {
+            let res = await fetch(_URL + "?action=calcular&historial=" + encodeURIComponent(JSON.stringify(_h.slice(0, 15))));
+            let data = await res.json(); _s = data.sugerencia;
+        } catch(e) { _s = "ERR"; }
+        _isFetching = false; stDiv.className = ""; update();
     }
 
-    function update() {
+    function update(isCalc = false) {
         let p = (_MONEDA === 'USD') ? "$" : "";
         let fr = (_MONEDA === 'USD') ? 2 : 0;
-        document.getElementById('c-i').innerText = p + _ba.toLocaleString('es-CL', {minimumFractionDigits: fr, maximumFractionDigits: fr});
-        document.getElementById('u-s').innerText = p + _nP.toLocaleString('es-CL', {minimumFractionDigits: fr, maximumFractionDigits: fr});
-        document.getElementById('n-g').innerText = p + _nG.toLocaleString('es-CL', {minimumFractionDigits: fr, maximumFractionDigits: fr});
-        document.getElementById('m-t').innerText = p + _m.toLocaleString('es-CL', {minimumFractionDigits: fr, maximumFractionDigits: fr});
-        document.getElementById('s-t').innerText = _s || "---";
-        document.getElementById('s-t').style.color = (_s === "ROJO") ? "#e74c3c" : (_s === "NEGRO" ? "#fff" : "#888");
-        const ch = document.getElementById('c-h'); ch.innerHTML = "";
-        _h.slice(0,12).forEach(v => {
-            const cl = (v==='Rojo') ? 'red' : (v==='Negro'?'#fff':'green');
-            ch.innerHTML += `<div class="bola" style="background:${cl}; color:${v==='Negro'?'#000':'#fff'}">${v==='Cero'?'0':''}</div>`;
-        });
-    }
-
-    async function activarDemo() {
-        const nom = document.getElementById('reg-nombre').value.trim();
-        const wsp = document.getElementById('reg-pais').value + document.getElementById('reg-wsp').value.trim().replace(/\D/g,'');
-        if(!nom || wsp.length < 8) return alert("Datos inválidos");
-        window.open(`https://wa.me/56995931641?text=Hola, soy ${nom} y quiero mi DEMO.`);
-        document.getElementById('modal-demo').style.display='none';
+        document.getElementById('c-i').innerText = p + _ba.toLocaleString(undefined, {minimumFractionDigits: fr, maximumFractionDigits: fr});
+        document.getElementById('u-s').innerText = p + _nP.toLocaleString(undefined, {minimumFractionDigits: fr, maximumFractionDigits: fr});
+        document.getElementById('n-g').innerText = p + _nG.toLocaleString(undefined, {minimumFractionDigits: fr, maximumFractionDigits: fr});
+        if(!isCalc) {
+            document.getElementById('s-t').innerText = _s || "---";
+            document.getElementById('s-t').style.color = (_s === "ROJO") ? "#e74c3c" : (_s === "NEGRO" ? "#fff" : "#888");
+        }
+        document.getElementById('m-t').innerText = p + _m.toLocaleString(undefined, {minimumFractionDigits: fr, maximumFractionDigits: fr});
     }
 
     document.getElementById('btn-R').onclick=()=>xfR('Rojo'); 
     document.getElementById('btn-N').onclick=()=>xfR('Negro'); 
     document.getElementById('btn-0').onclick=()=>xfR('Cero');
-    document.getElementById('btn-undo').onclick=()=>{if(_lS){_ba=_lS.ba;_nP=_lS.nP;_nG=_lS.nG;_h=[..._lS.h];_m=_lS.m;_s=_lS.s;_per=_lS.per;update();}};
-    document.getElementById('btn-reset').onclick=()=>{_h=[];_m=(_MONEDA==='USD'?0.2:200);_s="";_per=0;update();};
     </script>
 </body>
 </html>
