@@ -11,7 +11,6 @@
         html, body { height: 100%; width: 100%; margin: 0; padding: 0; overflow: hidden !important; background-color: #000; position: fixed; font-family: 'Segoe UI', sans-serif; }
         @keyframes rotar { 100% { transform: rotate(360deg); } }
         
-        /* AJUSTE MÓVILES: Reducción de espacios para que no se corte el recuadro */
         #p-l { width: 100%; height: 100dvh; display: flex; flex-direction: column; padding: 10px; position: fixed; top: 0; left: 0; background: #000; z-index: 9999; justify-content: center; align-items: center; }
         .c-l { background: #000; border: 2px solid #00e5ff; border-radius: 15px; padding: 15px; width: 100%; max-width: 380px; text-align: center; box-shadow: 0 0 20px rgba(0,229,255,0.3); max-height: 98vh; overflow-y: auto; }
         .c-l img { width: 65px; margin-bottom: 5px; border-radius: 50%; border: 2px solid #fff; animation: rotar 5s linear infinite;}
@@ -181,7 +180,7 @@
     const _URL = "https://script.google.com/macros/s/AKfycbzUIdq4jKKOi3_fu3kLsO_cP3Z9ckXp7B6sUiP78B7Km7bDVmaecAIdsWGgGcA8nlE8JA/exec";
     let _HID = localStorage.getItem('VIP_HID') || 'VIP-'+Math.random().toString(36).substr(2,10).toUpperCase(); localStorage.setItem('VIP_HID', _HID);
     let _L="", _U="", _S=0, _ba=0, _nP=0, _nG=0, _h=[], _m=0.2, _s="", _per=0, _TS=0, _IS=0, _MONEDA = "USD", _isFetching=false, _lS=null;
-    let _cR=0, _cN=0, _c0=0, _s0=0; // Variables de estadísticas restauradas
+    let _cR=0, _cN=0, _c0=0, _s0=0;
 
     function mostrarAlerta(mensaje) { 
         document.getElementById('txt-alerta-trampa').innerHTML = mensaje; 
@@ -238,11 +237,8 @@
 
     async function xfR(c) {
         if(_isFetching) return; _isFetching = true;
-        
-        // Memoria para el botón corregir
         _lS = {ba:_ba, nP:_nP, nG:_nG, h:[..._h], m:_m, s:_s, per:_per, cR:_cR, cN:_cN, c0:_c0, s0:_s0};
 
-        // Lógica de estadísticas
         if (c === 'Rojo') { _cR++; _s0++; }
         else if (c === 'Negro') { _cN++; _s0++; }
         else if (c === 'Cero') { _c0++; _s0 = 0; }
@@ -259,7 +255,6 @@
         } catch(e) { _s = "ERR"; }
         _isFetching = false; stDiv.className = ""; update();
 
-        // LÓGICA DE TRAMPAS
         if(_per >= 7) { 
             document.getElementById('btn-trampa').style.opacity="1"; 
             document.getElementById('btn-trampa').style.pointerEvents="auto"; 
@@ -274,7 +269,6 @@
         }
     }
 
-    // BOTÓN CORREGIR (Deshacer jugada y estadísticas)
     document.getElementById('btn-undo').onclick = () => { 
         if(_lS) { 
             _ba = _lS.ba; _nP = _lS.nP; _nG = _lS.nG; _h = [..._lS.h]; _m = _lS.m; _s = _lS.s; _per = _lS.per; 
@@ -306,7 +300,6 @@
         }
         document.getElementById('m-t').innerText = p + _m.toLocaleString(undefined, {minimumFractionDigits: fr, maximumFractionDigits: fr});
         
-        // Actualizar valores de estadísticas en HTML
         document.getElementById('st-R').innerText = _cR;
         document.getElementById('st-N').innerText = _cN;
         document.getElementById('st-0').innerText = _c0;
@@ -319,10 +312,33 @@
         });
     }
 
+    // AQUÍ ESTÁ EL CÓDIGO DE LA DEMO RESTAURADO EXACTAMENTE COMO LO TENÍAS
     document.getElementById('btn-activar-demo').onclick = async function() {
-        const nom = document.getElementById('reg-nombre').value.trim();
-        const wsp = document.getElementById('reg-pais').value + document.getElementById('reg-wsp').value.trim().replace(/\D/g,'');
-        window.open(`https://wa.me/56995931641?text=Hola, soy ${nom} y quiero mi DEMO.`);
+        const nom = document.getElementById('reg-nombre').value.trim(); 
+        const rawWsp = document.getElementById('reg-wsp').value.trim(); 
+        const codPais = document.getElementById('reg-pais').value;
+        if(!nom || !nom.includes(' ')) return alert("Ingresa tu NOMBRE y APELLIDO (separados por espacio)."); 
+        if(!rawWsp) return alert("Falta celular.");
+        const wsp = codPais + rawWsp.replace(/\D/g, '');
+        this.innerText = "PROCESANDO...";
+        
+        try {
+            const r = await fetch(_URL + "?action=solicitar_demo&nombre=" + encodeURIComponent(nom) + "&wsp=" + wsp + "&hid=" + _HID);
+            const d = await r.json();
+            if(d.status === "success") {
+                document.getElementById('modal-demo').style.display='none';
+                alert("✅ SOLICITUD ENVIADA.\n\nRevisa tu WhatsApp y responde 'SI'.");
+                document.getElementById('u-i').value = "DEMO"; document.getElementById('l-i').value = d.serial;
+                this.innerText = "ACTIVAR AHORA";
+            } else { 
+                throw new Error("Fallo de red");
+            }
+        } catch(e) { 
+            let msg = `Hola TECNOENTRETE, mi nombre es ${nom} y quiero activar mi DEMO VIP.`;
+            window.open(`https://wa.me/56995931641?text=${encodeURIComponent(msg)}`, '_blank');
+            document.getElementById('modal-demo').style.display='none';
+            this.innerText = "ACTIVAR AHORA";
+        }
     };
 
     document.getElementById('btn-R').onclick=()=>xfR('Rojo'); 
@@ -334,7 +350,7 @@
             _h = []; 
             _s = ""; 
             _per = 0; 
-            _cR = 0; _cN = 0; _c0 = 0; _s0 = 0; // Reset de estadísticas
+            _cR = 0; _cN = 0; _c0 = 0; _s0 = 0;
             _m = (_MONEDA === 'USD') ? 0.20 : 200;
             document.getElementById('btn-trampa').style.opacity = "0.3"; 
             document.getElementById('btn-trampa').style.pointerEvents = "none"; 
