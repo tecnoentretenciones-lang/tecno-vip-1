@@ -44,8 +44,6 @@
         .modal-content { background: rgba(20, 20, 20, 0.98); border: 2px solid var(--c5); border-radius: 25px; padding: 25px; width: 90%; text-align: center; max-width: 450px; }
         .manual-text { text-align: left; font-size: 13px; line-height: 1.5; color: #fff; background: rgba(0,0,0,0.5); border: 1px solid #333; padding: 15px; border-radius: 12px; max-height: 350px; overflow-y: auto; margin-bottom: 15px; }
         #toast-evasion { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg, #27ae60, #2ecc71); color: #fff; padding: 15px 20px; border-radius: 10px; font-weight: 900; font-size: 14px; box-shadow: 0 5px 15px rgba(39, 174, 96, 0.6); z-index: 10007; display: none; text-align: center; border: 2px solid #fff; width: 90%; max-width: 400px; }
-        @keyframes pulse-text { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
-        .loading-st { animation: pulse-text 1s infinite; color: #888 !important; }
         @keyframes glow-pulse { 0% { box-shadow: 0 0 10px var(--c5); } 50% { box-shadow: 0 0 25px var(--c5); } 100% { box-shadow: 0 0 10px var(--c5); } }
         #sugerencia-container { border: 2px solid var(--c5); animation: glow-pulse 3s infinite linear; background: #1a1a1a; padding: 15px; border-radius: 15px; text-align: center; }
 
@@ -122,7 +120,7 @@
             <div class="legal-box">
                 REGLAS DE ORO Y PATRÓN DE ROBO:<br>
                 - Seleccionará su moneda al entrar.<br>
-                - Capital recomendado en mesa: x200 de la base.<br>
+                - Capital recomendado en mesa: Mínimo 100 / Recomendado 200.<br>
                 - Si la racha contraria llega a 7 veces seguidas, use el botón ⚠️ TRAMPA.
             </div>
             
@@ -179,6 +177,17 @@
             <div style="display: flex; gap: 8px; margin-bottom: 8px;">
                 <select id="reg-pais" class="i-s" style="width: 38%; margin-bottom: 0; padding: 0 5px; font-size: 14px; border-radius:10px;">
                     <option value="569" selected>🇨🇱 +569</option>
+                    <option value="54">🇦🇷 +54</option>
+                    <option value="51">🇵🇪 +51</option>
+                    <option value="57">🇨🇴 +57</option>
+                    <option value="52">🇲🇽 +52</option>
+                    <option value="593">🇪🇨 +593</option>
+                    <option value="591">🇧🇴 +591</option>
+                    <option value="58">🇻🇪 +58</option>
+                    <option value="595">🇵🇾 +595</option>
+                    <option value="598">🇺🇾 +598</option>
+                    <option value="1">🇺🇸 +1</option>
+                    <option value="34">🇪🇸 +34</option>
                 </select>
                 <input type="tel" id="reg-wsp" class="i-s" placeholder="Número (Ej: 87654321)" style="width: 62%; margin-bottom: 0; border-radius:10px;">
             </div>
@@ -204,10 +213,10 @@
         <div class="modal-content">
             <h2 style="color:var(--c4); margin-top:0;"><i class="fas fa-book-open"></i> MANUAL VIP</h2>
             <div class="manual-text">
-                <p><strong>1. Capital:</strong> Base <strong>$0.20 USD</strong> o <strong>$200 CLP</strong>.</p>
-                <p><strong>2. Motor:</strong> Siga la sugerencia en grande (S.T.). El cálculo se hace seguro en la nube.</p>
+                <p><strong>1. Capital:</strong> Mínimo <strong>$100 USD / $100.000 CLP</strong> (Recomendado $200 USD / $200.000 CLP). Base $0.20 USD o $200 CLP.</p>
+                <p><strong>2. Motor:</strong> Siga la sugerencia en grande (S.T.). El cálculo es local, veloz y funciona sin internet.</p>
                 <p><strong>3. Racha:</strong> Si pierde, el sistema dobla automáticamente.</p>
-                <p><strong>4. Trampa:</strong> Si pierde 7 veces seguidas, use el botón ⚠️ TRAMPA.</p>
+                <p><strong>4. Trampa:</strong> Si pierde 7 veces seguidas, use el botón ⚠️ TRAMPA para proteger a la comunidad.</p>
             </div>
             <button class="b-a" style="background:#555; color:white;" onclick="document.getElementById('modal-manual').style.display='none'">Cerrar</button>
         </div>
@@ -219,16 +228,122 @@
     const _URL = "https://script.google.com/macros/s/AKfycbzUIdq4jKKOi3_fu3kLsO_cP3Z9ckXp7B6sUiP78B7Km7bDVmaecAIdsWGgGcA8nlE8JA/exec";
     let _HID = localStorage.getItem('VIP_HID') || 'VIP-'+Math.random().toString(36).substr(2,10).toUpperCase(); localStorage.setItem('VIP_HID', _HID);
     
-    let _L="", _U="", _S=0, _ba=0, _cI=40, _nP=0, _nG=0, _g=0, _p=0, _h=[], _m=0.2, _s="", _per=0, _Meta=0, _TS=0, _IS=0, _WSP="", _lS=null, _cR=0, _cN=0, _c0=0, _s0=0, _isFetching=false;
-    
+    let _L="", _U="", _S=0, _ba=0, _cI=100, _nP=0, _nG=0, _g=0, _p=0, _h=[], _m=0.2, _s="", _per=0, _Meta=0, _TS=0, _IS=0, _WSP="", _lS=null, _cR=0, _cN=0, _c0=0, _s0=0;
     let _MONEDA = "USD";
     let _savedJSON_temp = null;
 
-    window.onload = async () => { try { const r = await fetch(_URL + "?action=obtener_global"); const d = await r.json(); if(d.status === "success") { let monto = parseFloat(d.total_global); if(monto <= 0) monto = 1450.50; document.getElementById('lbl-global-neto').innerText = "$ " + monto.toFixed(2) + " USD"; } } catch(e) { document.getElementById('lbl-global-neto').innerText = "$ 1450.50 USD"; } };
+    // 🔥 CARGA DE BASES DE TRAMPAS MUTUA 🔥
+    async function syncTrampas() {
+        if (!navigator.onLine) return; // Si está offline no intenta
+        
+        // Sube las trampas pendientes que reportaste sin internet
+        let pendientes = JSON.parse(localStorage.getItem('VIP_PENDING_TRAMPAS') || "[]");
+        if(pendientes.length > 0) {
+            for (let p of pendientes) {
+                try { await fetch(_URL + "?action=reportar_trampa&usuario=" + encodeURIComponent(_U) + "&serial=" + encodeURIComponent(_L) + "&patron=" + p); } catch(e){}
+            }
+            localStorage.setItem('VIP_PENDING_TRAMPAS', "[]");
+        }
+
+        // Descarga la base maestra actualizada
+        try {
+            let r = await fetch(_URL + "?action=panel_trampas");
+            let d = await r.json();
+            if (d.status === "success" && d.datos) {
+                let trampas = [];
+                for (let i = 1; i < d.datos.length; i++) {
+                    let ptn = String(d.datos[i][2]).toUpperCase().split("_")[0].trim().replace(/ROJO/g, 'R').replace(/NEGRO/g, 'N').replace(/CERO/g, '0');
+                    if (ptn.length > 2) trampas.push(ptn);
+                }
+                localStorage.setItem('VIP_TRAMPAS_DB', JSON.stringify(trampas));
+            }
+        } catch(e) {}
+    }
+
+    // 🔥 MOTOR NEURONAL V14 100% LOCAL Y OFFLINE 🔥
+    function calcularMotorLocal(historial) {
+        if (!historial || historial.length === 0) return "---";
+        var u = historial[0] || "", p = historial.length > 1 ? historial[1] : "", a = historial.length > 2 ? historial[2] : "", t = historial.length > 3 ? historial[3] : "";
+        
+        var tren = 1; for(var k=0; k<historial.length-1; k++){ if(historial[k] === historial[k+1] && historial[k] !== 'Cero') tren++; else break; }
+        var serrucho = 1; for(var i=0; i<historial.length-1; i++){ if(historial[i] !== historial[i+1] && historial[i] !== 'Cero' && historial[i+1] !== 'Cero') serrucho++; else break; }
+
+        var mem = { tren: 5, serrucho: 5, parejas: 5 };
+        var histRev = historial.slice().reverse(); 
+        for(var k = 1; k < histRev.length; k++) {
+            var actualColor = histRev[k]; if(actualColor === 'Cero') continue;
+            var lastSim = histRev[k-1], prevSim = (k > 1) ? histRev[k-2] : null;
+            var predTren = (lastSim === 'Cero') ? "" : lastSim.toUpperCase();
+            var predSerrucho = (lastSim === "Rojo") ? "NEGRO" : (lastSim === "Negro" ? "ROJO" : "");
+            var predParejas = "";
+            if (prevSim && lastSim === prevSim && lastSim !== "Cero") predParejas = (lastSim === "Rojo") ? "NEGRO" : "ROJO";
+            else if (lastSim !== "Cero") predParejas = lastSim.toUpperCase();
+            
+            var r = actualColor.toUpperCase();
+            if(predTren !== "") mem.tren += (predTren === r) ? 1.5 : -1;
+            if(predSerrucho !== "") mem.serrucho += (predSerrucho === r) ? 1.5 : -1;
+            if(predParejas !== "") mem.parejas += (predParejas === r) ? 1.5 : -1;
+            
+            mem.tren = Math.max(0, Math.min(10, mem.tren)); mem.serrucho = Math.max(0, Math.min(10, mem.serrucho)); mem.parejas = Math.max(0, Math.min(10, mem.parejas));
+        }
+
+        var vTren = (u === 'Cero') ? "" : u.toUpperCase();
+        var vSerrucho = (u === "Rojo") ? "NEGRO" : (u === "Negro" ? "ROJO" : "");
+        var vParejas = "";
+        if (p && u === p && u !== "Cero") vParejas = (u === "Rojo") ? "NEGRO" : "ROJO"; else if (u !== "Cero") vParejas = u.toUpperCase();
+
+        var maxPts = -1, patronDominante = "";
+        if (mem.tren > maxPts) { maxPts = mem.tren; patronDominante = "tren"; }
+        if (mem.serrucho > maxPts) { maxPts = mem.serrucho; patronDominante = "serrucho"; }
+        if (mem.parejas > maxPts) { maxPts = mem.parejas; patronDominante = "parejas"; }
+
+        var sugerencia_normal = "";
+        if (u === 'Cero') { sugerencia_normal = (p === 'Rojo') ? 'ROJO' : (p === 'Negro' ? 'NEGRO' : ''); }
+        else if (serrucho >= 3) { sugerencia_normal = (u === "Rojo") ? "NEGRO" : "ROJO"; } 
+        else if (tren >= 3) { sugerencia_normal = u.toUpperCase(); } 
+        else if (historial.length < 2 || maxPts < 4) { sugerencia_normal = (u === "Rojo") ? "NEGRO" : "ROJO"; }
+        else {
+            if (patronDominante === "tren") sugerencia_normal = vTren;
+            else if (patronDominante === "serrucho") sugerencia_normal = vSerrucho;
+            else if (patronDominante === "parejas") sugerencia_normal = vParejas;
+        }
+        if(sugerencia_normal === "") sugerencia_normal = (u === "Rojo") ? "NEGRO" : "ROJO"; 
+
+        // Trampas Locales Sincronizadas
+        var en_ola = (tren >= 3 || serrucho >= 3 || maxPts >= 6);
+        if (en_ola) {
+             if (u !== 'Cero') return sugerencia_normal; 
+        } else {
+            var next_c = sugerencia_normal === "ROJO" ? "R" : (sugerencia_normal === "NEGRO" ? "N" : "");
+            if (next_c !== "" && u !== 'Cero') {
+                var mapHist = historial.map(function(v) { return String(v).charAt(0).toUpperCase(); });
+                mapHist.unshift(next_c);
+                var h_hipo = mapHist.join("-");
+                var trampasLocales = JSON.parse(localStorage.getItem('VIP_TRAMPAS_DB') || "[]");
+                for(var j=0; j<trampasLocales.length; j++) { 
+                    if(trampasLocales[j].length > 2 && h_hipo.indexOf(trampasLocales[j]) === 0) { 
+                        return (sugerencia_normal === "ROJO") ? "NEGRO" : "ROJO"; 
+                    } 
+                }
+            }
+        }
+        return sugerencia_normal;
+    }
+
+    window.onload = async () => { 
+        if(navigator.onLine){
+            try { 
+                const r = await fetch(_URL + "?action=obtener_global"); 
+                const d = await r.json(); 
+                if(d.status === "success") { let monto = parseFloat(d.total_global); if(monto <= 0) monto = 1450.50; document.getElementById('lbl-global-neto').innerText = "$ " + monto.toFixed(2) + " USD"; } 
+            } catch(e) { document.getElementById('lbl-global-neto').innerText = "$ 1450.50 USD"; } 
+        } else {
+            document.getElementById('lbl-global-neto').innerText = "$ 1450.50 USD (Offline)"; 
+        }
+    };
 
     function mostrarAlerta(mensaje) { document.getElementById('txt-alerta-trampa').innerHTML = mensaje; document.getElementById('alerta-trampa-custom').style.display = 'flex'; }
     
-    // 🔥 REPARACIÓN DEL RESET: Borra bolitas pero mantiene Parcial y Global intactos 🔥
     window.ejecutarReset = () => { 
         _h=[]; _m=(_MONEDA==='USD'?0.2:200); _s=""; _per=0; _cR=0; _cN=0; _c0=0; _s0=0; 
         document.getElementById('btn-trampa').style.opacity="0.3"; 
@@ -243,12 +358,38 @@
         if(!_U) return alert("Ingrese el Usuario VIP");
         _L = document.getElementById('l-i').value.trim().toUpperCase(); if(!_L) return;
         this.innerText = "... CONECTANDO ...";
-        try {
-            const r = await fetch(_URL + "?action=validar&app=mesa_segura&usuario=" + encodeURIComponent(_U) + "&serial=" + encodeURIComponent(_L) + "&hid=" + _HID);
-            const d = await r.json();
-            if(d.status === "success") { 
-                _S = d.segundos; _nG = parseFloat(d.neto_global) || 0; 
-                _savedJSON_temp = d.estado_nube || localStorage.getItem('ts_'+_L);
+
+        if (navigator.onLine) {
+            try {
+                const r = await fetch(_URL + "?action=validar&app=mesa_segura&usuario=" + encodeURIComponent(_U) + "&serial=" + encodeURIComponent(_L) + "&hid=" + _HID);
+                const d = await r.json();
+                if(d.status === "success") { 
+                    _S = d.segundos; _nG = parseFloat(d.neto_global) || 0; 
+                    
+                    // Guarda caducidad para modo offline
+                    let expTime = Date.now() + (_S * 1000);
+                    localStorage.setItem('VIP_EXP_TIME_' + _L, expTime);
+                    
+                    _savedJSON_temp = d.estado_nube || localStorage.getItem('ts_'+_L);
+                    syncTrampas(); // Actualiza base de trampas mutuamente
+                    
+                    let savedMoneda = localStorage.getItem('VIP_MONEDA_' + _L);
+                    if (!savedMoneda) {
+                        document.getElementById('p-l').style.display = 'none';
+                        document.getElementById('modal-moneda').style.display = 'flex';
+                    } else {
+                        ejecutarIngreso(savedMoneda);
+                    }
+                } else { alert(d.mensaje); this.innerText = "ENTRAR AL SISTEMA"; }
+            } catch(e) { alert("Error de Conexión."); this.innerText = "ENTRAR AL SISTEMA"; }
+        } else {
+            // INICIO DE SESIÓN OFFLINE 
+            let expTime = localStorage.getItem('VIP_EXP_TIME_' + _L);
+            if (expTime && Date.now() < parseInt(expTime)) {
+                _S = Math.floor((parseInt(expTime) - Date.now()) / 1000);
+                _nG = parseFloat(localStorage.getItem('VIP_OFFLINE_NG_' + _L)) || 0;
+                _savedJSON_temp = localStorage.getItem('ts_'+_L);
+                alert("🟢 Entrando en Modo Offline. Tiempo restante verificado localmente.");
                 
                 let savedMoneda = localStorage.getItem('VIP_MONEDA_' + _L);
                 if (!savedMoneda) {
@@ -257,8 +398,11 @@
                 } else {
                     ejecutarIngreso(savedMoneda);
                 }
-            } else { alert(d.mensaje); this.innerText = "ENTRAR AL SISTEMA"; }
-        } catch(e) { alert("Error de Conexión."); this.innerText = "ENTRAR AL SISTEMA"; }
+            } else {
+                alert("🔴 No hay internet y no se encontró una licencia activa guardada. Conéctese a Wi-Fi para validarse por primera vez.");
+                this.innerText = "ENTRAR AL SISTEMA";
+            }
+        }
     };
 
     window.seleccionarMonedaInicial = function(mon) {
@@ -270,15 +414,12 @@
     function ejecutarIngreso(mon) {
         _MONEDA = mon;
         let restored = false;
-        
-        // 🔥 SIEMPRE EMPIEZA LA UTILIDAD DE LA SESIÓN EN 0 🔥
         _nP = 0; 
-
         if(_savedJSON_temp && _savedJSON_temp.includes("{")) {
-            if(confirm("☁️ Tienes una sesión guardada en la Nube.\n\n¿Deseas CONTINUAR la partida anterior?")) {
+            if(confirm("💾 Se encontró una partida guardada.\n\n¿Deseas CONTINUAR donde lo dejaste?")) {
                 try { 
                     let st = JSON.parse(_savedJSON_temp); 
-                    _ba = parseFloat(st.ba) || (_MONEDA==='USD'?40:40000); 
+                    _ba = parseFloat(st.ba) || (_MONEDA==='USD'?100:100000); 
                     _nG = parseFloat(st.nG) || _nG; _h = st.h || []; 
                     _m = parseFloat(st.m) || (_MONEDA==='USD'?0.2:200); _s = st.s || ""; _per = parseFloat(st.per) || 0; 
                     _cI = parseFloat(st.cI) || _ba; _cR = parseInt(st.cR) || 0; _cN = parseInt(st.cN) || 0; _c0 = parseInt(st.c0) || 0; _s0 = parseInt(st.s0) || 0; 
@@ -287,7 +428,7 @@
             }
         }
         if(!restored) { 
-            _cI = parseFloat(prompt(`Capital disponible en mesa (${_MONEDA}):`, _MONEDA==='USD' ? "40.00" : "40000")) || (_MONEDA==='USD'?40:40000); 
+            _cI = parseFloat(prompt(`Capital disponible en mesa (${_MONEDA}). Mínimo ${_MONEDA==='USD'?'100':'100.000'}, Recomendado ${_MONEDA==='USD'?'200':'200.000'}:`, _MONEDA==='USD' ? "200.00" : "200000")) || (_MONEDA==='USD'?100:100000); 
             _ba = _cI; _Meta = _ba * 1.20; _cR=0; _cN=0; _c0=0; _s0=0; 
             _m = (_MONEDA === 'USD') ? 0.20 : 200; 
         }
@@ -299,20 +440,24 @@
         if(!nom || !nom.includes(' ')) return alert("Ingresa tu NOMBRE y APELLIDO (separados por espacio)."); if(!rawWsp) return alert("Falta celular.");
         const wsp = codPais + rawWsp.replace(/\D/g, '');
         this.innerText = "PROCESANDO...";
-        try {
-            const r = await fetch(_URL + "?action=solicitar_demo&nombre=" + encodeURIComponent(nom) + "&wsp=" + wsp + "&hid=" + _HID);
-            const d = await r.json();
-            if(d.status === "success") {
+        if(navigator.onLine){
+            try {
+                const r = await fetch(_URL + "?action=solicitar_demo&nombre=" + encodeURIComponent(nom) + "&wsp=" + wsp + "&hid=" + _HID);
+                const d = await r.json();
+                if(d.status === "success") {
+                    document.getElementById('modal-demo').style.display='none';
+                    alert("✅ SOLICITUD ENVIADA.\n\nRevisa tu WhatsApp y responde 'SI'.");
+                    document.getElementById('u-i').value = "DEMO"; document.getElementById('l-i').value = d.serial;
+                    this.innerText = "ACTIVAR AHORA";
+                } else { alert(d.mensaje); this.innerText = "ACTIVAR AHORA"; } 
+            } catch(e) { 
+                let msg = `Hola TECNOENTRETE, mi nombre es ${nom} y quiero activar mi DEMO VIP.`;
+                window.open(`https://wa.me/56995931641?text=${encodeURIComponent(msg)}`, '_blank');
                 document.getElementById('modal-demo').style.display='none';
-                alert("✅ SOLICITUD ENVIADA.\n\nRevisa tu WhatsApp y responde 'SI'.");
-                document.getElementById('u-i').value = "DEMO"; document.getElementById('l-i').value = d.serial;
                 this.innerText = "ACTIVAR AHORA";
-            } else { alert(d.mensaje); this.innerText = "ACTIVAR AHORA"; } // Muestra si el WhatsApp ya existe
-        } catch(e) { 
-            let msg = `Hola TECNOENTRETE, mi nombre es ${nom} y quiero activar mi DEMO VIP.`;
-            window.open(`https://wa.me/56995931641?text=${encodeURIComponent(msg)}`, '_blank');
-            document.getElementById('modal-demo').style.display='none';
-            this.innerText = "ACTIVAR AHORA";
+            }
+        } else {
+            alert("Necesitas conexión a Internet para solicitar un Demo."); this.innerText = "ACTIVAR AHORA";
         }
     };
 
@@ -330,34 +475,77 @@
         if(_S<=0) location.reload(); 
     }
     
-    window.addEventListener("pagehide", () => { if(_L !== "") navigator.sendBeacon(_URL + "?action=salir&usuario=" + encodeURIComponent(_U) + "&serial=" + encodeURIComponent(_L) + "&wsp=" + encodeURIComponent(_WSP)); });
+    window.addEventListener("pagehide", () => { if(_L !== "" && navigator.onLine) navigator.sendBeacon(_URL + "?action=salir&usuario=" + encodeURIComponent(_U) + "&serial=" + encodeURIComponent(_L) + "&wsp=" + encodeURIComponent(_WSP)); });
     
-    function saveState() { let est = JSON.stringify({ba:_ba, nP:_nP, nG:_nG, cI:_cI, h:_h.slice(0,12), m:_m, s:_s, per:_per, cR:_cR, cN:_cN, c0:_c0, s0:_s0}); localStorage.setItem('ts_'+_L, est); let url = _URL + `?action=guardar&usuario=${encodeURIComponent(_U)}&serial=${encodeURIComponent(_L)}&neto_global=${_nG.toFixed(2)}&neto=${_nP.toFixed(2)}&estado=${encodeURIComponent(est)}&wsp=${encodeURIComponent(_WSP)}`; fetch(url).catch(e=>{}); }
+    function saveState() { 
+        let est = JSON.stringify({ba:_ba, nP:_nP, nG:_nG, cI:_cI, h:_h.slice(0,12), m:_m, s:_s, per:_per, cR:_cR, cN:_cN, c0:_c0, s0:_s0}); 
+        localStorage.setItem('ts_'+_L, est); 
+        localStorage.setItem('VIP_OFFLINE_NG_' + _L, _nG); // Guarda global para offline
+        if (navigator.onLine) {
+            let url = _URL + `?action=guardar&usuario=${encodeURIComponent(_U)}&serial=${encodeURIComponent(_L)}&neto_global=${_nG.toFixed(2)}&neto=${_nP.toFixed(2)}&estado=${encodeURIComponent(est)}&wsp=${encodeURIComponent(_WSP)}`; 
+            fetch(url).catch(e=>{}); 
+        }
+    }
     
     window.aceptarMeta = () => { document.getElementById('alerta-meta').style.display = 'none'; _Meta = _ba * 1.20; };
 
-    async function xfR(c) {
-        if(_isFetching) return; _isFetching = true;
+    function xfR(c) {
         let per_anterior = _per; let gano_ahora = false;
         _lS = {ba:_ba, nP:_nP, nG:_nG, g:_g, p:_p, h:[..._h], m:_m, s:_s, per:_per, cR:_cR, cN:_cN, c0:_c0, s0:_s0};
+        
         if (c === 'Rojo') { _cR++; _s0++; } else if (c === 'Negro') { _cN++; _s0++; } else if (c === 'Cero') { _c0++; _s0 = 0; }
-        if(_s !== "" && _s !== "⏳") { if(c.toUpperCase() === _s){ _ba += _m; _nP += _m; _nG += _m; _m = (_MONEDA==='USD'?0.20:200); _g++; _per = 0; gano_ahora = true; } else if(c !== 'Cero'){ _ba -= _m; _nP -= _m; _nG -= _m; _m *= 2; _p++; _per++; } }
+        
+        if(_s !== "" && _s !== "⏳") { 
+            if(c.toUpperCase() === _s){ 
+                _ba += _m; _nP += _m; _nG += _m; _m = (_MONEDA==='USD'?0.20:200); _g++; _per = 0; gano_ahora = true; 
+            } else if(c !== 'Cero'){ 
+                _ba -= _m; _nP -= _m; _nG -= _m; _m *= 2; _p++; _per++; 
+            } 
+        }
+        
         _h.unshift(c);
         
-        let stDiv = document.getElementById('s-t'); stDiv.innerText = "⏳"; stDiv.className = "loading-st"; update(true);
-        try {
-            let res = await fetch(_URL + "?action=calcular&historial=" + encodeURIComponent(JSON.stringify(_h.slice(0, 15))));
-            let data = await res.json(); _s = (data.status === "success") ? data.sugerencia : "ERR";
-        } catch(e) { _s = "RED"; }
-        _isFetching = false; stDiv.className = ""; update(); saveState();
+        // 🔥 CÁLCULO LOCAL INSTANTÁNEO 🔥
+        _s = calcularMotorLocal(_h.slice(0, 15));
+        
+        update(); saveState();
 
         if(gano_ahora && per_anterior >= 4) { let toast = document.getElementById('toast-evasion'); toast.style.display = 'block'; setTimeout(() => { toast.style.display = 'none'; }, 4000); }
         if(_ba >= _Meta) document.getElementById('alerta-meta').style.display='flex';
-        if(_per >= 7) { document.getElementById('btn-trampa').style.opacity="1"; document.getElementById('btn-trampa').style.pointerEvents="auto"; if(_per === 7) { let patronAuto = _h.slice(0,7).map(v => v.charAt(0).toUpperCase()).join("-"); navigator.sendBeacon(_URL + "?action=reportar_trampa&usuario=" + encodeURIComponent(_U) + "&serial=" + encodeURIComponent(_L) + "&patron=" + patronAuto + "_AUTO_7_ERRORES"); mostrarAlerta("Has acumulado <b>7 pérdidas seguidas</b>. Reporte enviado automáticamente al Cloud."); } } 
+        
+        if(_per >= 7) { 
+            document.getElementById('btn-trampa').style.opacity="1"; document.getElementById('btn-trampa').style.pointerEvents="auto"; 
+            if(_per === 7) { 
+                let p_auto = _h.slice(0,7).map(v => v.charAt(0).toUpperCase()).join("-"); 
+                guardarTrampaLocal(p_auto + "_AUTO");
+                mostrarAlerta("Has acumulado <b>7 pérdidas seguidas</b>. Trampa evadida y guardada localmente."); 
+            } 
+        } 
         else { document.getElementById('btn-trampa').style.opacity="0.3"; document.getElementById('btn-trampa').style.pointerEvents="none"; }
     }
 
-    document.getElementById('btn-trampa').onclick = async () => { let patron = _h.slice(0,7).map(v => v.charAt(0).toUpperCase()).join("-"); try { navigator.sendBeacon(_URL + "?action=reportar_trampa&usuario=" + encodeURIComponent(_U) + "&serial=" + encodeURIComponent(_L) + "&patron=" + patron + "_MANUAL"); mostrarAlerta("<b>✅ REPORTE MANUAL ENVIADO AL CLOUD.</b>"); document.getElementById('btn-trampa').style.opacity="0.3"; document.getElementById('btn-trampa').style.pointerEvents="none"; } catch(e) {} };
+    function guardarTrampaLocal(patronFull) {
+        // Guarda en la base local para uso offline
+        let trampasLocales = JSON.parse(localStorage.getItem('VIP_TRAMPAS_DB') || "[]");
+        let pLimpio = patronFull.split("_")[0].replace(/ROJO/g, 'R').replace(/NEGRO/g, 'N').replace(/CERO/g, '0');
+        if (!trampasLocales.includes(pLimpio)) {
+            trampasLocales.push(pLimpio);
+            localStorage.setItem('VIP_TRAMPAS_DB', JSON.stringify(trampasLocales));
+        }
+        // Deja en cola para subir a internet
+        let pendientes = JSON.parse(localStorage.getItem('VIP_PENDING_TRAMPAS') || "[]");
+        pendientes.push(patronFull);
+        localStorage.setItem('VIP_PENDING_TRAMPAS', JSON.stringify(pendientes));
+        syncTrampas();
+    }
+
+    document.getElementById('btn-trampa').onclick = () => { 
+        let patron = _h.slice(0,7).map(v => v.charAt(0).toUpperCase()).join("-"); 
+        guardarTrampaLocal(patron + "_MANUAL");
+        mostrarAlerta("<b>✅ REPORTE GUARDADO.</b><br>Protegiendo mesa actual."); 
+        document.getElementById('btn-trampa').style.opacity="0.3"; 
+        document.getElementById('btn-trampa').style.pointerEvents="none"; 
+    };
     
     document.getElementById('btn-undo').onclick = () => { if(_lS) { _ba = _lS.ba; _nP = _lS.nP; _nG = _lS.nG; _g = _lS.g; _p = _lS.p; _h = [..._lS.h]; _m = _lS.m; _s = _lS.s; _per = _lS.per; _cR = _lS.cR; _cN = _lS.cN; _c0 = _lS.c0; _s0 = _lS.s0; update(false); saveState(); _lS = null; } };
     document.getElementById('btn-reset').onclick = () => { document.getElementById('modal-reset-confirm').style.display='flex'; };
