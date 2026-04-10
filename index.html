@@ -3,569 +3,327 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>TECNOENTRETE VIP - MESA SEGURA CLOUD</title>
+    <title>TECNOENTRETE VIP PRO - ENGINE LOCAL</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --c1: #e74c3c; --c2: #2c3e50; --c3: #27ae60; --c4: #f1c40f; --c5: #00e5ff; --c8: #111; }
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; touch-action: none !important; user-select: none !important; -webkit-user-drag: none; overscroll-behavior: none; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; touch-action: none !important; user-select: none !important; }
+        input, select { user-select: text !important; -webkit-user-select: text !important; }
+
         html, body { height: 100%; width: 100%; margin: 0; padding: 0; overflow: hidden !important; background-color: #000; position: fixed; font-family: 'Segoe UI', sans-serif; }
+        body::before { content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: url('https://raw.githubusercontent.com/tecnoentretenciones-lang/tecno-vip-1/main/image_1209a3.jpg') no-repeat center center; background-size: cover; z-index: -2; }
+        body::after { content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: -1; }
         @keyframes rotar { 100% { transform: rotate(360deg); } }
-        #p-l { width: 100%; height: 100dvh; max-width: 450px; display: flex; flex-direction: column; padding: 20px; margin: auto; position: fixed; top: 0; left: 50%; transform: translateX(-50%); background: #000; z-index: 9999; justify-content: center; align-items: center; }
-        .c-l { background: #000; border: 2px solid #00e5ff; border-radius: 20px; padding: 25px 20px; width: 100%; text-align: center; box-shadow: 0 0 20px rgba(0,229,255,0.3); }
-        .c-l img { width: 80px; margin-bottom: 10px; border-radius: 50%; border: 2px solid #fff; animation: rotar 5s linear infinite;}
-        .c-l h1 { color: #fff; font-size: 22px; margin: 0 0 15px 0; font-weight: 900;}
-        .box-global { background: linear-gradient(180deg, #f39c12, #e67e22); color: #000; padding: 12px; border-radius: 10px; margin-bottom: 15px; font-weight: 900; font-size: 18px; display: flex; flex-direction: column; box-shadow: 0 4px 10px rgba(243,156,18,0.4); }
-        .box-global-title { font-size: 11px; text-transform: uppercase; color: #111; margin-bottom: 2px; }
-        .legal-box { background: rgba(231, 76, 60, 0.1); border: 1px solid #e74c3c; padding: 15px; border-radius: 10px; margin-bottom: 15px; font-size: 11px; color: #e74c3c; text-align: left; line-height: 1.5; font-weight: 600;}
-        .i-s { width: 100%; background: #000; border: 1px solid #444; color: #f1c40f; padding: 15px; border-radius: 10px; font-size: 18px; text-align: center; margin-bottom: 15px; outline: none; font-weight: bold; }
-        .b-a { border: none; padding: 18px; border-radius: 10px; font-weight: 900; width: 100%; cursor: pointer; text-transform: uppercase; font-size: 14px; margin-bottom: 10px; transition: transform 0.1s;}
-        .b-a:active { transform: scale(0.97); }
-        .btn-entrar { background: #00e5ff; color: #000; }
-        .btn-demo { background: #0b2228; color: #00e5ff; border: 2px solid #00e5ff; }
-        .btn-planes { background: #00e5ff; color: #000; }
-        .btn-manual { background: #f1c40f; color: #000; }
-        #app-principal { display: none; flex-direction: column; width: 100%; height: 100dvh; max-width: 500px; padding: calc(env(safe-area-inset-top) + 10px) 10px 10px 10px; margin: auto; }
-        .tmr-big { background:#000; border:2px solid var(--c5); border-radius: 12px; padding:10px; text-align:center; font-size: 26px; color: var(--c5); font-weight: 900; margin-bottom: 5px;}
-        #global-wallet { background:#000; border:1px solid #333; border-radius:15px; padding:12px; display:flex; justify-content:space-around; margin-bottom: 5px; }
+        
+        #p-l, #p-select { width: 100%; height: 100dvh; max-width: 500px; display: flex; flex-direction: column; padding: 20px; margin: auto; position: fixed; top: 0; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.95); z-index: 9999; justify-content: center; align-items: center; }
+        .c-l { background: rgba(20, 20, 20, 0.98); border: 2px solid var(--c5); border-radius: 20px; padding: 25px 15px; width: 100%; text-align: center; box-shadow: 0 0 20px rgba(0,229,255,0.2); }
+        .i-s { width: 100%; background: #000; border: 2px solid #555; color: var(--c4); padding: 15px; border-radius: 10px; font-size: 16px; text-align: center; margin-bottom: 10px; outline: none; font-weight: bold; }
+        .b-a { background: var(--c5); color: #000; border: none; padding: 18px; border-radius: 10px; font-weight: 900; width: 100%; cursor: pointer; text-transform: uppercase; font-size: 14px; margin-bottom: 10px; transition: 0.2s;}
+        .b-a:active { transform: scale(0.95); }
+
+        #app-principal { display: none; flex-direction: column; height: 100dvh; width: 100%; padding-top: calc(env(safe-area-inset-top) + 10px); }
+        
+        #global-wallet { background:#000; border:1px solid #333; border-radius:15px; padding:12px; display:flex; justify-content:space-around; margin: 0 10px 10px 10px; }
         .gw-box { text-align:center; }
-        .gw-title { font-size:11px; color:#888; }
+        .gw-title { font-size:11px; color:#888; text-transform: uppercase; }
         .gw-val { font-size:18px; font-weight:bold; }
-        .bola { width: 22px; height: 22px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 9px; font-weight: bold; }
         
-        #stats-bar { background:#0a0a0a; border:1px solid #333; border-radius:10px; padding:10px 15px; display:flex; justify-content:space-between; font-size:14px; font-weight:900; color:#ccc; margin-top:-2px; margin-bottom:5px;}
-        
-        .btn-bottom { background:transparent; border:1px solid #333; padding:14px 10px; border-radius:10px; font-size:12px; font-weight:900; flex:1; cursor:pointer; text-transform: uppercase; transition: transform 0.1s; }
-        .btn-bottom:active { transform: scale(0.95); }
-        #btn-undo { color:#ccc; }
-        #btn-trampa { color:var(--c4); border-color:var(--c4); }
-        #btn-reset { color:var(--c1); border-color:var(--c1); }
+        #tabs-container { display: flex; padding: 0 10px 10px 10px; gap: 5px; }
+        .tab-btn { flex: 1; background: #222; color: #888; border: 1px solid #444; border-radius: 10px; padding: 12px 0; font-weight: bold; font-size: 12px; text-align: center; cursor: pointer; }
+        .tab-btn.active { background: var(--c5); color: #000; border-color: var(--c5); box-shadow: 0 0 10px rgba(0,229,255,0.4); }
 
-        .modal-base { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 10000; display: none; justify-content: center; align-items: center; padding: 20px; }
-        .modal-content { background: rgba(20, 20, 20, 0.98); border: 2px solid var(--c5); border-radius: 25px; padding: 25px; width: 90%; text-align: center; max-width: 450px; }
-        .manual-text { text-align: left; font-size: 13px; line-height: 1.5; color: #fff; background: rgba(0,0,0,0.5); border: 1px solid #333; padding: 15px; border-radius: 12px; max-height: 350px; overflow-y: auto; margin-bottom: 15px; }
-        #toast-evasion { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg, #27ae60, #2ecc71); color: #fff; padding: 15px 20px; border-radius: 10px; font-weight: 900; font-size: 14px; box-shadow: 0 5px 15px rgba(39, 174, 96, 0.6); z-index: 10007; display: none; text-align: center; border: 2px solid #fff; width: 90%; max-width: 400px; }
-        @keyframes glow-pulse { 0% { box-shadow: 0 0 10px var(--c5); } 50% { box-shadow: 0 0 25px var(--c5); } 100% { box-shadow: 0 0 10px var(--c5); } }
-        #sugerencia-container { border: 2px solid var(--c5); animation: glow-pulse 3s infinite linear; background: #1a1a1a; padding: 15px; border-radius: 15px; text-align: center; }
+        #grid-mesas { flex-grow: 1; display: grid; gap: 10px; padding: 0 10px 10px 10px; overflow-y: auto; height: 100%; }
+        .mesa-wrapper { display: none; flex-direction: column; height: 100%; width: 100%; gap: 10px; }
+        .mesa-wrapper.active { display: flex; flex-grow: 1; }
+        .interior-mesa { background:var(--c8); padding:15px; border-radius:15px; display:flex; flex-direction:column; gap:10px; flex-grow:1; border:1px solid #333; justify-content: space-between; }
 
+        .tmr-big { background:#000; border:2px solid var(--c5); border-radius: 12px; padding:10px; text-align:center; font-size: 26px; color: var(--c5); font-weight: 900; margin: 0 10px 10px 10px;}
+        .bola { display: inline-flex; align-items: center; justify-content: center; font-weight: bold; border-radius: 50%; }
+        .stats-bar { background:#0a0a0a; border:1px solid #333; border-radius:10px; padding:8px 10px; display:flex; justify-content:space-between; font-size:12px; font-weight:bold; color:#aaa; }
+        .b-i { border-radius:15px; border:none; color:white; flex:1; font-weight: bold; cursor: pointer; display: flex; justify-content: center; align-items: center;}
+
+        /* 🔥 REGLAS PARA 1 SOLA MESA (AHORA GIGANTE Y ANCHA PARA PC) 🔥 */
+        .grid-1 { display: flex !important; flex-direction: column; max-width: 900px; margin: auto; width: 100%; justify-content: center; padding: 20px; }
+        .grid-1 .interior-mesa { padding: 40px; gap: 25px; border-width: 2px; }
+        .grid-1 [id^="s-t-"] { font-size: 140px; font-weight: 900; line-height: 1; margin-bottom: 5px;}
+        .grid-1 [id^="m-t-"] { font-size: 45px; color: var(--c4); margin-bottom: 10px;}
+        .grid-1 .b-i { height: 120px; font-size: 55px; border-radius: 20px; }
+        .grid-1 [id^="c-h-"] { height: 130px; background:#000; border-radius:15px; border:2px solid #222; display:flex; flex-wrap:wrap; justify-content:center; align-items: center; gap:10px; overflow:hidden; padding: 15px; }
+        .grid-1 .bola { width: 40px; height: 40px; font-size: 18px; border-width: 2px; }
+        .grid-1 .stats-bar { padding: 25px; font-size: 20px; border-radius: 15px; }
+        .grid-1 button[onclick*="deshacer"], .grid-1 button[onclick*="reportarTrampa"], .grid-1 button[onclick*="resetear"] { padding: 25px; font-size: 18px; border-radius: 12px; }
+
+        /* 🔥 REGLAS PARA 4 MESAS (COMPACTAS) 🔥 */
         @media (min-width: 768px) {
-            #app-principal { max-width: 800px; justify-content: center; padding: 30px; }
-            .tmr-big { font-size: 38px !important; padding: 15px !important; }
-            .gw-val { font-size: 28px !important; }
-            .gw-title { font-size: 14px !important; }
-            #s-t { font-size: 140px !important; }
-            #m-t { font-size: 45px !important; }
-            .b-i { height: 110px !important; font-size: 55px !important; border-radius: 25px !important; }
-            .bola { width: 45px !important; height: 45px !important; font-size: 18px !important; border-width: 2px; }
-            #c-h { height: 120px !important; gap: 12px !important; padding: 15px !important; border-radius: 20px !important; }
-            #stats-bar { font-size: 18px !important; padding: 20px !important; border-radius: 15px !important;}
-            .btn-bottom { font-size: 16px !important; padding: 20px !important; border-radius: 15px !important; }
+            #tabs-container { display: none !important; }
+            .grid-1 { height: 100%; }
+            .grid-2 { grid-template-columns: 1fr 1fr; }
+            .grid-4 { grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; overflow: hidden; }
+            .mesa-wrapper { display: flex !important; min-height: 0; }
+            
+            .grid-4 .tmr-big { padding: 5px; font-size: 2vh; margin-bottom: 5px; }
+            .grid-4 #global-wallet { padding: 8px; margin-bottom: 5px; }
+            .grid-4 .gw-val { font-size: 2.2vh; }
+            .grid-4 .interior-mesa { padding: 1.5vh; gap: 1vh; justify-content: space-evenly; }
+            .grid-4 [id^="s-t-"] { font-size: 5vh; }
+            .grid-4 [id^="m-t-"] { font-size: 2.5vh; }
+            .grid-4 .b-i { height: 6.5vh; font-size: 3vh; border-radius: 10px; }
+            .grid-4 [id^="c-h-"] { height: 6vh; padding: 2px; background:#000; border-radius:10px; display:flex; flex-wrap:wrap; justify-content:center; align-items: center; gap:2px; overflow:hidden; }
+            .grid-4 .bola { width: 3vh; height: 3vh; font-size: 1.2vh; margin: 1px; }
+            .grid-4 .stats-bar { padding: 0.6vh 1vh; font-size: 1.4vh; border-radius: 8px; }
+            .grid-4 button[onclick*="deshacer"], .grid-4 button[onclick*="reportarTrampa"], .grid-4 button[onclick*="resetear"] { padding: 1vh; font-size: 1.2vh; }
         }
     </style>
 </head>
 <body oncontextmenu="return false;">
 
-    <div id="modal-moneda" class="modal-base" style="z-index: 10006; flex-direction: column;">
-        <div style="background: rgba(20,20,20,0.98); border: 2px solid var(--c5); color: #fff; padding: 25px; border-radius: 20px; text-align: center; max-width: 400px; box-shadow: 0 0 20px rgba(0,229,255,0.3);">
-            <h2 style="color: var(--c5); margin: 0 0 15px 0;">💰 TIPO DE MONEDA</h2>
-            <p style="color: #ccc; font-size: 14px; margin-bottom: 20px; line-height: 1.4;">Selecciona la moneda que usarás. Esta opción quedará guardada para tu cuenta.</p>
-            <div style="display: flex; gap: 10px;">
-                <button class="b-a" style="background: var(--c5); color: #000; flex: 1;" onclick="seleccionarMonedaInicial('USD')">DÓLARES (USD)</button>
-                <button class="b-a" style="background: #222; color: #fff; flex: 1; border: 1px solid #444;" onclick="seleccionarMonedaInicial('CLP')">PESOS (CLP)</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="toast-evasion">🛡️ ¡SISTEMA VIP EVADIÓ UNA TRAMPA DEL CASINO!</div>
-
-    <div id="alerta-trampa-custom" class="modal-base" style="z-index: 10006; flex-direction: column;">
-        <div style="background: rgba(20,20,20,0.98); border: 2px solid var(--c1); color: #fff; padding: 25px; border-radius: 20px; text-align: center; max-width: 400px; box-shadow: 0 0 20px rgba(231,76,60,0.5);">
+    <div id="alerta-trampa-custom" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.92); z-index: 10006; display: none; justify-content: center; align-items: center; flex-direction: column; padding:20px;">
+        <div style="background: rgba(20,20,20,0.98); border: 2px solid var(--c1); color: #fff; padding: 25px; border-radius: 20px; text-align: center; max-width: 400px;">
             <div style="font-size: 50px;">⚠️</div>
             <h2 style="color: var(--c1); margin: 10px 0;">¡ALERTA DE CASINO!</h2>
-            <p id="txt-alerta-trampa" style="font-size: 15px; line-height: 1.5; color: #ccc; margin-bottom: 20px;"></p>
-            <button class="b-a btn-entrar" onclick="document.getElementById('alerta-trampa-custom').style.display='none'">ENTENDIDO</button>
-        </div>
-    </div>
-
-    <div id="modal-reset-confirm" class="modal-base" style="z-index: 10006; flex-direction: column;">
-        <div style="background: rgba(20,20,20,0.98); border: 2px solid var(--c1); color: #fff; padding: 25px; border-radius: 20px; text-align: center; max-width: 400px;">
-            <h2 style="color: var(--c1); margin: 10px 0;">¿RESETEAR MESA?</h2>
-            <p style="color: #ccc; font-size: 14px;">Esto borrará el historial de bolitas de la pantalla, pero <b>TU UTILIDAD Y GLOBAL SE MANTENDRÁN INTACTOS</b>.</p>
-            <div style="display: flex; gap: 10px; margin-top: 20px;">
-                <button class="b-a" style="background: #555; color: #fff; flex: 1;" onclick="document.getElementById('modal-reset-confirm').style.display='none'">CANCELAR</button>
-                <button class="b-a" style="background: var(--c1); color: #fff; flex: 1;" onclick="ejecutarReset()">SÍ, BORRAR BOLITAS</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="alerta-meta" class="modal-base" style="z-index: 10005; flex-direction: column;">
-        <div style="background: linear-gradient(135deg, #f1c40f, #f39c12); color: #000; padding: 25px; border-radius: 30px; text-align: center; max-width: 90%; border: 4px solid #fff; box-shadow: 0px 15px 35px rgba(241,196,15,0.5);">
-            <div style="font-size: 50px;">🛑💰✨</div>
-            <h2 style="margin: 10px 0; font-weight: 900; line-height: 1.1;">¡OBJETIVO LOGRADO!</h2>
-            <p style="margin: 10px 0; font-weight: bold; font-size: 16px;">Has ganado el 20% de tu capital.</p>
-            <p style="margin: 0; font-weight: 600; font-size: 14px; line-height: 1.4;">Para proteger tus ganancias, <b>¡ARRANCA AHORA!</b></p>
-            <button class="b-a" style="background: #000; color: #f1c40f; margin-top: 15px;" onclick="aceptarMeta()">OK, ENTIENDO (CONTINUAR)</button>
+            <p id="txt-alerta-trampa" style="font-size: 15px; color: #ccc; margin-bottom: 20px;"></p>
+            <button class="b-a" onclick="document.getElementById('alerta-trampa-custom').style.display='none'">ENTENDIDO</button>
         </div>
     </div>
 
     <div id="p-l">
         <div class="c-l">
-            <img src="https://cdn-icons-png.flaticon.com/512/1055/1055673.png" style="width:80px; margin-bottom:10px; animation: rotar 5s linear infinite; border-radius: 50%; border: 2px solid #fff;"> 
-            <h1>TECNOENTRETE VIP</h1>
-            
-            <div class="box-global">
-                <span class="box-global-title">🏆 COMUNIDAD VIP GANANDO:</span>
-                <span id="lbl-global-neto">Cargando...</span>
-            </div>
-
-            <div class="legal-box">
-                REGLAS DE ORO Y PATRÓN DE ROBO:<br>
-                - Seleccionará su moneda al entrar.<br>
-                - Capital recomendado en mesa: Mínimo 100 / Recomendado 200.<br>
-                - Si la racha contraria llega a 7 veces seguidas, use el botón ⚠️ TRAMPA.
-            </div>
-            
-            <input type="text" id="u-i" class="i-s" placeholder="USUARIO VIP" autocomplete="off">
+            <img src="https://cdn-icons-png.flaticon.com/512/1055/1055673.png" style="width:70px; animation: rotar 5s linear infinite; margin-bottom:10px;">
+            <h1 style="color:white; font-size:24px; margin:0 0 5px 0;">TECNOENTRETE VIP</h1>
+            <p style="color:#00e5ff; font-size:12px; margin-top:0; margin-bottom:20px; font-weight: bold;">MOTOR LOCAL 0-LAG ACTIVADO</p>
+            <input type="text" id="u-i" class="i-s" placeholder="USUARIO" autocomplete="off">
             <input type="password" id="l-i" class="i-s" placeholder="CLAVE / LICENCIA" autocomplete="off">
-            
-            <button class="b-a btn-entrar" id="btn-validar">ENTRAR AL SISTEMA</button>
-            <button class="b-a btn-demo" onclick="document.getElementById('modal-demo').style.display='flex'">PROBAR DEMO GRATIS</button>
-            <button class="b-a btn-planes" onclick="document.getElementById('modal-planes').style.display='flex'"><i class="fas fa-list"></i> VER PLANES Y PRECIOS</button>
-            <button class="b-a btn-manual" onclick="document.getElementById('modal-manual').style.display='flex'"><i class="fas fa-book-open"></i> MANUAL: CÓMO JUGAR</button>
+            <button class="b-a" id="btn-validar">ENTRAR AL SISTEMA</button>
+        </div>
+    </div>
+
+    <div id="p-select" style="display:none;">
+        <div class="c-l" style="border-color: var(--c4);">
+            <h2 style="color:var(--c4); margin-top:0;">MODO VIP PRO</h2>
+            <p style="color:#fff; font-size:14px; margin-bottom:20px;">¿Cuántas mesas abrirá simultáneamente?</p>
+            <button class="b-a" style="background:#222; color:white; border:1px solid #555;" onclick="iniciarMesas(1)">1 MESA (GIGANTE)</button>
+            <button class="b-a" style="background:#333; color:white; border:1px solid #666;" onclick="iniciarMesas(2)">2 MESAS</button>
+            <button class="b-a" style="background:var(--c4); color:black;" onclick="iniciarMesas(4)">4 MESAS</button>
         </div>
     </div>
 
     <div id="app-principal">
         <div id="tmr" class="tmr-big">00d-00h:00m:00s</div>
-        
         <div id="global-wallet">
-            <div class="gw-box"><div class="gw-title">CAPITAL TOTAL</div><div id="c-i" class="gw-val" style="color:#fff;">$0.00</div></div>
-            <div class="gw-box"><div class="gw-title">UTILIDAD</div><div id="u-s" class="gw-val" style="color:var(--c3);">$0.00</div></div>
-            <div class="gw-box"><div class="gw-title">GLOBAL</div><div id="n-g" class="gw-val" style="color:var(--c5);">$0.00</div></div>
+            <div class="gw-box"><div class="gw-title">CAPITAL TOTAL</div><div id="gw-cap" class="gw-val" style="color:#fff;">$0.00</div></div>
+            <div class="gw-box"><div class="gw-title">UTILIDAD GLOBAL</div><div id="gw-util" class="gw-val" style="color:var(--c3);">$0.00</div></div>
+            <div class="gw-box"><div class="gw-title">NETO (OBJETIVO)</div><div id="gw-neto" class="gw-val" style="color:var(--c5);">$0.00</div></div>
         </div>
-
-        <div style="background:var(--c8); padding:15px; border-radius:15px; display:flex; flex-direction:column; gap:10px; flex-grow:1; border:1px solid #333;">
-            <div id="sugerencia-container">
-                <div id="s-t" style="font-size:75px; font-weight:900;">---</div>
-                <div id="m-t" style="color:var(--c4); font-size:26px;">$0.20</div>
-            </div>
-            <div style="display:flex; gap:8px;">
-                <button id="btn-R" style="background:var(--c1); height:70px; border-radius:15px; border:none; font-size:32px; color:white; flex:1; font-weight:bold;">R</button>
-                <button id="btn-N" style="background:var(--c2); height:70px; border-radius:15px; border:none; font-size:32px; color:white; flex:1; font-weight:bold;">N</button>
-                <button id="btn-0" style="background:var(--c3); height:70px; border-radius:15px; border:none; font-size:32px; color:white; flex:1; font-weight:bold;">0</button>
-            </div>
-            <div id="c-h" style="background:#000; height:90px; border-radius:12px; border:1px solid #222; display:flex; flex-wrap:wrap; justify-content:center; gap:5px; overflow:hidden;"></div>
-            
-            <div id="stats-bar">
-                <div><span style="color:var(--c1)">R:</span> <span id="st-R">0</span></div>
-                <div><span style="color:#fff">N:</span> <span id="st-N">0</span></div>
-                <div><span style="color:var(--c3)">0:</span> <span id="st-0">0</span></div>
-                <div><span style="color:var(--c4)">SIN 0:</span> <span id="st-s0">0</span></div>
-            </div>
-
-            <div style="display:flex; gap:8px;">
-                <button id="btn-undo" class="btn-bottom">CORREGIR</button>
-                <button id="btn-trampa" class="btn-bottom" style="opacity:0.3; pointer-events:none;">⚠️ TRAMPA</button>
-                <button id="btn-reset" class="btn-bottom">RESET</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="modal-demo" class="modal-base">
-        <div class="modal-content">
-            <h2 style="color:var(--c5); margin-top:0;">🎁 DEMO GRATIS</h2>
-            <input type="text" id="reg-nombre" class="i-s" placeholder="NOMBRE Y APELLIDO (Ej: Juan Perez)" style="border-radius:10px;">
-            <div style="display: flex; gap: 8px; margin-bottom: 8px;">
-                <select id="reg-pais" class="i-s" style="width: 38%; margin-bottom: 0; padding: 0 5px; font-size: 14px; border-radius:10px;">
-                    <option value="569" selected>🇨🇱 +569</option>
-                    <option value="54">🇦🇷 +54</option>
-                    <option value="51">🇵🇪 +51</option>
-                    <option value="57">🇨🇴 +57</option>
-                    <option value="52">🇲🇽 +52</option>
-                    <option value="593">🇪🇨 +593</option>
-                    <option value="591">🇧🇴 +591</option>
-                    <option value="58">🇻🇪 +58</option>
-                    <option value="595">🇵🇾 +595</option>
-                    <option value="598">🇺🇾 +598</option>
-                    <option value="1">🇺🇸 +1</option>
-                    <option value="34">🇪🇸 +34</option>
-                </select>
-                <input type="tel" id="reg-wsp" class="i-s" placeholder="Número (Ej: 87654321)" style="width: 62%; margin-bottom: 0; border-radius:10px;">
-            </div>
-            <button class="b-a btn-entrar" id="btn-activar-demo">ACTIVAR AHORA</button>
-            <button onclick="document.getElementById('modal-demo').style.display='none'" style="color:#888; background:none; border:none; text-decoration:underline; font-size: 14px; margin-top: 10px;">Volver</button>
-        </div>
-    </div>
-
-    <div id="modal-planes" class="modal-base">
-        <div class="modal-content">
-            <h2 style="color:var(--c4); margin-top:0;"><i class="fas fa-gem"></i> PLANES VIP</h2>
-            <div style="background:#111; border:1px solid #333; border-radius:12px; padding:15px; text-align:left; color:#fff; margin-bottom:15px;">
-                <p style="margin:8px 0; font-size:16px;">⏱️ <b>12 Horas:</b> <span style="color:var(--c3); float:right;">$8.000 CLP</span></p><hr style="border:0; border-top:1px solid #333;">
-                <p style="margin:8px 0; font-size:16px;">📅 <b>24 Horas:</b> <span style="color:var(--c3); float:right;">$15.000 CLP</span></p><hr style="border:0; border-top:1px solid #333;">
-                <p style="margin:8px 0; font-size:16px;">🔥 <b>1 Semana:</b> <span style="color:var(--c3); float:right;">$50.000 CLP</span></p>
-            </div>
-            <button class="b-a" style="background:#25d366; color:white;" onclick="window.open('https://wa.me/56995931641?text=Hola TECNOENTRETE, quiero un plan VIP.')"><i class="fab fa-whatsapp"></i> SOPORTE</button>
-            <button class="b-a" style="background:#555; color:white;" onclick="document.getElementById('modal-planes').style.display='none'">Cerrar</button>
-        </div>
-    </div>
-
-    <div id="modal-manual" class="modal-base">
-        <div class="modal-content">
-            <h2 style="color:var(--c4); margin-top:0;"><i class="fas fa-book-open"></i> MANUAL VIP</h2>
-            <div class="manual-text">
-                <p><strong>1. Capital:</strong> Mínimo <strong>$100 USD / $100.000 CLP</strong> (Recomendado $200 USD / $200.000 CLP). Base $0.20 USD o $200 CLP.</p>
-                <p><strong>2. Motor:</strong> Siga la sugerencia en grande (S.T.). El cálculo es local, veloz y funciona sin internet.</p>
-                <p><strong>3. Racha:</strong> Si pierde, el sistema dobla automáticamente.</p>
-                <p><strong>4. Trampa:</strong> Si pierde 7 veces seguidas, use el botón ⚠️ TRAMPA para proteger a la comunidad.</p>
-            </div>
-            <button class="b-a" style="background:#555; color:white;" onclick="document.getElementById('modal-manual').style.display='none'">Cerrar</button>
-        </div>
+        <div id="tabs-container"></div>
+        <div id="grid-mesas"></div>
     </div>
 
     <script>
-    let lastTouchEnd = 0; document.addEventListener('touchend', e => { const now = (new Date()).getTime(); if (now - lastTouchEnd <= 300) e.preventDefault(); lastTouchEnd = now; }, { passive: false });
+    document.addEventListener('contextmenu', e => e.preventDefault());
 
-    const _URL = "https://script.google.com/macros/s/AKfycbzUIdq4jKKOi3_fu3kLsO_cP3Z9ckXp7B6sUiP78B7Km7bDVmaecAIdsWGgGcA8nlE8JA/exec";
-    let _HID = localStorage.getItem('VIP_HID') || 'VIP-'+Math.random().toString(36).substr(2,10).toUpperCase(); localStorage.setItem('VIP_HID', _HID);
-    
-    let _L="", _U="", _S=0, _ba=0, _cI=100, _nP=0, _nG=0, _g=0, _p=0, _h=[], _m=0.2, _s="", _per=0, _Meta=0, _TS=0, _IS=0, _WSP="", _lS=null, _cR=0, _cN=0, _c0=0, _s0=0;
-    let _MONEDA = "USD";
-    let _savedJSON_temp = null;
-
-    // 🔥 CARGA DE BASES DE TRAMPAS MUTUA 🔥
-    async function syncTrampas() {
-        if (!navigator.onLine) return; // Si está offline no intenta
-        
-        // Sube las trampas pendientes que reportaste sin internet
-        let pendientes = JSON.parse(localStorage.getItem('VIP_PENDING_TRAMPAS') || "[]");
-        if(pendientes.length > 0) {
-            for (let p of pendientes) {
-                try { await fetch(_URL + "?action=reportar_trampa&usuario=" + encodeURIComponent(_U) + "&serial=" + encodeURIComponent(_L) + "&patron=" + p); } catch(e){}
-            }
-            localStorage.setItem('VIP_PENDING_TRAMPAS', "[]");
-        }
-
-        // Descarga la base maestra actualizada
-        try {
-            let r = await fetch(_URL + "?action=panel_trampas");
-            let d = await r.json();
-            if (d.status === "success" && d.datos) {
-                let trampas = [];
-                for (let i = 1; i < d.datos.length; i++) {
-                    let ptn = String(d.datos[i][2]).toUpperCase().split("_")[0].trim().replace(/ROJO/g, 'R').replace(/NEGRO/g, 'N').replace(/CERO/g, '0');
-                    if (ptn.length > 2) trampas.push(ptn);
-                }
-                localStorage.setItem('VIP_TRAMPAS_DB', JSON.stringify(trampas));
-            }
-        } catch(e) {}
-    }
-
-    // 🔥 MOTOR NEURONAL V14 100% LOCAL Y OFFLINE 🔥
-    function calcularMotorLocal(historial) {
+    window.trampasLocales = [];
+    function motorCalculoLocal(historial) {
         if (!historial || historial.length === 0) return "---";
-        var u = historial[0] || "", p = historial.length > 1 ? historial[1] : "", a = historial.length > 2 ? historial[2] : "", t = historial.length > 3 ? historial[3] : "";
-        
-        var tren = 1; for(var k=0; k<historial.length-1; k++){ if(historial[k] === historial[k+1] && historial[k] !== 'Cero') tren++; else break; }
-        var serrucho = 1; for(var i=0; i<historial.length-1; i++){ if(historial[i] !== historial[i+1] && historial[i] !== 'Cero' && historial[i+1] !== 'Cero') serrucho++; else break; }
+        let u = historial[0] || "", p = historial[1] || "", a = historial[2] || "", t = historial[3] || "";
+        let racha_actual = 1;
+        for(let k=0; k<historial.length-1; k++){ if(historial[k] === historial[k+1]) racha_actual++; else break; }
 
-        var mem = { tren: 5, serrucho: 5, parejas: 5 };
-        var histRev = historial.slice().reverse(); 
-        for(var k = 1; k < histRev.length; k++) {
-            var actualColor = histRev[k]; if(actualColor === 'Cero') continue;
-            var lastSim = histRev[k-1], prevSim = (k > 1) ? histRev[k-2] : null;
-            var predTren = (lastSim === 'Cero') ? "" : lastSim.toUpperCase();
-            var predSerrucho = (lastSim === "Rojo") ? "NEGRO" : (lastSim === "Negro" ? "ROJO" : "");
-            var predParejas = "";
-            if (prevSim && lastSim === prevSim && lastSim !== "Cero") predParejas = (lastSim === "Rojo") ? "NEGRO" : "ROJO";
-            else if (lastSim !== "Cero") predParejas = lastSim.toUpperCase();
-            
-            var r = actualColor.toUpperCase();
-            if(predTren !== "") mem.tren += (predTren === r) ? 1.5 : -1;
-            if(predSerrucho !== "") mem.serrucho += (predSerrucho === r) ? 1.5 : -1;
-            if(predParejas !== "") mem.parejas += (predParejas === r) ? 1.5 : -1;
-            
-            mem.tren = Math.max(0, Math.min(10, mem.tren)); mem.serrucho = Math.max(0, Math.min(10, mem.serrucho)); mem.parejas = Math.max(0, Math.min(10, mem.parejas));
-        }
-
-        var vTren = (u === 'Cero') ? "" : u.toUpperCase();
-        var vSerrucho = (u === "Rojo") ? "NEGRO" : (u === "Negro" ? "ROJO" : "");
-        var vParejas = "";
-        if (p && u === p && u !== "Cero") vParejas = (u === "Rojo") ? "NEGRO" : "ROJO"; else if (u !== "Cero") vParejas = u.toUpperCase();
-
-        var maxPts = -1, patronDominante = "";
-        if (mem.tren > maxPts) { maxPts = mem.tren; patronDominante = "tren"; }
-        if (mem.serrucho > maxPts) { maxPts = mem.serrucho; patronDominante = "serrucho"; }
-        if (mem.parejas > maxPts) { maxPts = mem.parejas; patronDominante = "parejas"; }
-
-        var sugerencia_normal = "";
-        if (u === 'Cero') { sugerencia_normal = (p === 'Rojo') ? 'ROJO' : (p === 'Negro' ? 'NEGRO' : ''); }
-        else if (serrucho >= 3) { sugerencia_normal = (u === "Rojo") ? "NEGRO" : "ROJO"; } 
-        else if (tren >= 3) { sugerencia_normal = u.toUpperCase(); } 
-        else if (historial.length < 2 || maxPts < 4) { sugerencia_normal = (u === "Rojo") ? "NEGRO" : "ROJO"; }
+        let sugerencia_normal = "";
+        if(u === 'Cero'){ sugerencia_normal = (p === 'Rojo') ? 'ROJO' : (p === 'Negro' ? 'NEGRO' : ''); }
+        else if(u === p && a === t && u !== a && historial[4] === historial[5] && u === historial[4]){ sugerencia_normal = (u === "Rojo") ? "NEGRO" : "ROJO"; }
         else {
-            if (patronDominante === "tren") sugerencia_normal = vTren;
-            else if (patronDominante === "serrucho") sugerencia_normal = vSerrucho;
-            else if (patronDominante === "parejas") sugerencia_normal = vParejas;
+            if(u === p && a === t && u !== a && a !== ""){ sugerencia_normal = u.toUpperCase(); }
+            else if(racha_actual >= 3){ sugerencia_normal = u.toUpperCase(); }
+            else { sugerencia_normal = (u === "Rojo") ? "NEGRO" : "ROJO"; }
         }
-        if(sugerencia_normal === "") sugerencia_normal = (u === "Rojo") ? "NEGRO" : "ROJO"; 
 
-        // Trampas Locales Sincronizadas
-        var en_ola = (tren >= 3 || serrucho >= 3 || maxPts >= 6);
-        if (en_ola) {
-             if (u !== 'Cero') return sugerencia_normal; 
-        } else {
-            var next_c = sugerencia_normal === "ROJO" ? "R" : (sugerencia_normal === "NEGRO" ? "N" : "");
-            if (next_c !== "" && u !== 'Cero') {
-                var mapHist = historial.map(function(v) { return String(v).charAt(0).toUpperCase(); });
+        let s_final = sugerencia_normal;
+        if(racha_actual >= 4 && u !== 'Cero') { s_final = u.toUpperCase(); } else {
+            let next_c = sugerencia_normal === "ROJO" ? "R" : (sugerencia_normal === "NEGRO" ? "N" : "");
+            if (next_c !== "") {
+                let mapHist = historial.map(v => String(v).charAt(0).toUpperCase());
                 mapHist.unshift(next_c);
-                var h_hipo = mapHist.join("-");
-                var trampasLocales = JSON.parse(localStorage.getItem('VIP_TRAMPAS_DB') || "[]");
-                for(var j=0; j<trampasLocales.length; j++) { 
-                    if(trampasLocales[j].length > 2 && h_hipo.indexOf(trampasLocales[j]) === 0) { 
-                        return (sugerencia_normal === "ROJO") ? "NEGRO" : "ROJO"; 
-                    } 
+                let h_hipo = mapHist.join("-");
+                for(let j=0; j<window.trampasLocales.length; j++) {
+                    if(window.trampasLocales[j].length > 2 && h_hipo.indexOf(window.trampasLocales[j]) === 0) {
+                        s_final = (sugerencia_normal === "ROJO") ? "NEGRO" : "ROJO"; break;
+                    }
                 }
             }
         }
-        return sugerencia_normal;
+        return s_final;
     }
-
-    window.onload = async () => { 
-        if(navigator.onLine){
-            try { 
-                const r = await fetch(_URL + "?action=obtener_global"); 
-                const d = await r.json(); 
-                if(d.status === "success") { let monto = parseFloat(d.total_global); if(monto <= 0) monto = 1450.50; document.getElementById('lbl-global-neto').innerText = "$ " + monto.toFixed(2) + " USD"; } 
-            } catch(e) { document.getElementById('lbl-global-neto').innerText = "$ 1450.50 USD"; } 
-        } else {
-            document.getElementById('lbl-global-neto').innerText = "$ 1450.50 USD (Offline)"; 
-        }
-    };
 
     function mostrarAlerta(mensaje) { document.getElementById('txt-alerta-trampa').innerHTML = mensaje; document.getElementById('alerta-trampa-custom').style.display = 'flex'; }
+
+    // 🔥 AQUÍ ESTÁ TU ENLACE CORRECTO Y ORIGINAL 🔥
+    const _URL = "https://script.google.com/macros/s/AKfycbzUIdq4jKKOi3_fu3kLsO_cP3Z9ckXp7B6sUiP78B7Km7bDVmaecAIdsWGgGcA8nlE8JA/exec";
     
-    window.ejecutarReset = () => { 
-        _h=[]; _m=(_MONEDA==='USD'?0.2:200); _s=""; _per=0; _cR=0; _cN=0; _c0=0; _s0=0; 
-        document.getElementById('btn-trampa').style.opacity="0.3"; 
-        document.getElementById('btn-trampa').style.pointerEvents="none"; 
-        update(false); 
-        saveState(); 
-        document.getElementById('modal-reset-confirm').style.display='none'; 
+    const { machineIdSync } = require('node-machine-id');
+    let _L="", _U="", _HID = "PC-" + machineIdSync().substring(0, 15).toUpperCase();
+    
+    let _S = 0, _TS = 0, _IS = 0, capitalGlobal = 40, mesasInstancias = [];
+
+    window.saveState = function() { 
+        if(!_L) return;
+        let utilTotal = mesasInstancias.reduce((a, b) => a + b._nP, 0);
+        let estadoMesas = mesasInstancias.map(m => ({ nP: m._nP, h: m._h.slice(0,10), m: m._m, s: m._s, per: m._per, cR: m._cR, cN: m._cN, c0: m._c0, s0: m._s0 }));
+        let est = JSON.stringify({ cap: capitalGlobal, mesas: estadoMesas });
+        localStorage.setItem('ts_pro_'+_L, est);
+        fetch(_URL + `?action=guardar&usuario=${encodeURIComponent(_U)}&serial=${encodeURIComponent(_L)}&neto_global=${utilTotal.toFixed(2)}&estado=${encodeURIComponent(est)}`).catch(e=>{});
     };
 
     document.getElementById('btn-validar').onclick = async function() {
         _U = document.getElementById('u-i').value.trim();
-        if(!_U) return alert("Ingrese el Usuario VIP");
-        _L = document.getElementById('l-i').value.trim().toUpperCase(); if(!_L) return;
-        this.innerText = "... CONECTANDO ...";
+        _L = document.getElementById('l-i').value.trim().toUpperCase();
+        if(!_U || !_L) return alert("Ingrese Usuario y Clave");
+        
+        this.innerText = "... CONECTANDO AL CLOUD ...";
+        try {
+            const r = await fetch(_URL + "?action=validar&app=mesa_segura&usuario=" + encodeURIComponent(_U) + "&serial=" + encodeURIComponent(_L) + "&hid=" + _HID);
+            const d = await r.json();
+            
+            if(d.status === "success") { 
+                _S = d.segundos; 
+                let planCliente = d.plan ? String(d.plan).toUpperCase().trim() : "BASICO";
 
-        if (navigator.onLine) {
-            try {
-                const r = await fetch(_URL + "?action=validar&app=mesa_segura&usuario=" + encodeURIComponent(_U) + "&serial=" + encodeURIComponent(_L) + "&hid=" + _HID);
-                const d = await r.json();
-                if(d.status === "success") { 
-                    _S = d.segundos; _nG = parseFloat(d.neto_global) || 0; 
-                    
-                    // Guarda caducidad para modo offline
-                    let expTime = Date.now() + (_S * 1000);
-                    localStorage.setItem('VIP_EXP_TIME_' + _L, expTime);
-                    
-                    _savedJSON_temp = d.estado_nube || localStorage.getItem('ts_'+_L);
-                    syncTrampas(); // Actualiza base de trampas mutuamente
-                    
-                    let savedMoneda = localStorage.getItem('VIP_MONEDA_' + _L);
-                    if (!savedMoneda) {
-                        document.getElementById('p-l').style.display = 'none';
-                        document.getElementById('modal-moneda').style.display = 'flex';
-                    } else {
-                        ejecutarIngreso(savedMoneda);
+                this.innerText = "... DESCARGANDO TRAMPAS ...";
+                try {
+                    let rT = await fetch(_URL + "?action=panel_trampas");
+                    let dT = await rT.json();
+                    if(dT.status === "success" && dT.datos) {
+                        dT.datos.forEach(row => {
+                            if(row[2]) {
+                                let ptn = String(row[2]).toUpperCase().split("_")[0].trim().replace(/ROJO/g, 'R').replace(/NEGRO/g, 'N').replace(/CERO/g, '0');
+                                if(ptn.length > 2) window.trampasLocales.push(ptn);
+                            }
+                        });
                     }
-                } else { alert(d.mensaje); this.innerText = "ENTRAR AL SISTEMA"; }
-            } catch(e) { alert("Error de Conexión."); this.innerText = "ENTRAR AL SISTEMA"; }
-        } else {
-            // INICIO DE SESIÓN OFFLINE 
-            let expTime = localStorage.getItem('VIP_EXP_TIME_' + _L);
-            if (expTime && Date.now() < parseInt(expTime)) {
-                _S = Math.floor((parseInt(expTime) - Date.now()) / 1000);
-                _nG = parseFloat(localStorage.getItem('VIP_OFFLINE_NG_' + _L)) || 0;
-                _savedJSON_temp = localStorage.getItem('ts_'+_L);
-                alert("🟢 Entrando en Modo Offline. Tiempo restante verificado localmente.");
-                
-                let savedMoneda = localStorage.getItem('VIP_MONEDA_' + _L);
-                if (!savedMoneda) {
-                    document.getElementById('p-l').style.display = 'none';
-                    document.getElementById('modal-moneda').style.display = 'flex';
-                } else {
-                    ejecutarIngreso(savedMoneda);
+                } catch(e) { console.log("Se usarán las trampas offline previas."); }
+
+                let savedJSON = d.estado_nube || localStorage.getItem('ts_pro_'+_L);
+                if(savedJSON && savedJSON.includes("{")) {
+                    if(confirm("☁️ Tienes una sesión guardada.\n\n¿Deseas CONTINUAR la partida anterior?")) {
+                        try { 
+                            let st = JSON.parse(savedJSON); 
+                            capitalGlobal = parseFloat(st.cap) || 40;
+                            document.getElementById('p-l').style.display='none';
+                            iniciarMesas(st.mesas ? st.mesas.length : 1, st.mesas);
+                            return;
+                        } catch(e) {}
+                    }
                 }
-            } else {
-                alert("🔴 No hay internet y no se encontró una licencia activa guardada. Conéctese a Wi-Fi para validarse por primera vez.");
-                this.innerText = "ENTRAR AL SISTEMA";
+
+                document.getElementById('p-l').style.display='none';
+                
+                // 🔥 EL ROUTER: AHORA SÍ LEERÁ SI ERES PRO DESDE TU CÓDIGO ACTUALIZADO
+                if(planCliente.includes("VIP") || planCliente.includes("PRO") || planCliente.includes("MULTIMESA")) {
+                    document.getElementById('p-select').style.display='flex';
+                } else {
+                    iniciarMesas(1); 
+                }
+
+            } else { alert(d.mensaje); this.innerText = "ENTRAR AL SISTEMA"; }
+        } catch(e) { alert("Error de Conexión."); this.innerText = "ENTRAR AL SISTEMA"; }
+    };
+
+    window.iniciarMesas = (cant, savedData = null) => {
+        document.getElementById('p-select').style.display = 'none';
+        document.getElementById('app-principal').style.display = 'flex';
+        const grid = document.getElementById('grid-mesas');
+        const tabs = document.getElementById('tabs-container');
+        grid.className = "grid-" + cant;
+
+        for(let i=1; i<=cant; i++) {
+            let t = document.createElement('button');
+            t.className = i===1 ? "tab-btn active" : "tab-btn"; t.innerText = "MESA " + i; t.onclick = () => cambiarTab(i, cant);
+            tabs.appendChild(t);
+
+            let mHTML = `
+            <div class="mesa-wrapper ${i===1?'active':''}" id="mesa-${i}">
+                <div style="text-align:center; font-weight:bold; color:#888; font-size:13px; text-transform:uppercase;">MESA ${i} - UTILIDAD: <span id="u-s-${i}" style="color:var(--c3);">$0.00</span></div>
+                <div class="interior-mesa">
+                    <div style="background:#1a1a1a; padding:15px; border-radius:15px; text-align:center; border:1px solid #333;">
+                        <div id="s-t-${i}">---</div>
+                        <div id="m-t-${i}">$0.20</div>
+                    </div>
+                    <div style="display:flex; gap:8px;">
+                        <button class="b-i" style="background:var(--c1);" onclick="mesasInstancias[${i-1}].xfR('Rojo')">R</button>
+                        <button class="b-i" style="background:var(--c2);" onclick="mesasInstancias[${i-1}].xfR('Negro')">N</button>
+                        <button class="b-i" style="background:var(--c3);" onclick="mesasInstancias[${i-1}].xfR('Cero')">0</button>
+                    </div>
+                    <div id="c-h-${i}"></div>
+                    
+                    <div class="stats-bar">
+                        <div><span style="color:var(--c1)">R:</span> <span id="st-R-${i}">0</span></div>
+                        <div><span style="color:#fff">N:</span> <span id="st-N-${i}">0</span></div>
+                        <div><span style="color:var(--c3)">0:</span> <span id="st-0-${i}">0</span></div>
+                        <div><span style="color:var(--c4)">S/0:</span> <span id="st-s0-${i}">0</span></div>
+                    </div>
+
+                    <div style="display:flex; gap:6px;">
+                        <button style="background:transparent; color:#555; border:1px solid #333; padding:12px; border-radius:10px; font-weight:bold; flex:1; cursor:pointer;" onclick="mesasInstancias[${i-1}].deshacer()">CORREGIR</button>
+                        <button id="btn-trampa-${i}" style="background:transparent; color:var(--c4); border:1px solid var(--c4); padding:12px; border-radius:10px; font-weight:bold; flex:1.5; opacity:0.3; pointer-events:none; cursor:pointer;" onclick="mesasInstancias[${i-1}].reportarTrampa()">⚠️ TRAMPA</button>
+                        <button style="background:transparent; color:var(--c1); border:1px solid var(--c1); padding:12px; border-radius:10px; font-weight:bold; flex:1; cursor:pointer;" onclick="mesasInstancias[${i-1}].resetear()">RESET</button>
+                    </div>
+                </div>
+            </div>`;
+            grid.insertAdjacentHTML('beforeend', mHTML);
+            
+            let motor = new MotorFelipe(i);
+            if (savedData && savedData[i-1]) {
+                let sd = savedData[i-1]; motor._nP=sd.nP||0; motor._h=sd.h||[]; motor._m=sd.m||0.2; motor._s=sd.s||""; motor._per=sd.per||0; motor._cR=sd.cR||0; motor._cN=sd.cN||0; motor._c0=sd.c0||0; motor._s0=sd.s0||0;
             }
+            mesasInstancias.push(motor);
         }
+        actualizarBilletera(); mesasInstancias.forEach(m => m.update()); iniciarReloj();
     };
 
-    window.seleccionarMonedaInicial = function(mon) {
-        localStorage.setItem('VIP_MONEDA_' + _L, mon);
-        document.getElementById('modal-moneda').style.display = 'none';
-        ejecutarIngreso(mon);
-    };
+    window.cambiarTab = (id, total) => { for(let i=1; i<=total; i++) { document.getElementById('mesa-'+i).classList.toggle('active', i===id); document.querySelectorAll('.tab-btn')[i-1].classList.toggle('active', i===id); } };
+    function actualizarBilletera() { let ut = mesasInstancias.reduce((a, b) => a + b._nP, 0); document.getElementById('gw-cap').innerText = "$" + capitalGlobal.toFixed(2); document.getElementById('gw-util').innerText = "$" + ut.toFixed(2); document.getElementById('gw-neto').innerText = "$" + (capitalGlobal + ut).toFixed(2); }
 
-    function ejecutarIngreso(mon) {
-        _MONEDA = mon;
-        let restored = false;
-        _nP = 0; 
-        if(_savedJSON_temp && _savedJSON_temp.includes("{")) {
-            if(confirm("💾 Se encontró una partida guardada.\n\n¿Deseas CONTINUAR donde lo dejaste?")) {
-                try { 
-                    let st = JSON.parse(_savedJSON_temp); 
-                    _ba = parseFloat(st.ba) || (_MONEDA==='USD'?100:100000); 
-                    _nG = parseFloat(st.nG) || _nG; _h = st.h || []; 
-                    _m = parseFloat(st.m) || (_MONEDA==='USD'?0.2:200); _s = st.s || ""; _per = parseFloat(st.per) || 0; 
-                    _cI = parseFloat(st.cI) || _ba; _cR = parseInt(st.cR) || 0; _cN = parseInt(st.cN) || 0; _c0 = parseInt(st.c0) || 0; _s0 = parseInt(st.s0) || 0; 
-                    _Meta = _cI * 1.20; restored = true; 
-                } catch(e) {}
-            }
-        }
-        if(!restored) { 
-            _cI = parseFloat(prompt(`Capital disponible en mesa (${_MONEDA}). Mínimo ${_MONEDA==='USD'?'100':'100.000'}, Recomendado ${_MONEDA==='USD'?'200':'200.000'}:`, _MONEDA==='USD' ? "200.00" : "200000")) || (_MONEDA==='USD'?100:100000); 
-            _ba = _cI; _Meta = _ba * 1.20; _cR=0; _cN=0; _c0=0; _s0=0; 
-            _m = (_MONEDA === 'USD') ? 0.20 : 200; 
-        }
-        iniciarApp();
+    function iniciarReloj() {
+        _TS = Date.now(); _IS = _S;
+        setInterval(() => {
+            let e = Math.floor((Date.now()-_TS)/1000); _S = Math.max(0, _IS - e);
+            let d=Math.floor(_S/86400), h=Math.floor((_S%86400)/3600), m=Math.floor((_S%3600)/60), s=_S%60;
+            document.getElementById('tmr').innerText = `${d}d-${h}h:${m}m:${s}s`; if(_S<=0) location.reload();
+        }, 1000);
+        setInterval(saveState, 15000); 
     }
 
-    document.getElementById('btn-activar-demo').onclick = async function() {
-        const nom = document.getElementById('reg-nombre').value.trim(); const rawWsp = document.getElementById('reg-wsp').value.trim(); const codPais = document.getElementById('reg-pais').value;
-        if(!nom || !nom.includes(' ')) return alert("Ingresa tu NOMBRE y APELLIDO (separados por espacio)."); if(!rawWsp) return alert("Falta celular.");
-        const wsp = codPais + rawWsp.replace(/\D/g, '');
-        this.innerText = "PROCESANDO...";
-        if(navigator.onLine){
-            try {
-                const r = await fetch(_URL + "?action=solicitar_demo&nombre=" + encodeURIComponent(nom) + "&wsp=" + wsp + "&hid=" + _HID);
-                const d = await r.json();
-                if(d.status === "success") {
-                    document.getElementById('modal-demo').style.display='none';
-                    alert("✅ SOLICITUD ENVIADA.\n\nRevisa tu WhatsApp y responde 'SI'.");
-                    document.getElementById('u-i').value = "DEMO"; document.getElementById('l-i').value = d.serial;
-                    this.innerText = "ACTIVAR AHORA";
-                } else { alert(d.mensaje); this.innerText = "ACTIVAR AHORA"; } 
-            } catch(e) { 
-                let msg = `Hola TECNOENTRETE, mi nombre es ${nom} y quiero activar mi DEMO VIP.`;
-                window.open(`https://wa.me/56995931641?text=${encodeURIComponent(msg)}`, '_blank');
-                document.getElementById('modal-demo').style.display='none';
-                this.innerText = "ACTIVAR AHORA";
-            }
-        } else {
-            alert("Necesitas conexión a Internet para solicitar un Demo."); this.innerText = "ACTIVAR AHORA";
-        }
-    };
+    class MotorFelipe {
+        constructor(id) { this.id = id; this._h = []; this._m = 0.2; this._s = ""; this._per = 0; this._nP = 0; this._cR = 0; this._cN = 0; this._c0 = 0; this._s0 = 0; this._lS = null; }
+        
+        xfR(c) {
+            this._lS = {nP:this._nP, h:[...this._h], m:this._m, s:this._s, per:this._per, cR:this._cR, cN:this._cN, c0:this._c0, s0:this._s0};
+            if (c === 'Rojo') { this._cR++; this._s0++; } else if (c === 'Negro') { this._cN++; this._s0++; } else if (c === 'Cero') { this._c0++; this._s0 = 0; }
+            if(this._s !== "") { if(c.toUpperCase() === this._s){ this._nP += this._m; this._m = 0.2; this._per = 0; } else if(c !== 'Cero'){ this._nP -= this._m; this._m *= 2; this._per++; } }
+            
+            this._h.unshift(c);
+            this._s = motorCalculoLocal(this._h.slice(0, 15));
+            this.update(); actualizarBilletera(); saveState(); 
 
-    function iniciarApp() { 
-        document.getElementById('p-l').style.display='none'; 
-        document.getElementById('app-principal').style.display='flex'; 
-        _TS = Date.now(); _IS = _S; TM_TICK(); setInterval(TM_TICK, 1000); setInterval(saveState, 15000); update(); 
-    }
-    
-    function TM_TICK() { 
-        if(_S<=0) return; 
-        let e = Math.floor((Date.now()-_TS)/1000); _S = Math.max(0, _IS - e); 
-        let d=Math.floor(_S/86400), h=Math.floor((_S%86400)/3600), m=Math.floor((_S%3600)/60), s=_S%60; 
-        document.getElementById('tmr').innerText = `${d}d-${h}h:${m}m:${s}s`; 
-        if(_S<=0) location.reload(); 
-    }
-    
-    window.addEventListener("pagehide", () => { if(_L !== "" && navigator.onLine) navigator.sendBeacon(_URL + "?action=salir&usuario=" + encodeURIComponent(_U) + "&serial=" + encodeURIComponent(_L) + "&wsp=" + encodeURIComponent(_WSP)); });
-    
-    function saveState() { 
-        let est = JSON.stringify({ba:_ba, nP:_nP, nG:_nG, cI:_cI, h:_h.slice(0,12), m:_m, s:_s, per:_per, cR:_cR, cN:_cN, c0:_c0, s0:_s0}); 
-        localStorage.setItem('ts_'+_L, est); 
-        localStorage.setItem('VIP_OFFLINE_NG_' + _L, _nG); // Guarda global para offline
-        if (navigator.onLine) {
-            let url = _URL + `?action=guardar&usuario=${encodeURIComponent(_U)}&serial=${encodeURIComponent(_L)}&neto_global=${_nG.toFixed(2)}&neto=${_nP.toFixed(2)}&estado=${encodeURIComponent(est)}&wsp=${encodeURIComponent(_WSP)}`; 
-            fetch(url).catch(e=>{}); 
+            if(this._per >= 7) {
+                document.getElementById('btn-trampa-'+this.id).style.opacity="1"; document.getElementById('btn-trampa-'+this.id).style.pointerEvents="auto";
+                if(this._per === 7) {
+                    let patronAuto = this._h.slice(0,7).map(v => v.charAt(0).toUpperCase()).join("-");
+                    navigator.sendBeacon(_URL + "?action=reportar_trampa&usuario=" + encodeURIComponent(_U) + "&serial=" + encodeURIComponent(_L) + "&patron=" + patronAuto + "_AUTO_APP");
+                }
+            } else { document.getElementById('btn-trampa-'+this.id).style.opacity="0.3"; document.getElementById('btn-trampa-'+this.id).style.pointerEvents="none"; }
+        }
+
+        deshacer() { if(this._lS) { this._nP=this._lS.nP; this._h=[...this._lS.h]; this._m=this._lS.m; this._s=this._lS.s; this._per=this._lS.per; this._cR=this._lS.cR; this._cN=this._lS.cN; this._c0=this._lS.c0; this._s0=this._lS.s0; this._lS = null; this.update(); actualizarBilletera(); saveState(); } }
+        resetear() { this._h=[]; this._m=0.2; this._s=""; this._per=0; this._cR=0; this._cN=0; this._c0=0; this._s0=0; this._nP=0; document.getElementById('btn-trampa-'+this.id).style.opacity="0.3"; document.getElementById('btn-trampa-'+this.id).style.pointerEvents="none"; this.update(); actualizarBilletera(); saveState(); }
+        reportarTrampa() { let patron = this._h.slice(0,7).map(v => v.charAt(0).toUpperCase()).join("-"); navigator.sendBeacon(_URL + "?action=reportar_trampa&usuario=" + encodeURIComponent(_U) + "&serial=" + encodeURIComponent(_L) + "&patron=" + patron + "_MANUAL_APP"); mostrarAlerta("<b>✅ REPORTE MANUAL ENVIADO.</b>"); document.getElementById('btn-trampa-'+this.id).style.opacity="0.3"; document.getElementById('btn-trampa-'+this.id).style.pointerEvents="none"; }
+        
+        update() {
+            document.getElementById(`u-s-${this.id}`).innerText = "$" + this._nP.toFixed(2); document.getElementById(`m-t-${this.id}`).innerText = "$" + this._m.toFixed(2);
+            document.getElementById(`s-t-${this.id}`).innerText = this._s || "---"; document.getElementById(`s-t-${this.id}`).style.color = (this._s === "ROJO") ? "#e74c3c" : (this._s === "NEGRO" ? "#fff" : "#888");
+            document.getElementById(`st-R-${this.id}`).innerText = this._cR; document.getElementById(`st-N-${this.id}`).innerText = this._cN; document.getElementById(`st-0-${this.id}`).innerText = this._c0; document.getElementById(`st-s0-${this.id}`).innerText = this._s0;
+            const ch = document.getElementById(`c-h-${this.id}`); ch.innerHTML=""; this._h.slice(0,18).forEach(v => { const cl=(v==='Rojo')?'red':(v==='Negro'?'#fff':'green'); ch.innerHTML+=`<div class="bola" style="background:${cl}; color:${v==='Negro'?'#000':'#fff'}">${v==='Cero'?'0':''}</div>`; });
         }
     }
-    
-    window.aceptarMeta = () => { document.getElementById('alerta-meta').style.display = 'none'; _Meta = _ba * 1.20; };
-
-    function xfR(c) {
-        let per_anterior = _per; let gano_ahora = false;
-        _lS = {ba:_ba, nP:_nP, nG:_nG, g:_g, p:_p, h:[..._h], m:_m, s:_s, per:_per, cR:_cR, cN:_cN, c0:_c0, s0:_s0};
-        
-        if (c === 'Rojo') { _cR++; _s0++; } else if (c === 'Negro') { _cN++; _s0++; } else if (c === 'Cero') { _c0++; _s0 = 0; }
-        
-        if(_s !== "" && _s !== "⏳") { 
-            if(c.toUpperCase() === _s){ 
-                _ba += _m; _nP += _m; _nG += _m; _m = (_MONEDA==='USD'?0.20:200); _g++; _per = 0; gano_ahora = true; 
-            } else if(c !== 'Cero'){ 
-                _ba -= _m; _nP -= _m; _nG -= _m; _m *= 2; _p++; _per++; 
-            } 
-        }
-        
-        _h.unshift(c);
-        
-        // 🔥 CÁLCULO LOCAL INSTANTÁNEO 🔥
-        _s = calcularMotorLocal(_h.slice(0, 15));
-        
-        update(); saveState();
-
-        if(gano_ahora && per_anterior >= 4) { let toast = document.getElementById('toast-evasion'); toast.style.display = 'block'; setTimeout(() => { toast.style.display = 'none'; }, 4000); }
-        if(_ba >= _Meta) document.getElementById('alerta-meta').style.display='flex';
-        
-        if(_per >= 7) { 
-            document.getElementById('btn-trampa').style.opacity="1"; document.getElementById('btn-trampa').style.pointerEvents="auto"; 
-            if(_per === 7) { 
-                let p_auto = _h.slice(0,7).map(v => v.charAt(0).toUpperCase()).join("-"); 
-                guardarTrampaLocal(p_auto + "_AUTO");
-                mostrarAlerta("Has acumulado <b>7 pérdidas seguidas</b>. Trampa evadida y guardada localmente."); 
-            } 
-        } 
-        else { document.getElementById('btn-trampa').style.opacity="0.3"; document.getElementById('btn-trampa').style.pointerEvents="none"; }
-    }
-
-    function guardarTrampaLocal(patronFull) {
-        // Guarda en la base local para uso offline
-        let trampasLocales = JSON.parse(localStorage.getItem('VIP_TRAMPAS_DB') || "[]");
-        let pLimpio = patronFull.split("_")[0].replace(/ROJO/g, 'R').replace(/NEGRO/g, 'N').replace(/CERO/g, '0');
-        if (!trampasLocales.includes(pLimpio)) {
-            trampasLocales.push(pLimpio);
-            localStorage.setItem('VIP_TRAMPAS_DB', JSON.stringify(trampasLocales));
-        }
-        // Deja en cola para subir a internet
-        let pendientes = JSON.parse(localStorage.getItem('VIP_PENDING_TRAMPAS') || "[]");
-        pendientes.push(patronFull);
-        localStorage.setItem('VIP_PENDING_TRAMPAS', JSON.stringify(pendientes));
-        syncTrampas();
-    }
-
-    document.getElementById('btn-trampa').onclick = () => { 
-        let patron = _h.slice(0,7).map(v => v.charAt(0).toUpperCase()).join("-"); 
-        guardarTrampaLocal(patron + "_MANUAL");
-        mostrarAlerta("<b>✅ REPORTE GUARDADO.</b><br>Protegiendo mesa actual."); 
-        document.getElementById('btn-trampa').style.opacity="0.3"; 
-        document.getElementById('btn-trampa').style.pointerEvents="none"; 
-    };
-    
-    document.getElementById('btn-undo').onclick = () => { if(_lS) { _ba = _lS.ba; _nP = _lS.nP; _nG = _lS.nG; _g = _lS.g; _p = _lS.p; _h = [..._lS.h]; _m = _lS.m; _s = _lS.s; _per = _lS.per; _cR = _lS.cR; _cN = _lS.cN; _c0 = _lS.c0; _s0 = _lS.s0; update(false); saveState(); _lS = null; } };
-    document.getElementById('btn-reset').onclick = () => { document.getElementById('modal-reset-confirm').style.display='flex'; };
-
-    function update(isCalc = false) {
-        let p = (_MONEDA === 'USD') ? "$" : ""; let sfx = (_MONEDA === 'CLP') ? " CLP" : "";
-        let fr = (_MONEDA === 'USD') ? 2 : 0; 
-        document.getElementById('c-i').innerText=p+_ba.toLocaleString('en-US', {minimumFractionDigits: fr, maximumFractionDigits: fr})+sfx; 
-        document.getElementById('u-s').innerText=p+_nP.toLocaleString('en-US', {minimumFractionDigits: fr, maximumFractionDigits: fr})+sfx; 
-        document.getElementById('n-g').innerText=p+_nG.toLocaleString('en-US', {minimumFractionDigits: fr, maximumFractionDigits: fr})+sfx;
-        if(!isCalc) { document.getElementById('s-t').innerText=_s||"---"; document.getElementById('s-t').style.color=(_s==="ROJO")?"#e74c3c":(_s==="NEGRO"?"#fff":"#888"); }
-        document.getElementById('m-t').innerText=p+_m.toLocaleString('en-US', {minimumFractionDigits: fr, maximumFractionDigits: fr})+sfx; 
-        document.getElementById('st-R').innerText=_cR; document.getElementById('st-N').innerText=_cN; document.getElementById('st-0').innerText=_c0; document.getElementById('st-s0').innerText=_s0;
-        const ch=document.getElementById('c-h'); ch.innerHTML=""; _h.slice(0,18).forEach(v => { const cl=(v==='Rojo')?'red':(v==='Negro'?'#fff':'green'); ch.innerHTML+=`<div class="bola" style="background:${cl}; color:${v==='Negro'?'#000':'#fff'}">${v==='Cero'?'0':''}</div>`; });
-    }
-
-    document.getElementById('btn-R').onclick=()=>xfR('Rojo'); document.getElementById('btn-N').onclick=()=>xfR('Negro'); document.getElementById('btn-0').onclick=()=>xfR('Cero');
-
-    document.addEventListener('contextmenu', e => e.preventDefault()); document.addEventListener('keydown', e => { if(e.key === "F12" || (e.ctrlKey && e.shiftKey && e.keyCode === 73) || (e.ctrlKey && e.keyCode === 85) || (e.ctrlKey && e.keyCode === 83)) { e.preventDefault(); mostrarAlertaHacker(); } if(e.ctrlKey && (e.key === '+' || e.key === '-' || e.key === '=' || e.keyCode === 107 || e.keyCode === 109)) e.preventDefault(); }); document.addEventListener('wheel', e => { if(e.ctrlKey) e.preventDefault(); }, { passive: false });
-    function mostrarAlertaHacker() { if(document.getElementById("pantalla-terror")) return; var pm = document.createElement("div"); pm.id = "pantalla-terror"; pm.style = "position:fixed;top:0;left:0;width:100vw;height:100vh;background:#a00;color:#fff;z-index:999999;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:20px;font-family:Arial;"; pm.innerHTML = `<h1 style="font-size:32px;text-transform:uppercase;font-weight:bold;">⚠️ ALERTA DE SEGURIDAD</h1><p style="font-size:20px;margin-top:15px;font-weight:bold;">Intento de alteración de código detectado.</p><button onclick="this.parentElement.remove()" style="margin-top:30px;padding:15px 30px;background:#000;color:#fff;border:2px solid #fff;border-radius:10px;cursor:pointer;font-weight:bold;">ENTENDIDO</button>`; document.body.appendChild(pm); }
     </script>
 </body>
 </html>
