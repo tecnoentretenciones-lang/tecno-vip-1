@@ -11,16 +11,17 @@
         html, body { height: 100%; width: 100%; margin: 0; padding: 0; overflow: hidden !important; background-color: #000; position: fixed; font-family: 'Segoe UI', sans-serif; }
         @keyframes rotar { 100% { transform: rotate(360deg); } }
         
-        /* AJUSTE MÓVILES: Inicio encuadrado y no gigante */
-        #p-l { width: 100%; height: 100dvh; display: flex; flex-direction: column; padding: 15px; position: fixed; top: 0; left: 0; background: #000; z-index: 9999; justify-content: center; align-items: center; }
-        .c-l { background: #000; border: 2px solid #00e5ff; border-radius: 20px; padding: 20px; width: 100%; max-width: 380px; text-align: center; box-shadow: 0 0 20px rgba(0,229,255,0.3); max-height: 95vh; overflow-y: auto; }
-        .c-l img { width: 70px; margin-bottom: 8px; border-radius: 50%; border: 2px solid #fff; animation: rotar 5s linear infinite;}
-        .c-l h1 { color: #fff; font-size: 20px; margin: 0 0 10px 0; font-weight: 900;}
-        .box-global { background: linear-gradient(180deg, #f39c12, #e67e22); color: #000; padding: 10px; border-radius: 10px; margin-bottom: 12px; font-weight: 900; font-size: 16px; display: flex; flex-direction: column; box-shadow: 0 4px 10px rgba(243,156,18,0.4); }
+        /* AJUSTE MÓVILES: Reducción de espacios para que no se corte el recuadro */
+        #p-l { width: 100%; height: 100dvh; display: flex; flex-direction: column; padding: 10px; position: fixed; top: 0; left: 0; background: #000; z-index: 9999; justify-content: center; align-items: center; }
+        .c-l { background: #000; border: 2px solid #00e5ff; border-radius: 15px; padding: 15px; width: 100%; max-width: 380px; text-align: center; box-shadow: 0 0 20px rgba(0,229,255,0.3); max-height: 98vh; overflow-y: auto; }
+        .c-l img { width: 65px; margin-bottom: 5px; border-radius: 50%; border: 2px solid #fff; animation: rotar 5s linear infinite;}
+        .c-l h1 { color: #fff; font-size: 18px; margin: 0 0 8px 0; font-weight: 900;}
+        .box-global { background: linear-gradient(180deg, #f39c12, #e67e22); color: #000; padding: 8px; border-radius: 10px; margin-bottom: 10px; font-weight: 900; font-size: 15px; display: flex; flex-direction: column; box-shadow: 0 4px 10px rgba(243,156,18,0.4); }
         .box-global-title { font-size: 10px; text-transform: uppercase; color: #111; margin-bottom: 2px; }
-        .legal-box { background: rgba(231, 76, 60, 0.1); border: 1px solid #e74c3c; padding: 12px; border-radius: 10px; margin-bottom: 15px; font-size: 11px; color: #e74c3c; text-align: left; line-height: 1.4; font-weight: 600;}
-        .i-s { width: 100%; background: #000; border: 1px solid #444; color: #f1c40f; padding: 12px; border-radius: 10px; font-size: 15px; text-align: center; margin-bottom: 12px; outline: none; font-weight: bold; }
-        .b-a { border: none; padding: 14px; border-radius: 10px; font-weight: 900; width: 100%; cursor: pointer; text-transform: uppercase; font-size: 13px; margin-bottom: 8px; transition: transform 0.1s;}
+        .legal-box { background: rgba(231, 76, 60, 0.1); border: 1px solid #e74c3c; padding: 10px; border-radius: 10px; margin-bottom: 10px; font-size: 10px; color: #e74c3c; text-align: left; line-height: 1.3; font-weight: 600;}
+        .i-s { width: 100%; background: #000; border: 1px solid #444; color: #f1c40f; padding: 10px; border-radius: 10px; font-size: 14px; text-align: center; margin-bottom: 8px; outline: none; font-weight: bold; }
+        .b-a { border: none; padding: 12px; border-radius: 10px; font-weight: 900; width: 100%; cursor: pointer; text-transform: uppercase; font-size: 12px; margin-bottom: 6px; transition: transform 0.1s;}
+        
         .btn-entrar { background: #00e5ff; color: #000; }
         .btn-demo { background: #0b2228; color: #00e5ff; border: 2px solid #00e5ff; }
         .btn-planes { background: #00e5ff; color: #000; }
@@ -115,11 +116,14 @@
                 <button id="btn-0" style="background:var(--c3); height:70px; border-radius:15px; color:white; flex:1; font-weight:bold; border:none;">0</button>
             </div>
             <div id="c-h" style="background:#000; height:90px; border-radius:12px; border:1px solid #222; display:flex; flex-wrap:wrap; justify-content:center; gap:5px; overflow:hidden;"></div>
+            
             <div id="stats-bar">
-                <div>R: <span id="st-R">0</span></div>
-                <div>N: <span id="st-N">0</span></div>
-                <div>0: <span id="st-0">0</span></div>
+                <div><span style="color:var(--c1)">R:</span> <span id="st-R">0</span></div>
+                <div><span style="color:#fff">N:</span> <span id="st-N">0</span></div>
+                <div><span style="color:var(--c3)">0:</span> <span id="st-0">0</span></div>
+                <div><span style="color:var(--c4)">SIN 0:</span> <span id="st-s0">0</span></div>
             </div>
+
             <div style="display:flex; gap:8px;">
                 <button id="btn-undo" class="btn-bottom">CORREGIR</button>
                 <button id="btn-trampa" class="btn-bottom" style="opacity:0.3; pointer-events:none; color: var(--c4);">⚠️ TRAMPA</button>
@@ -177,6 +181,7 @@
     const _URL = "https://script.google.com/macros/s/AKfycbzUIdq4jKKOi3_fu3kLsO_cP3Z9ckXp7B6sUiP78B7Km7bDVmaecAIdsWGgGcA8nlE8JA/exec";
     let _HID = localStorage.getItem('VIP_HID') || 'VIP-'+Math.random().toString(36).substr(2,10).toUpperCase(); localStorage.setItem('VIP_HID', _HID);
     let _L="", _U="", _S=0, _ba=0, _nP=0, _nG=0, _h=[], _m=0.2, _s="", _per=0, _TS=0, _IS=0, _MONEDA = "USD", _isFetching=false, _lS=null;
+    let _cR=0, _cN=0, _c0=0, _s0=0; // Variables de estadísticas restauradas
 
     function mostrarAlerta(mensaje) { 
         document.getElementById('txt-alerta-trampa').innerHTML = mensaje; 
@@ -197,7 +202,6 @@
                 _S = d.segundos; _nG = parseFloat(d.neto_global) || 0;
                 document.getElementById('p-l').style.display = 'none';
                 
-                // VALIDACIÓN: PREGUNTAR MONEDA SOLO UNA VEZ
                 let monedaGuardada = localStorage.getItem('VIP_MONEDA_' + _L);
                 if (monedaGuardada) {
                     seleccionarMonedaFinal(monedaGuardada, true);
@@ -211,7 +215,7 @@
     window.seleccionarMonedaFinal = function(mon, yaEstabaGuardada = false) {
         _MONEDA = mon;
         if(!yaEstabaGuardada) {
-            localStorage.setItem('VIP_MONEDA_' + _L, mon); // Guarda para siempre en este dispositivo/licencia
+            localStorage.setItem('VIP_MONEDA_' + _L, mon);
         }
         document.getElementById('modal-moneda').style.display = 'none';
         let sug = (_MONEDA==='USD') ? "100.00" : "100000";
@@ -235,8 +239,13 @@
     async function xfR(c) {
         if(_isFetching) return; _isFetching = true;
         
-        // RESPALDO PARA BOTÓN CORREGIR
-        _lS = {ba:_ba, nP:_nP, nG:_nG, h:[..._h], m:_m, s:_s, per:_per};
+        // Memoria para el botón corregir
+        _lS = {ba:_ba, nP:_nP, nG:_nG, h:[..._h], m:_m, s:_s, per:_per, cR:_cR, cN:_cN, c0:_c0, s0:_s0};
+
+        // Lógica de estadísticas
+        if (c === 'Rojo') { _cR++; _s0++; }
+        else if (c === 'Negro') { _cN++; _s0++; }
+        else if (c === 'Cero') { _c0++; _s0 = 0; }
 
         if(_s !== "" && _s !== "⏳") {
             if(c.toUpperCase() === _s) { _ba += _m; _nP += _m; _nG += _m; _m = (_MONEDA==='USD'?0.2:200); _per = 0; }
@@ -254,12 +263,9 @@
         if(_per >= 7) { 
             document.getElementById('btn-trampa').style.opacity="1"; 
             document.getElementById('btn-trampa').style.pointerEvents="auto"; 
-            // Envío Automático
             if(_per === 7) {
                 let patronAuto = _h.slice(0,7).map(v => v.charAt(0).toUpperCase()).join("-");
-                try {
-                    navigator.sendBeacon(_URL + "?action=reportar_trampa&usuario=" + encodeURIComponent(_U) + "&serial=" + encodeURIComponent(_L) + "&patron=" + patronAuto + "_AUTO_7_ERRORES");
-                } catch(e) {}
+                try { navigator.sendBeacon(_URL + "?action=reportar_trampa&usuario=" + encodeURIComponent(_U) + "&serial=" + encodeURIComponent(_L) + "&patron=" + patronAuto + "_AUTO_7_ERRORES"); } catch(e) {}
                 mostrarAlerta("Has acumulado <b>7 pérdidas seguidas</b>.<br>Reporte enviado automáticamente al Cloud.");
             }
         } else {
@@ -268,16 +274,16 @@
         }
     }
 
-    // BOTÓN CORREGIR SOLUCIONADO
+    // BOTÓN CORREGIR (Deshacer jugada y estadísticas)
     document.getElementById('btn-undo').onclick = () => { 
         if(_lS) { 
             _ba = _lS.ba; _nP = _lS.nP; _nG = _lS.nG; _h = [..._lS.h]; _m = _lS.m; _s = _lS.s; _per = _lS.per; 
+            _cR = _lS.cR; _cN = _lS.cN; _c0 = _lS.c0; _s0 = _lS.s0; 
             update(false); 
             _lS = null; 
         } 
     };
 
-    // BOTÓN TRAMPA MANUAL
     document.getElementById('btn-trampa').onclick = () => { 
         let patron = _h.slice(0,7).map(v => v.charAt(0).toUpperCase()).join("-"); 
         try { 
@@ -299,6 +305,13 @@
             document.getElementById('s-t').style.color = (_s === "ROJO") ? "#e74c3c" : (_s === "NEGRO" ? "#fff" : "#888");
         }
         document.getElementById('m-t').innerText = p + _m.toLocaleString(undefined, {minimumFractionDigits: fr, maximumFractionDigits: fr});
+        
+        // Actualizar valores de estadísticas en HTML
+        document.getElementById('st-R').innerText = _cR;
+        document.getElementById('st-N').innerText = _cN;
+        document.getElementById('st-0').innerText = _c0;
+        document.getElementById('st-s0').innerText = _s0;
+
         const ch = document.getElementById('c-h'); ch.innerHTML = "";
         _h.slice(0,12).forEach(v => {
             const cl = (v==='Rojo') ? 'red' : (v==='Negro'?'#fff':'green');
@@ -321,6 +334,7 @@
             _h = []; 
             _s = ""; 
             _per = 0; 
+            _cR = 0; _cN = 0; _c0 = 0; _s0 = 0; // Reset de estadísticas
             _m = (_MONEDA === 'USD') ? 0.20 : 200;
             document.getElementById('btn-trampa').style.opacity = "0.3"; 
             document.getElementById('btn-trampa').style.pointerEvents = "none"; 
