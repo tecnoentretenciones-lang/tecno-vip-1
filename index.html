@@ -8,11 +8,11 @@
     <style>
         :root { --c1: #e74c3c; --c2: #2c3e50; --c3: #27ae60; --c4: #f1c40f; --c5: #00e5ff; --c8: #111; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; touch-action: none !important; user-select: none !important; -webkit-user-drag: none; overscroll-behavior: none; }
-        html, body { height: 100%; width: 100%; margin: 0; padding: 0; overflow: hidden !important; background-color: #000; position: fixed; font-family: 'Segoe UI', sans-serif; transition: background-color 0.3s; }
+        html, body { height: 100%; width: 100%; margin: 0; padding: 0; overflow: hidden !important; background-color: #000; position: fixed; font-family: 'Segoe UI', sans-serif; transition: background 0.4s ease; }
         @keyframes rotar { 100% { transform: rotate(360deg); } }
         
-        #p-l { width: 100%; height: 100dvh; display: flex; flex-direction: column; padding: 10px; position: fixed; top: 0; left: 0; background: #000; z-index: 9999; justify-content: center; align-items: center; transition: background-color 0.3s;}
-        .c-l { background: var(--c8); border: 2px solid var(--c5); border-radius: 15px; padding: 15px; width: 100%; max-width: 380px; text-align: center; box-shadow: 0 0 20px rgba(0,229,255,0.3); max-height: 98vh; overflow-y: auto; transition: all 0.3s;}
+        #p-l { width: 100%; height: 100dvh; display: flex; flex-direction: column; padding: 10px; position: fixed; top: 0; left: 0; background: #000; z-index: 9999; justify-content: center; align-items: center; transition: background 0.4s ease;}
+        .c-l { background: var(--c8); border: 2px solid var(--c5); border-radius: 15px; padding: 15px; width: 100%; max-width: 380px; text-align: center; box-shadow: 0 0 20px rgba(0,0,0,0.5); max-height: 98vh; overflow-y: auto; transition: all 0.4s ease;}
         .c-l img { width: 65px; margin-bottom: 5px; border-radius: 50%; border: 2px solid #fff; animation: rotar 5s linear infinite;}
         .c-l h1 { color: #fff; font-size: 18px; margin: 0 0 8px 0; font-weight: 900;}
         .box-global { background: linear-gradient(180deg, #f39c12, #e67e22); color: #000; padding: 8px; border-radius: 10px; margin-bottom: 10px; font-weight: 900; font-size: 15px; display: flex; flex-direction: column; box-shadow: 0 4px 10px rgba(243,156,18,0.4); }
@@ -27,23 +27,22 @@
         .btn-manual { background: #f1c40f; color: #000; }
         
         #app-principal { display: none; flex-direction: column; width: 100%; height: 100dvh; max-width: 500px; padding: calc(env(safe-area-inset-top) + 10px) 10px 10px 10px; margin: auto; }
-        .tmr-big { background:#000; border:2px solid var(--c5); border-radius: 12px; padding:10px; text-align:center; font-size: 26px; color: var(--c5); font-weight: 900; margin-bottom: 5px; transition: border-color 0.3s, color 0.3s;}
+        .tmr-big { background:#000; border:2px solid var(--c5); border-radius: 12px; padding:10px; text-align:center; font-size: 26px; color: var(--c5); font-weight: 900; margin-bottom: 5px; transition: border-color 0.4s ease, color 0.4s ease;}
         #global-wallet { background:#000; border:1px solid #333; border-radius:15px; padding:12px; display:flex; justify-content:space-around; margin-bottom: 5px; }
         .gw-title { font-size:11px; color:#888; }
         .gw-val { font-size:18px; font-weight:bold; }
         .gw-box { text-align:center; }
         .bola { width: 22px; height: 22px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 9px; font-weight: bold; flex-shrink: 0;}
         #stats-bar { background:#0a0a0a; border:2px solid #333; border-radius:12px; padding:15px 20px; display:flex; justify-content:space-between; font-size:15px; font-weight:900; color:#ccc; margin-top:5px; margin-bottom: 5px; }
-        .btn-bottom { background:transparent; border:2px solid #333; padding:16px 10px; border-radius:12px; font-size:14px; font-weight:900; flex:1; cursor:pointer; text-transform: uppercase; }
+        .btn-bottom { background:transparent; border:2px solid #333; padding:16px 10px; border-radius:12px; font-size:14px; font-weight:900; flex:1; cursor:pointer; text-transform: uppercase; color: #fff;}
         .modal-base { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 10000; display: none; justify-content: center; align-items: center; padding: 20px; }
-        .modal-content { background: rgba(20, 20, 20, 0.98); border: 2px solid var(--c5); border-radius: 25px; padding: 25px; width: 90%; text-align: center; max-width: 450px; transition: border-color 0.3s;}
+        .modal-content { background: rgba(20, 20, 20, 0.98); border: 2px solid var(--c5); border-radius: 25px; padding: 25px; width: 90%; text-align: center; max-width: 450px; transition: border-color 0.4s ease;}
         .manual-text { text-align: left; font-size: 13px; line-height: 1.5; color: #fff; background: rgba(0,0,0,0.5); border: 1px solid #333; padding: 15px; border-radius: 12px; max-height: 350px; overflow-y: auto; margin-bottom: 15px; }
         #toast-evasion { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #27ae60; color: #fff; padding: 15px 20px; border-radius: 10px; font-weight: 900; z-index: 10007; display: none; border: 2px solid #fff; }
         .loading-st { animation: pulse 1s infinite; color: #888 !important; }
         @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
-        #sugerencia-container { border: 2px solid var(--c5); background: #1a1a1a; padding: 15px; border-radius: 15px; text-align: center; transition: border-color 0.3s;}
+        #sugerencia-container { border: 2px solid var(--c5); background: #1a1a1a; padding: 15px; border-radius: 15px; text-align: center; transition: border-color 0.4s ease;}
         
-        /* Modificación para el scroll suave de las bolitas */
         #c-h::-webkit-scrollbar { width: 5px; }
         #c-h::-webkit-scrollbar-thumb { background: #444; border-radius: 10px; }
     </style>
@@ -58,6 +57,17 @@
             <h2 style="color: var(--c1);">¡ALERTA DE CASINO!</h2>
             <p id="txt-alerta-trampa" style="color: #ccc;"></p>
             <button class="b-a btn-entrar" onclick="document.getElementById('alerta-trampa-custom').style.display='none'">ENTENDIDO</button>
+        </div>
+    </div>
+
+    <div id="modal-continuar" class="modal-base" style="z-index: 10007; flex-direction: column;">
+        <div style="background: rgba(20,20,20,0.98); border: 2px solid var(--c4); color: #fff; padding: 25px; border-radius: 20px; text-align: center; max-width: 400px; box-shadow: 0 0 20px rgba(241, 196, 15, 0.3);">
+            <h2 style="color: var(--c4); margin: 0 0 15px 0;">🔄 PARTIDA DETECTADA</h2>
+            <p style="color: #ccc; font-size: 14px; margin-bottom: 20px; line-height: 1.4;">El sistema se cerró inesperadamente. ¿Deseas continuar tu partida anterior con el mismo historial, o empezar de cero (se borrará el parcial)?</p>
+            <div style="display: flex; gap: 10px; flex-direction: column;">
+                <button class="b-a" style="background: var(--c4); color: #000;" onclick="accionContinuarPartida(true)">CONTINUAR PARTIDA</button>
+                <button class="b-a" style="background: #222; color: #fff; border: 1px solid #444;" onclick="accionContinuarPartida(false)">NUEVA PARTIDA (Borrar Parcial)</button>
+            </div>
         </div>
     </div>
 
@@ -108,7 +118,7 @@
             <div class="gw-box"><div class="gw-title">GLOBAL</div><div id="n-g" class="gw-val" style="color:var(--c5);">$0</div></div>
         </div>
 
-        <div style="background:var(--c8); padding:15px; border-radius:15px; display:flex; flex-direction:column; gap:10px; border:1px solid #333; transition: background-color 0.3s;">
+        <div style="background:var(--c8); padding:15px; border-radius:15px; display:flex; flex-direction:column; gap:10px; border:1px solid #333; transition: background-color 0.4s ease;">
             <div id="sugerencia-container">
                 <div id="s-t" style="font-size:75px; font-weight:900;">---</div>
                 <div id="m-t" style="color:var(--c4); font-size:26px;">$0.20</div>
@@ -135,7 +145,10 @@
                 </select>
                 <select id="sel-skin" class="i-s" style="margin-bottom:0; padding:10px; flex:1; font-size:12px; background:#111;">
                     <option value="neon">SKIN: NEON VIP</option>
-                    <option value="casino">SKIN: MESA CLÁSICA</option>
+                    <option value="casino_clasico">SKIN: MESA CLÁSICA</option>
+                    <option value="loki">SKIN: LOKI VIP</option>
+                    <option value="hxh">SKIN: HUNTER X HUNTER</option>
+                    <option value="casino_rojo">SKIN: CASINO ROYALE</option>
                 </select>
             </div>
 
@@ -186,7 +199,7 @@
                 <p><strong>1. Capital:</strong> Mínimo <strong>$100.000 CLP / $100 USD</strong>. Recomendado <strong>$200.000 CLP / $200 USD</strong>.</p>
                 <p><strong>2. Motor:</strong> Siga la sugerencia en grande (S.T.). El cálculo se hace seguro en la nube.</p>
                 <p><strong>3. Racha:</strong> Si pierde, el sistema dobla automáticamente su apuesta base.</p>
-                <p><strong>4. Trampa:</strong> Si pierde 7 veces seguidas, el sistema reportará automáticamente al Cloud. También puede usar el botón ⚠️ TRAMPA para envío manual.</p>
+                <p><strong>4. Trampa:</strong> Si pierde 7 veces seguidas, el sistema reportará automáticamente al Cloud.</p>
             </div>
             <button class="b-a" style="background:#555; color:white;" onclick="document.getElementById('modal-manual').style.display='none'">Cerrar</button>
         </div>
@@ -196,24 +209,49 @@
     const _URL = "https://script.google.com/macros/s/AKfycbzUIdq4jKKOi3_fu3kLsO_cP3Z9ckXp7B6sUiP78B7Km7bDVmaecAIdsWGgGcA8nlE8JA/exec";
     let _HID = localStorage.getItem('VIP_HID') || 'VIP-'+Math.random().toString(36).substr(2,10).toUpperCase(); localStorage.setItem('VIP_HID', _HID);
     let _L="", _U="", _S=0, _ba=0, _nP=0, _nG=0, _h=[], _m=0.2, _s="", _per=0, _TS=0, _IS=0, _MONEDA = "USD", _isFetching=false, _lS=null;
-    let _cR=0, _cN=0, _c0=0, _s0=0, _baseNivel=1; // 1: Principiante, 2: Experto
+    let _cR=0, _cN=0, _c0=0, _s0=0, _baseNivel=1; 
 
     function mostrarAlerta(mensaje) { 
         document.getElementById('txt-alerta-trampa').innerHTML = mensaje; 
         document.getElementById('alerta-trampa-custom').style.display = 'flex'; 
     }
 
-    // Calcular la ficha base dependiendo del Nivel y Moneda
     function getBaseBet() {
         if (_MONEDA === 'USD') return _baseNivel === 1 ? 0.20 : 1.00;
         else return _baseNivel === 1 ? 200 : 1000;
     }
 
-    // Funciones visuales (Skins y Base)
+    // --- NUEVO: GUARDADO DE ESTADO PARA REINICIOS ---
+    function guardarEstadoPartida() {
+        let estado = { ba: _ba, nP: _nP, h: _h, m: _m, s: _s, per: _per, cR: _cR, cN: _cN, c0: _c0, s0: _s0, moneda: _MONEDA, baseNivel: _baseNivel };
+        localStorage.setItem('VIP_ESTADO_' + _L, JSON.stringify(estado));
+    }
+
+    function accionContinuarPartida(continuar) {
+        document.getElementById('modal-continuar').style.display = 'none';
+        if (continuar) {
+            let savedState = localStorage.getItem('VIP_ESTADO_' + _L);
+            if(savedState) {
+                let d = JSON.parse(savedState);
+                _ba = d.ba; _nP = d.nP; _h = d.h; _m = d.m; _s = d.s; _per = d.per;
+                _cR = d.cR; _cN = d.cN; _c0 = d.c0; _s0 = d.s0;
+                _MONEDA = d.moneda || 'USD'; _baseNivel = d.baseNivel || 1;
+                document.getElementById('sel-base').value = _baseNivel;
+                iniciarApp();
+            }
+        } else {
+            localStorage.removeItem('VIP_ESTADO_' + _L);
+            let monedaGuardada = localStorage.getItem('VIP_MONEDA_' + _L);
+            if (monedaGuardada) { seleccionarMonedaFinal(monedaGuardada, true); } 
+            else { document.getElementById('modal-moneda').style.display = 'flex'; }
+        }
+    }
+
+    // --- SKINS VISUALES ---
     document.getElementById('sel-base').onchange = function() {
         _baseNivel = parseInt(this.value);
         if(_per === 0) { 
-            _m = getBaseBet(); update(false); 
+            _m = getBaseBet(); update(false); guardarEstadoPartida();
         } else {
             alert("⚠️ La nueva Ficha Base se aplicará automáticamente cuando ganes la racha actual o presiones RESET.");
         }
@@ -221,17 +259,26 @@
 
     document.getElementById('sel-skin').onchange = function() {
         const body = document.body;
-        const pantallaLogin = document.getElementById('p-l');
+        const pLogin = document.getElementById('p-l');
+        const docSt = document.documentElement.style;
+        
         if(this.value === 'neon') {
-            document.documentElement.style.setProperty('--c8', '#111');
-            document.documentElement.style.setProperty('--c5', '#00e5ff');
-            body.style.backgroundColor = '#000';
-            pantallaLogin.style.backgroundColor = '#000';
-        } else if(this.value === 'casino') {
-            document.documentElement.style.setProperty('--c8', '#0b2614'); // Verde oscuro mesa
-            document.documentElement.style.setProperty('--c5', '#f1c40f'); // Dorado
-            body.style.backgroundColor = '#040e07';
-            pantallaLogin.style.backgroundColor = '#040e07';
+            docSt.setProperty('--c8', '#111'); docSt.setProperty('--c5', '#00e5ff');
+            body.style.background = '#000'; pLogin.style.background = '#000';
+        } else if(this.value === 'casino_clasico') {
+            docSt.setProperty('--c8', '#0b2614'); docSt.setProperty('--c5', '#f1c40f');
+            body.style.background = '#040e07'; pLogin.style.background = '#040e07';
+        } else if(this.value === 'loki') {
+            // Estilo Loki Bull Terrier: Blanco/Negro y detalles ámbar
+            docSt.setProperty('--c8', '#1c1c1c'); docSt.setProperty('--c5', '#f39c12');
+            body.style.background = 'linear-gradient(135deg, #000000, #3a3a3a)'; pLogin.style.background = 'linear-gradient(135deg, #000000, #3a3a3a)';
+        } else if(this.value === 'hxh') {
+            // Estilo Hunter x Hunter: Verde Cazador y Rojo/Naranja
+            docSt.setProperty('--c8', '#0b2010'); docSt.setProperty('--c5', '#ff4500');
+            body.style.background = 'linear-gradient(135deg, #051a08, #133a1b)'; pLogin.style.background = 'linear-gradient(135deg, #051a08, #133a1b)';
+        } else if(this.value === 'casino_rojo') {
+            docSt.setProperty('--c8', '#380606'); docSt.setProperty('--c5', '#ffd700');
+            body.style.background = 'linear-gradient(135deg, #170000, #4a0909)'; pLogin.style.background = 'linear-gradient(135deg, #170000, #4a0909)';
         }
     };
 
@@ -247,18 +294,18 @@
             const d = await r.json();
             if(d.status === "success") {
                 _S = d.segundos; 
-                
-                // SISTEMA DE GUARDADO GLOBAL INMORTAL
                 let savedNG = localStorage.getItem('VIP_NG_' + _L);
                 _nG = savedNG !== null ? parseFloat(savedNG) : (parseFloat(d.neto_global) || 0);
                 
                 document.getElementById('p-l').style.display = 'none';
                 
-                let monedaGuardada = localStorage.getItem('VIP_MONEDA_' + _L);
-                if (monedaGuardada) {
-                    seleccionarMonedaFinal(monedaGuardada, true);
+                // VERIFICAR SI HAY PARTIDA GUARDADA
+                if(localStorage.getItem('VIP_ESTADO_' + _L)) {
+                    document.getElementById('modal-continuar').style.display = 'flex';
                 } else {
-                    document.getElementById('modal-moneda').style.display = 'flex';
+                    let monedaGuardada = localStorage.getItem('VIP_MONEDA_' + _L);
+                    if (monedaGuardada) { seleccionarMonedaFinal(monedaGuardada, true); } 
+                    else { document.getElementById('modal-moneda').style.display = 'flex'; }
                 }
             } else { alert(d.mensaje); this.innerText = "ENTRAR AL SISTEMA"; }
         } catch(e) { alert("Error de red"); this.innerText = "ENTRAR AL SISTEMA"; }
@@ -266,14 +313,12 @@
 
     window.seleccionarMonedaFinal = function(mon, yaEstabaGuardada = false) {
         _MONEDA = mon;
-        if(!yaEstabaGuardada) {
-            localStorage.setItem('VIP_MONEDA_' + _L, mon);
-        }
+        if(!yaEstabaGuardada) localStorage.setItem('VIP_MONEDA_' + _L, mon);
         document.getElementById('modal-moneda').style.display = 'none';
         let sug = (_MONEDA==='USD') ? "100.00" : "100000";
         let capital = parseFloat(prompt(`Capital mínimo en mesa (${_MONEDA}):`, sug)) || (_MONEDA==='USD'?100:100000);
         _ba = capital; 
-        _m = getBaseBet(); // Aplica la base elegida dinámicamente
+        _m = getBaseBet(); 
         iniciarApp();
     };
 
@@ -300,13 +345,12 @@
         if(_s !== "" && _s !== "⏳") {
             if(c.toUpperCase() === _s) { 
                 _ba += _m; _nP += _m; _nG += _m; 
-                _m = getBaseBet(); // Vuelve a la base elegida
+                _m = getBaseBet(); 
                 _per = 0; 
             }
             else if(c !== 'Cero') { _ba -= _m; _nP -= _m; _nG -= _m; _m *= 2; _per++; }
         }
         
-        // GUARDAMOS EL GLOBAL EN EL DISCO DURO TRAS CADA JUGADA
         localStorage.setItem('VIP_NG_' + _L, _nG);
 
         _h.unshift(c);
@@ -316,6 +360,8 @@
             let data = await res.json(); _s = data.sugerencia;
         } catch(e) { _s = "ERR"; }
         _isFetching = false; stDiv.className = ""; update();
+        
+        guardarEstadoPartida(); // GUARDA DESPUÉS DE CADA JUGADA
 
         if(_per >= 7) { 
             document.getElementById('btn-trampa').style.opacity="1"; 
@@ -335,8 +381,8 @@
         if(_lS) { 
             _ba = _lS.ba; _nP = _lS.nP; _nG = _lS.nG; _h = [..._lS.h]; _m = _lS.m; _s = _lS.s; _per = _lS.per; 
             _cR = _lS.cR; _cN = _lS.cN; _c0 = _lS.c0; _s0 = _lS.s0; 
-            
-            localStorage.setItem('VIP_NG_' + _L, _nG); // Rescata el global al corregir
+            localStorage.setItem('VIP_NG_' + _L, _nG); 
+            guardarEstadoPartida(); // Actualiza el estado guardado al deshacer
             update(false); 
             _lS = null; 
         } 
@@ -370,7 +416,6 @@
         document.getElementById('st-s0').innerText = _s0;
 
         const ch = document.getElementById('c-h'); ch.innerHTML = "";
-        // Ahora muestra hasta 60 bolitas y con scroll
         _h.slice(0,60).forEach(v => {
             const cl = (v==='Rojo') ? 'red' : (v==='Negro'?'#fff':'green');
             ch.innerHTML += `<div class="bola" style="background:${cl}; color:${v==='Negro'?'#000':'#fff'}">${v==='Cero'?'0':''}</div>`;
@@ -394,9 +439,7 @@
                 alert("✅ SOLICITUD ENVIADA.\n\nRevisa tu WhatsApp y responde 'SI'.");
                 document.getElementById('u-i').value = "DEMO"; document.getElementById('l-i').value = d.serial;
                 this.innerText = "ACTIVAR AHORA";
-            } else { 
-                throw new Error("Fallo de red");
-            }
+            } else { throw new Error("Fallo de red"); }
         } catch(e) { 
             let msg = `Hola TECNOENTRETE, mi nombre es ${nom} y quiero activar mi DEMO VIP.`;
             window.open(`https://wa.me/56995931641?text=${encodeURIComponent(msg)}`, '_blank');
@@ -410,15 +453,17 @@
     document.getElementById('btn-0').onclick=()=>xfR('Cero');
     
     document.getElementById('btn-reset').onclick = () => { 
-        if(confirm("¿Seguro que deseas borrar las bolitas de la pantalla? Tu saldo se mantendrá intacto.")) {
+        if(confirm("¿Seguro que deseas iniciar un nuevo ciclo? Tu saldo parcial volverá a cero, pero el Global se mantendrá.")) {
             _h = []; 
             _s = ""; 
             _per = 0; 
+            _nP = 0; // Se resetea el parcial
             _cR = 0; _cN = 0; _c0 = 0; _s0 = 0;
-            _m = getBaseBet(); // Vuelve a la base elegida
+            _m = getBaseBet(); 
             document.getElementById('btn-trampa').style.opacity = "0.3"; 
             document.getElementById('btn-trampa').style.pointerEvents = "none"; 
             update();
+            guardarEstadoPartida(); // Guarda el estado en limpio
         }
     };
     </script>
