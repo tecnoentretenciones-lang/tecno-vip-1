@@ -1,72 +1,69 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SISTEMA CENTRAL - TECNOENTRETE</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        body { background: #0b0b0b; color: white; font-family: 'Segoe UI', sans-serif; padding: 20px; margin: 0; }
-        
-        #login-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 99999; display: flex; justify-content: center; align-items: center; flex-direction: column; }
-        .login-box { background: #1a1a1a; padding: 40px; border-radius: 20px; border: 2px solid #00e5ff; text-align: center; box-shadow: 0 0 30px rgba(0,229,255,0.2); width: 90%; max-width: 400px; box-sizing: border-box;}
-        .login-box input { background: #000; color: #00e5ff; border: 1px solid #00e5ff; padding: 15px; font-size: 18px; text-align: center; border-radius: 10px; width: 100%; margin-bottom: 20px; outline: none; box-sizing: border-box;}
-        .login-box button { background: #00e5ff; color: #000; border: none; padding: 15px; width: 100%; border-radius: 10px; font-weight: 900; font-size: 16px; cursor: pointer; }
-        
-        .panel { max-width: 1400px; margin: auto; background: #1a1a1a; padding: 20px; border-radius: 15px; border: 2px solid #333; display: none;}
-        h1 { color: #00e5ff; text-align: center; margin-top: 0; text-transform: uppercase; font-weight: 900;}
-        
-        .tabs { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;}
-        .tab-btn { flex: 1; background: #222; color: #888; border: 1px solid #444; padding: 15px; font-weight: bold; cursor: pointer; border-radius: 10px; font-size: 14px; min-width: 150px;}
-        .tab-btn.active { background: #00e5ff; color: #000; border-color: #00e5ff; }
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
+// CONFIGURACIÓN GREEN API (MANTENIDA)
+var ID_INSTANCE = "7107571244";
+var API_TOKEN = "ed338e34155a4ba3a513bff14bcc7817d81938774ced491a90";
+var GREEN_URL = "https://7107.api.greenapi.com";
 
-        .caja-crear { background: #111; border: 1px solid #333; padding: 15px; border-radius: 10px; margin-bottom: 20px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap;}
-        .caja-crear input, .caja-crear select { background: #222; border: 1px solid #555; color: #fff; padding: 10px; border-radius: 5px; outline: none; flex: 1; min-width: 100px;}
-        .btn-crear { background: #00e5ff; color: #000; border: none; padding: 10px 20px; border-radius: 5px; font-weight: 900; cursor: pointer; flex-grow: 1; min-width: 100px;}
+function doGet(e) {
+  try {
+    var ss = SpreadsheetApp.getActiveSpreadsheet();
+    var action = e.parameter.action;
+    var hojaL = ss.getSheetByName("licencias") || ss.getSheetByName("Licencias");
+    var hojaM = ss.getSheetByName("Maquinas") || ss.insertSheet("Maquinas");
+    
+    // Inicializar cabeceras si la hoja es nueva
+    if (hojaM.getLastRow() === 0) {
+      hojaM.appendRow(["Ultima Conexion", "Perfil", "Saldo", "Nivel Táctico", "IA Sugerencia", "Estado"]);
+    }
 
-        .resumen-finanzas { display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap;}
-        .total-box { flex: 1; background: linear-gradient(135deg, #27ae60, #2ecc71); padding: 20px; border-radius: 10px; text-align: center; color: #fff; font-size: 18px; font-weight: 900; border: 2px solid #fff; min-width: 250px;}
-        .total-box.azul { background: linear-gradient(135deg, #2980b9, #3498db); }
+    // --- ACCIÓN: REPORTE DESDE EL BOT ---
+    if (action === "reportar_bot") {
+      var serial = e.parameter.serial;
+      var saldo = e.parameter.saldo;
+      var nivel = e.parameter.nivel;
+      var ia = e.parameter.ia;
+      var dataM = hojaM.getDataRange().getValues();
+      var filaEncontrada = -1;
 
-        .table-responsive { overflow-x: auto; width: 100%; }
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 12px; background: #111; }
-        th, td { border: 1px solid #333; padding: 8px 5px; text-align: center; vertical-align: middle; }
-        th { background: #00e5ff; color: black; font-weight: 900; white-space: nowrap; }
-        
-        td.col-licencia { color: #00e5ff; font-weight: bold; font-size: 13px; white-space: nowrap; letter-spacing: 1px; }
+      for (var i = 1; i < dataM.length; i++) {
+        if (dataM[i][1] == serial) { filaEncontrada = i + 1; break; }
+      }
 
-        #t-trampas td { white-space: nowrap; }
-        #t-trampas td:nth-child(3) { white-space: normal; min-width: 250px; word-break: break-word; color: #e74c3c; font-weight: bold; text-align: left; padding: 10px; background: rgba(231, 76, 60, 0.05); }
+      var registro = [new Date(), serial, saldo, nivel, ia, "🟢 EN VIVO"];
+      if (filaEncontrada != -1) {
+        hojaM.getRange(filaEncontrada, 1, 1, 6).setValues([registro]);
+      } else {
+        hojaM.appendRow(registro);
+      }
+      return ContentService.createTextOutput("OK");
+    }
 
-        .btn-accion { padding: 6px 10px; border-radius: 5px; font-weight: bold; cursor: pointer; border: none; width: 100%; margin-bottom: 4px; font-size: 11px;}
-        .btn-borrar { background: #e74c3c; color: white; }
-        .btn-sus { background: #f39c12; color: white; }
-        .btn-act { background: #2ecc71; color: white; }
-        .btn-tiempo { background: #3498db; color: white; }
-        .btn-editar { background: #f1c40f; color: black; }
-        .btn-reset { background: #9b59b6; color: white; }
-        
-        .btn-limpiar-trampas { background: #e74c3c; color: white; border: 2px solid #c0392b; padding: 15px; border-radius: 10px; cursor: pointer; font-weight: 900; width: 100%; margin-bottom: 15px; font-size: 16px; text-transform: uppercase; box-shadow: 0 4px 6px rgba(0,0,0,0.3);}
-        .btn-limpiar-trampas:hover { background: #c0392b; }
-        .btn-refresh { background: #333; color: #fff; border: 1px solid #555; padding: 10px 20px; border-radius: 8px; cursor: pointer; width: 100%; font-weight: 900; font-size: 14px; margin-bottom: 10px; }
-        
-        .status-activo { color: #2ecc71; font-weight: bold; }
-        .status-inactivo { color: #e74c3c; font-weight: bold; }
-        .conn-box { background: #222; padding: 5px; border-radius: 5px; font-family: monospace; font-size: 11px; text-align: center; white-space: nowrap;}
-        
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 999999; display: none; justify-content: center; align-items: center; }
-        .modal-body { background: #1a1a1a; padding: 30px; border-radius: 20px; border: 2px solid #00e5ff; width: 90%; max-width: 400px; }
-        .modal-body label { color: #888; font-size: 12px; font-weight: bold; display: block; margin-top: 10px; text-align: left;}
-        .modal-body input, .modal-body select { width: 100%; background: #000; color: #00e5ff; border: 1px solid #00e5ff; padding: 12px; border-radius: 8px; margin-top: 5px; font-size: 14px; box-sizing: border-box; outline: none;}
-    </style>
-</head>
-<body>
+    // --- ACCIÓN: DATOS PARA EL PANEL ---
+    if (action === "ver_maquinas") {
+      var data = hojaM.getDataRange().getValues();
+      var maquinas = [];
+      for (var j = 1; j < data.length; j++) {
+        maquinas.push({
+          fecha: data[j][0],
+          serial: data[j][1],
+          saldo: data[j][2],
+          nivel: data[j][3],
+          ia: data[j][4],
+          estado: data[j][5]
+        });
+      }
+      return ContentService.createTextOutput(JSON.stringify(maquinas)).setMimeType(ContentService.MimeType.JSON);
+    }
 
-<div id="modal-tiempo" class="modal-overlay">
-    <div class="modal-body">
-        <h2 style="color:#00e5ff; text-align: center; margin-top:0;">⏱️ AÑADIR TIEMPO</h2>
+    // --- LÓGICA ORIGINAL DE LICENCIAS (INTACTA) ---
+    if (action === "validar_demo") {
+      // ... (Tu código original de validación)
+    }
+    // ... resto de tus funciones originales
+
+  } catch(err) {
+    return ContentService.createTextOutput("Error: " + err.toString());
+  }
+}        <h2 style="color:#00e5ff; text-align: center; margin-top:0;">⏱️ AÑADIR TIEMPO</h2>
         <label>DÍAS A SUMAR</label> <input type="number" id="add-dias" value="1">
         <label>HORAS A SUMAR</label> <input type="number" id="add-horas" value="0">
         <button style="background:#2ecc71; color:#fff; width:100%; padding:15px; border:none; border-radius:8px; font-weight:bold; margin-top:15px; cursor:pointer;" onclick="enviarTiempo()">RENOVAR Y ACTIVAR</button>
