@@ -61,13 +61,396 @@
         .modal-body label { color: #888; font-size: 12px; font-weight: bold; display: block; margin-top: 10px; text-align: left;}
         .modal-body input, .modal-body select { width: 100%; background: #000; color: #00e5ff; border: 1px solid #00e5ff; padding: 12px; border-radius: 8px; margin-top: 5px; font-size: 14px; box-sizing: border-box; outline: none;}
 
-        /* INYECCIÓN VISUAL MONITOREO */
+        /* ESTILOS NUEVOS PARA MONITOREO EN VIVO */
         .tarjeta-maquina { background: #111; border: 2px solid #333; border-radius: 10px; padding: 15px; display: flex; flex-direction: column; gap: 10px;}
         .tarjeta-maquina.activa { border-color: #2ecc71; }
         .tarjeta-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; padding-bottom: 10px; }
         .tarjeta-header h3 { margin: 0; color: #00e5ff; font-size: 16px; }
         .tarjeta-status { font-size: 12px; padding: 4px 8px; border-radius: 4px; font-weight: bold; }
         .status-atacando { background: rgba(46, 204, 113, 0.2); color: #2ecc71; border: 1px solid #2ecc71; }
+        .tarjeta-datos { display: flex; justify-content: space-between; font-size: 14px; }
+        .tarjeta-datos div { display: flex; flex-direction: column; }
+        .tarjeta-datos span { color: #888; font-size: 10px; text-transform: uppercase; }
+        .tarjeta-datos strong { font-size: 18px; color: #fff; }
+    </style>
+</head>
+<body>
+
+<div id="modal-tiempo" class="modal-overlay">
+    <div class="modal-body">
+        <h2 style="color:#00e5ff; text-align: center; margin-top:0;">⏱️ AÑADIR TIEMPO</h2>
+        <label>DÍAS A SUMAR</label> <input type="number" id="add-dias" value="1">
+        <label>HORAS A SUMAR</label> <input type="number" id="add-horas" value="0">
+        <button style="background:#2ecc71; color:#fff; width:100%; padding:15px; border:none; border-radius:8px; font-weight:bold; margin-top:15px; cursor:pointer;" onclick="enviarTiempo()">RENOVAR Y ACTIVAR</button>
+        <button style="background:#555; color:#fff; width:100%; padding:15px; border:none; border-radius:8px; font-weight:bold; margin-top:10px; cursor:pointer;" onclick="document.getElementById('modal-tiempo').style.display='none'">CANCELAR</button>
+        <input type="hidden" id="fila-tiempo">
+    </div>
+</div>
+
+<div id="modal-editar-usuario" class="modal-overlay">
+    <div class="modal-body">
+        <h2 style="color:#f1c40f; text-align: center; margin-top:0;">✏️ EDITAR CLIENTE</h2>
+        <label>Usuario Login</label> <input type="text" id="ed-u-user">
+        <label>Clave / Licencia</label> <input type="text" id="ed-u-serial">
+        <label>Nombre del Cliente</label> <input type="text" id="ed-u-nombre">
+        <label>WhatsApp</label> <input type="text" id="ed-u-wsp">
+        <label>Plan Asignado</label>
+        <select id="ed-u-plan">
+            <option value="BASICO">Básico (1 Mesa)</option>
+            <option value="VIP">VIP / PRO (4 Mesas)</option>
+        </select>
+        <label>Pago Realizado ($)</label> <input type="number" id="ed-u-pago">
+        <button style="background:#2ecc71; color:#fff; width:100%; padding:15px; border:none; border-radius:8px; font-weight:bold; margin-top:15px; cursor:pointer;" onclick="guardarEdicionUsuario()">GUARDAR CAMBIOS</button>
+        <button style="background:#555; color:#fff; width:100%; padding:15px; border:none; border-radius:8px; font-weight:bold; margin-top:10px; cursor:pointer;" onclick="document.getElementById('modal-editar-usuario').style.display='none'">CANCELAR</button>
+        <input type="hidden" id="ed-u-fila">
+    </div>
+</div>
+
+<div id="modal-editar-cajero" class="modal-overlay">
+    <div class="modal-body">
+        <h2 style="color:#f1c40f; text-align: center; margin-top:0;">✏️ EDITAR CAJERO</h2>
+        <label>Usuario Login</label> <input type="text" id="ed-c-user">
+        <label>Clave</label> <input type="text" id="ed-c-pass">
+        <label>Nombre Real</label> <input type="text" id="ed-c-nombre">
+        <label>WhatsApp</label> <input type="text" id="ed-c-wsp">
+        <button style="background:#2ecc71; color:#fff; width:100%; padding:15px; border:none; border-radius:8px; font-weight:bold; margin-top:15px; cursor:pointer;" onclick="guardarEdicionCajero()">GUARDAR CAMBIOS</button>
+        <button style="background:#555; color:#fff; width:100%; padding:15px; border:none; border-radius:8px; font-weight:bold; margin-top:10px; cursor:pointer;" onclick="document.getElementById('modal-editar-cajero').style.display='none'">CANCELAR</button>
+        <input type="hidden" id="ed-c-fila">
+    </div>
+</div>
+
+<div id="login-screen">
+    <div class="login-box">
+        <img src="https://cdn-icons-png.flaticon.com/512/1055/1055673.png" style="width:80px; margin-bottom: 15px;">
+        <h1>SISTEMA MAESTRO</h1>
+        <input type="text" id="user-admin" placeholder="Usuario / Cajero">
+        <input type="password" id="clave-admin" placeholder="Clave de acceso">
+        <button id="btn-login" onclick="verificarClave()">INGRESAR AL PANEL</button>
+    </div>
+</div>
+
+<div class="panel" id="panel-principal">
+    <h1><i class="fas fa-shield-alt"></i> PANEL DE CONTROL TECNOENTRETE</h1>
+    
+    <div class="tabs" id="menu-tabs">
+        <button class="tab-btn active" onclick="cambiarPestana('usuarios', this)">👤 GESTIÓN LICENCIAS</button>
+        <button class="tab-btn" id="tab-cajeros-btn" onclick="cambiarPestana('cajeros', this)">👥 GESTIÓN CAJEROS</button>
+        <button class="tab-btn" id="tab-trampas-btn" onclick="cambiarPestana('trampas', this)">⚠️ BASE DE TRAMPAS</button>
+        <button class="tab-btn" id="tab-monitoreo-btn" onclick="cambiarPestana('monitoreo', this)" style="border-color: #f39c12; color: #f39c12;">📊 MONITOREO EN VIVO</button>
+    </div>
+
+    <div id="tab-monitoreo" class="tab-content">
+        <div class="resumen-finanzas">
+            <div class="total-box azul">💵 CAPITAL ACTIVO EN MESAS<br><span id="total-capital-vivo">$0</span></div>
+            <div class="total-box" style="background: linear-gradient(135deg, #8e44ad, #9b59b6);">🤖 MÁQUINAS ACTIVAS<br><span id="total-maquinas-vivo">0</span></div>
+        </div>
+        <button class="btn-refresh" onclick="cargarMonitoreo()">🔄 ACTUALIZAR TELEMETRÍA</button>
+        
+        <div id="grid-maquinas" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 15px; margin-top: 20px;">
+            <p style='text-align:center; color:#888; width:100%; grid-column: 1 / -1;'>Esperando conexión de telemetría de las máquinas locales...</p>
+        </div>
+    </div>
+
+    <div id="tab-usuarios" class="tab-content active">
+        <div class="resumen-finanzas" id="caja-finanzas">
+            <div class="total-box azul">💼 VENTAS DE PLANES<br><span id="total-ventas">$0.00</span></div>
+            <div class="total-box">💰 LUCRO JUGADORES<br><span id="total-global">$0.00</span></div>
+        </div>
+        <div class="caja-crear">
+            <input type="text" id="n-usuario" placeholder="Usuario Login">
+            <input type="text" id="n-serial" placeholder="Clave / Licencia">
+            <input type="text" id="n-nombre" placeholder="Nombre Cliente">
+            <input type="text" id="n-wsp" placeholder="WhatsApp">
+            <select id="n-tiempo">
+                <option value="00d-12h:00m:00s">12 Horas</option>
+                <option value="01d-00h:00m:00s">24 Horas</option>
+                <option value="07d-00h:00m:00s">7 Días</option>
+                <option value="30d-00h:00m:00s">30 Días</option>
+            </select>
+            <select id="n-plan">
+                <option value="BASICO">Básico (1 Mesa)</option>
+                <option value="VIP">VIP / PRO (4 Mesas)</option>
+            </select>
+            <input type="number" id="n-pago" placeholder="Cobro ($)">
+            <button class="btn-crear" onclick="crearLicencia()">GENERAR</button>
+        </div>
+        <button class="btn-refresh" onclick="cargarUsuarios()">🔄 ACTUALIZAR DATOS</button>
+        <div class="table-responsive">
+            <table id="t-usuarios">
+                <thead><tr><th>#</th><th>USUARIO</th><th>CLAVE</th><th>TOKEN</th><th>NOMBRE</th><th>WSP</th><th>PLAN</th><th>ESTADO</th><th>TIEMPO / ESTADO</th><th>NETO J.</th><th>PAGÓ</th><th id="th-vendedor">VENDEDOR</th><th>ANCLAJE</th><th>ACCIONES</th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="tab-cajeros" class="tab-content">
+        <div class="caja-crear">
+            <input type="text" id="c-user" placeholder="Usuario Login">
+            <input type="text" id="c-pass" placeholder="Clave Cajero">
+            <input type="text" id="c-nombre" placeholder="Nombre Completo">
+            <input type="text" id="c-wsp" placeholder="WhatsApp">
+            <button class="btn-crear" style="background:#2ecc71;" onclick="crearCajero()">+ REGISTRAR CAJERO</button>
+        </div>
+        <button class="btn-refresh" onclick="cargarCajeros()">🔄 REFRESCAR LISTA</button>
+        <div class="table-responsive">
+            <table id="t-cajeros">
+                <thead><tr><th>#</th><th>USUARIO</th><th>CLAVE</th><th>NOMBRE</th><th>WHATSAPP</th><th>ESTADO</th><th>ACCIONES</th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="tab-trampas" class="tab-content">
+        <button class="btn-limpiar-trampas" onclick="limpiarTrampas()"><i class="fas fa-trash-alt"></i> LIMPIAR PATRONES DUPLICADOS</button>
+        <div class="table-responsive"><table id="t-trampas"><thead><tr><th>FECHA</th><th>QUIÉN</th><th>PATRÓN</th></tr></thead><tbody></tbody></table></div>
+    </div>
+</div>
+
+<script>
+    // 🔥 NUBE 1: LA ORIGINAL PARA EL LOGIN, CAJEROS Y LICENCIAS 🔥
+    const API = "https://script.google.com/macros/s/AKfycbzUIdq4jKKOi3_fu3kLsO_cP3Z9ckXp7B6sUiP78B7Km7bDVmaecAIdsWGgGcA8nlE8JA/exec"; 
+    
+    // 📡 NUBE 2: LA ANTENA DEL BOT (SOLO PARA LEER LA TELEMETRÍA EN VIVO) 📡
+    const API_BOT = "https://script.google.com/macros/s/AKfycbzVAoiVPr4M2x3qZjW2jEL9yn633Rc7FqcXZaSMzIf6uant1VbLPV7ScwSudHslJYOuzw/exec";
+
+    let ROL_ACTUAL = ""; let USUARIO_ACTUAL = "";
+    
+    async function verificarClave() {
+        const u = document.getElementById('user-admin').value.trim();
+        const p = document.getElementById('clave-admin').value.trim();
+        if(!u || !p) return alert("Ingrese Usuario y Clave");
+        
+        document.getElementById('btn-login').innerText = "VERIFICANDO...";
+        try {
+            // Usa la nube original para verificar
+            const r = await fetch(API + `?action=login_panel&u=${encodeURIComponent(u)}&p=${encodeURIComponent(p)}`);
+            const d = await r.json();
+            if(d.status === "success") {
+                ROL_ACTUAL = d.rol; USUARIO_ACTUAL = d.usuario;
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('panel-principal').style.display = 'block';
+                
+                if(ROL_ACTUAL === "CAJERO") {
+                    document.getElementById('tab-cajeros-btn').style.display = 'none';
+                    document.getElementById('tab-trampas-btn').style.display = 'none';
+                    document.getElementById('tab-monitoreo-btn').style.display = 'none'; 
+                    document.getElementById('caja-finanzas').style.display = 'none';
+                    document.getElementById('th-vendedor').style.display = 'none';
+                }
+                cargarUsuarios();
+            } else {
+                alert(d.mensaje); document.getElementById('btn-login').innerText = "INGRESAR AL PANEL";
+            }
+        } catch(e) { alert("Error de conexión con el Servidor."); document.getElementById('btn-login').innerText = "INGRESAR AL PANEL"; }
+    }
+
+    function cambiarPestana(tab, btn) {
+        document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById('tab-' + tab).classList.add('active');
+        btn.classList.add('active');
+        if(tab === 'cajeros') cargarCajeros();
+        if(tab === 'trampas') cargarTrampas();
+        if(tab === 'monitoreo') cargarMonitoreo();
+    }
+
+    // 📡 FUNCIÓN DE MONITOREO: LEE LOS DATOS REALES DE LA NUBE DEL BOT 📡
+    async function cargarMonitoreo() {
+        try {
+            document.querySelector('#grid-maquinas').innerHTML = "<p style='text-align:center; color:#888; width:100%; grid-column: 1 / -1;'>Sincronizando estado en vivo de las máquinas...</p>";
+            
+            // ¡OJO AQUÍ! Usa API_BOT, no API normal
+            const r = await fetch(API_BOT + "?action=obtener_telemetria");
+            const d = await r.json();
+            
+            if(d.status === "success" && d.maquinas && d.maquinas.length > 0) {
+                let totalCapital = 0;
+                let gridHTML = "";
+                
+                d.maquinas.forEach(maq => {
+                    totalCapital += maq.saldo;
+                    gridHTML += `
+                    <div class="tarjeta-maquina activa">
+                        <div class="tarjeta-header">
+                            <h3>${maq.maquina}</h3>
+                            <span class="tarjeta-status status-atacando">🟢 TRANSMITIENDO</span>
+                        </div>
+                        <div class="tarjeta-datos">
+                            <div><span>SALDO CAJA</span><strong>$ ${maq.saldo.toLocaleString('es-CL')}</strong></div>
+                            <div><span>TÁCTICA / NIVEL</span><strong>${maq.tactica}</strong></div>
+                        </div>
+                    </div>`;
+                });
+                
+                document.getElementById('total-capital-vivo').innerText = "$" + totalCapital.toLocaleString('es-CL');
+                document.getElementById('total-maquinas-vivo').innerText = d.maquinas.length;
+                document.querySelector('#grid-maquinas').innerHTML = gridHTML;
+            } else {
+                document.querySelector('#grid-maquinas').innerHTML = "<p style='text-align:center; color:#888; width:100%; grid-column: 1 / -1;'>No hay máquinas conectadas o transmitiendo en este momento.</p>";
+                document.getElementById('total-capital-vivo').innerText = "$0";
+                document.getElementById('total-maquinas-vivo').innerText = "0";
+            }
+        } catch(e) {
+            document.querySelector('#grid-maquinas').innerHTML = "<p style='text-align:center; color:#e74c3c; width:100%; grid-column: 1 / -1;'>Error de conexión con la Nube del Bot.</p>";
+        }
+    }
+
+    // EL RESTO DEL CÓDIGO USA TU "API" ORIGINAL PARA QUE TODO FUNCIONE NORMAL
+    async function cargarUsuarios() {
+        document.querySelector('.btn-refresh').innerText = "⏳ CARGANDO...";
+        try {
+            const r = await fetch(API + `?action=panel_datos&vendedor=${encodeURIComponent(USUARIO_ACTUAL)}`); 
+            const d = await r.json();
+            const b = document.querySelector("#t-usuarios tbody"); b.innerHTML = "";
+            let sG = 0; let sV = 0;
+            
+            d.datos.forEach((f, i) => {
+                if (i === 0 || !f[0]) return; 
+                
+                let realFila = f[17]; 
+                let neto = parseFloat(f[10]) || 0; 
+                let pago = parseFloat(f[9]) || 0; 
+                let planActual = (f[13]) ? (f[13].toString().toUpperCase().trim()) : 'BASICO'; 
+                
+                if(f[0] !== "DEMO") { sG += neto; sV += pago; }
+                
+                let bE = f[2]==="Activo" ? `<button class="btn-accion btn-sus" onclick="cambiarEstado(${realFila},'Inactivo')">PAUSAR</button>` : `<button class="btn-accion btn-act" onclick="cambiarEstado(${realFila},'Activo')">ACTIVAR</button>`;
+                let bResetHID = f[6] ? `<button class="btn-accion btn-reset" onclick="resetearHID(${realFila})">DESANCLAR</button>` : '';
+                let colVend = ROL_ACTUAL === "ADMIN" ? `<td style="font-size:10px; color:#888;">${f[15]||'ADMIN'}</td>` : ''; 
+                
+                const tr = document.createElement("tr");
+                tr.innerHTML = `<td>${i}</td>
+                                <td style="color:#f1c40f; font-weight:bold;">${f[14]||'--'}</td>
+                                <td class="col-licencia">${f[0]}</td>
+                                <td style="color:#2ecc71; font-weight:bold; font-family:monospace;">${f[4]||'--'}</td> <td>${f[11]||'--'}</td>
+                                <td>${f[12]||'--'}</td>
+                                <td><select style="background:#222; color:#fff; border:1px solid #444; padding:4px; font-size:11px; border-radius:4px;" onchange="cambiarPlan(${realFila}, this.value)"><option value="BASICO" ${planActual==='BASICO'?'selected':''}>BÁSICO</option><option value="VIP" ${planActual==='VIP'||planActual==='PRO'?'selected':''}>VIP / PRO</option></select></td>
+                                <td class="${f[2]==='Activo'?'status-activo':'status-inactivo'}">${f[2]}</td>
+                                <td><div class="conn-box">${f[3]}</div></td>
+                                <td style="color:#2ecc71;">$${neto.toFixed(2)}</td>
+                                <td style="color:#3498db;">$${pago.toFixed(2)}</td>
+                                ${colVend}
+                                <td style="color:${f[6]?'#2ecc71':'#888'}; font-size:11px;">${f[6]?'🔒':'Libre'}<br>${bResetHID}</td>
+                                <td>
+                                    ${bE}
+                                    <button class="btn-accion btn-editar" onclick="abrirEditUser(${realFila}, '${f[14]||''}', '${f[0]||''}', '${f[11]||''}', '${f[12]||''}', '${planActual}', '${pago}')">✏️ EDITAR</button>
+                                    <button class="btn-accion btn-tiempo" onclick="abrirModal(${realFila})">+ TIEMPO</button>
+                                    <button class="btn-accion btn-borrar" onclick="borrar(${realFila})">🗑️ ELIMINAR</button>
+                                </td>`;
+                b.appendChild(tr);
+            });
+            document.getElementById('total-global').innerText = '$' + sG.toFixed(2);
+            document.getElementById('total-ventas').innerText = '$' + sV.toFixed(2); 
+            document.querySelector('.btn-refresh').innerText = "🔄 ACTUALIZAR DATOS";
+        } catch(e) { document.querySelector('.btn-refresh').innerText = "Error de Red"; }
+    }
+
+    async function crearLicencia() {
+        const u = document.getElementById('n-usuario').value.trim(); 
+        const s = document.getElementById('n-serial').value.trim(); 
+        const n = document.getElementById('n-nombre').value.trim(); 
+        const w = document.getElementById('n-wsp').value.trim(); 
+        const t = document.getElementById('n-tiempo').value; 
+        const p = document.getElementById('n-plan').value; 
+        const pago = document.getElementById('n-pago').value;
+        if(!s) return alert("Ingresa una Clave");
+        await fetch(API + `?action=crear_usuario&usuario=${encodeURIComponent(u)}&serial=${encodeURIComponent(s)}&nombre=${encodeURIComponent(n)}&wsp=${encodeURIComponent(w)}&tiempo=${encodeURIComponent(t)}&plan=${encodeURIComponent(p)}&pago=${encodeURIComponent(pago)}&vendedor=${encodeURIComponent(USUARIO_ACTUAL)}`);
+        cargarUsuarios();
+    }
+
+    function abrirEditUser(fila, user, serial, nom, wsp, plan, pago) {
+        document.getElementById('ed-u-fila').value = fila; 
+        document.getElementById('ed-u-user').value = user !== 'undefined' ? user : '';
+        document.getElementById('ed-u-serial').value = serial !== 'undefined' ? serial : ''; 
+        document.getElementById('ed-u-nombre').value = nom !== 'undefined' ? nom : '';
+        document.getElementById('ed-u-wsp').value = wsp !== 'undefined' ? wsp : ''; 
+        document.getElementById('ed-u-plan').value = plan || 'BASICO';
+        document.getElementById('ed-u-pago').value = pago; 
+        document.getElementById('modal-editar-usuario').style.display = 'flex';
+    }
+    
+    async function guardarEdicionUsuario() {
+        let f = document.getElementById('ed-u-fila').value; 
+        let u = document.getElementById('ed-u-user').value.trim(); 
+        let s = document.getElementById('ed-u-serial').value.trim(); 
+        let n = document.getElementById('ed-u-nombre').value.trim();
+        let w = document.getElementById('ed-u-wsp').value.trim(); 
+        let p = document.getElementById('ed-u-plan').value; 
+        let pag = document.getElementById('ed-u-pago').value;
+        
+        document.getElementById('modal-editar-usuario').style.display = 'none';
+        await fetch(API + `?action=editar_usuario&fila=${f}&usuario=${encodeURIComponent(u)}&serial=${encodeURIComponent(s)}&nombre=${encodeURIComponent(n)}&wsp=${encodeURIComponent(w)}&plan=${encodeURIComponent(p)}&pago=${encodeURIComponent(pag)}`); 
+        cargarUsuarios();
+    }
+
+    async function cargarCajeros() {
+        try {
+            const r = await fetch(API + "?action=panel_cajeros"); const d = await r.json();
+            const b = document.querySelector("#t-cajeros tbody"); b.innerHTML = "";
+            d.datos.forEach((f, i) => {
+                if (i === 0 || !f[0]) return;
+                let realRow = f[6];
+                const tr = document.createElement("tr");
+                let btnEst = f[4]==="Activo" ? `<button class="btn-accion btn-sus" onclick="estadoCajero(${realRow},'Inactivo')">SUSPENDER</button>` : `<button class="btn-accion btn-act" onclick="estadoCajero(${realRow},'Activo')">ACTIVAR</button>`;
+                tr.innerHTML = `<td>${i+1}</td><td style="color:#00e5ff;">${f[0]}</td><td>${f[1]}</td><td>${f[2]}</td><td>${f[3]}</td><td class="${f[4]==='Activo'?'status-activo':'status-inactivo'}">${f[4]}</td>
+                <td>
+                    ${btnEst}
+                    <button class="btn-accion btn-editar" onclick="abrirEditCajero(${realRow}, '${f[0]}', '${f[1]}', '${f[2]}', '${f[3]}')">✏️ EDITAR</button>
+                    <button class="btn-accion btn-borrar" onclick="borrarCajero(${realRow})">🗑️ ELIMINAR</button>
+                </td>`;
+                b.appendChild(tr);
+            });
+        } catch(e) {}
+    }
+
+    async function crearCajero() {
+        const u = document.getElementById('c-user').value.trim(); const p = document.getElementById('c-pass').value.trim();
+        const n = document.getElementById('c-nombre').value.trim(); const w = document.getElementById('c-wsp').value.trim();
+        if(!u || !p) return alert("Usuario y Clave obligatorios");
+        await fetch(API + `?action=crear_cajero&user=${encodeURIComponent(u)}&pass=${encodeURIComponent(p)}&nombre=${encodeURIComponent(n)}&wsp=${encodeURIComponent(w)}`); 
+        cargarCajeros();
+    }
+
+    function abrirEditCajero(fila, u, p, n, w) {
+        document.getElementById('ed-c-fila').value = fila; document.getElementById('ed-c-user').value = u;
+        document.getElementById('ed-c-pass').value = p; document.getElementById('ed-c-nombre').value = n;
+        document.getElementById('ed-c-wsp').value = w; document.getElementById('modal-editar-cajero').style.display = 'flex';
+    }
+    
+    async function guardarEdicionCajero() {
+        let f = document.getElementById('ed-c-fila').value; let u = document.getElementById('ed-c-user').value.trim();
+        let p = document.getElementById('ed-c-pass').value.trim(); let n = document.getElementById('ed-c-nombre').value.trim(); let w = document.getElementById('ed-c-wsp').value.trim();
+        document.getElementById('modal-editar-cajero').style.display = 'none';
+        await fetch(API + `?action=editar_cajero&fila=${f}&user=${encodeURIComponent(u)}&pass=${encodeURIComponent(p)}&nombre=${encodeURIComponent(n)}&wsp=${encodeURIComponent(w)}`); 
+        cargarCajeros();
+    }
+
+    async function cargarTrampas() {
+        try {
+            const r = await fetch(API + "?action=panel_trampas"); const d = await r.json();
+            const b = document.querySelector("#t-trampas tbody"); b.innerHTML = "";
+            d.datos.forEach((f, i) => {
+                if (i === 0 || !f[2]) return; 
+                const tr = document.createElement("tr");
+                let fecha = f[0] ? new Date(f[0]).toLocaleString() : '---';
+                tr.innerHTML = `<td>${fecha}</td> <td>${f[1]}</td> <td>${f[2]}</td>`;
+                b.appendChild(tr);
+            });
+        } catch(e) {}
+    }
+
+    async function limpiarTrampas() { if(!confirm("¿Limpiar patrones duplicados?")) return; document.querySelector('.btn-limpiar-trampas').innerText = "LIMPIANDO..."; await fetch(API + "?action=limpiar_trampas"); document.querySelector('.btn-limpiar-trampas').innerHTML = "<i class='fas fa-trash-alt'></i> LIMPIAR PATRONES DUPLICADOS"; cargarTrampas(); }
+    async function estadoCajero(f, est) { await fetch(API + `?action=cambiar_estado_cajero&fila=${f}&estado=${est}`); cargarCajeros(); }
+    async function borrarCajero(f) { if(confirm("¿Eliminar cajero?")) { await fetch(API + `?action=borrar_cajero&fila=${f}`); cargarCajeros(); } }
+    async function cambiarEstado(f, est) { await fetch(API + `?action=cambiar_estado&fila=${f}&estado=${est}`); cargarUsuarios(); }
+    async function cambiarPlan(f, plan) { await fetch(API + `?action=cambiar_plan&fila=${f}&plan=${encodeURIComponent(plan)}`); }
+    async function borrar(f) { if(confirm("¿Borrar Licencia?")) { await fetch(API + `?action=borrar_fila&fila=${f}`); cargarUsuarios(); } }
+    async function resetearHID(f) { if(confirm("¿Desanclar dispositivo?")) { await fetch(API + `?action=resetear_hid&fila=${f}`); cargarUsuarios(); } }
+    function abrirModal(f) { document.getElementById('fila-tiempo').value = f; document.getElementById('modal-tiempo').style.display = 'flex'; }
+    async function enviarTiempo() { let f = document.getElementById('fila-tiempo').value; let d = document.getElementById('add-dias').value; let h = document.getElementById('add-horas').value; await fetch(API + `?action=agregar_tiempo&fila=${f}&dias=${d}&horas=${h}`); document.getElementById('modal-tiempo').style.display = 'none'; cargarUsuarios(); }
+</script>
+</body>
+</html>        .status-atacando { background: rgba(46, 204, 113, 0.2); color: #2ecc71; border: 1px solid #2ecc71; }
         .tarjeta-datos { display: flex; justify-content: space-between; font-size: 14px; }
         .tarjeta-datos div { display: flex; flex-direction: column; }
         .tarjeta-datos span { color: #888; font-size: 10px; text-transform: uppercase; }
